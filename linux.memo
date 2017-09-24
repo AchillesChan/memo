@@ -1,0 +1,1588 @@
+#########xargs 替换参数位置start##########
+#>cat ip.txt
+1
+201
+3
+11
+#> cat ip.txt |xargs -t -P 1 -n 1 -i  ping -c 1 192.168.1.{}
+
+PING 192.168.1.1 (192.168.1.1)
+PING 192.168.1.201 (192.168.1.201)
+。。。。。。
+########xargs 替换参数位置End######
+
+###使用parallel并行处理######
+-k后面的’与end后面的’之间直接可以运行多个命令，这些命令使用；区格；这些命令使用-k强制执行顺序相同
+To force the output in the same order as the arguments use --keep-order/-k:
+  parallel -j64 -k 'printf "%s-start\n%s" {} {};
+    sleep {};printf "%s\n" -middle;echo {}-end' ::: 4 2 1
+Output:
+  4-start
+  4-middle
+  4-end
+  2-start
+  2-middle
+  2-end
+  1-start
+  1-middle
+  1-end
+
+重定向错误到/dev/null
+# time cat pl.txt |parallel -j 8 2>/dev/nul l 'echo -n "{} " ;curl -X GET -IL {}|grep HTTP'
+
+GNU Parallel tutorial 精华 验证
+
+man parallel_tutorial 手册
+
+###使用parallel并行处理######
+
+#### ping youSite 端口80 直到成功才退出 #######
+
+cat continue-test.sh
+while true
+    do
+        nc -vz youSite.com 80 >/dev/null 2>&1 && break;
+    done
+#### ping youSite 直到成功才退出 #######
+
+#########vimrc###########
+###########
+$ cat .vimrc
+set smartindent
+set pastetoggle=<f5>
+syntax enable
+set tabstop=4
+set softtabstop=4
+set expandtab
+set number
+set showcmd
+set cursorline
+filetype indent on
+set wildmenu
+set showmatch
+######
+
+.vimrc 黏贴时先按F5
+set pastetoggle=<f5>
+
+or
+:set paste
+in vim
+
+黏贴不自动indent
+#########vimrc end########
+
+##############SED 区间操作START############
+##delete between #start and #stop
+shell> sed -i '/#start/,/#stop/ d' someScript
+
+##BEFORE DELETE
+shell> cat someScript
+#!/bin/bash
+export
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/bin
+yum -y install ncurses-devel gcc gcc++ autoconf automake
+/bin/mkdir -p /usr/local/screen
+#start
+/bin/tar zxf /tmp/screen.tar.gz -C /usr/local/screen
+cd /usr/local/screen/v.4.3.1/src
+./autogen.sh
+./configure
+make
+#stop
+rm /usr/bin/screen -f
+ln -s /usr/local/screen/v.4.3.1/src/screen /usr/bin/screen
+
+###AFTER DELETE
+shell> cat someScript
+#!/bin/bash
+export
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/bin
+yum -y install ncurses-devel gcc gcc++ autoconf automake
+/bin/mkdir -p /usr/local/screen
+##############SED 区间操作END##############
+
+侦测新网卡/虚拟机迁移后网卡变化解决处理
+https://superuser.com/questions/332593/how-do-you-automatically-detect-a-new-network-card-in-centos-6-redhat
+
+With CentOS 6 everthing is handled by udev now. Go into /etc/udev/rules.d and delete the 70-persistent-net.rules file and reboot. If you open it berfore hand you will most likey see the original NIC MAC listed as eth0 and the new one as eth1.
+
+Now you need to edit /etc/sysconfig/network-scripts/ifcfg-eth0 and manually update to the MAC of your new NIC card.
+
+Deleting the file forces the detection process to run again at boot with no baggage left over from the cloning process, namely the old NIC MAC address(es).
+
+I have to do it with my CentOS 6 clones on VMware ESXi 4.1 all the time. It's a pain kudzu would just handle it in the past with previous versions.
+编辑 /etc/udev/rules.d/70-persistent-net.rules 这个文件符合实际情况，然后重启。CentOS6.5验证成功。
+
+CentOS6.5
+
+####audit input审计键盘输入####
+前提需要保证auditd服务处于运行状态
+/etc/pam.d/system-auth添加下面这行
+session required pam_tty_audit.so enable=*
+在/etc/audit/audit.rules中加入
+In /etc/audit/audit.rules we need to ensure that the following exists.
+
+-a exit,always -F arch=b64 -S execve
+-a exit,always -F arch=b32 -S execve
+使用下面的方式查看
+ausearch  -ui 502 -i    ##502是用户ID
+ausearch -ui 501  -i |grep EXECVE -A 2 -B 2 --color
+
+ 重新登录使用下面的方式查看
+ausearch -m tty -i  ###过时？
+azure centos 6.X成功
+####audit input审计键盘输入####
+
+########selinux排除故障#####
+#安装文件
+$yum install setroubleshooot setools
+
+#分析得到的结果
+$sealert -a /var/log/audit/audit.log
+
+给selinux权限，持久化？
+$semanage fcontext -a -t
+
+#还原上面给的权限
+$ restorecon -v
+
+########selinux排除故障END#####
+
+#########selinux持久化####
+
+- Run the semanage fcontext -a options file-name|directory-name command, remembering to use the full path to the file or directory.  ##新增
+
+- Run the restorecon -v file-name|directory-name command to apply the context changes.  ##生效
+
+-  semanage fcontext -d "/web(/.*)?"  删除
+
+semanage未安装 not found centos 6.x
+yum install policycoreutils-python
+系统安装sealter
+yum install setroubleshoot setools
+#########selinux持久化####
+
+#########bash and expect###########
+#!/bin/bash
+Scp_ip()
+{
+cat /root/app.txt | while read line
+do
+(
+   /usr/bin/expect << EOF
+   set time 20
+   spawn scp /root/apache-tomcat-7.0.75.tar.gz root@$line:/root/
+   expect {
+        "*yes/no*"
+          { send "yes\r";exp_continue }
+        "*password:"
+          { send "Lh##U1H9Q"{}()\r"}
+   }
+   expect eof
+EOF
+) &>/dev/null
+
+   if [ $? -eq 0 ]
+   then
+       echo "复制文件到$line成功！"
+   else
+       echo "复制文件到$line失败！"
+   fi
+done
+}
+Scp_ip
+
+#########bash and expectEND#####
+
+###AWK在bash script中调用bash变量#######
+variable="line one\nline two"
+awk -v var="$variable" 'BEGIN {print var}'
+line one
+line two
+###AWK在bash script中调用bash变量END####
+
+文本操作关键命令
+
+Get-ChildItem -Recurse .\ |Where-Object {$_.Mode -eq "-a---"}|%{certutil -hashfile $_.FullName md5}|Select-String -Pattern "CertUtil: -hashfile
+命令成功完成" -NotMatch
+
+sed -e 's/^CertUtil:.*$//g' -e ':a;N;$!ba;s/\n/ /g' -e 's/MD5 哈希(文件 /\n/g' -e 's/ CertUtil: -hashfile 命令成功完成。//g' -e 's/): /\n):/g' 1.txt|sed -r '/^\):/ s/\ //g' |sed -e 's/)://g' -e 's/^/"/' -e 's/$/"/' |sed -e ':a;N;$!ba;s/\n/ /g' -e 's/"C:/\n"C:/g'|awk '-F " {print $4,$2}
+###注意Linux中使用双引号（”）作为文件名 的包含符号
+###awk -F ‘"’使用双引号作为分隔符号
+###sed的条件操作
+###sed的正则操作-r
+###sed -e 有时会出错，只能使用多级管道？？？？
+处理前：
+MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170209\ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有限公司合作协 议 - 副本。。，？D2ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有.txt):
+c7 c5 46 f3 a0 e7 38 d1 bd d9 cb bb fc b3 d6 5b
+CertUtil: -hashfile 命令成功完成。
+MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170310\fa899f88-deda-42af-bc7d-55c0bdb189c3-Scan.pdf):
+3c 66 ed 12 42 49 8c 90 80 d3 c3 56 35 e1 56 5b
+CertUtil: -hashfile 命令成功完成。
+MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170327\63532f77-26b1-4b8a-b192-4e0975c3d22f-Scan1.pdf):
+fd ef cf fb 3b 04 9c ae 43 33 77 3b 96 12 fe d9
+CertUtil: -hashfile 命令成功完成。
+
+处理后：
+c7c546f3a0e738d1bdd9cbbbfcb3d65b C:\mallsite\ManagePortal\Upload\attachment\4\20170209\ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有限公司合作协 议 - 副本。。，？D2ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有.txt
+3c66ed1242498c9080d3c35635e1565b C:\mallsite\ManagePortal\Upload\attachment\4\20170310\fa899f88-deda-42af-bc7d-55c0bdb189c3-Scan.pdf
+fdefcffb3b049cae4333773b9612fed9 C:\mallsite\ManagePortal\Upload\attachment\4\20170327\63532f77-26b1-4b8a-b192-4e0975c3d22f-Scan1.pdf
+
+###条件SED,注意s操作符号前面的空格 condition
+sed '/conditional_pattern/ s/pattern/replacement/g'
+
+####sed反向引用，需要新建SED管道，不能使用-e
+####注意正则表达方式
+cat 1.txt |sed -r
+'s/(^.*)(\): )(.*)(CertUtil.*)$/\1\3/g'
+
+########awk系统调用system###########
+###后面的命令和参数都需要使用双引号包含;
+###只有AWK中的$n不需要使用双引号包含;
+###下面的正常命令是grep $1 20.txt在awk中的调用方式;
+###其中$1是awk中一行 的第一个字段。
+awk '{md5[$2]++} END{ for (var in md5) print var,md5[var]}' 20.txt |awk
+'$2!=2{system("grep " $1 " " "20.txt")}'
+
+###操作文件的调用方法
+awk '{system("mv -R " $1 " " $2)}' file.cfg
+########awk系统调用system END###########
+
+find + exec + mv 兼容空格
+find . -type f -iname '*.cpp' -exec mv -t ./test/ {} \+
+http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work-on-cygwin
+
+-exec command ;
+
+Execute command; true if 0 status is returned. All following arguments to find are taken to be arguments to the command until an argument consisting of `;' is encountered. The string `{}' is replaced by the current file name being processed everywhere it occurs in the arguments to the command, not just in arguments where it is alone, as in some versions of find. Both of these constructions might need to be escaped (with a `\') or quoted to protect them from expansion by the shell. See the EXAMPLES section for examples of the use of the -exec option. The specified command is run once for each matched file. The command is executed in the starting directory. There are unavoidable security problems surrounding use of the -exec action; you should use the -execdir option instead.
+
+-exec command {} +
+
+This variant of the -exec action runs the specified command on the selected files, but the command line is built by appending each selected file name at the end; the total number of invocations of the command will be much less than the number of matched files. The command line is built in much the same way that xargs builds its command lines. Only one instance of `{}' is allowed within the command. The command is executed in the starting directory.
+
+这两个待测试
+find ./ -name '*article*' -exec mv {}  ../backup  \;
+find ./ -name '*article*' -exec mv {}  ../backup  \;
+
+对于有特殊字符的情况，xargs不能争取处理，而find+exec可以 ，如下
+#touch "ab c\\ \"'.txt"
+注意后边有分号
+# find ./ -maxdepth 1 -type f -exec rm -fv {} \;
+已删除"./ab c\\ \"'.txt"
+# touch "ab c\\ \"'.txt"
+# find ./ -maxdepth 1 -type f -exec rm -fv {} \+
+已删除"./ab c\\ \"'.txt"
+# touch "ab c\\ \"'.txt"
+# find ./ -maxdepth 1 -type f | xargs  rm -fv {} \+
+xargs: 未匹配的 双 引用；默认情况下，引用是针对 xargs 的，除非您使用了 -0 选项
+
+##########linux回车替换为空格############
+$  echo "$string" | tr '\n' ' '
+as others had pointed.
+But if you want to convert new lines into spaces on a file using sed, then you
+can use:
+$ sed -i ':a;N;$!ba;s/\n/\t/g' file_with_line_breaks
+or even awk:
+$ awk '$1=$1' ORS=' ' file_with_line_breaks > new_file_with_spaces
+e this solution with GNU sed:
+sed ':a;N;$!ba;s/\n/ /g'
+This will read the whole file in a loop, then replaces the newline(s) with a
+space.
+
+Explanation:
+    Create a label via :a.
+    Append the current and next line to the pattern space via N.
+    If we are before the last line, branch to the created label $!ba ($! means
+not to do it on the last line as there should be one final newline).
+    Finally the substitution replaces every newline with a space on the pattern
+space (which is the whole file).
+
+Here is cross-platform compatible syntax which works with BSD sed (as per
+@Benjie comment)
+##tr的替换目标只能是单个字符？？
+#########linux回车替换为空格END#########
+
+###zabbixAgent with ssh Tunnel####
+ssh -NCfqL 1000:localhost:10051 someone@ZbxServer -p 3000 -i ca
+##上面1000Agent所在的本机端口，10051是zbxServer端口;
+##someone@ZbxServer是登录到Server的用户和服务器地址;
+##-p端口，-i证书
+##ssh的参数和值之间只有一个空格，坑的很？
+##为为避免和ZabbixServer的Agnet冲突，需要修改Agent的监听的端口到10060
+##并且要在ZbxSrv端ssh Tunnel回到10060
+ssh -NCfqL 10060:localhost:10060 someone@ZbxClinet -p 3000 -i ca1
+##完成后修改zabbix_agentd.conf,ServerActive=127.0.0.1:1000
+##然后启动zabbix_agentd就可以在服务端监控这台远程的Agent了
+###zabbixAgent with ssh Tunnel End####
+
+Zabbix磁盘监控指标:{Adan Linux CentOS 6:vfs.fs.size[{#FSNAME},pfree].last(0)}<20 and {Adan Linux CentOS 6:vfs.fs.size[{#FSNAME},free].last(0)}<4294967296
+
+##########3.在以普通用户打开的VIM当中保存一个ROOT用户文件,VIM保存没有权限的文件##########
+
+:w !sudo tee %
+
+这题目读起来纠结，其实是很常见的，常常忘记了sudo就直接用vim编辑/etc内的文件，
+（不过也不一定，vim发现保存的文件无法保存时候会提示）等编辑好了，保存时候才发现没权限。
+曲线方法是先保存个临时文件，退出后再sudo cp回去。不过实际上在vim里面可以直接完成这个过程的，命令就是如此。
+
+查阅vim的文档（输入:help :w），会提到命令:w!{cmd}，让vim执行一个外部命令{cmd}，然后把当前缓冲区的内容从stdin传入。
+
+tee是一个把stdin保存到文件的小工具。
+
+而%，是vim当中一个只读寄存器的名字，总保存着当前编辑文件的文件路径。
+
+所以执行这个命令，就相当于从vim外部修改了当前编辑的文件，好完工。
+###################END################################################
+
+##########后项引用变量替换##################
+:%s:\($[a-zA-Z]\+\):"\1":g 变量替换，由$var换为"$var"
+:%s:"\($[a-zA-Z0-9]\+\)":\1:g   变量替换，由“$var”换为$var
+##########后项引用变量替换END###############
+
+##########detecv port status V4####################
+cat /data/backup/detectServiceStatusV4.mon01.sh
+#!/bin/bash
+PATH="/usr/local/bin:/usr/bin:/bin"
+export PATH
+managedServiceFile="/data/backup/managedServiceListMon01"
+logFile="/var/log/serviceStatusLogs/serviceStatusLog"
+operationDate=$(date +%Y%m%d-%H%M)
+echo -n "$operationDate:">"$logFile"
+###每次的操作输入到一个文件，多个错误拼接到一行
+while IFS= read -r managedServiceItem
+do(
+        if echo "$managedServiceItem"|grep '#' &>/dev/null
+        then
+           continue
+        fi
+
+        host=$(echo "$managedServiceItem"|awk '{print $1}')
+        port=$(echo "$managedServiceItem"|awk '{print $2}')
+        name=$(echo "$managedServiceItem"|awk '{print $3}')
+        if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+        #if [ $? != 0 ];then
+                echo -n "WRONG $name ">>"$logFile"
+        fi)&
+done <"$managedServiceFile"
+wait
+echo "">>"$logFile" ##打印换行
+sed -i 's# WRONG##g' "$logFile"  ##删除多余的WRONG字符
+
+##输出格式：2017xxxx：WRONG HOST1 HOST2  .....
+##########detecv port status V4 END侦测端口开启状态 ####################
+
+##########detecv port status V3侦测端口开启状态####################
+##程序,变量做了双引号包含，避免意外的扩展，并把状态打印在第一个位置，方便阅读
+#!/bin/bash
+PATH="/home/Michael/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games"
+export PATH
+managedServiceFile="/data/backup/managedServiceListMon01"
+logFile="/var/log/serviceStatusLogs/serviceStatusLog"
+operationDate=$(date +%Y%m%d-%H%M)
+
+echo "">>"$logFile"
+echo "$operationDate">>"$logFile"
+
+while IFS= read -r managedServiceItem
+do(
+        if echo "$managedServiceItem"|grep '#' &>/dev/null
+        then
+           continue
+        fi  ###如果配置行中有#，忽略该行
+
+        host=$(echo "$managedServiceItem"|awk '{print $1}')
+        port=$(echo "$managedServiceItem"|awk '{print $2}')
+        name=$(echo "$managedServiceItem"|awk '{print $3}')
+        nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+        if [ $? == 0 ];then
+                echo OK "$name" "$operationDate">>"$logFile"
+        else
+                echo !!WRONG!! "$name" "$operationDate">>"$logFile"
+        fi)&
+done <"$managedServiceFile"
+wait
+##########detecv port status V3 END####################
+
+######################detect port status V2####################
+####程序文件
+#!/bin/bash
+managedServiceFile="mg.txt"
+logFile="sb.txt"
+operationDate=$(date +%Y%m%d-%H%M)
+
+echo "">>"$logFile"
+echo "$operationDate">>"$logFile"
+
+while IFS= read -r managedServiceItem ##逐行读入处理
+do(
+        host=$(echo "$managedServiceItem"|awk '{print $1}')
+        port=$(echo "$managedServiceItem"|awk '{print $2}')
+        name=$(echo "$managedServiceItem"|awk '{print $3}')
+        if  nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+        then
+                echo "$name" is OK at "$operationDate">>"$logFile"
+        else
+                echo "$name" is Wrong at "$operationDate">>"$logFile"
+        fi)&   ####后台处理，等待所有进程完成后才退出
+done <"$managedServiceFile"
+wait ####后台处理，等待所有进程完成后才退出
+
+####配置文件
+$cat mg.txt
+172.16.10.156 22 bak01ssh
+172.16.10.156 3306 bak01Mysql
+172.16.10.156 80 bak01Nginx
+172.16.10.156 8030 bak01Tomcat156-8080
+172.16.10.13 3389 cdDC01RDP13-3389
+41.1.24.41 5682 azureRedis-ssh-5682
+
+####输出结果
+$cat sb.txt
+
+20170315-1049
+bak01Mysql is OK at 20170315-1049
+bak01Nginx is OK at 20170315-1049
+bak01Tomcat156-8080 Wrong at 20170315-1049
+bak01ssh is OK at 20170315-1049
+Redis-ssh-56183 is OK at 20170315-1049
+cdDC01RDP13-3389 is OK at 20170315-1049
+
+20170315-1050
+bak01Tomcat156-8080 Wrong at 20170315-1050
+bak01Mysql is OK at 20170315-1050
+bak01Nginx is OK at 20170315-1050
+bak01ssh is OK at 20170315-1050
+azureRedis-ssh-56183 is OK at 20170315-1050
+cdDC01RDP13-3389 is OK at 20170315-1050
+######################detect port status V2 END####################
+
+######################detect port status探测端口状态#######################
+$>cat detectServiceStatus.sh
+
+#!/bin/bash
+########变量值定义为ip，端口，服务描述,用于此后调用时候方便分离
+cdbak01ssh="172.16.10.156 22 bak01ssh"
+cdbak01db="172.16.10.156 3306 bak01Mysql"
+cdbak01web="172.16.10.156 80 bak01Nginx"
+cdbak01web2="172.16.10.156 8030 bak01Tomcat156-8080"
+cddc01rdp="172.16.10.13 3389 cdDC01RDP13-3389"
+log_file="sb.txt"
+op_date=$(date +%Y%m%d-%H%M)
+####注意引号的使用，特别是变量处理的时候
+#######nc要使用 nc-1.84-24.el6.x86_64.rpm这个版本，CentOS7 yum自动安装的
+#######对Windows的端口兼容性不好，坑货Windows
+
+for managedService in "$cdbak01ssh" "$cdbak01db" "$cdbak01web" "$cdbak01web2" "$cddc01rdp"
+do
+
+####使用eval来逐层的剥离变量名字，得到实际的值
+####$managedServic-->$cdbak01ssh-->"172.16.10.156 22 bak01ssh" 。。。。。。
+
+       host=$(eval eval echo "$managedService" |awk '{print $1}')
+        #echo host=$host
+        port=$(eval eval echo "$managedService" |awk '{print $2}')
+        name=$(eval eval echo "$managedService" |awk '{print $3}')
+        #echo port=$port
+        #echo name=$name
+
+        nc -w 2 $host $port < /dev/null &>/dev/null
+        if [ $? == 0 ];then
+                #echo $name is OK at $op_date
+                echo $name is OK at $op_date>>$log_file
+        else
+                echo $name Wrong at $op_date>>$log_file
+                #echo $name Wrong at $op_date
+        fi
+done
+###############探测端口状态 detect port status End######################
+
+##############文档去除重复段落#########################
+对于空格，可以将空格替换为文档中不存在的字符
+比如在vim中，%s:^$:abcdefghijklmnopq1234567890:g
+然后使用awk 'BEGIN {RS="abcdefghijklmnopq1234567890"} !seen[$0]++' file.txt
+
+http://stackoverflow.com/questions/1444406/how-can-i-delete-duplicate-lines-in-a-file-in-unix
+
+awk '!seen[$0]++' file.txt
+
+seen is an associative-array that Awk will pass every line of the file to. If a line isn't in the array then seen[$0] will evaluate to false. The ! is a logical NOT operator and will invert the false to true. Awk will print the lines where the expression evaluates to true. The ++ increments seen so that seen[$0] == 1 after the first time a line is found and then seen[$0] == 2, and so on.
+Awk evaluates everything but 0 and "" (empty string) to true. If a duplicate line is placed in seen then !seen[$0] will evaluate to false and the line will not be written to the output.
+
+##############文档去除重复段落END######################
+
+##########nc centos 7 探测开放端口#####################
+$ nc -w 2 172.16.20.11 22 < /dev/null &>/dev/null && echo Success || echo Failure
+Success
+$ nc -w 2 172.16.20.11 25 < /dev/null &>/dev/null && echo Success || echo Failure
+Failure
+##########nc centos 7 探测开放端口END#################
+
+#########UPGRADE升级SSH#####
+https://gist.github.com/faishal/add912b9b4c3899ec26c488a91446a84
+
+#!/bin/bash
+# Copyright © 2016 Faishal Saiyed
+cd
+timestamp=$(date +%s)
+if [ ! -f openssh-7.3.zip ]; then wget https://github.com/faishal/openssh-portable/releases/download/cent.os.6.7.openssh.7.3p1/openssh-7.3.zip; fi;
+unzip -o openssh-7.3.zip -d openssh-7.3p1
+cd openssh-7.3p1/
+cp /etc/pam.d/sshd pam-ssh-conf-$timestamp
+rpm -U *.rpm
+yes | cp pam-ssh-conf-$timestamp /etc/pam.d/sshd
+/etc/init.d/sshd restart
+#########升级SSH END######
+
+###########并行处理############
+#/bin/bash
+#filename: generate_checksums.sh
+PIDARRAY=()
+for file in File1.iso File2.iso
+do md5sum $file & PIDARRAY+=("$!") done
+wait ${PIDARRAY[@]}
+###########并行处理end############
+
+####stdin stdout with -#############
+
+$ tar cvf - files/ | ssh user@example.com "tar xv -C Documents/"
+In the preceding example, the directory files/ is added to a tar archive which is output to stdout (denoted by '-')
+
+####stdin stdout with - end#############
+
+##########delete n days before files and directory##########
+$ cat del_before_10days_backup_mon01_v2.sh
+#!/bin/bash
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
+####find -ctime +10 表示10天以前的所有时间
+####find -ctime 10 表示只是前第10天的文件
+####注意rm所操作的目录
+mallimage_path="/data/backup/mall/attachement/"
+mallattache_path="/data/backup/mall/image/pictures/"
+dbbak_path="/data/backup/db/"
+if [ -d $mallimage_path ];then
+        find $mallimage_path  -ctime +10 |xargs rm  -rf
+else
+        echo "Error,Directory not exist!"
+fi
+
+if [ -d $mallattache_path ];then
+        find $mallattache_path -ctime +10 |xargs rm  -rf
+else
+        echo "Error,Directory not exist!"
+fi
+
+if [ -d $dbbak_path ];then
+        find $dbbak_path -name "*.sql" -ctime +10 |xargs rm  -f
+else
+        echo "Error,Directory not exist!"
+fi
+##########delete n days before files and directory END########
+
+删除N天以前的文件
+#!/bin/bash
+find /usr/local/nginx/logs/ -mtime +15 -type f -name *.log | xargs rm -f
+“find: paths must precede expression:” How do I specify a recursive search that also finds files in the current directory?
+find /usr/local/nginx/logs/ -mtime +15 -type f -name "*.log" | xargs rm -f
+仅找出当前目录的文件
+find ./ -maxdepth 1 -name "*.conf"
+
+#!/bin/bash
+find /usr/local/nginx/logs/ -mtime +15 -type f -name *.log | xargs rm -f
+##################################################
+
+http://kodango.com/ linux 运维开发
+https://my.oschina.net/leejun2005/blog
+
+ssh tunnel 隧道
+###########mall###########
+ssh -R 28000:172.16.10.118:80 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+ssh -R 28080:172.16.10.118:8080 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+###########shunfeng waas#################
+ssh -R 30080:192.168.28.99:80 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+ssh -R 30180:172.16.10.124:9010 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+
+#############################
+#############split view#########
+http://unix.stackexchange.com/questions/7453/how-to-split-the-terminal-into-more-than-one-view
+You can do it in screen the terminal multiplexer.
+here ctrla is press Ctrl + a
+To split vertically: ctrla then |.
+To split horizontally: ctrla then S (uppercase one).
+To unsplit: ctrla then Q (uppercase one).
+To switch from one to the other: ctrla then tab
+Note: After splitting, you need to go into the new region and start a new session via ctrla then c before you can use that area.
+
+EDIT, basic screen usage:
+
+New terminal: ctrla then c.
+Next terminal: ctrla then space.
+Previous terminal: ctrla then backspace.
+N'th terminal ctrla then [n]. (works for n∈{0,1…9})
+Switch between terminals using list: ctrla then " (useful when more than 10 terminals)
+Send ctrla to the underlying terminal ctrla then a.
+
+#############################
+###split view end###
+
+########screen config 20170320######
+
+hardstatus on
+
+hardstatus alwayslastline
+
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H
+
+%{..Y} %m/%d %C%a "
+
+##scroll 2048 line
+
+defscrollback 2048
+
+##bind shorcut Fn to switch screen
+
+##f10-->k; select 0
+
+##f11-->F1 monitor
+
+##f12-->F2 kill
+
+##f7--->k7 new screen
+
+##f8--->k8 title screen
+
+bindkey -k k1 select 1
+
+bindkey -k k2 select 2
+
+bindkey -k k3 select 3
+
+bindkey -k k4 select 4
+
+bindkey -k k5 select 5
+
+bindkey -k k6 select 6
+
+bindkey -k k7 screen
+
+bindkey -k k8 title
+
+bindkey -k k9 time
+
+bindkey -k k;  select 0
+
+bindkey -k F1  monitor
+
+bindkey -k F2  kill
+
+##initial named session
+
+screen -t config 1 bash
+
+screen -t debug 1 bash
+
+screen -t test 1 bash
+
+screen -t misc 1 bash
+
+##initail screen from 1
+
+bind c screen 1
+
+bind ^c screen 1
+
+bind 0 select 10
+
+screen 1
+########screen config 20170320 END######
+
+########config 20170215 #######
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+##scroll 2048 line
+defscrollback 2048
+##bind shorcut Fn to switch screen
+bindkey -k k1 select 1
+bindkey -k k2 select 2
+bindkey -k k3 select 3
+bindkey -k k4 select 4
+bindkey -k k5 select 5
+##initial named session
+screen -t config 1 bash
+screen -t debug 1 bash
+screen -t test 1 bash
+screen -t misc 1 bash
+##initail screen from 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+screen 1
+termcapinfo xterm* ti@:te@
+########config 20170215 #######
+############end###############
+
+632 down vote accepted
+"kill" will only kill one screen window. To "kill" the complete session, use quit.
+
+Example 删除已经deteatch的sockets
+$ screen -X -S [session # you want to kill] quit
+
++++++++inital centos 6 start++++++++
+++++++only run once ++++++++++
+
+#!/bin/bash
+PATH=/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+export PATH
+personBashCfg=/root/.bashrc
+personScreenCfg=/root/.screenrc
+mv /etc/localtime /tmp
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+if [ `grep AlreadyInitiald $personBashCfg | wc -l` -eq 0 ];then
+        echo "alias hg='history |egrep -i --color'">>$personBashCfg
+        echo "alias h='history'">>$personBashCfg
+        echo "alias fcn='find ./ -name'">>$personBashCfg
+        echo "alias frn='find / -name'">>$personBashCfg
+        echo "alias lc='locate / | grep -i -E --color'">>$personBashCfg
+        echo "alias les='less -I'">>$personBashCfg
+        echo "alias ng='netstat -tlanp | grep -Ei --color'">>$personBashCfg
+        echo "alias pg='ps aux | grep -E -i --color'">>$personBashCfg
+        echo "alias ud='updatedb'">>$personBashCfg
+        echo "alias yuml='yum --disablerepo=\* --enablerepo=c6-media install'">>$personBashCfg
+        echo "alias gre='grep -E -i --color'">>$personBashCfg
+        echo "alias yumm='yum --enablerepo=c6-media install'">>$personBashCfg
+        echo "alias mc='mount /dev/cdrom /mnt/cdrom -t iso9660'">>$personBashCfg
+        echo "alias la='ls -Al'">>$personBashCfg
+        echo "alias lh='ls -hAl'">>$personBashCfg
+        echo "alias h='history'">>$personBashCfg
+        echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
+        echo "alias scs='screen -S'">>$personBashCfg
+        echo "alias scl='screen -li'">>$personBashCfg
+        echo "alias scd='screen -d'">>$personBashCfg
+        echo "alias scr='screen -r'">>$personBashCfg
+        echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
+        echo "alias gre='grep -i --color -A 3 -B 3 -n'">>$personBashCfg
+        source ~/.bashrc
+        rm -f $personScreenCfg
+        touch $personScreenCfg
+        echo  "hardstatus on ">$personScreenCfg
+        echo "hardstatus alwayslastline" >>$personScreenCfg
+        echo 'hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "'>>$personScreenCfg
+        echo "defscrollback 2048 " >>$personScreenCfg
+        echo "termcapinfo xterm* ti@:te@ ">>$personScreenCfg
+        ##bind shorcut Fn to switch screen
+        echo "bindkey -k k1 select 1 ">>$personScreenCfg
+        echo "bindkey -k k2 select 2 ">>$personScreenCfg
+        echo "bindkey -k k3 select 3 ">>$personScreenCfg
+        echo "bindkey -k k4 select 4 ">>$personScreenCfg
+        echo "bindkey -k k5 select 5 ">>$personScreenCfg
+        echo "##initail screen from 1 ">>$personScreenCfg
+        echo "bind c screen 1 ">>$personScreenCfg
+        echo "bind ^c screen 1 ">>$personScreenCfg
+        echo "bind 0 select 10 ">>$personScreenCfg
+        echo "screen 1 ">>$personScreenCfg
+
+        yum install -y epel-release.noarch  mlocate vim  gcc gcc++ gcc-c++ cmake screen
+        yum update -y
+        echo "#TheVMhasAlreadyInitialed">>$personBashCfg
+else
+        echo "AlreadyInitialed"
+fi
+
+++++++inital centos 6++++++
++++++++end++++++++++++
+
+=======screen op ===========
+=======start==============
+for centos 7 title 不是期待的设置
+I am using bash and GNU screen on centos7. I notice that if I ssh to another server, change the title (via ctrl+a+A), and log out of the server that my new title gets overwritten by USER@HOST:~. How can I stop it from doing this?
+
+As documented in the man page, screen looks for a null title-escape-sequence. bash sends this sequence via the PROMPT_COMMAND environment variable (for example, mine defaults to printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}".
+
+To disable this feature for a particular window, I just run unset PROMPT_COMMAND from that window. Of course, one could just add this to their ~/.bashrc or to a specific environment file to make it more persistent.
+shareimprove this answer
+
+If $PROMPT_COMMAND is empty, check $PS1. – choroba Oct 22 '14 at 22:44
+http://unix.stackexchange.com/questions/163691/how-do-i-stop-screen-from-clobbering-my-titles
+
+vim %userHome%/.screenrc
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+##scroll 2048 line
+defscrollback 2048
+##bind shorcut Fn to switch screen
+bindkey -k k1 select 1
+bindkey -k k2 select 2
+bindkey -k k3 select 3
+bindkey -k k4 select 4
+bindkey -k k5 select 5
+##initail screen from 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+screen 1
+termcapinfo xterm* ti@:te@
+
+screen -S sharing -t one 创建带名称的screen
+
+alias scd='screen -d'
+alias scl='screen -li'
+alias scr='screen -r'
+alias scs='screen -S'
+=======screen op ===========
+=======end==============
+
+====bash shell 并行后台ping========
+====start===================
+#!/bin/bash
+#Filename: fast_ping.sh
+# Change base address 192.168.0 according to your network.
+for ip in 192.168.28.{1..255} ;
+ do   (ping $ip -c2 &> /dev/null ;
+     if [ $? -eq 0 ];
+    then
+ echo $ip is alive
+        fi)&
+ done
+wait
+====bash shell 并行后台ping========
+====end===================
+
+====vim编辑替换时候的转意字符start===========
+必须转意：～空格 [ ]= $(字符，非结尾标志) \
+不必转意：@ > : - （) {
+随意：/}
+成功的示意:
+:%s:now\=:\=:g 转意=
+:%s#Michael@linux-gzbl:\~>##g            //仅仅转意～
+:%s:\[root@RD-CD-SVN-BAK-1\ xml\]::g  //-没有转意
+====vim编辑替换时候的转意字符end===========
+
+===from http://vim.wikia.com/wiki/Search_and_replace start==============================
+When searching:
+
+., *, \, [, ^, and $ are metacharacters.
++, ?, |, &, {, (, and ) must be escaped to use their special function.
+\/ is / (use backslash + forward slash to search for forward slash)
+\t is tab, \s is whitespace
+\n is newline, \r is CR (carriage return = Ctrl-M = ^M)
+After an opening [, everything until the next closing ] specifies a /collection. Character ranges can be represented with a -; for example a letter a, b, c, or the number 1 can be matched with [1a-c]. Negate the collection with [^ instead of [; for example [^1a-c] matches any character except a, b, c, or 1.
+\{#\} is used for repetition. /foo.\{2\} will match foo and the two following characters. The \ is not required on the closing } so /foo.\{2} will do the same thing.
+\(foo\) makes a backreference to foo. Parenthesis without escapes are literally matched. Here the \ is required for the closing \).
+When replacing:
+
+\r is newline, \n is a null byte (0x00).
+\& is ampersand (& is the text that matches the search pattern).
+\0 inserts the text matched by the entire pattern
+\1 inserts the text of the first backreference. \2 inserts the second backreference, and so on.
+=============from http://vim.wikia.com/wiki/Search_and_replace end=============
+
+###tcpdump
+#tcpdump -nNxXi eth0 -s 0 proto TCP and port 25 -w mail.txt
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+^C14 packets captured
+14 packets received by filter
+0 packets dropped by kernel
+# strings mail.txt
+>220 163.com Anti-spam GT for Coremail System (163com[20141201])
+ehlo [10.21.100.4]
+N250-mail
+250-PIPELINING
+250-AUTH LOGIN PLAIN
+250-AUTH=LOGIN PLAIN
+250-coremail 1Uxr2xKj7kG0xkI17xGrU7I0s8FY2U3Uj8Cz28x1UUUUU7Ic2I0Y2UrNWAAgUCa0xDrUUUUj
+250-STARTTLS
+250 8BITMIME
+AUTH PLAIN AHh0ODMzYQBtaW1haW1hOSk=
+535 Error: authentication failed
+
+#VIM 空格高亮黄色  显示所有隐藏的字符
+set nohls取消搜索的高亮关键字。
+
+set list 显示所有隐藏的字符
+
+hlsearch 是高亮选择搜索的关键字。
+
+原来我此前搜索替换了空格，所以就把所有空格染色了。
+
+而set nohls，则以后的搜索都不会高亮所有搜索的关键字。所以空格也不会有颜色了
+
+当然这个方面只是一次性开关，下次打开时又会出现黄色空格。如果想以后打开所有的文件里的黄色空格都不要的话，就打开用户主目录下的.vimrc文件，（如果没有，就新建一个），在后面输入set nohls，保存。以后再打开所有的文件都不会有烦人的黄色空格了。
+
+######映射L到End键######
+xmodmap -e "keycode 115 = End NoSymbol End"        #restore End key
+xmodmap -e "keycode 115 = l"                                    #remap End key to l
+报什么display错误时，
+添加如下语句到.bashrc,然后source .bashrc
+if [ -n “${DISPLAY+x}”];then       #x是小写？
+     xmodmap -e "keycode 115 = l" #最后的字符时字母L的小写
+fi
+
+xmodmap -pke #显示所有键盘映射
+
+###### 映射L到End键######
+
++++++读取文件到数组的shell script++++
+++++++start++++++++++++++++
+====vim编辑替换时候的转意字符start===========
+必须转意：～空格 [ ]= $(字符，非结尾标志) \
+不必转意：@ > : - （) {
+随意：/}
+成功的示意:
+:%s:now\=:\=:g 转意=
+:%s#Michael@linux-gzbl:\~>##g            //仅仅转意～
+:%s:\[root@RD-CD-SVN-BAK-1\ xml\]::g  //-没有转意
+====vim编辑替换时候的转意字符end===========
+
++++++读取文件到数组的shell script++++
+++++++start++++++++++++++++
+#!/bin/bash
+declare -a myarray
+
+# Load file into array.
+mapfile myarray < /tmp/file.txt
+#readarray myarray < /tmp/file.txt
+
+# Explicitly report array content.
+let i=0
+while (( ${#myarray[@]} > i )); do
+printf "${myarray[i++]}"
+done
++++++读取文件到数组的shell script++++
+++++++end++++++++++++++++
+
+++++++rsync with ssh++++++
++++++++start+++++++++++++
+#first upload CA to remoteHost
+rsync -avz -e ssh remoteuser@remoteHost:/remotefiles /localDir
++++++++++rsync with ssh++++
+++++++++end++++++++++++++
+
+rsync +inotify
+Server 源端 192.168.1.91
+> sudo yum install inotify-tools
+[leo@linux-vps~]$ vim inotify-example
+while true$>run indefinitely
+do
+inotifywait -r -e modify,attrib,close_write,move,create,delete \
+/path/2/dir && /bin/bash backup-script
+done
+$>cat backup-script
+#!/bin/bash
+rsync -avz /source/dir 192.168.1.92::website --delete
+[root@www ~]# yum -y install rsync
+
+Backup目的端
+[root@dlp ~]# yum -y install rsync xinetd
+[root@dlp ~]# vi /etc/xinetd.d/rsync
+# default: off
+# description: The rsync server is a good addition to an ftp server, as it \
+# allows crc checksumming etc.
+service rsync
+{
+disable= n$> change
+flags= IPv6
+socket_type= stream
+wait= no
+user= root
+server= /usr/bin/rsync
+server_args= --daemon
+log_on_failure+= USERID
+}
+[root@dlp ~]# /etc/rc.d/init.d/xinetd start
+Starting xinetd:[ OK ]
+[root@dlp ~]# chkconfig xinetd on
+[root@dlp ~]# mkdir /home/backup
+[root@dlp ~]# vi /etc/rsyncd.conf
+# any name you like
+[website]
+# destination directory
+path = /home/backup
+# Hosts you allow to copy (specify source Host)
+hosts allow = 192.168.1.91
+hosts deny = *
+list = true
+uid = root
+gid = root
+read only = false
+
+执行
+[root@ha1 home]# ./inotify_trigger.sh &
+[1] 3935
+[root@ha1 home]# Setting up watches. Beware: since -r was given, this may take a while!
+Watches established.
+
+通过监控某一文件的值做对应的操作，
+用于系统第一次启动按照软件;之后不在安装
+shell> cat getVar.sh
+#!/bin/bash
+isFstBt=$(cat c.txt)
+case $isFstBt in
+1)
+  echo "Install something"
+  isFstBt=0
+  echo "$isFstBt" >c.txt #用0覆盖c.txt中的1
+  ;;
+0)
+  echo "Done"
+  ;;
+*)
+  echo "something worong"
+esac
+
+shell> echo 1 >c.txt
+shell> ./getVar.sh
+Install something
+shell> cat c.txt
+0
+shell> echo e >c.txt
+shell> ./getVar.sh
+something worong
+
+ LVM相关
+1 fdisk /dev/sdb /dev/sdc -->logical partition-->type 8e
+2 vgcreate vg_web /dev/sd{b5,c5}
+3 vcreate -L 8G -n lv_web vg_web
+4 mkfs.ext4 /dev/vg_web/lv_web
+5 mkdir -p /data
+6 mount -t ext4 /dev/vg_web/lv_web /data
+7 echo "/dev/mapper/vg_web-lv_web ext4 defaults 1 1" >>/etc/fstab
+8 lvresize -L +500M /dev/vg_web/lv_web
+9 ## display correct partion info on df -hT command
+10 umount /db
+11 e2fsck -f /dev/mapper/vg_web-lv_web
+12 resize2fs /dev/mapper/vg_web-lv_web
+13 mount -t ext4 e2fsck -f /dev/mapper/vg_web-lv_web /data
+
+####iptables-save centos6
+
+iptables-save | sudo tee /etc/sysconfig/iptables
+
+The iptables configuration file on CentOS is located at /etc/sysconfig/iptables. The above command saved the rules we created into that file. Just to make sure everything works, we can restart the firewall:
+
+service iptables restart
+
+####iptables-save centos6
+
+####firewalld centos7
+# firewall-cmd --list-ports
+1235/tcp
+
+# firewall-cmd --get-active-zone
+public
+  interfaces: enp0s3
+
+# firewall-cmd --add-port 1236/tcp --permanent
+success
+
+# firewall-cmd --add-service https
+success
+
+# firewall-cmd --list-services
+dhcpv6-client ssh https
+
+# systemctl enable firewalld
+# systemctl restart firewalld
+
+[root@localhost ~]# firewall-cmd --add-service telnet
+success
+[root@localhost ~]# firewall-cmd --list-service
+dhcpv6-client ssh http telnet
+[root@localhost ~]# firewall-cmd --add-service https
+success
+[root@localhost ~]# firewall-cmd --list-service
+dhcpv6-client ssh http telnet https
+[root@localhost ~]# firewall-cmd --add-service dns
+success
+[root@localhost ~]# firewall-cmd --list-service
+dhcpv6-client ssh http telnet https dns
+[root@localhost ~]# firewall-cmd --reload
+success
+[root@localhost ~]# firewall-cmd --zone=public --remove-service=http --permanent
+Warning: NOT_ENABLED: http
+success
+
+####firewalld centos7
+
+DNAT
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT \
+--to 172.31.0.23:80
+iptables -A FORWARD -i eth0 -p tcp --dport 80 -d \
+172.31.0.23 -j ACCEPT #开启Forward允许策略
+
+端口重定向 port forward
+iptables -t nat -I PREROUTING -i eth0 -p tcp \
+--dport 88 -j REDIRECT --to-ports 3306
+[root@lnmp ~]# mysql -uroot -P 88 -p #注意端口是88
+
+ ssh自动输入密码 StrictHostKeyChecking=no 不要求输入yes
+sshpass -p "PASS" ssh -o StrictHostKeyChecking=no USER@host:[port]
+没有sshpass就yum
+sshpass -p You_Pwd ssh-copy-id -i Your_Pub_key user@host    ##互信设置
+
+find正则类型 posix-awk, posix-basic, posix-egrep and posix-extended
+#命令执行方法，-regex区分大小写，-iregex不区分大小写
+# find / -regextype posix-extended -regex ".*\.conf$"
+/etc/latrace.d/libio.conf
+/etc/latrace.d/mman.conf
+/etc/latrace.d/stdlib.conf
+/etc/latrace.d/inet.conf
+/etc/latrace.d/typedefs.conf
+
+EC2 AMI 登入方式及切換 root 權限
+
+ssh -i AWS_KEY.pem ubuntu@ec2-52-69-88-159.ap-northeast-1.compute.amazonaws.com aws云服务器
+
+去掉windows下的回车符 （注意^M 在linux 下写法 按^M 是回车换行符,输入方法是按住CTRL+v,松开v,按m)
+sed -i 's/^M//g' filename
+
+2) 在vim下类似
+
+:%s/^M//g
+
+$ find /home -name test > list_right 2>&1
+
+$ cat local2 >>/dev/null
+cat: local2: 是一个目录 //有错误信息显示
+$ cat local2 >>/dev/null 2>&1  #也可以使用>>/dev/null &>
+//错误信息也被丢弃了
+
+2 $ locate i18n|grep i18n$|xargs grep -nvH '\#' 2>/dev/null | grep -v "匹配"
+找出所有的i18n文件，打印其文件名字行号及内容，丢弃错误信息，并去掉有“匹配”字样的行
+
+3 $ grep .* `locate -r '^/etc.*conf$'` 2>/dev/null |grep nameserver |grep -v '\#'
+/etc/resolv.conf:nameserver 121.40.144.82
+/etc/resolv.conf:nameserver 123.56.46.123
+
+达到2一样的效果，注意2>/dev/null的位置要放在产生错误的语句的后面而不是最后面
+
+4 $ grep -Hn .* `locate -r '^/etc.*conf$'` 2>/dev/null |grep nameserver |grep -v '\#' | sed 's/^.*ver//'
+121.40.144.82
+123.56.46.123
+
+从3中只取IP，注意sed的用法
+
+5 GREP 或 or 操作
+$ netstat -np|grep -E 'PID|mysql'
+Proto Recv-Q Send-Q Local Address Foreign Address State PID/Program name
+tcp 0 0 192.168.1.104:38635 192.168.1.104:3306 ESTABLISHED 3420/mysql
+tcp 0 0 192.168.1.104:3306 192.168.1.104:38635 ESTABLISHED 2342/mysqld
+Proto RefCnt Flags Type State I-Node PID/Program name Path
+
+6 HowTo: Flush nscd dns cache
+
+Nscd caches libc-issued requests to the Name Service. If retrieving NSS data is fairly expensive, nscd is able to speed up consecutive access to the same data dramatically and increase overall system performance. Just restart nscd:
+$ sudo /etc/init.d/nscd restart
+OR
+# service nscd restart
+OR
+# service nscd reload
+
+7 目录hard link
+
+shel $ mount --bind /home /tmp
+shel $ ls -lid /home /tmp
+64 drwxr-xr-x 4 root root 36 3月 25 12:28 /home
+64 drwxr-xr-x 4 root root 36 3月 25 12:28 /tmp
+shel $ umount /tmp
+shel $ ls -lid /home /tmp
+64 drwxr-xr-x 4 root root 36 3月 25 12:28 /home
+256 drwxrwxrwt 1 root root 12656 6月 6 18:03 /tmp
+
+8 nc探测主机开放的端口（同时nc是一个简单的网络通信程序，man中有例子）
+shel $ nc -vz 192.168.1.1 80
+Connection to 192.168.1.1 80 port [tcp/http] succeeded!
+shel $ nc -vuz 192.168.1.1 53
+
+$ cat ep
+Iraq fight
+
+awk RS 匹配正则表达式，record seperate？
+
+9 $ cat ep
+Iraq fight
+
+oextuse mma
+exque cctv
+exqtes mmd
+occ eec
+
+mmd mt
+lsct
+
+qqtvm
+cmde
+wo
+flortt
+$ awk 'BEGIN {RS = ""} {print $3}' ep
+
+exque
+lsct
+wo
+
+$ awk '$2 ~ /mmd/' ep
+exqtes mmd
+$ awk 'BEGIN {RS = ""} {print $3}' ep //注意这个$3的结果
+
+exque
+lsct
+wo
+$ awk 'BEGIN {RS = ""} {print $2}' ep
+fight
+mma
+mt
+cmde
+
+$ awk '/mmd/' ep
+exqtes mmd
+mmd mt
+
+10 awk 统计 分类汇总
+
+$ cat courty
+asia china 140000
+american usa 30000
+europe uk 6000
+asia japan 20000
+american mexcia 5000
+europe french 7000
+asia india 130000
+
+$ cat prep3
+pass == 1{
+pop[$1]+=$3
+}
+pass == 2{
+print $1 " " pop[$1]| "sort | uniq" /调用系统命令的方法/
+}
+
+$ awk -f prep3 pass=1 courty pass=2 courty /传入变量值的方法
+american 35000
+asia 290000
+europe 13000
+
+11 AWK实现EXCEL vlookup的方法
+
+$ cat f1.txt f2.txt
+ls 34 b4
+zs 23 a3
+yq 57 f7
+we 62 e2
+mz 85 d5
+zs 3 3333
+ls 4 4444
+we 2 2222
+yq 6 7777
+mz 5 5555
+# awk 'FNR==NR{map[$1]=$3;map2[$1]=$2;next}{print $1,$2,$3 "," map[$1] ","map2[$1]}' f2.txt f1.txt /理解数组的表示的含义，数组中不仅可以用下标表示，还可以表示为别名，如map[ls]等
+ls 34 b4,4444,4
+zs 23 a3,3333,3
+yq 57 f7,7777,6
+we 62 e2,2222,2
+mz 85 d5,5555,5
+
+12 sed替换特殊字符的方法，注意sed后面的表示方法
+
+处理前
+
+$ find .
+.
+./.bash_history
+./bin
+./.gnupg
+./.dbus
+./.dbus/session-bus
+./.dbus/session-bus/4ed603cd18304c8d9216b69334cdeb3a-0
+。。。。。。
+
+处理后
+
+# find . | sed -r s/"^\."/"\/root"/g
+/root
+/root/.bash_history
+/root/bin
+/root/.gnupg
+/root/.dbus
+/root/.dbus/session-bus
+/root/.dbus/session-bus/4ed603cd18304c8d9216b69334cdeb3a-0
+。。。。。。
+
+13 在SED中处理包含特殊字符的变量的应用
+
+$ echo $PWD
+/root
+
+本是用sed s///g,因为$PWD中含有\字符，所以替换为;
+
+（实际上可以替换为$PWD中不含的任意特殊字符，
+
+比如 $！等都可以哦）
+
+$ find .|sed -r "s;^\.;$PWD;g"
+/root
+/root/.bash_history
+/root/bin
+.路径被/root替换了
+..............
+
+14 find & exec
+
+This command moves a set of files into an archive directory:
+
+find /foo -maxdepth 1 -atime +366 -exec mv {} /archive \;
+
+However, this will only move one file at a time. We cannot in this
+case use `-exec ... +' because the matched file names are added at the
+end of the command line, while the destination directory would need to
+be specified last. We also can't use `xargs' in the obvious way for
+the same reason. One way of working around this problem is to make use
+of the special properties of GNU `mv'; it has a `-t' option that allows
+the target directory to be specified before the list of files to be
+moved. However, while this technique works for GNU `mv', it doesn't
+solve the more general problem.
+
+15 info 指令
+
+s 向前搜索指定的字符串。
+{ 查找上一个出现点。
+} 查找下一个出现点。
+
+[ 上一个节点
+
+] 下一个节点
+
+h 打开帮助文档
+
+16 find exec 安全问题
+
+cd /var/tmp && find stuff -mtime +90 -exec /bin/rm {} \+
+
+might actually issue the command:
+
+/bin/rm stuff/A stuff/B stuff/passwd
+
+If an attacker can rename `stuff' to something else (making use of
+their write permissions in `/var/tmp') they can replace it with a
+symbolic link to `/etc'. That means that the `/bin/rm' command will be
+invoked on `/etc/passwd'. If you are running your `find' command as
+root, the attacker has just managed to delete a vital file. All they
+needed to do to achieve this was replace a subdirectory with a symbolic
+link at the vital moment.
+
+There is however, a simple solution to the problem. This is an
+action which works a lot like `-exec' but doesn't need to traverse a
+chain of directories to reach the file that it needs to work on. This
+is the `-execdir' action, which was introduced by the BSD family of
+operating systems. The command,
+
+find /var/tmp/stuff -mtime +90 -execdir /bin/rm {} \+
+这样才好？
+
+might delete a set of files by performing these actions:
+
+1. Change directory to /var/tmp/stuff/foo
+
+2. Invoke `/bin/rm ./file1 ./file2 ./file3'
+
+3. Change directory to /var/tmp/stuff/bar
+
+4. Invoke `/bin/rm ./file99 ./file100 ./file101'
+
+This is a much more secure method. We are no longer exposed to a
+race condition. For many typical uses of `find', this is the best
+strategy. It's reasonably efficient, but the length of the command
+line is limited not just by the operating system limits, but also by
+how many files we actually need to delete from each directory.
+
+Is it possible to do any better? In the case of general file
+processing, no. However, in the specific case of deleting files it is
+indeed possible to do better.
+
+17 awk替换和条件判断
+
+# cat f1.txt
+ls 34 b4
+zs 23 a3
+yq 57 f7
+we 62 e2
+mz 85 d5
+19899951
+223667
+abc12345
+19230815a
+5561826
+511121193303032551
+510122192308152652
+510671201209011952
+610311199009192512
+要求是把上面的文本中每一列包含7个到结尾的数字，替换最3个数字为-xxx
+# awk '$0 ~/[0-9]{7}$/{sub(/[0-9]{3}$/,"-xxx");print $0;next}{print $0}' f1.txt
+ls 34 b4
+zs 23 a3
+yq 57 f7
+we 62 e2
+mz 85 d5
+19899-xxx
+223667
+abc12345
+19230815a
+5561-xxx
+511121193303032-xxx
+510122192308152-xxx
+510671201209011-xxx
+610311199009192-xxx
+
+18 lsblk -o +uuid 显示设备名，挂载点与uuid
+
+19 mysql -e "select * ..." Dbname 在shell执行sql语句
+
+20 centOS 安装完成后ifconfig只有lo网卡
+
+A ifup eth0 试试是否可以看到eth0，
+B lsmod 查找网卡的mod，再用modinfo确认是否是正确的网卡
+
+以上确认后编辑ifcfg-eth0这个配置文件，使网卡启动时自动加载
+下面是这个配置文件的正确方式
+
+shel $ cat /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+HWADDR=08:00:27:B9:B3:5C
+TYPE=Ethernet
+UUID=0179cbdb-4c64-4ecb-a9ff-d331baf1a178
+ONBOOT=yes
+NM_CONTROLLED=yes
+IPADDR=192.168.1.2
+GATEWAY=192.168.1.1
+PREFIX=24
+NETMASK=255.255.255.0
+DNS=61.139.2.69
+
+21
+nginx SSL配置
+生成证书
+$ cd /usr/local/nginx/conf
+$ openssl genrsa -des3 -out server.key 1024
+$ openssl req -new -key server.key -out server.csr
+$ cp server.key server.key.org
+$ openssl rsa -in server.key.org -out server.key
+$ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+编辑 nginx.conf
+server {
+server_name YOUR_DOMAINNAME_HERE;
+listen 443;
+ssl on;
+ssl_certificate /usr/local/nginx/conf/server.crt;
+ssl_certificate_key /usr/local/nginx/conf/server.key;
+}
+
+22 svn多目录配置
+[root@localhost conf]# grep -v ^# authz
+[aliases]
+[groups]
+[/] $这里只能是根路径，不然授权出错
+uw = rw
+
+[root@localhost conf]# grep -v ^# passwd
+[users]
+uw=uwmima
+
+[root@localhost conf]# grep -v ^# svnserve.conf
+[general]
+anon-access = read
+auth-access = write
+password-db = passwd
+authz-db = authz
+realm = www
+
+23 LVS 配置 Server
+[root@localhost ~]# cat dr.sh
+service iptables stop
+ifconfig eth0:0 192.168.1.10 broadcast 192.168.1.10 netmask 255.255.255.255 up
+route add -host 192.168.1.10 dev eth0:0
+ipvsadm -C
+ipvsadm -A -t 192.168.1.10:80 -s rr
+ipvsadm -agt 192.168.1.10:80 -r 192.168.1.11:80
+ipvsadm -agt 192.168.1.10:80 -r 192.168.1.12:80
+
+[root@localhost ~]# cat tunl.sh
+service iptables stop
+ifconfig tunl0 192.168.1.10 netmask 255.255.255.255 up
+route add -host 192.168.1.10 dev tunl0
+ipvsadm -C
+ipvsadm -A -t 192.168.1.10:80 -s rr
+ipvsadm -a -t 192.168.1.10:80 -r 192.168.1.11:80 -i
+ipvsadm -a -t 192.168.1.10:80 -r 192.168.1.12:80 -i
+
+CLIENT
+anaconda-ks.cfg dr.sh install.log install.log.syslog start.sh
+[root@localhost ~]# cat dr.sh
+service httpd start
+service iptables stop
+ifconfig lo:0 192.168.1.10 broadcast 192.168.1.10 netmask 255.255.255.255 up
+route add -host 192.168.1.10 dev lo:0
+echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
+echo 1 > /proc/sys/net/ipv4/conf/lo/arp_ignore
+echo 1 > /proc/sys/net/ipv4/conf/all/arp_announce
+echo 2 > /proc/sys/net/ipv4/conf/lo/arp_announce
+
+[root@localhost ~]# cat start.sh
+service httpd start
+service iptables stop
+ifconfig tunl0 192.168.1.10 netmask 255.255.255.255 up
+route add -host 192.168.1.10 dev tunl0
+echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
+echo 1 > /proc/sys/net/ipv4/conf/tunl0/arp_ignore
+echo 1 > /proc/sys/net/ipv4/conf/all/arp_announce
+echo 2 > /proc/sys/net/ipv4/conf/tunl0/arp_announce
+
+24
+rsync配置
+
+rsyncd.conf rsyncd.secrets
+[root@localhost rsyncd]# cat rsyncd.conf
+uid = root
+gid = root
+use chroot = no
+read only = no
+write only = no
+host allow =192.168.1.0/255.255.255.0
+max connection = 3
+pid file = /var/run/syncd.pid
+log file = /var/log/rsyncd.log
+secrets file = /etc/rsyncd/rsyscd.secrets
+log format = %t %a %m %f %b
+time out = 300
+strict mode = false
+
+[shares]
+path = /home/rsync
+list = yes
+
+start
+# rsync --daemon --config=/etc/rsyncd/rsyncd.conf
+
+客户端
+list
+$>rsync -avzP root@192.168.1.2::shares
+
+sync
+$>rsync -v ./* root@192.168.1.2::shares
+
+26
+tar.bz 安装时注意./configure 后面的参数，有时候错了不会有提示，但会失败;用 ./configure --help|grep 查找需要的参数，仔细核对输入，注意大小写，横线，单字的拼写;libdir 和includedir的值一定要正确，如果使用yum等自动安装找不到include和lib，使用tar源码手动安装
+
+coreseek 段错误是词典路径不正确
+
+coreseek 一定使用UTF8编码
+
+27
+diff
+26c26
+左边文件的26行与又边26行不同
+
+26d
+26行删除了
+
+#空格高亮黄色
+set nohls取消搜索的高亮关键字。

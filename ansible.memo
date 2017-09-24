@@ -1,0 +1,483 @@
+####报selinx错误处理（目标被操作主机上操作）
+yum -y install libselinux-python
+
+####不存bar才创建文件（或者目录）
+name: create bar
+ls /path/to/bar >&/dev/null || cd /path/to && touch bar
+ls /path/to/bar >&/dev/null || mkdir /path/to/bar
+
+#### 使用系统变量替换特定字符
+- name: replace hostname
+  raw: /bin/sed -i "s:HOSTNAME:$HOSTNAME:g" /path/2/foo
+
+####对特定的文件新加原来不存在的一行在末尾 ,line=后面的是添加的内容
+ansible test -m lineinfile -a "dest=/root/cs.txt line='92.168.1.99'" -u userName --become --ask-sudo-pass --key-file=key-file
+
+SUDO password: ###下面是结果
+192.168.1.15 | SUCCESS => {
+    "backup": "",
+    "changed": true,
+    "msg": "line added"
+}
+
+使用密码连接远程的方式
+ansible HostGrp -m raw -a "/cmd" -u userName -k --become --ask-sudo-pass
+
+###ansible with expect ####
+cat /tmp.com.sh
+#!/bin/bash
+   username=$1;
+   newpass=$2;
+   export HISTIGNORE="expect*";
+   expect -c "
+        set timeout 5
+        spawn passwd $username
+        expect "?assword:"
+        send \"$newpass\r\"
+        expect "?assword:"
+        send \"$newpass\r\"
+        expect eof"
+  export HISTIGNORE="";
+
+~> ansible db -a "/bin/sh /tmp.com.sh Alice com-2358" -u Michael \
+--key-file=.ssh/rsa_private_keys --sudo -K
+SUDO password:
+192.168.20.10 | SUCCESS | rc=0 >>
+spawn passwd Alice
+Changing password for user Alice.
+New password:
+Retype new password:
+passwd: all authentication tokens updated successfully.
+###ansible with expect ####
+
+######服务器多角色#####
+######服务器多角色#####
+######服务器多角色#####
+Shell> tree ansible
+ansible
+├── roles
+│   ├── screen
+│   │   ├── defaults
+│   │   ├── files
+│   │   │   ├── ansibleInstallScreen.sh
+│   │   │   └── screen.tar.gz
+│   │   ├── handlers
+│   │   ├── meta
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   ├── templates
+│   │   └── vars
+│   └── zabbix
+│       ├── defaults
+│       ├── files
+│       │   ├── autoInstallZbxClient.sh
+│       │   └── zabbix-3.0.4.tar.gz
+│       ├── handlers
+│       ├── meta
+│       ├── tasks
+│       │   └── main.yml
+│       ├── templates
+│       └── vars
+└── web.yml
+
+17 directories, 7 files
+
+Shell> cat ansible/web.yml
+- hosts: all
+  remote_user: Michael
+  roles:
+    - screen
+    - zabbix
+######服务器多角色#####
+######服务器多角色#####
+######服务器多角色#####
+
+######################
+######################
+######################
+安装screen成功
+服务器opensuse 42.2 客户端CentOS 7
+ansible 2.1.1 用户Michael使用key登陆客户端
+
+Shell>mkdir -p ansible/roles/screen/{defaults,files,handlers,meta,tasks,templates,vars}
+
+Shell> tree
+.
+├── roles
+│   └── screen
+│       ├── defaults
+│       ├── files
+│       │   ├── ansibleInstallScreen.sh
+│       │   └── screen.tar.gz
+│       ├── handlers
+│       ├── meta
+│       ├── tasks
+│       │   └── main.yml
+│       ├── templates
+│       └── vars
+└── web.yml
+
+Shell> cat web.yml （在这以下的yml文件有严格的格式要求，否则报错）
+- hosts all
+  remote_user Michael
+  roles
+    - screen
+Shell> cat roles/screen/tasks/main.yml
+---
+- name copy tar.gz
+  copy src=screen.tar.gz dest=/tmp/screen.tar.gz
+- name copy sh
+  copy src=ansibleInstallScreen.sh dest=/tmp/ansibleInstallScreen.sh mode=0755
+- name run
+  shell /bin/sh /tmp/ansibleInstallScreen.sh
+
+Shell> cat roles/screen/files/ansibleInstallScreen.sh
+#!/bin/bash
+export
+PATH=/usr/local/bin/bin/usr/bin/usr/local/sbin/usr/sbin/sbin/home/Alen/bin
+yum -y install ncurses-devel gcc gcc++ autoconf automake
+/bin/mkdir -p /usr/local/screen
+/bin/tar zxf /tmp/screen.tar.gz -C /usr/local/screen
+cd /usr/local/screen/v.4.3.1/src
+./autogen.sh
+./configure
+make
+rm /usr/bin/screen -f
+ln -s /usr/local/screen/v.4.3.1/src/screen /usr/bin/screen
+
+Shell> ansible-playbook web.yml --syntax-check
+
+playbook web.yml
+Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/logcdbak --sudo -K
+
+SUDO password:(输入目标机器的sudo密码）
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok [192.168.0.11]
+
+TASK [screen  copy tar.gz] ****************************************************
+changed [192.168.0.11]
+
+TASK [screen  copy sh] ********************************************************
+changed [192.168.0.11]
+
+TASK [screen  run] ************************************************************
+changed [192.168.0.11]
+
+PLAY RECAP *********************************************************************
+192.168.0.11             : ok=4    changed=3    unreachable=0    failed=0
+
+######################
+######################
+######################
+
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/usr/local/mysql/bin
+export PATH
+srvIP="192.168.1.13"
+ftpUser="xml"
+ftpPwd="Y0urFtpP@ssw)rd"
+mysqlPkg="mysql-5.6.33.tar.gz"
+ftpPath="ftp://$srvIP/$mysqlPkg"
+srcPath="/usr/local/src"
+installPath="/usr/local/mysql"
+mysqlConf="/etc/my.comf"
+initialpw='YourRootPasswordHere'
+vmCpuCores=$(cat /proc/cpuinfo |grep processor |wc -l)
+cd $srcPath
+wget --user=$ftpUser --password=$ftpPwd $ftpPath
+
+#add mysql user
+if [ `cat /etc/passwd|grep 'mysql' |wc -l` -eq 0 ];then
+        groupadd -r mysql
+        useradd -g mysql -s /sbin/nologin -g mysql -M mysql
+fi
+yum install -y gcc-c++ ncurses-devel gcc gcc++ gcc-g77 openssl-devel cmake
+tar zxf $mysqlPkg
+
+cd $srcPath/mysql-5.6.33
+ cmake \
+-DCMAKE_INSTALL_PREFIX=$installPath \
+-DMYSQL_DATADIR=$installPath/data \
+-DSYSCONFDIR=/etc \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_MEMORY_STORAGE_ENGINE=1 \
+-DWITH_READLINE=1 \
+-DMYSQL_UNIX_ADDR=$installPath/mysql.sock \
+-DMYSQL_TCP_PORT=3306 \
+-DENABLED_LOCAL_INFILE=1 \
+-DWITH_PARTITION_STORAGE_ENGINE=1 \
+-DEXTRA_CHARSETS=all \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DMYSQL_USER=mysql \
+-DWITH_DEBUG=0 \
+-DWITH_SSL=system
+
+if [ $? -eq 0 ];then
+      make -j $vmCpuCores
+fi
+
+if [ $? -eq 0 ];then
+      make install
+fi
+
+chmod +w $installPath
+chown -R mysql.mysql $installPath
+cd $srcPath/mysql-5.6.33/support-files/
+
+mv $mysqlConf "$mysqlConf".bak
+cp my-default.comf $mysqlConf
+
+$installPath/scripts/mysql_install_db --defaults-file=$mysqlConf --basedir=$installPath --datadir=$installPath/data -user=mysql
+
+cp $srcPath/mysql-5.6.33/support-files/mysql.server /etc/init.d/mysqld
+
+chmod +x /etc/init.d/mysqld
+chkconfig mysqld on
+service mysqld start
+
+if [ `cat /etc/profile|grep 'mysql/bin' |wc -l` -eq 0 ];then
+  echo "export PATH=$installPath/bin:$PATH" /etc/profile
+  source /etc/profile
+fi
+
+sleep 1s
+#update mysql credential
+$installPath/mysql -uroot -e "update user set password=password('$initialpw') where host='127.0.0.1'" mysql;
+$installPath/mysql -uroot -e "delete from user where password=''" mysql
+$installPath/mysql -uroot -e "flush privileges" mysql
+sleep 1s
+service mysqld restart
+
+############install 5.7########################
+################start#########################
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/usr/local/mysq/bin
+export PATH
+srvIP="192.168.1.13"
+ftpUser="xml"
+ftpPwd="Y0urFtpP@ssw)rd"
+mysqlPkg="mysql-5.7.17.tar.gz" ##需要boost版本
+ftpPath="ftp://$srvIP/$mysqlPkg"
+srcPath="/usr/local/src"
+initialpw='abcd-1238'
+installPath="/usr/local/mysql"
+mysqlConf="/etc/my.comf"
+vmCpuCores=$(cat /proc/cpuinfo |grep processor |wc -l)
+cd $srcPath
+wget --user=$ftpUser --password=$ftpPwd $ftpPath
+
+#add mysql user
+if [ `cat /etc/passwd|grep 'mysql' |wc -l` -eq 0 ];then
+        groupadd -r mysql
+        useradd -g mysql -s /sbin/nologin -g mysql -M mysql
+fi
+yum install -y gcc-c++ ncurses-devel gcc gcc++ gcc-g77 openssl-devel cmake
+tar zxf $mysqlPkg
+
+cd $srcPath/mysql-5.7.17
+ cmake \
+-DCMAKE_INSTALL_PREFIX=$installPath \
+-DMYSQL_DATADIR=$installPath/data \
+-DSYSCONFDIR=/etc \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_MEMORY_STORAGE_ENGINE=1 \
+-DWITH_READLINE=1 \
+-DMYSQL_UNIX_ADDR=$installPath/mysql.sock \
+-DMYSQL_TCP_PORT=3306 \
+-DENABLED_LOCAL_INFILE=1 \
+-DWITH_PARTITION_STORAGE_ENGINE=1 \
+-DEXTRA_CHARSETS=all \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DMYSQL_USER=mysql \
+-DWITH_DEBUG=0 \
+-DWITH_SSL=system \
+-DWITH_BOOST=/usr/local/src/mysql-5.7.17/boost/boost_1_59_0
+if [ $? -eq 0 ];then
+      make -j $vmCpuCores
+fi
+
+if [ $? -eq 0 ];then
+      make install
+fi
+mkdir -p $installPath/data
+chmod +w $installPath
+chown -R mysql.mysql $installPath
+cd $srcPath/mysql-5.7.17/support-files/
+
+mv $mysqlConf "$mysqlConf".bak
+cp my-default.comf $mysqlConf
+
+$installPath/bin/mysqld --initialize --basedir=$installPath --datadir=$installPath/data/ --user=mysql
+
+cp $srcPath/mysql-5.7.17/support-files/mysql.server /etc/init.d/mysqld
+
+chmod +x /etc/init.d/mysqld
+chkconfig mysqld on
+service mysqld start
+
+if [ `cat /etc/profile|grep 'mysql/bin' |wc -l` -eq 0 ];then
+        echo "export PATH=$installPath/bin:$PATH" >>/root/.bashrc
+  source /root/.bashrc
+fi
+
+sleep 1s
+#update mysql credential
+#$installPath/bin/mysql -uroot -e "update user set password=password('$initialpw') where host='127.0.0.1'" mysql;
+#$installPath/bin/mysql -uroot -e "delete from user where password=''" mysql
+#$installPath/bin/mysql -uroot -e "flush privileges" mysql
+#sleep 1s
+
+安装完成5.7后最后部分系统会给你一个初始密码；
+使用这个初始密码登陆到Mysql后，
+用Alter User 'root'@'localhost' identified by 'nespassword'后才可以使用Mysql。
+
+ALTER USER 'jeffrey'@'localhost' IDENTIFIED WITH sha256_password BY 'new_password' PASSWORD EXPIRE INTERVAL 180 DAY;
+############install 5.7########################
+################end#########################
+
+++ansible++++++++++
+ansible zbx  -a "/usr/bin/wget --user=xml --password=Y0urFtpP@ssw)rd ftp://192.168.1.13/getMysql.sh" -u MIKE --sudo -K
+ ansible zbx  -a "/bin/sh getMysql.sh" -u MIKE --sudo -K
+++++++ansible end++++++++++
+
+############screen start#############
+++++++++++++
+#!/bin/bash
+export PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/Alice/bin
+yum -y install ncurses-devel gcc gcc++ autoconf automake
+/bin/mkdir -p /usr/local/screen
+/bin/tar zxf /tmp/screen.tar.gz -C /usr/local/screen
+cd /usr/local/screen/v.4.3.1/src
+./autogen.sh
+./configure
+make
+rm /usr/bin/screen -f
+ln -s /usr/local/screen/v.4.3.1/src/screen /usr/bin/screen
+++++++++++++
+
+调用命令：输入Alice的sudo密码
+ansible tstclient  -a "/bin/sh /tmp/installscreen.sh" -u Alice --key-file dlu --sudo -K
+注意sh的任何命令出现错误都会导致整个ansible错误
+
+############screen start#############
+
+##########以下的在2.2.1.0版本下操作###################
+####one ip with more port on remote #########
+#####edit in /etc/ansible host###############
+[tstdb]
+db1 ansible_ssh_port=6001 ansible_ssh_host=yc.example.com
+db2 ansible_ssh_port=6002 ansible_ssh_host=yc.example.com
+####one ip with more port on remote END#########
+查证ansible的command命令无法使用grep操作，要想使用管道命令，需要使用shell来操作。？？
+
+# ansible tstdb -m shell -a "grep -v '#' /etc/selinux/config" -u Anthnoy --key-file dlu  -K
+SUDO password:
+db2 | SUCCESS | rc=0 >>
+
+SELINUX=disabled
+SELINUXTYPE=targeted
+
+db1 | SUCCESS | rc=0 >>
+
+SELINUX=disabled
+SELINUXTYPE=targeted
+
+需要适用命令的绝对路径（如下面的/sbin/ifconfig)
+ansible tstdb -m shell -a "/sbin/ifconfig|grep 172" -u Anthnoy --key-file dlu  -K
+
+++++ingore ssh key error on run asinsble ad-hoc start++++
+vim /etc/ansible/ansible.cfg
+$ grep host_key /etc/ansible/ansible.cfg
+host_key_checking = False
+++++++++key error end+++++++++++++++
+
+++++++++++none standard port start++++++
+none standard port only add port number to /etc/ansible/host
+like this
+10.2.3.4:60000
+192.168.5.6:22
+www.example.com:60100
+++++++++++none standard port end++++++
+
+$ ansible bak -m copy -a "src=./installVsftpd.sh dest=/tmp/iv.sh" -u some-user --sudo -K
+SUDO password:
+10.31.100.13 | SUCCESS => {
+    "changed": true,
+    "checksum": "be4292da978ead81fea35f9eabed15608ef240bd",
+    "dest": "/tmp/iv.sh",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "07ac7f2cf9b106f998a08c209d036861",
+    "mode": "0644",
+    "owner": "root",
+    "size": 178,
+    "src": "/home/some-user/.ansible/tmp/ansible-tmp-1480586111.94-149658495898370/source",
+    "state": "file",
+    "uid": 0
+}
+$ ansible bak -m file -a "path=/tmp/iv.sh mode=755" -u some-user --sudo -K
+SUDO password:
+10.31.100.13 | SUCCESS => {
+    "changed": true,
+    "gid": 0,
+    "group": "root",
+    "mode": "0755",
+    "owner": "root",
+    "path": "/tmp/iv.sh",
+    "size": 178,
+    "state": "file",
+    "uid": 0
+}
+
+$ ansible bak  -a "/bin/sh /tmp/iv.sh" -u some-user --sudo -K
+SUDO password:
+10.31.100.13 | SUCCESS | rc=0 >>
+Loaded plugins: fastestmirror, security
+Determining fastest mirrors
+Setting up Install Process
+Resolving Dependencies
+--> Running transaction check
+---> Package vsftpd.x86_64 0:2.2.2-21.el6 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package          Arch             Version                 Repository      Size
+================================================================================
+Installing:
+ vsftpd           x86_64           2.2.2-21.el6            base           155 k
+
+Transaction Summary
+================================================================================
+Install       1 Package(s)
+
+Total download size: 155 k
+Installed size: 340 k
+Downloading Packages:
+Running rpm_check_debug
+Running Transaction Test
+Transaction Test Succeeded
+Running Transaction
+  Installing : vsftpd-2.2.2-21.el6.x86_64                                   1/1
+  Verifying  : vsftpd-2.2.2-21.el6.x86_64                                   1/1
+
+Installed:
+  vsftpd.x86_64 0:2.2.2-21.el6
+
+Complete!
+Starting vsftpd for vsftpd: [  OK  ]Warning: RPMDB altered outside of yum.
+
+$ cat /tmp/iv.sh
+#!/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/mongodb/bin
+export PATH
+yum install -y vsftpd
+service vsftpd start

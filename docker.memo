@@ -1,0 +1,200 @@
+$ docker images ###########列镜像
+REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
+ubuntu/ubuntu_httpd v0 ba8ba558ddfb About an hour ago 227.9 MB
+
+$ $ sudo docker run -itdp 8080:80 ubuntu/ubuntu_httpd:v0 #######以后台方式运行镜像
+########注意端口格式是对外端口号：对内端口号###########
+0b62724e1d06ca685cd4567ad46d4c5f26fe55089d423579e22942083a185e62
+
+$ docker ps ###列出正在运行的镜像
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+0b62724e1d06 ubuntu/ubuntu_httpd:v0 "/bin/bash" ...... 0.0.0.0:8080->80/tcp rever
+
+$ docker inspect 0b62724e1d06 |grep -Ei ipaddr ##########获取运行镜像的IP地址
+"IPAddress": "172.17.0.26"         ####宿主机器的ip192.168.1.93
+
+$ curl 172.17.0.26 #######运行的镜像初始没有启动nginx
+curl: (7) couldn't connect to host
+
+$ docker exec 0b62724e1d06 service nginx start######为启动的镜像启动nginx
+$ curl 172.17.0.26 ##########nginx启动了,curl 192.168.1.93:8080也是一样#####
+.............Some nginx html PAGE HERE.....................
+<title>Welcome to nginx!</title>
+.............OMIT MANY URL CONTENT..........................
+
+使用宿主机器的目录作为工作目录(冒号前面是宿主机器目录，后面是容器目录）
+$docker run -d -p 1080:80 --name website \
+-v $PWD/website:/var/www/html/website jamtur01/nginx nginx
+
+$ ls $PWD
+default.htm index.html lb.html Test.html
+
+创建私有HUB
+docker run -dp 5000:5000 registry  #创建服务器
+docker tag 3620872edb5e 172.31.11.144:5000/xt833a/ubuntu #标记待上传image
+docker push 172.31.11.144:5000/xt833a/ubuntu #上传image
+vim /etc/default/docker  #使用http的方式，编辑这个文件，加入下一句
+DOCKER_OPTS="--insecure-registry 172.31.11.144:5000"
+
+“Unable to locate package” while trying to install packages by apt
+
+Try running sudo apt-get update before trying to install the package. After installation the system doesn't have an up-to-date package list so you won't be able to find the package.
+
+制作完整docker自定义镜像的方法：
+
+docker pull 拉源image
+docker run -it imageID
+
+进入Container
+apt-get update 升级软件仓库源
+apt-get install nginx 安装
+nginx -v 验证
+exit 退出docker
+
+docker ps 查找ContainerID
+docker commit 提交
+docker commit -m "Added nginx from ubuntu14.04" -a "saymagic" 79c761f627f3 saymagic/ubuntu-nginx:v1
+
+docker run -it
+
+docker pull microsoft/dotnet
+
+C#
+
+###############加速#############
+
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://9993f789.m.daocloud.io
+如果报错，编辑下面的文件，去掉多余的逗号
+vim /etc/docker/daemon.json
+然后重启DOCKER
+
+Copy
+
+该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/default/docker 中。适用于
+Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
+
+网易
+https://c.163.com/wiki/index.php?title=Dockerhub%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F
+
+$ sudo echo "DOCKER_OPTS=\"\$DOCKER_OPTS --registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
+$ service docker restart
+
+#################################
+
+Error starting daemon: layer does not exist" centos 7
+
+https://github.com/moby/moby/blob/620339f166984540f15aadef2348646eee9a5b42/contrib/nuke-graph-directory.sh
+运行下面的脚本,成功后删除DOCKER重装
+
+
+#!/bin/sh
+
+set -e
+
+dir="$1"
+
+if [ -z "$dir" ]; then
+
+{
+
+echo 'This script is for destroying old /var/lib/docker directories more safely than'
+
+echo ' "rm -rf", which can cause data loss or other serious issues.'
+
+echo
+
+echo "usage: $0 directory"
+
+echo " ie: $0 /var/lib/docker"
+
+} >&2
+
+exit 1
+
+fi
+
+if [ "$(id -u)" != 0 ]; then
+
+echo >&2 "error: $0 must be run as root"
+
+exit 1
+
+fi
+
+if [ ! -d "$dir" ]; then
+
+echo >&2 "error: $dir is not a directory"
+
+exit 1
+
+fi
+
+dir="$(readlink -f "$dir")"
+
+echo
+
+echo "Nuking $dir ..."
+
+echo ' (if this is wrong, press Ctrl+C NOW!)'
+
+echo
+
+( set -x; sleep 10 )
+
+echo
+
+dir_in_dir() {
+
+inner="$1"
+
+outer="$2"
+
+[ "${inner#$outer}" != "$inner" ]
+
+}
+
+# let's start by unmounting any submounts in $dir
+
+# (like -v /home:... for example - DON'T DELETE MY HOME DIRECTORY BRU!)
+
+for mount in $(awk '{ print $5 }' /proc/self/mountinfo); do
+
+mount="$(readlink -f "$mount" || true)"
+
+if dir_in_dir "$mount" "$dir"; then
+
+( set -x; umount -f "$mount" )
+
+fi
+
+done
+
+# now, let's go destroy individual btrfs subvolumes, if any exist
+
+if command -v btrfs > /dev/null 2>&1; then
+
+root="$(df "$dir" | awk 'NR>1 { print $NF }')"
+
+root="${root#/}" # if root is "/", we want it to become ""
+
+for subvol in $(btrfs subvolume list -o "$root/" 2>/dev/null | awk -F' path ' '{ print $2 }' | sort -r); do
+
+subvolDir="$root/$subvol"
+
+if dir_in_dir "$subvolDir" "$dir"; then
+
+( set -x; btrfs subvolume delete "$subvolDir" )
+
+fi
+
+done
+
+fi
+
+# finally, DESTROY ALL THINGS
+
+( set -x; rm -rf "$dir" )
+
+] 27.57MB/82.5MB
+eca642e7826b: Download complete
+3638d91a9039: Download complete ########################################################

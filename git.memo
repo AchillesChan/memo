@@ -1,0 +1,76 @@
+
+user@linux:~/git> ssh-add ~/.ssh/rsa-key
+Enter passphrase for /home/user/.ssh/rsa-key:
+Identity added: /home/user/.ssh/rsa-key (/home/user/.ssh/rsa-key)
+
+user@linux:~/git> git config --global user.email you-name@somemail.com
+
+user@linux:~/git> git config --list
+user.email=you-name@somemail.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+
+user@linux:~/git> ssh -T git@github.com
+Hi your-gitid! You've successfully authenticated, but GitHub does not provide shell access.
+
+user@linux:~/git> get clone git@github.com:your-gitid/your-repo
+If 'get' is not a typo you can use command-not-found to lookup the package that contains it, like this:
+
+user@linux:~/git> git clone git@github.com:your-gitid/your-repo
+Cloning into 'your-repo'...
+remote: Counting objects: 23, done.
+remote: Total 23 (delta 0), reused 0 (delta 0), pack-reused 23
+Receiving objects: 100% (23/23), done.
+Resolving deltas: 100% (7/7), done.
+
+user@linux:~/git> cd your-repo/
+
+user@linux:~/git> git add .  添加当前所有文件 到暂存区
+
+user@linux:~/git/your-repo> vim sourFileList
+
+user@linux:~/git/your-repo> git commit -a -m "update source list"
+[master 46d78ca] update source list
+1 file changed, 1 insertion(+), 1 deletion(-)
+
+user@linux:~/git/your-repo> git push
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 283 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:your-gitid/your-repo
+23637cc..46d78ca  master -> master
+
+user@linux:~/git/your-repo> git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working tree clean
+
+user@linux:~/git/your-repo> git log
+commit 46d78caf90e08273a9deee359b8b2e61a19d3db3
+Author: user <you-name@somemail.com>
+Date:   Wed Sep 20 17:04:57 2017 +0800
+
+update source list
+
+commit 23637cce04220b6f668894865a4c3bd31eb86873
+Author: user <you-name@somemail.com>
+Date:   Wed Sep 20 16:58:26 2017 +0800
+
+update compare-backup.sh
+
+commit c11d0dc67fb8b07e5b6b7dd080cdce4648878cc4
+Author: user <you-name@somemail.com>
+Date:   Wed Sep 20 16:54:38 2017 +0800
+
+update sh file
+
+commit bb9c88bada6debd26ab9d370900751cc27b47fba
+Author: root <root@your-name.localdomain>
+Date:   Fri Aug 4 17:48:58 2017 +0800
+
+5th

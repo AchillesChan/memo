@@ -1,0 +1,128 @@
+########screen config 20170320######
+
+hardstatus on
+
+hardstatus alwayslastline
+
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H
+
+%{..Y} %m/%d %C%a "
+
+##scroll 2048 line
+
+defscrollback 2048
+
+##bind shorcut Fn to switch screen
+
+##f10-->k; select 0
+
+##f11-->F1 monitor
+
+##f12-->F2 kill
+
+##f7--->k7 new screen
+
+##f8--->k8 title screen
+
+bindkey -k k1 select 1
+
+bindkey -k k2 select 2
+
+bindkey -k k3 select 3
+
+bindkey -k k4 select 4
+
+bindkey -k k5 select 5
+
+bindkey -k k6 select 6
+
+bindkey -k k7 screen
+
+bindkey -k k8 title
+
+bindkey -k k9 time
+
+bindkey -k k;  select 0
+
+bindkey -k F1  monitor
+
+bindkey -k F2  kill
+
+##initial named session
+
+screen -t config 1 bash
+
+screen -t debug 1 bash
+
+screen -t test 1 bash
+
+screen -t misc 1 bash
+
+##initail screen from 1
+
+bind c screen 1
+
+bind ^c screen 1
+
+bind 0 select 10
+
+screen 1
+########screen config 20170320 END######
+
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+##scroll 2048 line
+defscrollback 2048
+##bind shorcut Fn to switch screen
+bindkey -k k1 select 1
+bindkey -k k2 select 2
+bindkey -k k3 select 3
+bindkey -k k4 select 4
+bindkey -k k5 select 5
+##initial named session
+screen -t config 1 bash
+screen -t debug 1 bash
+screen -t test 1 bash
+screen -t misc 1 bash
+##initail screen from 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+screen 1
+termcapinfo xterm* ti@:te@
+
+#############################
+#############split view#########
+http://unix.stackexchange.com/questions/7453/how-to-split-the-terminal-into-more-than-one-view
+You can do it in screen the terminal multiplexer.
+here ctrla is press Ctrl + a
+To split vertically: ctrla then |.
+To split horizontally: ctrla then S (uppercase one).
+To unsplit: ctrla then Q (uppercase one).
+To switch from one to the other: ctrla then tab
+Note: After splitting, you need to go into the new region and start a new session via ctrla then c before you can use that area.
+
+EDIT, basic screen usage:
+
+New terminal: ctrla then c.
+Next terminal: ctrla then space.
+Previous terminal: ctrla then backspace.
+N'th terminal ctrla then [n]. (works for n∈{0,1…9})
+Switch between terminals using list: ctrla then " (useful when more than 10 terminals)
+Send ctrla to the underlying terminal ctrla then a.
+
+#############################
+###split view end###
+
+for centos 7 title
+I am using bash and GNU screen on centos7. I notice that if I ssh to another server, change the title (via ctrl+a+A), and log out of the server that my new title gets overwritten by USER@HOST:~. How can I stop it from doing this?
+
+As documented in the man page, screen looks for a null title-escape-sequence. bash sends this sequence via the PROMPT_COMMAND environment variable (for example, mine defaults to printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}".
+
+To disable this feature for a particular window, I just run unset PROMPT_COMMAND from that window. Of course, one could just add this to their ~/.bashrc or to a specific environment file to make it more persistent.
+shareimprove this answer
+
+add unset PROMPT_COMMAND  TO ~/.bashrc
+
+If $PROMPT_COMMAND is empty, check $PS1. – choroba Oct 22 '14 at 22:44
