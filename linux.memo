@@ -500,7 +500,7 @@ done
 ##############文档去除重复段落#########################
 对于空格，可以将空格替换为文档中不存在的字符
 比如在vim中，%s:^$:abcdefghijklmnopq1234567890:g
-然后使用awk 'BEGIN {RS="abcdefghijklmnopq1234567890"} !seen[$0]++' file.txt
+然后使用awk 'BEGIN {RS="abcdefghijklmnopq1234567890"} !seen[$0]++' file.txt >file-processed.txt
 
 http://stackoverflow.com/questions/1444406/how-can-i-delete-duplicate-lines-in-a-file-in-unix
 
