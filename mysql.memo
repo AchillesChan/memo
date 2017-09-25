@@ -1,3 +1,66 @@
+===========================================  
+环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
+mysql5.7需要xtrabackup2.4
+需要process权限
+需要--host --port --socket参数
+
+yum install perl-devel
+yum install rsync
+yum install -y perl-Digest-MD5.x86_64
+rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
+
+###backup
+1 full backup 
+innobackupex --user=bkpuser --port=3306 \
+--socket=/usr/local/mysql/mysql.sock \
+--password=s3cret ./
+
+2 single table backup
+innobackupex --user=root --host=localhost --password=somePW \
+--socket=/usr/local/mysql/mysql.sock \
+--tables-file=/root/restore/foo.txt .
+上面的tables-file需要接完整的路径
+
+###restore
+0 ####backup single database or tablennobackupex --apply-log --exports your-backup-full-path
+
+1 systemctl stop mysqld
+
+2 netstat -tlnp|grep mysqld 确保已经关闭mysql
+
+3 copy your-backup-full-path/tables-file to your-mysql-data-path
+
+        cp sys_role.* /usr/local/mysql/data/your-database/
+        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.cfg’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.exp’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.frm’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.ibd’? y
+
+4 systemctl start mysqld
+
+模拟了文中丢弃表空间没有问题，
+模拟了文中丢弃文件在从备份文件中copy back成功。
+使用的是直接copy back后chown的方法，牛，
+备份还原单个表，验证成功。
+
+
+
+
+Partial Backups
+使用这个方法还原单个数据库也成功，但文档上要还原mysql，我
+没有做，模拟数据文件丢失，在原来的服务器上处理好copy-back，
+shutdown mysql，copy back，chown ，start mysql，done
+
+
+
+注意：backup后一定要innobackupex --apply-log --export your-backup-full-path
+这个过程在源服务器的正常状态下运行，并且一定要成功，
+备份结果才可以使用。
+==============================================
+
+
+
+
 #####忘记root密码Linux 5.7.16#####
 
 0 official link https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html 
