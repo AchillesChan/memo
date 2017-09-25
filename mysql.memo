@@ -1,5 +1,7 @@
 #####忘记root密码Linux 5.7.16#####
 
+0 official link https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html 
+
 1 shell>$ pwd #在该目录编辑mysql-init   
 /usr/local/mysql
 
