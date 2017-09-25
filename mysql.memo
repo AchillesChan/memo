@@ -54,6 +54,16 @@ innobackupex --user=root --host=localhost --password=somePW \
 
 
 
+
+mysql> drop database your-database;
+ERROR 1010 (HY000): Error dropping database (can't rmdir './your-database/', errno: 17)
+
+# rm -f /path/2/your-database/*
+mysql> drop database your-database;
+Query OK, 0 rows affected (0.00 sec)
+
+
+
 Partial Backups
 使用这个方法还原单个数据库也成功，但文档上要还原mysql，我
 没有做，模拟数据文件丢失，在原来的服务器上处理好copy-back，
