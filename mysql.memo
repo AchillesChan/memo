@@ -22,7 +22,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 上面的tables-file需要接完整的路径
 
 ###restore
-0 ####backup single database or tablennobackupex --apply-log --exports your-backup-full-path
+0 tablennobackupex --apply-log --exports your-backup-full-path
 
 1 systemctl stop mysqld
 
@@ -30,11 +30,11 @@ innobackupex --user=root --host=localhost --password=somePW \
 
 3 copy your-backup-full-path/tables-file to your-mysql-data-path
 
-        cp sys_role.* /usr/local/mysql/data/your-database/
-        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.cfg’? y
-        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.exp’? y
-        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.frm’? y
-        cp: overwrite ‘/usr/local/mysql/data/your-database/sys_role.ibd’? y
+        cp your-restored-table.* /usr/local/mysql/data/your-database/
+        cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.cfg’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.exp’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.frm’? y
+        cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.ibd’? y
 
 4 systemctl start mysqld
 
