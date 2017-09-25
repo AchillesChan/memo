@@ -43,7 +43,9 @@ innobackupex --user=root --host=localhost --password=somePW \
 
 5 systemctl start mysqld
 
-6 tips
+6 对于数据库级别的恢复，如果还有events，procedure要恢复;需要使用同样的方法恢复mysql数据库
+
+7 tips
 模拟了文中丢弃表空间没有问题，
 模拟了文中丢弃文件在从备份文件中copy back成功。
 使用的是直接copy back后chown的方法，牛，
