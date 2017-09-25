@@ -214,20 +214,20 @@ sed -e 's/^CertUtil:.*$//g' -e ':a;N;$!ba;s/\n/ /g' -e 's/MD5 哈希(文件 /\n/
 ###sed的正则操作-r
 ###sed -e 有时会出错，只能使用多级管道？？？？
 处理前：
-MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170209\ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有限公司合作协 议 - 副本。。，？D2ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有.txt):
+MD5 哈希(文件 C:\yoursite\d2b-8057-5df9269e072b-包装有.txt):
 c7 c5 46 f3 a0 e7 38 d1 bd d9 cb bb fc b3 d6 5b
 CertUtil: -hashfile 命令成功完成。
-MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170310\fa899f88-deda-42af-bc7d-55c0bdb189c3-Scan.pdf):
+MD5 哈希(文件 C:\yoursite\2af-bc7d-55c0bdb189c3-Scan.pdf):
 3c 66 ed 12 42 49 8c 90 80 d3 c3 56 35 e1 56 5b
 CertUtil: -hashfile 命令成功完成。
-MD5 哈希(文件 C:\mallsite\ManagePortal\Upload\attachment\4\20170327\63532f77-26b1-4b8a-b192-4e0975c3d22f-Scan1.pdf):
+MD5 哈希(文件 C:\yoursite\e0975c3d22f-Scan1.pdf):
 fd ef cf fb 3b 04 9c ae 43 33 77 3b 96 12 fe d9
 CertUtil: -hashfile 命令成功完成。
 
 处理后：
-c7c546f3a0e738d1bdd9cbbbfcb3d65b C:\mallsite\ManagePortal\Upload\attachment\4\20170209\ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有限公司合作协 议 - 副本。。，？D2ZHANG   = # ` ~ ! @V # $ % ^ & ' ; , , . ..9d8f0de0-1855-4d2b-8057-5df9269e072b-成都禾绳包装有.txt
-3c66ed1242498c9080d3c35635e1565b C:\mallsite\ManagePortal\Upload\attachment\4\20170310\fa899f88-deda-42af-bc7d-55c0bdb189c3-Scan.pdf
-fdefcffb3b049cae4333773b9612fed9 C:\mallsite\ManagePortal\Upload\attachment\4\20170327\63532f77-26b1-4b8a-b192-4e0975c3d22f-Scan1.pdf
+c7c546f3a0e738d1bdd9cbbbfcb3d65b C:\yoursite\d2b-8057-5df9269e072b-包装有.txt
+3c66ed1242498c9080d3c35635e1565b C:\yoursite\2af-bc7d-55c0bdb189c3-Scan.pdf
+fdefcffb3b049cae4333773b9612fed9 C:\yoursite\e0975c3d22f-Scan1.pdf
 
 ###条件SED,注意s操作符号前面的空格 condition
 sed '/conditional_pattern/ s/pattern/replacement/g'
