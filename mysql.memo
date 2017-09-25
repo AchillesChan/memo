@@ -1,3 +1,28 @@
+#####忘记root密码Linux 5.7.16#####
+
+1 shell>$ pwd #在该目录编辑mysql-init   
+/usr/local/mysql
+
+2 shell>$ cat mysql-init 
+alter user 'root'@'localhost' identified by 'your-temp-password';
+
+3 shell>$ /usr/local/mysql/bin/mysqld --user=mysql --init-file=/usr/local/mysql/mysql-init &
+
+4 shell>$ mysql -uroot -hlocalhost -pyour-temp-password
+
+5 mysql> alter user 'root'@'localhost' identified by 'your-new-password';
+
+6 mysql> flush privileges;
+
+7 mysql> exit;
+
+8 shell>$ mysqladmin -uroot -hlocalhost shutdown -pyour-new-password
+
+9 shell>$ systemctl start mysqld 
+
+#####忘记root密码Linux 5.7.16#####
+
+
 
 
 #########Windows 安装mysql#########
