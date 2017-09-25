@@ -26,7 +26,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 
 1 systemctl stop mysqld
 
-2 netstat -tlnp|grep mysqld 确保已经关闭mysql
+2 netstat -tlnp|grep mysqld ###确保已经关闭mysql
 
 3 copy your-backup-full-path/tables-file to your-mysql-data-path
 
@@ -40,6 +40,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 
 5 systemctl start mysqld
 
+6 tips
 模拟了文中丢弃表空间没有问题，
 模拟了文中丢弃文件在从备份文件中copy back成功。
 使用的是直接copy back后chown的方法，牛，
