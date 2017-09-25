@@ -1,9 +1,12 @@
 ===========================================  
+####install
 环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
 mysql5.7需要xtrabackup2.4
 需要process权限
 需要--host --port --socket参数
 
+#####dependent install
+yum install libev
 yum install perl-devel
 yum install rsync
 yum install -y perl-Digest-MD5.x86_64
