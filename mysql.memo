@@ -36,7 +36,9 @@ innobackupex --user=root --host=localhost --password=somePW \
         cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.frm’? y
         cp: overwrite ‘/usr/local/mysql/data/your-database/your-restored-table.ibd’? y
 
-4 systemctl start mysqld
+4 chown mysql-user.mysql-user your-mysql-data-path
+
+5 systemctl start mysqld
 
 模拟了文中丢弃表空间没有问题，
 模拟了文中丢弃文件在从备份文件中copy back成功。
