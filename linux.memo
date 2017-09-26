@@ -435,7 +435,7 @@ $cat mg.txt
 172.16.10.156 80 bak01Nginx
 172.16.10.156 8030 bak01Tomcat156-8080
 172.16.10.13 3389 cdDC01RDP13-3389
-41.1.24.41 5682 azureRedis-ssh-5682
+41.1.24.41 5682 cloud-ssh-5682
 
 ####输出结果
 $cat sb.txt
@@ -453,7 +453,7 @@ bak01Tomcat156-8080 Wrong at 20170315-1050
 bak01Mysql is OK at 20170315-1050
 bak01Nginx is OK at 20170315-1050
 bak01ssh is OK at 20170315-1050
-azureRedis-ssh-56183 is OK at 20170315-1050
+cloud-ssh-56183 is OK at 20170315-1050
 cdDC01RDP13-3389 is OK at 20170315-1050
 ######################detect port status V2 END####################
 

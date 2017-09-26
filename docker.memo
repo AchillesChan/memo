@@ -31,8 +31,8 @@ default.htm index.html lb.html Test.html
 
 创建私有HUB
 docker run -dp 5000:5000 registry  #创建服务器
-docker tag 3620872edb5e 172.31.11.144:5000/xt833a/ubuntu #标记待上传image
-docker push 172.31.11.144:5000/xt833a/ubuntu #上传image
+docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu #标记待上传image
+docker push 172.31.11.144:5000/your-name/ubuntu #上传image
 vim /etc/default/docker  #使用http的方式，编辑这个文件，加入下一句
 DOCKER_OPTS="--insecure-registry 172.31.11.144:5000"
 
