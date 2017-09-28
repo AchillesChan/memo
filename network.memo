@@ -1,0 +1,168 @@
+http://mobaxterm.mobatek.net/
+
+http://blog.sina.com.cn/s/blog_4d2ec36d01010q9l.html
+http://blog.sina.com.cn/s/blog_85eca8730101k27j.html
+
+H3C路由器的SSH设置 (2013-11-05 12:39:23)转载▼
+标签： 路由器 h3c ssh 设置 it   分类： H3C
+  配置SSH 
+# 生成RSA 密钥对。
+system-view
+[Router] public-key local create rsa
+The range of public key size is (512 ~ 2048).
+NOTES: If the key modulus is greater than 512,
+1-13
+It will take a few minutes.
+Press CTRL+C to abort.
+Input the bits of the modulus[default = 1024]:
+Generating Keys...
+++++++++
+++++++++++++++
++++++
+++++++++
+# 生成DSA 密钥对。
+[Router] public-key local create dsa
+The range of public key size is (512 ~ 2048).
+NOTES: If the key modulus is greater than 512,
+It will take a few minutes.
+Press CTRL+C to abort.
+Input the bits of the modulus[default = 1024]:
+Generating Keys...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++
+# 启动SSH 服务器。
+[Router] ssh server enable
+
+# 设置SSH 客户端登录用户界面的认证方式为AAA 认证。
+[Router] user-interface vty 0 4
+[Router-ui-vty0-4] authentication-mode scheme
+# 设置Router 上远程用户登录协议为SSH。
+[Router-ui-vty0-4] protocol inbound ssh
+[Router-ui-vty0-4] quit
+# 创建本地用户client001，并设置用户访问的命令级别为3。
+[Router] local-user client001
+[Router-luser-client001] password simple aabbcc
+[Router-luser-client001] service-type ssh
+[Router-luser-client001] authorization-attribute level 3
+[Router-luser-client001] quit
+# 配置SSH 用户client001 的服务务器类型为Stelnet，认证方式为password 认证。（此步骤可以不
+配置）
+[Router] ssh user client001 service-type stelnet authentication-type password
+
+H3C设备的权限默认分为0-3这四种级别
+数值越小，用户的级别越低
+(1)访问权限0 级 : ping、tracert、telnet 等网络诊断小程序，不可以dis current
+(2)监控权限 1级: dis current、reset、可开debug这种高级系统诊断工具，不能进入system视图进行配置，命令不能保存
+(3)系统权限2级 :可以配置除升级版本外的几乎所有业务配置命令，包括创建用户等，可以保存
+(4)管理权限3级:关系到系统的基本运行、系统支撑模块功能的命令，这些命令对业务提供支撑作用。包括文件系统、FTP、TFTP、XModem
+ 
+可以使用user privilege level命令来设置用户帐号登陆时的级别
+
+
+=====================NAT=====================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===============example==========================
+#
+ sysname router-NAME
+#
+ nat address-group 0  ####NAT ITEM####
+  address your-public-ip  your-public-ip
+#
+ domain default enable system 
+#
+ dns proxy enable 
+#
+ dar p2p signature-file flash:/p2p_default.mtd
+#
+ port-security enable 
+#
+ password-recovery enable
+#  
+acl number 2000  ####NAT ITEM####
+ rule 0 permit source your-local-subnet.1.0 0.0.0.255 
+#
+vlan 1
+#
+vlan 10
+#
+domain system 
+ access-limit disable
+ state active 
+ idle-cut disable 
+ self-service-url disable 
+#
+user-group system
+ group-attribute allow-guest
+user-group -in
+#
+local-user admin
+ password cipher your-encryed-password-here 
+ authorization-attribute level 3
+ service-type web
+local-user ssh-user   ####SSH ITEM####
+ password cipher your-encryed-password-here 
+ authorization-attribute level 3
+ service-type ssh
+
+#
+interface Vlan-interface10
+ ip address your-local-subnet.1.254 255.255.255.0 
+#
+interface GigabitEthernet0/0 ####NAT ITEM####
+ port link-mode route
+ nat outbound 2000 address-group 0   ####NAT ITEM####
+ nat server 1 protocol tcp global current-interface 58833 inside your-local-subnet.1.100 8833 ####NAT MAP ITEM####
+ nat server 2 protocol tcp global current-interface 58330 inside your-local-subnet.1.101 8833 ####NAT MAP ITEM####
+ ip address your-public-ip 255.255.255.0 
+ dns server your-dns-ip 
+#
+interface GigabitEthernet0/9
+ port link-mode route
+ ip address your-local-subnet.1 255.255.255.0 
+#
+interface GigabitEthernet0/8
+ port link-mode bridge
+ port access vlan 10
+#
+ ip route-static 0.0.0.0 0.0.0.0 GigabitEthernet0/0 your-public-ip-gateway
+#
+ ssh server enable  ####SSH ITEM####
+ ssh user ssh-user service-type stelnet authentication-type password
+#
+ ip https enable 
+#
+ nms primary monitor-interface GigabitEthernet0/0
+#
+ load xml-configuration 
+#
+ load tr069-configuration
+#
+user-interface tty 12
+user-interface aux 0
+user-interface vty 0 ####SSH ITEM####
+ authentication-mode scheme
+ protocol inbound ssh
+user-interface vty 1 4 
+ authentication-mode scheme
+#
+return
+
+
+
+
+
+
