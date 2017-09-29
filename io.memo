@@ -1,0 +1,143 @@
+==========windows=================
+during 60s random write 99% file 1G block 8k threads 8 on t1.dat-to-8.dat
+.\diskspd.exe -d60 -r -w99 -c1G -b 8k -t8 t1.dat t2.dat t3.dat t4.dat 5.dat 6.dat 7.dat 8.dat
+
+
+
+
+
+Usage: diskspd [options] target1 [ target2 [ target3 ...] ]
+version 2.0.17a (2016/5/01)
+
+Available targets:
+       file_path
+       #<physical drive number>
+       <partition_drive_letter>:
+
+Available options:
+  -?                    display usage information
+  -ag                   group affinity - affinitize threads round-robin to cores in Processor Groups 0 - n.
+                          Group 0 is filled before Group 1, and so forth.
+                          [default; use -n to disable default affinity]
+  -ag#,#[,#,...]>       advanced CPU affinity - affinitize threads round-robin to the CPUs provided. The g# notation
+                          specifies Processor Groups for the following CPU core #s. Multiple Processor Groups
+                          may be specified, and groups/cores may be repeated. If no group is specified, 0 is assumed.
+                          Additional groups/processors may be added, comma separated, or on separate parameters.
+                          Examples: -a0,1,2 and -ag0,0,1,2 are equivalent.
+                                    -ag0,0,1,2,g1,0,1,2 specifies the first three cores in groups 0 and 1.
+                                    -ag0,0,1,2 -ag1,0,1,2 is equivalent.
+  -b<size>[K|M|G]       block size in bytes or KiB/MiB/GiB [default=64K]
+  -B<offs>[K|M|G|b]     base target offset in bytes or KiB/MiB/GiB/blocks [default=0]
+                          (offset from the beginning of the file)
+  -c<size>[K|M|G|b]     create files of the given size.
+                          Size can be stated in bytes or KiB/MiB/GiB/blocks
+  -C<seconds>           cool down time - duration of the test after measurements finished [default=0s].
+  -D<milliseconds>      Capture IOPs statistics in intervals of <milliseconds>; these are per-thread
+                          per-target: text output provides IOPs standard deviation, XML provides the full
+                          IOPs time series in addition. [default=1000, 1 second].
+  -d<seconds>           duration (in seconds) to run test [default=10s]
+  -f<size>[K|M|G|b]     target size - use only the first <size> bytes or KiB/MiB/GiB/blocks of the file/disk/partition,
+                          for example to test only the first sectors of a disk
+  -f<rst>               open file with one or more additional access hints
+                          r : the FILE_FLAG_RANDOM_ACCESS hint
+                          s : the FILE_FLAG_SEQUENTIAL_SCAN hint
+                          t : the FILE_ATTRIBUTE_TEMPORARY hint
+                          [default: none]
+  -F<count>             total number of threads (conflicts with -t)
+  -g<bytes per ms>      throughput per-thread per-target throttled to given bytes per millisecond
+                          note that this can not be specified when using completion routines
+                          [default inactive]
+  -h                    deprecated, see -Sh
+  -i<count>             number of IOs per burst; see -j [default: inactive]
+  -j<milliseconds>      interval in <milliseconds> between issuing IO bursts; see -i [default: inactive]
+  -I<priority>          Set IO priority to <priority>. Available values are: 1-very low, 2-low, 3-normal (default)
+  -l                    Use large pages for IO buffers
+  -L                    measure latency statistics
+  -n                    disable default affinity (-a)
+  -o<count>             number of outstanding I/O requests per target per thread
+                          (1=synchronous I/O, unless more than 1 thread is specified with -F)
+                          [default=2]
+  -p                    start parallel sequential I/O operations with the same offset
+                          (ignored if -r is specified, makes sense only with -o2 or greater)
+  -P<count>             enable printing a progress dot after each <count> [default=65536]
+                          completed I/O operations, counted separately by each thread 
+  -r<align>[K|M|G|b]    random I/O aligned to <align> in bytes/KiB/MiB/GiB/blocks (overrides -s)
+  -R<text|xml>          output format. Default is text.
+  -s[i]<size>[K|M|G|b]  sequential stride size, offset between subsequent I/O operations
+                          [default access=non-interlocked sequential, default stride=block size]
+                          In non-interlocked mode, threads do not coordinate, so the pattern of offsets
+                          as seen by the target will not be truly sequential.  Under -si the threads
+                          manipulate a shared offset with InterlockedIncrement, which may reduce throughput,
+                          but promotes a more sequential pattern.
+                          (ignored if -r specified, -si conflicts with -T and -p)
+  -S[bhruw]             control caching behavior [default: caching is enabled, no writethrough]
+                          non-conflicting flags may be combined in any order; ex: -Sbw, -Suw, -Swu
+  -S                    equivalent to -Su
+  -Sb                   enable caching (default, explicitly stated)
+  -Sh                   equivalent -Suw
+  -Su                   disable software caching, equivalent to FILE_FLAG_NO_BUFFERING
+  -Sr                   disable local caching, with remote sw caching enabled; only valid for remote filesystems
+  -Sw                   enable writethrough (no hardware write caching), equivalent to FILE_FLAG_WRITE_THROUGH
+  -t<count>             number of threads per target (conflicts with -F)
+  -T<offs>[K|M|G|b]     starting stride between I/O operations performed on the same target by different threads
+                          [default=0] (starting offset = base file offset + (thread number * <offs>)
+                          makes sense only with #threads > 1
+  -v                    verbose mode
+  -w<percentage>        percentage of write requests (-w and -w0 are equivalent and result in a read-only workload).
+                        absence of this switch indicates 100% reads
+                          IMPORTANT: a write test will destroy existing data without a warning
+  -W<seconds>           warm up time - duration of the test before measurements start [default=5s]
+  -x                    use completion routines instead of I/O Completion Ports
+  -X<filepath>          use an XML file for configuring the workload. Cannot be used with other parameters.
+  -z[seed]              set random seed [with no -z, seed=0; with plain -z, seed is based on system run time]
+
+Write buffers:
+  -Z                        zero buffers used for write tests
+  -Z<size>[K|M|G|b]         use a <size> buffer filled with random data as a source for write operations.
+  -Z<size>[K|M|G|b],<file>  use a <size> buffer filled with data from <file> as a source for write operations.
+
+  By default, the write buffers are filled with a repeating pattern (0, 1, 2, ..., 255, 0, 1, ...)
+
+Synchronization:
+  -ys<eventname>     signals event <eventname> before starting the actual run (no warmup)
+                       (creates a notification event if <eventname> does not exist)
+  -yf<eventname>     signals event <eventname> after the actual run finishes (no cooldown)
+                       (creates a notification event if <eventname> does not exist)
+  -yr<eventname>     waits on event <eventname> before starting the run (including warmup)
+                       (creates a notification event if <eventname> does not exist)
+  -yp<eventname>     stops the run when event <eventname> is set; CTRL+C is bound to this event
+                       (creates a notification event if <eventname> does not exist)
+  -ye<eventname>     sets event <eventname> and quits
+
+Event Tracing:
+  -e<q|c|s>             Use query perf timer (qpc), cycle count, or system timer respectively.
+                          [default = q, query perf timer (qpc)]
+  -ep                   use paged memory for the NT Kernel Logger [default=non-paged memory]
+  -ePROCESS             process start & end
+  -eTHREAD              thread start & end
+  -eIMAGE_LOAD          image load
+  -eDISK_IO             physical disk IO
+  -eMEMORY_PAGE_FAULTS  all page faults
+  -eMEMORY_HARD_FAULTS  hard faults only
+  -eNETWORK             TCP/IP, UDP/IP send & receive
+  -eREGISTRY            registry calls
+
+
+Examples:
+
+Create 8192KB file and run read test on it for 1 second:
+
+  diskspd -c8192K -d1 testfile.dat
+Set block size to 4KB, create 2 threads per file, 32 overlapped (outstanding)
+I/O operations per thread, disable all caching mechanisms and run block-aligned random
+access read test lasting 10 seconds:
+
+  diskspd -b4K -t2 -r -o32 -d10 -h testfile.dat
+
+Create two 1GB files, set block size to 4KB, create 2 threads per file, affinitize threads
+to CPUs 0 and 1 (each file will have threads affinitized to both CPUs) and run read test
+lasting 10 seconds:
+
+  diskspd -c1G -b4K -t2 -d10 -a0,1 testfile1.dat testfile2.dat
+
+==========windows=================
