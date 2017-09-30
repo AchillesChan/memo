@@ -246,16 +246,15 @@ interface Vlan1
  no ip address
  shutdown
 
-!         #########nat staff 3 of 4
+!         #########nat staff 4 of 4
 ip nat pool nat-pool 1.1.1.1 1.1.1.1 netmask 255.255.255.0
 ip nat inside source list 1 pool nat-pool overload
-
 
 ip classless
 ip route 0.0.0.0 0.0.0.0 1.1.1.2 
 ip route 192.168.0.0 255.255.0.0 192.168.3.1 
 !
-!          #########nat staff 4 of 4 
+!          #########nat staff 3 of 4 
 access-list 1 permit 192.168.0.0 0.0.255.255
 
 access-list 101 deny ip any 192.168.0.0 0.0.255.255
