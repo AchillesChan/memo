@@ -49,11 +49,7 @@ version 12.2
 !
 hostname L2SWITCH1
 !
-!
-!
 no ip domain-lookup
-!
-spanning-tree mode pvst
 !
 interface FastEthernet0/1
 
@@ -65,8 +61,6 @@ interface FastEthernet0/2
 interface FastEthernet0/3
  switchport mode trunk
 !
-
-
 L2SWITCH1#SHOW VTP STATUS
 VTP Version                     : 2
 Configuration Revision          : 1
@@ -86,17 +80,10 @@ L2SWITCH1#SHOW VLAN
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
 1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
-                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
-                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
-                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
-                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
-                                                Fa0/24, Gig1/1, Gig1/2
+			                        ....
 11   IT11                             active    Fa0/1
 12   HR12                             active    Fa0/2
 13   OUT13                            active    
-
-
-
 
 ====================================================================
 
@@ -113,9 +100,6 @@ Current configuration : 1117 bytes
 !
 hostname L2SWITCH2
 !
-!
-spanning-tree mode pvst
-!
 interface FastEthernet0/1
  switchport access vlan 11
 !
@@ -131,11 +115,7 @@ L2SWITCH2#SHOW VLAN
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
 1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
-                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
-                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
-                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
-                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
-                                                Fa0/24, Gig1/1, Gig1/2
+                                                ......
 11   IT11                             active    Fa0/1
 12   HR12                             active    Fa0/2
 13   OUT13                            active  
@@ -154,9 +134,6 @@ VTP Traps Generation            : Disabled
 MD5 digest                      : 0xD1 0x5F 0xD6 0xBC 0x44 0x9A 0x4A 0xFF 
 Configuration last modified by 192.168.3.1 at 3-1-93 01:11:33
 
-
-
-
 ====================================================================
 
 
@@ -170,14 +147,8 @@ Building configuration...
 
 Current configuration : 1330 bytes
 !
-version 12.2
-no service timestamps log datetime msec
-no service timestamps debug datetime msec
-no service password-encryption
-!
 hostname L3SW1
 !
-
 interface Vlan1
  no ip address
  shutdown
@@ -193,16 +164,15 @@ interface Vlan13
 !
 ip classless
 ip route 0.0.0.0 0.0.0.0 192.168.3.2 
+!
+ip routing ############enable ip route function,PATT
+
 L3SW1#SHOW VLAN
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
 1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
-                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
-                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
-                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
-                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
-                                                Fa0/24, Gig0/1, Gig0/2
+                                                ......
 11   IT11                             active    
 12   HR12                             active    
 13   OUT13                            active    Fa0/3
@@ -225,13 +195,7 @@ Local updater ID is 192.168.1.1 on interface Vl11 (lowest numbered VLAN interfa
 
 L3SW1#SHOW IP ROUTE
 Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
-       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
-       * - candidate default, U - per-user static route, o - ODR
-       P - periodic downloaded static route
-
+        ............
 Gateway of last resort is 192.168.3.2 to network 0.0.0.0
 
 C    192.168.1.0/24 is directly connected, Vlan11
@@ -267,29 +231,33 @@ version 12.4
 
 interface FastEthernet0/0
  ip address 192.168.3.2 255.255.255.0
- ip nat inside
+ ip nat inside     ####nat staff 1 of 4
  duplex auto
  speed auto
 !
 interface FastEthernet0/1
  ip address 1.1.1.1 255.255.255.0
  ip access-group 101 in
- ip nat outside
+ ip nat outside      #####nat staff 2 of 4
  duplex auto
  speed auto
 !
 interface Vlan1
  no ip address
  shutdown
-!
+
+!         #########nat staff 3 of 4
 ip nat pool nat-pool 1.1.1.1 1.1.1.1 netmask 255.255.255.0
 ip nat inside source list 1 pool nat-pool overload
+
+
 ip classless
 ip route 0.0.0.0 0.0.0.0 1.1.1.2 
 ip route 192.168.0.0 255.255.0.0 192.168.3.1 
 !
-!
+!          #########nat staff 4 of 4 
 access-list 1 permit 192.168.0.0 0.0.255.255
+
 access-list 101 deny ip any 192.168.0.0 0.0.255.255
 access-list 101 permit ip any any
 !
@@ -305,12 +273,8 @@ Vlan1                  unassigned      YES unset  administratively down down
 
 r1#SHOW IP ROUTE
 Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
-       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
-       * - candidate default, U - per-user static route, o - ODR
-       P - periodic downloaded static route
+         ...................
+         P - periodic downloaded static route
 
 Gateway of last resort is 1.1.1.2 to network 0.0.0.0
 
@@ -335,11 +299,6 @@ Building configuration...
 
 Current configuration : 599 bytes
 !
-version 12.4
-no service timestamps log datetime msec
-no service timestamps debug datetime msec
-no service password-encryption
-!
 hostname R2
 
 
@@ -351,39 +310,9 @@ interface FastEthernet0/0
  duplex auto
  speed auto
 !
-interface FastEthernet0/1
- no ip address
- duplex auto
- speed auto
- shutdown
-!
-interface Vlan1
- no ip address
- shutdown
-!
 ip classless
 ip route 0.0.0.0 0.0.0.0 1.1.1.1 
-!
-!
-!
-no cdp run
-!
-!
-!
-!
-!
-line con 0
-!
-line aux 0
-!
-line vty 0 4
- login
-!
-!
-!
 end
-
-
 ====================================================================
 
 
