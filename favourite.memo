@@ -1,5 +1,6 @@
 site:115.com |site:pan.baidu.com |site:dbank.com |site:vdisk.weibo.com |site:weiyun.com
-
+vim pattern
+http://vimdoc.sourceforge.net/htmldoc/pattern.html#/%5C%25c
 
 http://mobaxterm.mobatek.net/download.html   ssh vnc telnet rdp 工具Windows版本，
 免费，自带miniLinux，自动字体缩放，Linux copy&paste 风格，值得拥有
