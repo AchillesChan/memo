@@ -20,21 +20,21 @@
 |gw 192.168.2.1    |                                                     |
 +------------------+                                                     |
                                                                      F0/1|L2port       
-                                                                    +----------+ 
-                                                +------------------>|L3SWITCH1 |F0/3 L3port
-                                                |       F0/2 L2port +----------+192.168.3.1
-                                                |                               |
-                                                |                               |      
-                                                |                               | 
-+------------------+                            |                               |   
-|pc12->192.168.1.12|                            |                      F0/0     |  
-|gw 192.168.1.1    | -------+                   |                 192.168.3.2   |  
-+------------------+        |                   |                      +--------+ 
-                            |          F0/1     | F0/3                 |Router1 |
-                            +----------->+----------+              F0/1+--------+
-                                         |L2 SWITCH2|            1.1.1.1 |
-                         +-------------->+----------+                    |  
-                         |             F0/2                              |      
+                                                                     +----------+ 
+                                            +----------------------->|L3SWITCH1 |F0/3 L3port
+                                            |            F0/2 L2port +----------+192.168.3.1
+                                            |                                   |
+                                            |                                   |      
+                                            |                                   | 
++------------------+                        |                                   |   
+|pc12->192.168.1.12|                        |                      F0/0         |  
+|gw 192.168.1.1    |+ -------+              |                     192.168.3.2   |  
++------------------+        |               |                          +--------+ 
+                            |F0/1       F0/3|                          |RouteRouter1 |
+                            +--->+----------+                     F0/1 +--------+
+                                 |L2 SWITCH2|                    1.1.1.1 |
+                         +------>+----------+                            |  
+                         |  F0/2                                         |      
                          |                                               |
                          |                                      +--+----+-----++-----+
                          |                                      |        |           |
@@ -152,7 +152,7 @@ Configuration last modified by 192.168.3.1 at 3-1-93 01:11:33
 
 
 ====================================================================
-L3SW1#SHOW RUN
+L3SW1#SHOW RUN         ####INTRANET EDGE
 Building configuration...
 
 Current configuration : 1330 bytes
@@ -232,7 +232,7 @@ Vlan13                 192.168.3.1     YES manual up                    up
 
 
 ====================================================================
-r1#SHOW RUN
+Router1#SHOW RUN             ##########EDGE ROUTER
 Building configuration...
 
 Current configuration : 916 bytes
@@ -271,7 +271,7 @@ access-list 101 deny ip any 192.168.0.0 0.0.255.255
 access-list 101 permit ip any any
 !
 
-r1#SHOW IP INT BRIE
+Router1#SHOW IP INT BRIE
 Interface              IP-Address      OK? Method Status                Protocol
  
 FastEthernet0/0        192.168.3.2     YES manual up                    up
@@ -280,7 +280,7 @@ FastEthernet0/1        1.1.1.1         YES manual up                    up
  
 Vlan1                  unassigned      YES unset  administratively down down
 
-r1#SHOW IP ROUTE
+Router1#SHOW IP ROUTE
 Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
          ...................
          P - periodic downloaded static route
@@ -293,7 +293,7 @@ S    192.168.0.0/16 [1/0] via 192.168.3.1
 C    192.168.3.0/24 is directly connected, FastEthernet0/0
 S*   0.0.0.0/0 [1/0] via 1.1.1.2
 
-r1#show ip nat translations 
+Router1#show ip nat translations 
 Pro  Inside global     Inside local       Outside local      Outside global
 icmp 1.1.1.1:93        192.168.1.11:93    2.2.2.2:93         2.2.2.2:93
 icmp 1.1.1.1:94        192.168.1.11:94    2.2.2.2:94         2.2.2.2:94
@@ -303,23 +303,20 @@ icmp 1.1.1.1:96        192.168.1.11:96    2.2.2.2:96         2.2.2.2:96
 
 
 ====================================================================
-R2#show run
+Router2#show run                #########INTERNET AREA
 Building configuration...
 
 Current configuration : 599 bytes
 !
-hostname R2
-
+hostname Router2
 
 interface Loopback0
  ip address 2.2.2.2 255.255.255.255
 !
 interface FastEthernet0/0
  ip address 1.1.1.2 255.255.255.0
- duplex auto
- speed auto
+
 !
-ip classless
 ip route 0.0.0.0 0.0.0.0 1.1.1.1 
 end
 ====================================================================
