@@ -4,7 +4,7 @@
 import os
 
 def main():
-    file_hander = open('ip.txt','r+')
+    file_hander = open('your_file_here','r+')
     for line in iter(file_hander):
         print line
     file_hander.close()
