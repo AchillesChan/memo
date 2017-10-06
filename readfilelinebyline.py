@@ -1,3 +1,5 @@
+##refer to
+##http://cmdlinetips.com/2011/08/three-ways-to-read-a-text-file-line-by-line-in-python/
 # -*- coding: utf-8 -*-
 import os
 
