@@ -31,6 +31,9 @@ def main():
     for i in range(10):
         print i
 
+
+
+
 def add(param1, param2):
     """做了点加法.
 喔，其实还胡乱判断了一气。
@@ -50,3 +53,46 @@ def add(param1, param2):
 
 if __name__ == '__main__':
     main()
+
+
+#####文件中添加行
+####https://stackoverflow.com/questions/10507230/insert-line-at-middle-of-file-with-python
+def add_line_in_file(index,value):
+    file_handler = open("your_file","r")
+    content = file_handler.readlines()
+    file_handler.close
+
+    content.insert(index,"value\n")
+    file_handler = open("your_file","w")
+    content = "".join(content)
+    file_handler.write(content)
+    file_handler.close()
+
+
+##refer to
+##http://cmdlinetips.com/2011/08/three-ways-to-read-a-text-file-line-by-line-in-python/
+# -*- coding: utf-8 -*-
+import os
+
+def read_a_file_line_by_line():
+    file_hander = open('your_file_here','r+')
+    for line in iter(file_hander):
+        print line
+    file_hander.close()
+
+
+
+
+###ONLY REPLACE FIRST LINE???
+def replace_in_place_in_file_handler:
+    file_handler=open("your_file","r") ##read session
+    txt=file_handler.read()
+    file_handler.close()
+
+    file_handler = open("your_file","w") ###write session
+    file_handler.write(re.sub("^[a]","K",txt))                                
+    file_handler.close()
+
+
+
+
