@@ -1,4 +1,9 @@
-#########xargs 替换参数位置start##########
+####set bash mode 设置bash模式
+set -o vi
+set -o emacs
+
+
+########xargs 替换参数位置start##########
 #>cat ip.txt
 1
 201
