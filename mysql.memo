@@ -125,7 +125,7 @@ long_query_time=10
 skip_ssl
 # Binary Logging.
 log-bin="mysql-bin.log"
-
+lower_case_table_names = 1
 
 # Error Logging.
 log-error="your-log.err"
