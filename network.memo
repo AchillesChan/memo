@@ -431,6 +431,7 @@ Generating Keys...
 [Router-luser-client001] service-type ssh
 [Router-luser-client001] authorization-attribute level 3
 [Router-luser-client001] quit
+
 # 配置SSH 用户client001 的服务务器类型为Stelnet，认证方式为password 认证。（此步骤可以不
 配置）
 [Router] ssh user client001 service-type stelnet authentication-type password
@@ -446,6 +447,10 @@ H3C设备的权限默认分为0-3这四种级别
 
 
 
+# 配置SSH服务的端口号为1025。
+###如果没有该命令，注意升级ios
+<Sysname> system-view
+[Sysname] ssh server port 1025
 
 
 
