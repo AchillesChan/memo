@@ -1,0 +1,108 @@
+############使用证书的成功的配置############
+PATT，注意：源和目标都要有rsync软件
+源一定有lsyncd,版本2.1.6;
+目标的rsync版本3.0.9;
+注意文件和目录的权限，selinx;防火墙;
+sshd的配置文件细节,ssh先配置全功能的，
+成功后才使用限定的命令。
+
+在备份源的机器上的known_hosts上有目标服务器的条目。
+# cat /home/your-backup/.ssh/authorized_keys
+no-agent-forwarding,no-pty,no-port-forwarding ssh-rsa AAAAB3ZeENJrZ2RRb root@backup_server
+##no-agent-forwarding,no-pty,no-port-forwarding这几条保证只能传输文件，不能登陆server
+
+在备份服务器的机器的Authorized_keys上有源机器的ssh条目
+# cat .ssh/known_hosts
+[backup_server]backup_server ecdsa-sha2-nistp256 AAAAE2VjZHNh。。。。。。zsyUk=
+
+
+_________安装_______________
+lua cmake lua-devel gcc gcc-c++ rsync
+cmake .
+make       
+make install
+lsyncd -version
+_________安装END_______________
+
+
+-----------备份源设置----------------
+settings {
+    insist = true,   ##如果出错，不断进行
+    logfile = "/var/log/lsyncd.log",
+    statusFile = "/var/log/lsyncd.stat",
+    statusInterval = 2
+}
+
+
+sync {
+    default.rsync,
+    source="/home/Anthony/",
+    target="example.com:/backup/",
+    delete = false,
+    exclude = {"your-directory/dir1","your-directory/dir2"},  --排查特定的目录，注意时相对于$source的路径 
+    rsync = {
+        rsh ="/usr/bin/ssh -i /root/.ssh/your-ssh-rsa-privity-key -p your-port -l your-user-name",
+        compress = true,
+        perms = ture,
+        acls = true,
+        xattrs = true,
+        archive = true
+    }
+}
+
+以上的配置文件名为backupcfg.lua,
+调用方法：/path/2/lsyncd /path/2/backupcfg.lua
+调用排错：使用ps -ef |grep lua查看进程是否运行，没有网络端口开放，使用netstat看不到状态。
+可以配置多个rsync段来实现备份多个目录
+
+-----------备份源设置END----------------
+
+
+
+
+----------备份目标服务器设置---------------
+setfacl -R -m u:your-backup:rwx backup
+[root@cd-mon-01l /]# ll |grep backup
+drwxrwx---+   5 1004 group-name 4096 Mar  8 15:11 backup
+[root@cd-mon-01l /]# getfacl backup
+# file: backup
+# owner: 1004
+# group: group-name
+user::rwx
+user:your-backup:rwx
+group::---
+mask::rwx
+other::---
+
+[root@cd-mon-01l /]# ll /home/your-backup/ -A|grep ssh
+drwx------ 2 your-backup your-backup   28 Mar  8 14:51 .ssh
+
+
+
+###sshd的server配置，先不使用这些，第一次client ssh成功后再添加这些
+#grep backup /etc/ssh/sshd_config
+Match user backup
+        PasswordAuthentication no
+        RSAAuthentication yes
+        AllowAgentForwarding no
+        AllowTcpForwarding no
+        GatewayPorts no
+        PermitTTY no
+
+####如果有问题，tail log
+
+------备份目标服务器设置END-----------------------
+############使用证书的成功的配置END############
+
+
+
+
+
+https://axkibe.github.io/lsyncd/manual/invoking/   这个靠谱
+参考：（仅供参考）
+https://www.keycdn.com/support/how-to-setup-lsyncd-over-ssh/
+https://axkibe.github.io/lsyncd/manual/config/layer4/
+https://www.lucasrolff.com/ha/replication-using-lsyncd/
+http://blog.uouo123.com/post/100.html
+https://www.scalescale.com/tips/nginx/lsyncd-live-file-syncronization-linux/#
+
