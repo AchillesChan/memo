@@ -1,3 +1,15 @@
+##########
+echo "your-password" | passwd "your-user" --stdin
+
+How to avoid being prompted for a password by sudo? [duplicate]
+
+
+Note that this will produce an error if your sudo access token is active, if you don't need to enter your password because you've already done so recently. To get around that, you could use -k to reset the access token:
+
+#######
+echo 'password' | sudo -kS ls
+
+
 　　使用 HISTCONTROL 强制 history 不记住特定的命令
 
 　　将 HISTCONTROL 设置为 ignorespace，并在不想被记住的命令前面输入一个空格：

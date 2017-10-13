@@ -1,69 +1,36 @@
 ########screen config 20170320######
-
 hardstatus on
-
 hardstatus alwayslastline
-
 hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
-
-##scroll 2048 line
-
 defscrollback 2048
-
 ##bind shorcut Fn to switch screen
-
 ##f10-->k; select 0
-
 ##f11-->F1 monitor
-
 ##f12-->F2 kill
-
 ##f7--->k7 new screen
-
 ##f8--->k8 title screen
-
 bindkey -k k1 select 1
-
 bindkey -k k2 select 2
-
 bindkey -k k3 select 3
-
 bindkey -k k4 select 4
-
 bindkey -k k5 select 5
-
 bindkey -k k6 select 6
-
 bindkey -k k7 screen
-
 bindkey -k k8 title
-
 bindkey -k k9 time
-
 bindkey -k k;  select 0
-
 bindkey -k F1  monitor
-
 bindkey -k F2  kill
-
 ##initial named session
-
-screen -t config 1 bash
-
-screen -t debug 1 bash
-
-screen -t test 1 bash
-
+screen -t cfg 1 bash
+screen -t run 1 bash
+screen -t log 1 bash
+screen -t dbg 1 bash
 screen -t misc 1 bash
-
 ##initail screen from 1
-
 bind c screen 1
-
 bind ^c screen 1
-
 bind 0 select 10
-
 screen 1
 ########screen config 20170320 END######
 
