@@ -530,10 +530,10 @@ ERROR 1099 (HY000): Table 'student' was locked with a READ lock and can't be upd
 解锁 mysql> unlock tables; #不需要表名字
 
 
-备份 # mysqldump -uroot -pmimamima -h 192.168.1.104 Sales goods orders >./Sales.sql
+备份 # mysqldump -uroot -pyour-password -h 192.168.1.104 Sales goods orders >./Sales.sql
 
 
-恢复  $> mysql -uroot -pmimamima -h192.168.1.104 Sales < ./Sales.sql
+恢复  $> mysql -uroot -pyour-password -h192.168.1.104 Sales < ./Sales.sql
 注意，没有能够恢复单张表
 
 
