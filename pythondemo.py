@@ -58,12 +58,12 @@ if __name__ == '__main__':
 #####文件中添加行
 ####https://stackoverflow.com/questions/10507230/insert-line-at-middle-of-file-with-python
 def add_line_in_file(index,value):
-    file_handler = open("your_file","r")
+    file_handler = open("file","r")
     content = file_handler.readlines()
     file_handler.close
 
     content.insert(index,"value\n")
-    file_handler = open("your_file","w")
+    file_handler = open("file","w")
     content = "".join(content)
     file_handler.write(content)
     file_handler.close()
@@ -75,7 +75,7 @@ def add_line_in_file(index,value):
 import os
 
 def read_a_file_line_by_line():
-    file_hander = open('your_file_here','r+')
+    file_hander = open('file','r+')
     for line in iter(file_hander):
         print line
     file_hander.close()
@@ -83,31 +83,19 @@ def read_a_file_line_by_line():
 
 
 
-###ONLY REPLACE FIRST LINE???
-######https://jerel.co/blog/2011/12/using-python-for-super-fast-regex-search-and-replace
-def replace_in_place_in_file_handler():
-    file_handler=open("your_file","r") ##read session
-    txt=file_handler.read()
-    file_handler.close()
-
-    file_handler = open("your_file","w") ###write session
-    file_handler.write(re.sub("^[a]","K",txt))                                
-    file_handler.close()
-
-
 
 ##########regex replace file for all line in a file
 #########https://stackoverflow.com/questions/18935626/regex-re-sub-list-in-a-file
 def replace_in_place_in_file():
-        output = open("your_regex_replace_outfile","w")
-        input = open("your_regex_replace_file","r")
+        output = open("regex_replace_out_file","w")
+        input = open("regex_replace_file","r")
 
         for line in input:
-            output.write(re.sub("regex_pattern","replaced_string", line))                                       
+            output.write(re.sub("regex_pattern","will_be_replaced_string", line))                                       
         input.close()
         output.close()
-        os.remove("your_regex_replace_file")  ###权宜之计，不优雅
-        os.rename("your_regex_replace_outfile","your_regex_replace_file")
+        os.remove("regex_replace_file")  ###不优雅
+        os.rename("regex_replace_out_file","regex_replace_file")
 
 
 
@@ -121,9 +109,8 @@ import fileinput,re
 def replace_in_place_in_file():
 
         for line in fileinput.input(inplace=1, backup='.bak'):
-            line = re.sub('regex_pattern','replaced_string', line.rstrip())
+            line = re.sub('regex_pattern','will_be_replaced_string', line.rstrip())
             print(line)
-###
 ###The fileinput module takes care of the stream verses filename input handling.
 ###The re (regex, regular expression) module has sub which handles the search/replace.
 ###The ‘rstrip’ is called on the input just to strip the line of it’s newline, since the next ‘print’ statement is going to add a newline by default.
