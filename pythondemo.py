@@ -108,3 +108,23 @@ def replace_in_place_in_file():
         output.close()
         os.remove("your_regex_replace_file")  ###权宜之计，不优雅
         os.rename("your_regex_replace_outfile","your_regex_replace_file")
+
+
+
+####http://pythontesting.net/python/regex-search-replace-examples/
+######regex replace file for all line in a file###
+#######PERFECT###############
+####call by
+######python regex_replace_in_file.py example.txt
+import fileinput,re
+def replace_in_place_in_file():
+
+        for line in fileinput.input(inplace=1, backup='.bak'):
+            line = re.sub('regex_pattern','replaced_string', line.rstrip())
+            print(line)
+###
+###The fileinput module takes care of the stream verses filename input handling.
+###The re (regex, regular expression) module has sub which handles the search/replace.
+###The ‘rstrip’ is called on the input just to strip the line of it’s newline, since the next ‘print’ statement is going to add a newline by default.
+###If you leave the ‘backup’ flag out, no backup will be made.
+###As I’ve shown it with backup=’.bak’, an example.txt.bak file will be created.
