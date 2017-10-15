@@ -99,12 +99,12 @@ def replace_in_place_in_file_handler():
 ##########regex replace file for all line in a file
 #########https://stackoverflow.com/questions/18935626/regex-re-sub-list-in-a-file
 def replace_in_place_in_file():
-        output = open("out-your_need_regex_replace_file","w")
-        input = open("your_need_regex_replace_file","r")
+        output = open("your_regex_replace_outfile","w")
+        input = open("your_regex_replace_file","r")
 
         for line in input:
             output.write(re.sub("regex_pattern","replaced_string", line))                                       
         input.close()
         output.close()
-        os.remove("your_need_regex_replace_file")  ###权宜之计，不优雅
-        os.rename("out-your_need_regex_replace_file","your_need_regex_replace_file")
+        os.remove("your_regex_replace_file")  ###权宜之计，不优雅
+        os.rename("your_regex_replace_outfile","your_regex_replace_file")
