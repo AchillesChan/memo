@@ -114,6 +114,7 @@ def replace_in_place_in_file():
 ####http://pythontesting.net/python/regex-search-replace-examples/
 ######regex replace file for all line in a file###
 #######PERFECT###############
+####and https://pymotw.com/2/fileinput/ common replace
 ####call by
 ######python regex_replace_in_file.py example.txt
 import fileinput,re
