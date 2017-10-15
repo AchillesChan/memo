@@ -84,7 +84,8 @@ def read_a_file_line_by_line():
 
 
 ###ONLY REPLACE FIRST LINE???
-def replace_in_place_in_file_handler:
+######https://jerel.co/blog/2011/12/using-python-for-super-fast-regex-search-and-replace
+def replace_in_place_in_file_handler():
     file_handler=open("your_file","r") ##read session
     txt=file_handler.read()
     file_handler.close()
@@ -95,4 +96,15 @@ def replace_in_place_in_file_handler:
 
 
 
+##########regex replace file for all line in a file
+#########https://stackoverflow.com/questions/18935626/regex-re-sub-list-in-a-file
+def replace_in_place_in_file():
+        output = open("out-your_need_regex_replace_file","w")
+        input = open("your_need_regex_replace_file","r")
 
+        for line in input:
+            output.write(re.sub("regex_pattern","replaced_string", line))                                       
+        input.close()
+        output.close()
+        os.remove("your_need_regex_replace_file")  ###权宜之计，不优雅
+        os.rename("out-your_need_regex_replace_file","your_need_regex_replace_file")
