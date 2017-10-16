@@ -116,3 +116,112 @@ def replace_in_place_in_file():
 ###The ‘rstrip’ is called on the input just to strip the line of it’s newline, since the next ‘print’ statement is going to add a newline by default.
 ###If you leave the ‘backup’ flag out, no backup will be made.
 ###As I’ve shown it with backup=’.bak’, an example.txt.bak file will be created.
+
+
+
+###########detect port if open
+###https://stackoverflow.com/questions/19196105/python-how-to-check-if-a-network-port-is-open-on-linux
+# -*- coding: utf-8 -*-
+import socket 
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+result = sock.connect_ex(('ip_or_host',port_number))
+if result == 0:
+    print "Port is open"
+else:
+    print "Port is not open"
+
+
+
+
+##############mysql operation
+############http://www.runoob.com/python/python-mysql.html
+import MySQLdb
+# 打开数据库连接
+db = MySQLdb.connect("server_ip_or_host","user","pwd","DB_name" )
+
+# 使用cursor()方法获取操作游标 
+cursor = db.cursor()
+
+# 使用execute方法执行SQL语句
+cursor.execute("SELECT VERSION()")
+
+# 使用 fetchone() 方法获取一条数据库。
+data = cursor.fetchone()
+
+print "Database version : %s " % data
+
+
+
+
+cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
+
+# 创建数据表SQL语句
+sql = """CREATE TABLE EMPLOYEE (
+         FIRST_NAME  CHAR(20) NOT NULL,
+         LAST_NAME  CHAR(20),
+         AGE INT,  
+         SEX CHAR(1),
+         INCOME FLOAT )"""
+
+cursor.execute(sql)
+
+
+# SQL 插入语句
+sql = """INSERT INTO EMPLOYEE(FIRST_NAME,
+         LAST_NAME, AGE, SEX, INCOME)
+         VALUES ('Mac', 'Mohan', 20, 'M', 2000)"""
+try:
+   # 执行sql语句
+   cursor.execute(sql)
+   # 提交到数据库执行
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+
+# SQL 查询语句
+sql = "SELECT * FROM EMPLOYEE \
+       WHERE INCOME > '%d'" % (1000)
+try:
+   # 执行SQL语句
+   cursor.execute(sql)
+   # 获取所有记录列表
+   results = cursor.fetchall()
+   for row in results:
+      fname = row[0]
+      lname = row[1]
+      age = row[2]
+      sex = row[3]
+      income = row[4]
+      # 打印结果
+      print "fname=%s,lname=%s,age=%d,sex=%s,income=%d" % \ 
+             (fname, lname, age, sex, income )
+except:
+   print "Error: unable to fecth data"
+
+
+# SQL 更新语句
+sql = "UPDATE EMPLOYEE SET AGE = AGE + 1 WHERE SEX = '%c'" % ('M')
+try:
+   # 执行SQL语句
+   cursor.execute(sql)
+   # 提交到数据库执行
+   db.commit()
+except:
+   # 发生错误时回滚
+   db.rollback()
+
+
+# SQL 删除语句
+sql = "DELETE FROM EMPLOYEE WHERE AGE > '%d'" % (20)
+try:
+   # 执行SQL语句
+   cursor.execute(sql)
+   # 提交修改
+   db.commit()
+except:
+   # 发生错误时回滚
+   db.rollback()
+
+# 关闭数据库连接
+db.close()                     
