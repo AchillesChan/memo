@@ -29,6 +29,7 @@ xferlog_enable=YES
 xferlog_file=/var/log/xferlog
 vsftpd_log_file=/var/log/vsftpd.log
 
+#另外，端口映射的路由器，或者Azure的Endpoint，AWS的Security Group一定要开启listen_port和pasv_min_port。
 
 
 # cat ftpusers
@@ -119,8 +120,8 @@ userlist_enable=YES
 tcp_wrappers=YES
 #pasv_address=ip #服务器MAP PUBLIC IP 可以不要？
 pasv_enable=Yes
-pasv_min_port=3122 #这个值和下面的那个值一定要一样
-pasv_max_port=3124
+pasv_min_port=min_number
+pasv_max_port=max_number
 port_enable=YES
 syslog_enable=YES
 rsa_cert_file=/etc/ssl/private/vsftpd.pem
