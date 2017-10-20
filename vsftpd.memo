@@ -27,6 +27,7 @@ pasv_max_port=max_port
 port_enable=YES
 xferlog_enable=YES
 xferlog_file=/var/log/xferlog
+pasv_promiscuous=YES                     #####访问出现425 bad ip connection 需要添加这行
 vsftpd_log_file=/var/log/vsftpd.log
 
 #另外，端口映射的路由器，或者Azure的Endpoint，AWS的Security Group一定要开启listen_port和pasv_min_port。
