@@ -2,6 +2,10 @@ site:115.com |site:pan.baidu.com |site:dbank.com |site:vdisk.weibo.com |site:wei
 vim pattern
 http://vimdoc.sourceforge.net/htmldoc/pattern.html#/%5C%25c
 
+https://www.tecmint.com/sftp-command-examples/https://www.tecmint.com/sftp-command-examples/ 10 sFTP Command Examples to Transfer Files on Remote Servers in Linux
+https://www.digitalocean.com/community/tutorials/how-to-enable-sftp-without-shell-access-on-centos-7 How To Enable SFTP Without Shell Access on CentOS 7
+https://stackoverflow.com/questions/432385/sftp-in-python-platform-independent SFTP in Python? (platform independent) - Stack Overflow
+
 http://mobaxterm.mobatek.net/download.html   ssh vnc telnet rdp 工具Windows版本，
 免费，自带miniLinux，自动字体缩放，Linux copy&paste 风格，值得拥有
 个人版仅支持10个保存的会话
