@@ -621,11 +621,11 @@ https://my.oschina.net/leejun2005/blog
 
 ssh tunnel 隧道
 ###########mall###########
-ssh -R 28000:172.16.10.118:80 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
-ssh -R 28080:172.16.10.118:8080 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+ssh -R 28000:172.16.10.118:80 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
+ssh -R 28080:172.16.10.118:8080 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 ###########shunfeng waas#################
-ssh -R 30080:192.168.28.99:80 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
-ssh -R 30180:172.16.10.124:9010 -p 30023 -N -q -f -C -i you-privity-ssh-key Anthony@s-infra.example.com
+ssh -R 30080:192.168.28.99:80 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
+ssh -R 30180:172.16.10.124:9010 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 
 #############################
 #############split view#########

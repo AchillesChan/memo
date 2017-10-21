@@ -378,7 +378,7 @@ db2 ansible_ssh_port=6002 ansible_ssh_host=yc.example.com
 ####one ip with more port on remote END#########
 查证ansible的command命令无法使用grep操作，要想使用管道命令，需要使用shell来操作。？？
 
-# ansible tstdb -m shell -a "grep -v '#' /etc/selinux/config" -u Anthnoy --key-file dlu  -K
+# ansible tstdb -m shell -a "grep -v '#' /etc/selinux/config" -u user --key-file dlu  -K
 SUDO password:
 db2 | SUCCESS | rc=0 >>
 
@@ -391,7 +391,7 @@ SELINUX=disabled
 SELINUXTYPE=targeted
 
 需要适用命令的绝对路径（如下面的/sbin/ifconfig)
-ansible tstdb -m shell -a "/sbin/ifconfig|grep 172" -u Anthnoy --key-file dlu  -K
+ansible tstdb -m shell -a "/sbin/ifconfig|grep 172" -u user --key-file dlu  -K
 
 ++++ingore ssh key error on run asinsble ad-hoc start++++
 vim /etc/ansible/ansible.cfg

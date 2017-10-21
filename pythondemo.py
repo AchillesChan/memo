@@ -1,3 +1,9 @@
+http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy SFTP uploading with paramiko
+
+https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
+https://www.liaoxuefeng.com/ python教学
+
+
 # -*- coding: utf-8 -*-
 # 给 Python 初学者的超快速脚本解说
 

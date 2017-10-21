@@ -36,7 +36,7 @@ settings {
 
 sync {
     default.rsync,
-    source="/home/Anthony/",
+    source="/home/user/",
     target="example.com:/backup/",
     delete = false,
     exclude = {"your-directory/dir1","your-directory/dir2"},  --排查特定的目录，注意时相对于$source的路径 

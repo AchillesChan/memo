@@ -1,3 +1,17 @@
+#####install vim8 
+git clone https://github.com/vim/vim.git
+cd vim/src
+zypper install python-devel
+./configure --prefix=/usr/local/vim8 --enable-pythoninterp=yes --with-python-config-dir=/usr/lib64/python/config ###dir is the config.c in
+make
+sudo make install
+
+
+http://harttle.com/2015/07/18/vim-cpp.html
+http://harttle.com/2013/11/08/vim-config.html
+http://harttle.com/2015/11/04/vim-ide.html
+http://harttle.com/vim-practice
+
 http://www.jianshu.com/p/f0513d18742a 把vim配置成顺手的python轻量级IDE（一）
 http://www.jianshu.com/p/c690a3462224 把vim配置成顺手的python轻量级IDE（二）
 https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/ VIM and Python - a Match Made in Heaven
