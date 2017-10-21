@@ -1,3 +1,18 @@
+#####procedure variable from select clause
+ 
+mysql> delimiter $
+mysql> create procedure procedure_variable_from_select_clause() 
+        begin 
+        declare days_100_ago date;   ###100days ago 
+        SELECT DATE_SUB(NOW(), INTERVAL 100 day) into days_100_ago;
+        select count(*) from data_gps where timestamp < days_100_ago; end $
+mysql> delimiter ;
+mysql> call procedure_variable_from_select_clause();
+########schuduler event
+mysql> create definer= current_user 
+    event event_name 
+    on schedule at 'date' + interval time
+    do something(or_procedure);
 ===========================================  
 ####install
 环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
@@ -1265,8 +1280,8 @@ mysql> show global status like 'com_select';
 如果表扫描率超过4000，说明进行了太多表扫描，很有可能索引没有建好，增加read_buffer_size值会有一些好处，但最好不要超过8MB。
 
 
-[afor]> delimiter $ /*修改界定符号为$
-[afor]> select id from scores where id = 100001$
+[mysql]> delimiter $ /*修改界定符号为$
+[mysql]> select id from scores where id = 100001$
 +--------+
 | id |
 +--------+
@@ -1274,8 +1289,10 @@ mysql> show global status like 'com_select';
 | 100001 |
 +--------+
 
+[mysql]> drop index idx_name on some_table;                    
+[mysql]> create index idx_name on data_table(field1,field2...);
 
-[afor]> show index from scores\G; /×显示索引，\G表示使用如下的方式显示结果，很多命令都可以使用
+[mysql]> show index from some_table\G; /×显示索引，\G表示使用如下的方式显示结果，很多命令都可以使用
 
 
 *************************** 1. row ***************************
@@ -1884,7 +1901,7 @@ mysql> show profile for query 1;
 列选择原则:
 
 
-1:字段类型优先级 整型 > date,time > enum,char>varchar > blob
+1:字段类型优先级 int > date,time > enum,char>varchar > blob
 
 
 列的特点分析:
