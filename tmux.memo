@@ -1,4 +1,6 @@
-#设置前缀为Ctrl + x
+tmux.conf
+
+设置前缀为Ctrl + x
 set -g prefix C-x
 #解除Ctrl+b 与前缀的对应关系
 unbind C-b
@@ -9,7 +11,24 @@ setw -g mode-keys vi
 # zoom pane <-> window
 #http://tmux.svn.sourceforge.net/viewvc/tmux/trunk/examples/tmux-zoom.sh
 bind ^z run "tmux-zoom"
-##default C-b + array resize pane
-##default C-b + % create new h pane
-##default C-b + " create new V pane
 ##
+
+
+detatch sesseion               Prex + z
+enter copy mode                Prex + [
+paste recently                 Prex + ]
+chosse paste                   Prex + =
+delete paste buffer            Prex + -
+create horizontally            Prex + %
+create vertically              Prex + "
+switch pane                    Prex + Array
+swith windows                  Prex + Windows number
+name  session                  Prex + $
+name  window                   Prex + ,
+create window                  Prex + c
+create sesseion                tmux
+link to named session          tmux a -t session-name
+
+
+
+
