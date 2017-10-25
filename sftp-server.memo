@@ -53,3 +53,9 @@ Couldn't canonicalize: No such file or directory
 sftp> ls
 demo.py  ip.txt   
 
+
+~> ssh -p Port shahrilk@ip_or_dns
+shahrilk@ip_or_dns's password: 
+Could not chdir to home directory /data/shahrilk/upload: No such file or directory
+This service allows sftp connections only.
+Connection to ip_or_dns closed.
