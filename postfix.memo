@@ -1,0 +1,98 @@
+######postfix config##########
+##########plain txt###########
+########Example.com has MX dns record
+# grep -v "#" main.cf |grep -v "^$"
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+myhostname = mail.Example.com
+mydomain = Example.com
+myorigin = $mydomain
+inet_interfaces = all
+inet_protocols =  all
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+unknown_local_recipient_reject_code = 550
+mynetworks =192.168.16.0/24, 127.0.0.0/8,0.0.0.0/0  ###0/0 is permit public use##
+relay_domains = *                                   #############################
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+home_mailbox = Maildir/
+ 
+  
+debug_peer_level = 2
+debugger_command =
+         PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+         ddd $daemon_directory/$process_name $process_id & sleep 5
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.10.1/samples
+
+
+#######dovecot config#############
+# grep -v "#" /etc/dovecot/dovecot.conf |grep -v "^$"
+protocols = imap pop3   #####delete ssl support#####
+mail_location = maildir:~/Maildir
+pop3_uidl_format = %08Xu%08Xv
+login_process_size = 64
+login_trusted_networks = 0.0.0.0/0
+disable_plaintext_auth = no
+dict {
+}
+!include conf.d/*.conf
+!include_try local.conf
+[root@mail-server dovecot]# grep -v "#" 
+conf.d/       dovecot.conf  
+
+# grep -v "#" /etc/dovecot/conf.d/10-auth.conf |grep -v "^$"
+disable_plaintext_auth = no 
+auth_mechanisms = plain login
+!include auth-system.conf.ext
+
+
+#############client config###############
+#########outlook
+1 email address:       your_name@Example.com
+2 Account type:        pop3
+3 receive server:      example.com ###MX DNS record here
+4 send server:         example.com ###MX DNS RECORD HERE
+5 USER NAME:           your_name
+6 Password             your_password
+
+7 Other setup
+
+  7.0  check on: smtp need authentication
+  7.1  check on: logon in server before send mail 
+  7.2  pop3:     110
+  7.3  smtp:     25
+
+
+####################user add 
+>$groupadd postfixusers
+
+>$useradd -g postfixusers -d /data/mail_user  mail_user
+
+>$mkdir -p /data/mail_user/Maildir
+>$passwd mail_user
+
+>$ deny ssh login in system
+
+>$cat /etc/passwd
+mail_user:x:1002:1001::/data/mail_user:/bin/bash
+
+
+>$ ls -ld /data/mail_user/Maildir/
+drwxr-xr-x. 5 mail_user root 171 Oct 26 12:40 /data/mail_user/Maildir/
+>$ ls -ld /data/mail_user
+drwx------. 3 mail_user postfixusers 77 Oct 26 11:32 /data/mail_user
+
+
+#########Tips ##########
+1 view logs on /var/log/malllog
+2 on outlook sometime test failuer,skip it,enter and use it,no Problem
+
