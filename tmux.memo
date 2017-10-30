@@ -18,7 +18,7 @@ setw -g mode-keys vi
 bind ^z run "tmux-zoom"
 ##
 
-
+switch  sesseion               Prex + s
 detatch sesseion               Prex + z
 enter copy mode                Prex + [
 paste recently                 Prex + ]
