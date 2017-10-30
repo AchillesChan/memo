@@ -23,8 +23,7 @@ home_mailbox = Maildir/
   
 debug_peer_level = 2
 debugger_command =
-         PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
-         ddd $daemon_directory/$process_name $process_id & sleep 5
+PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
 sendmail_path = /usr/sbin/sendmail.postfix
 newaliases_path = /usr/bin/newaliases.postfix
 mailq_path = /usr/bin/mailq.postfix
@@ -85,6 +84,7 @@ auth_mechanisms = plain login
 >$cat /etc/passwd
 mail_user:x:1002:1001::/data/mail_user:/bin/bash
 
+>$chown -R mail_user.postfixusers   /data/mail_user/
 
 >$ ls -ld /data/mail_user/Maildir/
 drwxr-xr-x. 5 mail_user root 171 Oct 26 12:40 /data/mail_user/Maildir/
