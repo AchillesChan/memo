@@ -5,4 +5,6 @@ https://www.linode.com/docs/email/postfix/postfix-smtp-debian7      Configure Po
 http://postfix.state-of-mind.de/patrick.koetter/smtpauth/smtp_auth_mailservers.html        16. SMTP Authentication for Mail servers
 https://anothersysadmin.wordpress.com/2009/02/06/postfix-as-relay-to-a-smtp-requiring-authentication/        Postfix as relay to a SMTP requiring authentication
 keyword:postfix relay auth
+http://www.berlinix.com/net/postfix.php 
+
 
