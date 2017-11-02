@@ -96,3 +96,109 @@ drwx------. 3 mail_user postfixusers 77 Oct 26 11:32 /data/mail_user
 1 view logs on /var/log/malllog
 2 on outlook sometime test failuer,skip it,enter and use it,no Problem
 
+
+#########telnet test mail function#####
+https://mediatemple.net/community/products/dv/204404584/sending-or-viewing-emails-using-telnet 
+
+https://www.ndchost.com/wiki/mail/test-smtp-auth-telnet
+
+
+#####How to send email using telnet
+ Below are instructions on how to test SMTP AUTH against a mail server using Telnet and entering the commands by hand.
+
+The first thing you need to do is get a base64 encoding of your username and password. There are a couple ways to do this, the example below uses Perl:
+
+perl -MMIME::Base64 -e 'print encode_base64("username");'
+perl -MMIME::Base64 -e 'print encode_base64("password");'
+
+
+
+
+    Open your command prompt.
+    Now, connect with telnet using the following command:
+
+    telnet example.com 25
+
+    Type ehlo example.com. Some servers also accept helo in place of ehlo.
+
+    ehlo example.com
+
+    Type mail from: username@example.com:
+
+    mail from: username@example.com
+
+    Type rcpt to: friend@hotmail.com, friend2@yahoo.com (replace with your actual recipient name):
+
+    rcpt to: friend@hotmail.com, friend2@yahoo.com
+
+    To write the message - type data, followed by your subject and message. To end the message, put a period on a line by itself and press enter:
+
+    data
+    Subject: My Telnet Test Email
+
+    Hello,
+
+    This is an email sent by using the telnet command.
+
+    Your friend,
+    Me
+
+    .
+
+    Type quit to exit telnet.
+
+#####How to check or read email with telnet
+
+    Open your command prompt.
+    At the command prompt, type in
+
+    telnet example.com 110
+
+    Type user and the email address (username@example.com) of the user for which you wish to view emails:
+
+    user username@example.com
+
+    Then type in pass followed by your password:
+
+    pass yourpasswordgoeshere
+
+    Type list to bring up a list of your emails:
+
+    list
+
+    You will see a list of items with labels like "1 897" and "2 5136." Here is an example:
+
+    list
+    +OK POP3 clients that break here, they violate STD53.
+    1 897
+    2 5136
+    3 1884
+    4 2973
+    5 2595
+    6 3063
+    7 3509
+    8 2283
+    9 1926
+    10 2763
+    11 1795
+    12 2780
+    13 2342
+    14 2342
+    15 2342
+    16 3833
+    17 2211
+    18 793
+    19 797
+    20 2599
+    .
+
+    If you wish to read an email message such as 2 5136, you can type the following:
+
+    retr 2 
+
+    If you want to delete a message such as 1 897, type dele 1:
+
+    dele 1
+
+    When you are done checking your email, type quit.
+

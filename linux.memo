@@ -1,3 +1,36 @@
+####top tips
+3. Display Specific User Process  
+$ top -u tecmint
+5. Display All CPUs / Cores in the Top Output – Press 1 (one)Top output by default shows CPU line for all the CPUs combined together as shown below
+
+6. Refresh Unix Top Command Output On demand (or) Change Refresh IntervalBy default, linux top command updates the output every 3.0 seconds. When you want to update the output on-demand, press space bar.
+
+7. Highlight Running Processes in the Linux Top Command Output – Press z or bPress z or b, which will highlight all running process as shown below.
+
+13. Decrease Number of Processes Displayed in Top Output – Press nPress n in the Interactive mode, which prompts for a number and shows only that. Following example will display only 2 process as a time.
+
+
+
+To display the top 15 processes sorted by memory use in descending order, do:
+$ top -b -o +%MEM | head -n 22
+As opposed to the previous tip, here you have to use +%MEM (note the plus sign) to sort the output in descending order:
+From the command above, the option:
+
+	1. -b : runs top in batch mode
+	2. -o : used to specify fields for sorting processes
+	3. head utility displays the first few lines of a file and
+	4. the -n option is used to specify the number of lines to be displayed.
+
+
+####top tips
+
+
+
+
+
+
+
+
 ############server opt 优化 系统 TCP/IP栈 内存 文件
 From here https://tweaked.io/guide/kernel/
 Practice https://www.researchgate.net/publication/267253313_Tuning_the_Linux_Kernel
