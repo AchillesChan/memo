@@ -1,2 +1,8 @@
 www.spamhelp.org/shopenrelay/shopenrelaytest.php                SMTP Open Relay Test
 postfix.state-of-mind.de/patrick.koetter/smtpauth/smtp_auth_mailclients.html                      12. SMTP Authentication for Mail clients
+http://www.adeptus-mechanicus.com/codex/smtprly/smtprly.php         SMTP Relay Authentication - Postfix
+https://www.linode.com/docs/email/postfix/postfix-smtp-debian7      Configure Postfix to Send Mail Using an External SMTP Server
+http://postfix.state-of-mind.de/patrick.koetter/smtpauth/smtp_auth_mailservers.html        16. SMTP Authentication for Mail servers
+https://anothersysadmin.wordpress.com/2009/02/06/postfix-as-relay-to-a-smtp-requiring-authentication/        Postfix as relay to a SMTP requiring authentication
+keyword:postfix relay auth
+
