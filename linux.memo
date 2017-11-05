@@ -2,7 +2,8 @@
 install and config tmux
 install and config screen
 instll gcc gcc++ autoconf automake 
-install lsyncd
+install and config zabbix_client
+install and config lsyncd
 config timezone
 config backup
 config opt file-system tcp stack
