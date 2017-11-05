@@ -1,3 +1,23 @@
+###Linux inital install
+install and config tmux
+install and config screen
+instll gcc gcc++ autoconf automake 
+install lsyncd
+config timezone
+config backup
+config opt file-system tcp stack
+config python ansible lib
+config vimrc
+config bashrc
+config sshd_config
+config ssh_key
+config yum repo
+yum update
+install nc
+reboot
+
+###Linux inital install
+
 ####top tips
 3. Display Specific User Process  
 $ top -u tecmint
