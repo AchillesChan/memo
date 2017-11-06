@@ -11,3 +11,6 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-c
 http://geekyplatypus.com/dockerise-your-php-application-with-nginx-and-php7-fpm/ Dockerise your PHP application with Nginx and PHP7-FPM
 https://github.com/mikechernev/dockerised-php
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
+https://www.tecmint.com/mysql-mariadb-performance-tuning-and-optimization/  15 Useful MySQL/MariaDB Performance Tuning and Optimization Tips 有调优建议脚本
+
+https://www.percona.com/blog/2016/10/12/mysql-5-7-performance-tuning-immediately-after-installation/ MySQL 5.7 Performance Tuning Immediately After Installation
