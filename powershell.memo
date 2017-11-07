@@ -302,3 +302,32 @@ set-aduser -instance $user
 
 ######batch update proxyAddress of AD user                               
 
+
+#######batch deploy linux Azure vm use csv
+方法0 使用CSV格式(推荐)
+需要I:\batch_deploy_vm.csv这个文件,
+列名分别是myvmname和myipaddr,
+值分别是
+Jia    10.0.0.21
+Yi     10.0.0.29
+都不用引号
+
+
+
+$MYSIZE="Small"
+$myimage="zxc-centos"
+$myuser="zhangsan"
+$mypass="password"
+$mycloud="my-cloud"
+$mynet="my-net"
+$mysubnet="subnet-1"
+
+Import-Csv I:\batch_deploy_vm.csv |
+foreach{
+New-AzureVMConfig -name  $_.myvmname -InstanceSize $MYSIZE -ImageName $myimage |
+Add-AzureProvisioningConfig -Linux -LinuxUser $myuser -Password $mypass |
+Set-AzureSubnet $mysubnet |
+Set-AzureStaticVNetIP $_.myipaddr |
+New-AzureVM -ServiceName $mycloud -VNetName $mynet
+}
+
