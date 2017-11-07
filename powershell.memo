@@ -1,0 +1,304 @@
+##########返回值 return value  exit code######################
+> ping 127.0.0.1 -n 1
+
+正在 Ping 127.0.0.1 具有 32 字节的数据:
+来自 127.0.0.1 的回复: 字节=32 时间<1ms TTL=128
+
+127.0.0.1 的 Ping 统计信息:
+    数据包: 已发送 = 1，已接收 = 1，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 0ms，最长 = 0ms，平均 = 0ms
+> $lastexitcode
+0
+> $?
+True
+> ping 192.168.1.1 -n 1
+
+正在 Ping 192.168.1.1 具有 32 字节的数据:
+请求超时。
+
+192.168.1.1 的 Ping 统计信息:
+    数据包: 已发送 = 1，已接收 = 0，丢失 = 1 (100% 丢失)，
+> $?
+False
+> $lastexitcode
+0
+###########返回值 return value  exit code END##################
+
+
+
+##########日期时间的操作####################
+> $td=(get-date).adddays(-1).date  ##昨天
+> echo $td
+
+2017年3月19日 0:00:00
+
+
+> $td=(get-date).adddays(0).date ##今天，注意写法
+> echo $td
+
+2017年3月20日 0:00:00
+##########日期时间的操作END#################
+
+####获取目录中文件的hash值###################
+>  Get-ChildItem -Recurse -path F:\bak |Where-Object
+{$_.LastWriteTime -ge $yd -and $_.LastWriteTime  
+-le $td} |%{Write-Host $_.FullName}  #昨天写入的文件
+F:\bak\20170319
+F:\bak\20170319\project20170319.rar
+F:\bak\20170319\project_redirect20170319.rar
+>  Get-ChildItem -Recurse -path F:\bak |Where-Object
+{$_.LastWriteTime -ge $yd -and $_.LastWriteTime   #包含完整目录的昨天写入的文件
+-le $td} |%{$_.FullName}
+F:\bak\20170319
+F:\bak\20170319\project20170319.rar
+F:\bak\20170319\project_redirect20170319.rar
+
+
+PS F:\>  Get-ChildItem -Recurse -path F:\bak |Where-Object
+{$_.LastWriteTime -ge $yd -and $_.LastWriteTime -le $td}
+ |Where-Object {$_.Mode -eq "-a---"}   |%{d:\fciv.exe $_.FullName} ##调用外部命令，Mode只处理文件，丢弃目录
+//
+// File Checksum Integrity Verifier version 2.05.
+//
+8eddc3891ed145fbd0a18da0f6151f5a f:\bak\20170319\project20170319.rar
+//
+// File Checksum Integrity Verifier version 2.05.
+//
+d214f260bf1d7da605573eabcb3f045b f:\bak\20170319\project_redirect20170319.rar
+
+
+
+PS F:\>  Get-ChildItem -Recurse -path F:\bak |Where-Object
+{$_.LastWriteTime -ge $yd -and $_.LastWriteTime -le $td}
+ |Where-Object {$_.Mode -eq "-a---"}   |%{d:\fciv.exe $_.FullName}
+|Select-string -Pattern "/" -NotMatch   ##将输出中的/删除？？？
+
+支持中文字符的hash计算
+> Get-ChildItem -Recurse .\ |Where-Object {$_.Mode -eq "-a---"}|%{certutil
+-hashfile $_.FullName md5}|Select-String -Pattern "CertUtil: -hashfile 命令成功完成" -NotMatch
+
+
+文本规范化处理命令
+cat 1.txt |sed -e ':a;N;$!ba;s/\n/ /g' -e 's/MD5 哈希(文件 /\n/g' -e 's/ //g' -e 's/):/ /g' >12.txt
+换行替换未空格，再“MD5 哈希(文件 ”替换未换行；再将“）：”替换为空格
+
+文本规范化处理前文本
+MD5 哈希(文件 C:\20170209\f35b6f8a-1c0c-4d8d-baae-501bf9e05dcb-荣誉证书.jpg):
+88 b9 c9 00 23 e5 a7 88 47 67 7a fa ad c1 da 03
+MD5 哈希(文件 C:\20170209\fe2f6c8c-fffd-4317-8d8a-0fd8e6f57d90-105715370058673088
+.jpg):
+c2 51 2b a5 9e 0d 97 97 d2 7a 91 85 43 6f 7e 1d
+MD5 哈希(文件 C:\20170209\fea70a73-0279-460a-9538-faac2a42e4f2-营业执照最新.pdf):
+f4 f5 d9 15 3d f3 7a 8b 7f 47 05 62 4d 20 f3 ac
+MD5 哈希(文件 C:\20170310\a529a4a4-4d52-4805-aa11-defe69dc22d3-Scan1.pdf):
+c2 e7 fe c2 67 e6 88 95 3a 52 88 ff 3c a8 25 8b
+MD5 哈希(文件 C:\20170327\04c0cc85-b568-42d4-bc9d-59a286e23fbb-QQ图片20170104150028
+.jpg):
+d0 96 09 b9 de d4 7b cb 47 46 a9 d5 ad 71 ad fb
+MD5 哈希(文件 C:\20170327\53ca258b-f25f-488c-b70e-ed089ced32b4-QQ图片20160705104140
+.jpg):
+4b 43 08 e3 71 5d 86 4a f4 ac 1f c8 80 e4 04 ab
+
+
+文本规范化处理后文本
+C:\20170209\f35b6f8a-1c0c-4d8d-baae-501bf9e05dcb-荣誉证书.jpg 88b9c90023e5a78847677afaadc1da03
+C:\20170209\fe2f6c8c-fffd-4317-8d8a-0fd8e6f57d90-105715370058673088.jpg c2512ba59e0d9797d27a9185436f7e1d
+C:\20170209\fea70a73-0279-460a-9538-faac2a42e4f2-营业执照最新.pdf f4f5d9153df37a8b7f4705624d20f3ac
+C:\20170310\a529a4a4-4d52-4805-aa11-defe69dc22d3-Scan1.pdf c2e7fec267e688953a5288ff3ca8258b
+C:\20170327\04c0cc85-b568-42d4-bc9d-59a286e23fbb-QQ图片20170104150028.jpg d09609b9ded47bcb4746a9d5ad71adfb
+C:\20170327\53ca258b-f25f-488c-b70e-ed089ced32b4-QQ图片20160705104140.jpg 4b4308e3715d864af4ac1fc880e404ab
+
+8eddc3891ed145fbd0a18da0f6151f5a f:\bak\20170319\project20170319.rar
+d214f260bf1d7da605573eabcb3f045b f:\bak\20170319\project_redirect20170319.rar
+####获取目录中文件的hash值END################
+
+
+
+
+
+ 多行注释
+<#
+sed -i "s/^!/Erase/g" $svn_log_file
+sed -i "s/^D/Erase/g" $svn_log_file
+#>
+单行注释
+#del sed*
+
+#变量前后添加双引号，注意行首的M“和行尾的“是添加的，$($Matches[1])是第一个反向匹配，三个双引号
+svn status $svn_directory| ? { $_ -match '^!\s+(.*)' } | % { Write-Output """$($Matches[1])"""}
+"D:\test\add\del\新建文本文档 (4)- = ' ; `.txt"
+"D:\test\add\del\新建文本文档.txt"
+https://blogs.technet.microsoft.com/heyscriptingguy/2010/07/28/writing-double-quotation-marks-to-a-text-file-using-windows-powershell/
+#其他各种姿势，其他特殊符号
+svn status $svn_directory| ? { $_ -match '^!\s+(.*)' } | % { Write-Output ""?""$($Matches[1])"\?"k}
+svn status $svn_directory| ? { $_ -match '^!\s+(.*)' } | % { Write-Output ""!""$($Matches[1])"@"}
+svn status $svn_directory| ? { $_ -match '^!\s+(.*)' } | % { Write-Output ""/""$($Matches[1])"￥"}
+
+svn status $svn_directory| ? { $_ -match '^!\s+(.*)' } | % { Write-Output "‘"$($Matches[1])"’"} #通不过
+
+
+
+
+++++++string scrap++++++++
+++++++++++start+++++++++
+https://technet.microsoft.com/en-us/library/ee692804.aspx
+
+$op_time=get-date -format yyyyMd-HHmm
+$op_time.substring(0,8)
+++++++string scrap++++++++
+++++++++++end+++++++++
+
+
+
+
++++++++++++++++++++++
+变量与时间定义
+
+ #define variables
+$op_src="d:\site"
+$op_dst="Z:\waasiisbak"
+$op_time=get-date -format yyyyMd-HHmm
+$op_log="$op_dst\rc-$op_time.log"
+write-output "$op_src,$op_dst,$op_time,$op_log"
+
+结果如下
+
+ PS C:\Users\someuser\Desktop> C:\Users\someuser\Desktop\bak-waas-iis.ps1
+d:\site,Z:\waasiisbak,20161130-1456,Z:\waasiisbak\rc-20161130-1456.log
+++++++++++++++++++++++++++++++
+
+
+
+===========与计划任务互操作==================
+#define variables
+$op_src="C:\site"
+$op_log_pos="D:\log"
+$op_dst="\\172.16.100.13\image_bak\bak"  #不可以使用网络映射的驱动器方式，只能用UNC方式
+$op_time=get-date -format yyyyMd-HHmm
+$op_log="$op_log_pos\rc-$op_time.log"
+#write-output "$op_src,$op_dst,$op_time,$op_log" #验证变量
+
+
+
+#Backup with robocpy & Log
+robocopy $op_src $op_dst /copy:dt /e /log:$op_log /purge /r:5 /w:5 
+
+
++++++++++++PATT++++++++++
+taskschd set 任务计划的设置
+program:%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe #powshell路径
+add parameter:-File D:\shell\bak-waas-iis.ps1 #脚本路径加上前缀写到附加参数中
+++++++++++++++++++++++++++
+
+===========计划任务互操作结束===========
+
+ 
+#blank line 空行
+write-output "`n"
+
+ where-object filter (? is alias):
+% is an alias for foreach-object):
+This is the variable for the current value in the pipe line.
+
+1,2,3 | %{ write-host $_ } 
+For example in the above code the %{} block is called for every value in the array. The $_ variable will contain the current value.
+
+
+
+#类似XARGS 重定向 错误和正常输出到文件
+ Get-Content 5.txt |% {dir $_} 2>&1 >6.txt
+Get-Content 5.txt |% {svn status $_} 2>&1 >6.txt
+
+#bat文件中调用powershell
+Powershell.exe -executionpolicy remotesigned -File C:\Users\SE\Desktop\ps.ps1
+
+#正则文件内替换
+Get-Content .\svn_log.txt | % {$_ -replace "^svn.*$","MMTV"}|Set-Content .\svn_log_done.txt
+#各种替换姿势
+Get-Content .\svn_ADD.txt | % {$_ -replace "^!\s+",""}|Set-Content 1.txt
+Get-Content 1.txt | % {$_ -replace "^",'"'}|Set-Content 2.txt
+Get-Content 2.txt | % {$_ -replace "$",'"'}|Set-Content 3.txt
+ Get-Content 2.txt | % {$_ -replace "$",'"'} > 5.txt
+
+#文件内替换
+(Get-Content .\demo.txt).Replace('ma','999') |Set-Content .\demo.txt
+
+#replace
+PS C:> 'no alarms and no surprises' -replace '^no',''
+alarms and no surprises
+(Get-Content Input.json) `
+  -replace '"(\d+),(\d{1,})"', '$1.$2' `
+  -replace 'second regex', 'second replacement' |
+  Out-File output.json
+
+
+Get-Content -path "Input.json" | % { $_ -Replace '"(\d+),(\d{1,})"', '$1.$2' }
+
+#permit run powershell script
+Set-ExecutionPolicy Unrestricted
+Set-ExecutionPolicy RemoteSigned
+
+#$a=get-date 时间付给变量
+
+#ouput with variable
+PS D:\> $op_date=date
+PS D:\> Write-Output "test1 & $op_date"
+test1 & 09/04/2016 13:59:24
+PS D:\> Write-Output "test1 $op_date";
+test1 09/04/2016 13:59:24
+
+
+#redirection
+& myjob.bat 2>&1 >> C:\yLog.txt
+~
+ PowerShell CheatSheet – Regular Expressions
+Fab 09/10/2012 News
+Here is a regular expression list
+
+. matches any character except newline
+\ escape character
+\w word character [a-zA-Z_0-9]
+\W non-word character [^a-zA-Z_0-9]
+\d Digit [0-9]
+\D non-digit [^0-9]
+\n new line
+\r carriage return
+\t tabulation
+\s white space
+\S non-white space
+^ beginning of a line
+$ end of a line
+\A beginning of the string (multi-line match)
+\Z end of the string (multi-line match)
+\b word boundary, boundary between \w and \W
+\B not a word boundary
+\< beginning of a word
+\> end of a word
+{n} matches exaclty n times
+{n,} matches a minimum of n times
+{x,y} matches a min of x and max of y
+(a|b) ‘a’ or ‘b’
+* matches 0 or more times
++ matches 1 or more times
+? matches 1 or 0 times
+*? matches 0 or more times, but as few as possible
++? matches 1 or more times, but as few as possible
+?? matches 0 or 1 time
+
+
+解除powershell脚本允许限制，使用管理账户运行
+ PS C:\WINDOWS\system32> Set-ExecutionPolicy Unrestricted
+PS C:\WINDOWS\system32> Get-ExecutionPolicy
+Unrestricted
+
+######batch update proxyAddress of AD user                               
+Import-Csv C:\Users\user\Desktop\usertxt.csv |
+foreach{
+$user=get-aduser $_.username -Properties mail,department,ProxyAddresses
+$user.ProxyAddresses = 'SMTP:' + $_.username + '@example.com'
+set-aduser -instance $user
+}
+
+######batch update proxyAddress of AD user                               
+
