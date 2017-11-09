@@ -15,6 +15,26 @@ Connection to 127.0.0.1 23306 port [tcp/*] succeeded!
 
 3. Connect  to localhost
 $>mycli -uroot -h127.0.0.1 -P23306 -pPassword
+
+4. Done
+$> mycli -h127.0.0.1 -P23306 -uroot -pPassowd
+Version: 1.8.1
+Chat: https://gitter.im/dbcli/mycli
+Mail: https://groups.google.com/forum/#!forum/mycli-users
+Home: http://mycli.net
+Thanks to the contributor - Anonymous
+mysql root@127.0.0.1:(none)> show DATABASES;
++--------------------+
+| Database           |
+|--------------------|
+| information_schema |
+| deviceregister     |
+| sys                |
+| test               |
++--------------------+
+14 rows in set
+Time: 0.003s
+
 ###############mycli##########
 
 
