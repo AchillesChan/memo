@@ -41,7 +41,7 @@ Time: 0.003s
 ##back to select input s. chose your need
 ##s is alias
 ## BUT mysql.user table didn't work 
-
+###PATT SPACE,PUCTION ETC DETAIL
 
 > select s.`IsDeleted`,s.`RoleName` from sysrole s;
 +-------------+------------+
