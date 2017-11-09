@@ -1,3 +1,24 @@
+###############mycli##########
+http://www.jianshu.com/p/841e5477d3c0
+https://www.tuicool.com/articles/ZnANBvq
+
+tips:
+1. Map mysql-server to localhost
+## L represent map remote end to LOCAL 
+## 23306 represent LOCAL  port
+## 3306  represent REMOTE  mysql port
+$>ssh -NCfqL 23306:localhost:3306 Michael@mysql-server
+
+2. Test map status
+$> nc -vz 127.0.0.1 23306
+Connection to 127.0.0.1 23306 port [tcp/*] succeeded!
+
+3. Connect  to localhost
+$>mycli -uroot -h127.0.0.1 -P23306 -pPassword
+###############mycli##########
+
+
+
 #####procedure variable from select clause
  
 mysql> delimiter $
