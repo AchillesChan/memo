@@ -40,6 +40,9 @@ Time: 0.003s
 ##first input select from sysrole s;
 ##back to select input s. chose your need
 ##s is alias
+## BUT mysql.user table didn't work 
+
+
 > select s.`IsDeleted`,s.`RoleName` from sysrole s;
 +-------------+------------+
 |   IsDeleted | RoleName   |
