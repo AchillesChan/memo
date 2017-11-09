@@ -35,6 +35,18 @@ mysql root@127.0.0.1:(none)> show DATABASES;
 14 rows in set
 Time: 0.003s
 
+
+5. Auto complete
+##first input select from sysrole s;
+##back to select input s. chose your need
+##s is alias
+> select s.`IsDeleted`,s.`RoleName` from sysrole s;
++-------------+------------+
+|   IsDeleted | RoleName   |
+|-------------+------------|
+|           0 |default_role|
++-------------+------------+
+
 ###############mycli##########
 
 
