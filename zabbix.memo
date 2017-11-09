@@ -1,0 +1,22 @@
+######windows 使用mobaxterm ssh tunnnel 
+$ sudo ps -ef |grep 10|grep infra
+###sshtunnel 表示远端服务器的10051端口映射到本地的10000，本地仅需要与我本身localhost:10000通信
+###10051是Zabbix_server的服务端口
+ssh -NCfqL 10000:localhost:10051 -p 3002 someOne@example.com
+###sshtunnel 表示本地服务器的10060端口映射到远端的10060，远端仅需要与它本身的localhost:10060通信
+ssh -NCfqR 10060:localhost:10060 -p 3002 someOne@example.com
+
+
+$ Windows zabbix_agentd.conf配置
+LogFile=c:\zabbix_agentd.log
+Server=127.0.0.1
+###sshtunnel 表示本地服务器的10060端口映射到远端的10060，远端仅需要与它本身的localhost:10060通信
+###ListenPort表示本地Zabbix_agentd的服务端口，默认位10050
+ListenPort=10060
+###sshtunnel 表示远端服务器的10051端口映射到本地的10000，本地仅需要与我本身localhost:10000通信
+###10051是Zabbix_server的服务端口
+ServerActive=127.0.0.1:10000
+HostnameItem=system.hostname  ###自动注册
+HostMetadataItem=system.uname ###按照操作系统自动归类
+
+######windows 使用mobaxterm ssh tunnnel 
