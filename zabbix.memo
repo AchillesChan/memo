@@ -1,3 +1,26 @@
+#######zabbix with nat port map on windows######
+###server
+ZABBIX_SERVER的网关配置到10051的nat map
+完成后使用psping检查是否成功
+server配置不变
+开启需要的防火墙端口与监听端口
+
+###agent
+LogFile=C:\zabbix_agentd.log
+Server=server_public_ip
+ListenPort=10010
+ServerActive=server_public_ip:10051
+HostnameItem=system.hostname
+HostMetadataItem=system.uname
+
+开启需要的防火墙端口与监听端口
+
+zabbix agent的网关配置到10010的NAT MAP
+完成后使用psping检查是否成功
+#######zabbix with nat port map on windows######
+
+
+
 ######windows 使用mobaxterm ssh tunnnel 
 $ sudo ps -ef |grep 10|grep infra
 ###sshtunnel 表示远端服务器的10051端口映射到本地的10000，本地仅需要与我本身localhost:10000通信
