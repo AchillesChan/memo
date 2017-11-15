@@ -50,6 +50,14 @@ Time: 0.003s
 |           0 |default_role|
 +-------------+------------+
 
+6. Warning 
+ mycli didn't support delimiter
+ create procedure must like this:
+CREATE PROCEDURE dorepeat(p1 INT)
+BEGIN
+  SET @x = 0;
+  REPEAT SET @x = @x + 1; UNTIL @x > p1 END REPEAT;
+END;
 ###############mycli##########
 
 
@@ -69,7 +77,64 @@ mysql> create definer= current_user
     event event_name 
     on schedule at 'date' + interval time
     do something(or_procedure);
+
+
+
+
+###############schedule with storage procedure ###############
+###The follow 2 is manual input 
+###official link    https://dev.mysql.com/doc/refman/5.6/en/create-event.html
+create procedure sp1() begin insert into t1 value (5) ;end
+
+create event myevent on schedule every 5 second starts current_timestamp + INTERVAL 1 minute do call sp1()
+
+
+###The fllow is system status 
+mysql> show create procedure sp1\G;
+*************************** 1. row ***************************
+。。。。。。
+    Create Procedure: CREATE DEFINER=`root`@`localhost` PROCEDURE `sp1`()
+begin insert into t1 value (5) ;end
+。。。。。。
+
+
+mysql> show create event myevent\G;
+*************************** 1. row ***************************
+               Event: myevent
+            sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+           time_zone: SYSTEM
+        Create Event: CREATE DEFINER=`root`@`localhost` EVENT `myevent` ON SCHEDULE EVERY 5 SECOND STARTS '2017-11-13 01:30:39' ON COMPLETION NOT PRESERVE ENABLE DO call sp1()
+character_set_client: utf8
+collation_connection: utf8_general_ci
+  Database Collation: latin1_swedish_ci
+1 row in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> show processlist;
++----+-----------------+-----------+------+---------+------+-----------------------------+------------------+
+| Id | User            | Host      | db   | Command | Time | State                       | Info             |
++----+-----------------+-----------+------+---------+------+-----------------------------+------------------+
+| 26 | event_scheduler | localhost | NULL | Daemon  |    5 | Waiting for next activation | NULL             |
+| 94 | root            | localhost | test | Query   |    0 | init                        | show processlist |
++----+-----------------+-----------+------+---------+------+-----------------------------+------------------+
+2 rows in set (0.00 sec)
+
+
+mysql> show variables like "%schedule%"; ####Here must be ON
+
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| event_scheduler | ON    |
++-----------------+-------+
+1 row in set (0.00 sec)
+###############schedule with storage procedure ###############
 ===========================================  
+
+
+
 ####install
 环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
 mysql5.7需要xtrabackup2.4
@@ -1377,7 +1442,7 @@ select `name` from mysql.proc where db = 'your_db_name' and `type` = 'FUNCTION' 
 方法二：
 
 
-show procedure status; //存储过程
+show rocedure status; //存储过程
 
 
 show function status; //函数
