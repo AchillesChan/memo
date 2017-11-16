@@ -1,3 +1,33 @@
+####How To Install and Use Docker Compose on CentOS 7#######
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-centos-7    How To Install and Use Docker Compose on CentOS 7 
+1 install Docker
+2 install docker-compose
+sudo yum install epel-release
+sudo yum install -y python-pip
+sudo pip install docker-compose
+sudo yum upgrade python*
+3 run demo
+mkdir hello-world
+cd hello-world
+
+
+nano docker-compose.yml
+my-test:
+  image: hello-world
+
+docker-compose up
+
+
+4 php nginx demo url
+http://geekyplatypus.com/dockerise-your-php-application-with-nginx-and-php7-fpm/
+https://github.com/mikechernev/dockerised-php
+####How To Install and Use Docker Compose on CentOS 7#######
+
+
+
+
+
+
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
 
 $ docker images ###########列镜像
@@ -30,7 +60,7 @@ $docker run -d -p 1080:80 --name website \
 
 $ ls $PWD
 default.htm index.html lb.html Test.html
-
+\
 创建私有HUB
 docker run -dp 5000:5000 registry  #创建服务器
 docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu #标记待上传image
