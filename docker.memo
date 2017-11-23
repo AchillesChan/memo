@@ -6,6 +6,7 @@ sudo yum install epel-release
 sudo yum install -y python-pip
 sudo pip install docker-compose
 sudo yum upgrade python*
+pip install --upgrade pip
 3 run demo
 mkdir hello-world
 cd hello-world
