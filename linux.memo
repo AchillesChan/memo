@@ -206,6 +206,11 @@ while true
     do
         nc -vz youSite.com 80 >/dev/null 2>&1 && break;
     done
+
+====##command line run
+while true; do nc -vz ip-or-domain port >/dev/null 2>&1 && break; done
+
+
 #### ping youSite 直到成功才退出 #######
 
 #########vimrc###########
