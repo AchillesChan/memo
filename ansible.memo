@@ -150,6 +150,7 @@ Shell> ansible-playbook web.yml --syntax-check
 playbook web.yml
 Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/logcdbak --sudo -K
 Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/logcdbak --sudo --ask-sudo-pass
+Shell> ansible-playbook web.yml -u Michael --ask-pass  --sudo --ask-sudo-pass
 
 SUDO password:(输入目标机器的sudo密码）
 
