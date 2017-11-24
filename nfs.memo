@@ -64,7 +64,8 @@ Next we will mount the NFS shared content in the client machine as shown below:
 mount -t nfs 192.168.0.100:/home /mnt/nfs/home/
 
 It will mount /home of NFS server. Next we will /var/nfsshare mount as follows:
- mount -t nfs 192.168.0.100:/var/nfsshare /mnt/nfs/var/nfsshare/
+=====this config add to /etc/crontab seem is a intellget way 
+mount -t nfs 192.168.0.100:/var/nfsshare /mnt/nfs/var/nfsshare/
 
 Now we are connected with the NFS share, we will crosscheck it as follows:
 df -kh
