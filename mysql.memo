@@ -2218,14 +2218,14 @@ Qcache_total_blocks：缓存中块的数量。
 【mysql备份权限】
 
 
-CREATE USER 'mybak'@'10.21.100.4' IDENTIFIED BY 'bak-password';
-GRANT RELOAD ON *.* TO 'mybak'@'10.21.100.4';
-GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_progress TO 'mybak'@'10.21.100.4';
-GRANT CREATE, INSERT, SELECT, DROP, UPDATE ON mysql.backup_history TO 'mybak'@'10.21.100.4';
-GRANT REPLICATION CLIENT ON *.* TO 'mybak'@'10.21.100.4';
-GRANT SUPER ON *.* TO 'mybak'@'10.21.100.4';
-GRANT PROCESS ON *.* TO 'mybak'@'10.21.100.4';
-GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'mybak'@'10.21.100.4';
-GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'mybak'@'10.21.100.4';
+CREATE USER 'backup-user-name'@'ip-address' IDENTIFIED BY 'bak-password';
+GRANT RELOAD ON *.* TO 'backup-user-name'@'ip-address';
+GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_progress TO 'backup-user-name'@'ip-address';
+GRANT CREATE, INSERT, SELECT, DROP, UPDATE ON mysql.backup_history TO 'backup-user-name'@'ip-address';
+GRANT REPLICATION CLIENT ON *.* TO 'backup-user-name'@'ip-address';
+GRANT SUPER ON *.* TO 'backup-user-name'@'ip-address';
+GRANT PROCESS ON *.* TO 'backup-user-name'@'ip-address';
+GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'backup-user-name'@'ip-address';
+GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'backup-user-name'@'ip-address';
 flush privileges;
 
