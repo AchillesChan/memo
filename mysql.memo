@@ -1,3 +1,16 @@
+####index tuning 索引优化#####
+deferred join 延迟关联
+https://www.bennadel.com/blog/3168-high-performance-mysql-optimization-backups-and-replication-by-baron-schwartz-peter-zaitsev-and-vadim-tkachenko.htm
+http://www.iheavy.com/2013/06/19/3-ways-to-optimize-for-paging-in-mysql/
+http://superve.leanote.com/post/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96
+
+燕十八
+http://superve.leanote.com/cate/study
+
+
+####index tuning 索引优化#####
+
+
 ###############mycli##########
 http://www.jianshu.com/p/841e5477d3c0
 https://www.tuicool.com/articles/ZnANBvq
