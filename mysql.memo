@@ -1,10 +1,11 @@
 ##############haproxy on azure##############################
 =======================azure ilb set====================================
 先创建ILB
-azure service internal-load-balancer add --serviceName your-service --internalLBName Mysqlilb  --subnet-name coredb-01 --static-virtualnetwork-ipaddress 172.16.20.10
-然后附加endpoint到前面创建的ILB，注意-b参数，共两台机器
+azure service internal-load-balancer add --serviceName your-service --internalLBName Mysqlilb  --subnet-name coredb-01 --static-virtualnetwork-ipaddress 172.16.0.10
+
+然后附加endpoint到前面创建的ILB，注意-b参数(load balancer)，共两台机器
 azure vm endpoint create your-service-DB02L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 10 --probe-timeout 31 -b mysqllbs --internal-load-balancer-name Mysqlilb
-   53  azure vm endpoint create A-50YC-DB01L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 10 --probe-timeout 31 -b mysqllbs --internal-load-balancer-name Mysqlilb
+azure vm endpoint create your-service-DB01L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 10 --probe-timeout 31 -b mysqllbs --internal-load-balancer-name Mysqlilb
 
 ##下面这条计划使用3306工作端口，3307探测端口，使用nc -l生成探测端口，失败了
 azure vm endpoint create your-service-DB01L 3306 -n mysqlELB --local-port 3306  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 5 --probe-timeout 15 -b lbs --internal-load-balancer-name Mysqlilb
@@ -22,7 +23,7 @@ info:    Executing command vm endpoint list
 + Getting virtual machines
 data:    Name      Protocol  Public Port  Private Port  Virtual IP       EnableDirectServerReturn  Load Balanced
 data:    --------  --------  -----------  ------------  ---------------  ------------------------  -------------
-data:    mysqlELB  tcp       3306         3307          172.16.20.11     false                     Yes
+data:    mysqlELB  tcp       3306         3307          172.16.0.11     false                     Yes
 data:    SSH       tcp       3002        22            128.5.6.9  false                     No
 info:    vm endpoint list command OK
 Michael@linux-gzbl:~> azure vm endpoint create your-service-DB02L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 5 --probe-timeout 15 -b lbs --internal-load-balancer-name Mysqlilb
@@ -47,17 +48,29 @@ Update-AzureVM       430d7187-c766-45c4-b57e-d39e6d844674 Succeeded
 
 
 
+######mysql haproxy port#############
+# ss -tlnp |grep 3306
+LISTEN     0      128                      :::3306                    :::*      users:(("mysqld",1972,15))
+
+# ss -tlnp |grep 3307
+LISTEN     0      128                       *:3307                     *:*      users:(("haproxy",2012,5))
+######mysql haproxy port#############
+
+
 =======================azure ilb set====================================
 
 ==================haproxy core cfg use mysql-check=====================                                                                                    
 =======================================================================
 =======================================================================
+cat /etc/haproxy/haproxy.cfg
+
+
 listen  proxy-mysql *:3307
         mode tcp
         option mysql-check
         balance roundrobin
-        server db01 172.16.20.10:3306 check inter 1s rise 2 fall 2
-        server db02 172.16.20.12:3306 check inter 1s rise 2 fall 2 backup
+        server db01 172.16.0.10:3306 check inter 1s rise 2 fall 2
+        server db02 172.16.0.12:3306 check inter 1s rise 2 fall 2 backup
 ==================haproxy core cfg use mysql-check end=================
 =======================================================================
 =======================================================================
