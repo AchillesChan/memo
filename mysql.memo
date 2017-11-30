@@ -1,3 +1,102 @@
+##############haproxy on azure##############################
+=======================azure ilb set====================================
+先创建ILB
+azure service internal-load-balancer add --serviceName your-service --internalLBName Mysqlilb  --subnet-name coredb-01 --static-virtualnetwork-ipaddress 172.16.20.10
+然后附加endpoint到前面创建的ILB，注意-b参数，共两台机器
+azure vm endpoint create your-service-DB02L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 10 --probe-timeout 31 -b mysqllbs --internal-load-balancer-name Mysqlilb
+   53  azure vm endpoint create A-50YC-DB01L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 10 --probe-timeout 31 -b mysqllbs --internal-load-balancer-name Mysqlilb
+
+##下面这条计划使用3306工作端口，3307探测端口，使用nc -l生成探测端口，失败了
+azure vm endpoint create your-service-DB01L 3306 -n mysqlELB --local-port 3306  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 5 --probe-timeout 15 -b lbs --internal-load-balancer-name Mysqlilb
+
+chael@linux-gzbl:~> azure vm endpoint list your-service-DB02L
+info:    Executing command vm endpoint list
++ Getting virtual machines
+data:    Name      Protocol  Public Port  Private Port  Virtual IP       EnableDirectServerReturn  Load Balanced
+data:    --------  --------  -----------  ------------  ---------------  ------------------------  -------------
+data:    mysqlELB  tcp       3306         3307                           false                     Yes
+data:    SSH       tcp       60002        22            128.5.6.9  false                     No
+info:    vm endpoint list command OK
+Michael@linux-gzbl:~> azure vm endpoint list your-service-DB01L
+info:    Executing command vm endpoint list
++ Getting virtual machines
+data:    Name      Protocol  Public Port  Private Port  Virtual IP       EnableDirectServerReturn  Load Balanced
+data:    --------  --------  -----------  ------------  ---------------  ------------------------  -------------
+data:    mysqlELB  tcp       3306         3307          172.16.20.11     false                     Yes
+data:    SSH       tcp       3002        22            128.5.6.9  false                     No
+info:    vm endpoint list command OK
+Michael@linux-gzbl:~> azure vm endpoint create your-service-DB02L 3306 -n mysqlELB --local-port 3307  --protocol tcp --probe-port 3307 --probe-protocol tcp --probe-interval 5 --probe-timeout 15 -b lbs --internal-load-balancer-name Mysqlilb
+
+
+
+====powershell set=============
+PS C:\Users\wlyd-1> Get-AzureVM -ServiceName t-wlyd-it -Name ilb1 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
+
+OperationDescription OperationId                          OperationStatus
+-------------------- -----------                          ---------------
+Update-AzureVM       441bca73-64d0-4192-9c7a-8b9f84fdb0e8 Succeeded
+
+
+
+PS C:\Users\wlyd-1> Get-AzureVM -ServiceName t-wlyd-it -Name ilb2 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
+OperationDescription OperationId                          OperationStatus
+-------------------- -----------                          ---------------
+Update-AzureVM       430d7187-c766-45c4-b57e-d39e6d844674 Succeeded
+
+====powershell set=============
+
+
+
+=======================azure ilb set====================================
+
+==================haproxy core cfg use mysql-check=====================                                                                                    
+=======================================================================
+=======================================================================
+listen  proxy-mysql *:3307
+        mode tcp
+        option mysql-check
+        balance roundrobin
+        server db01 172.16.20.10:3306 check inter 1s rise 2 fall 2
+        server db02 172.16.20.12:3306 check inter 1s rise 2 fall 2 backup
+==================haproxy core cfg use mysql-check end=================
+=======================================================================
+=======================================================================
+
+##############haproxy on azure##############################
+
+
+
+
+
+#####################################################################
+#####################################################################
+###########batch insert mysql bash script############################
+# cat insert2mysql 
+#!/bin/bash
+PATH=/usr/local/mysql/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+rm mish
+touch mish
+chmod 755 mish
+
+echo '#!/bin/bash'>mish                                                                                                                                                                                                                  
+for((i=1;i<20000;i++))
+do
+        echo "mysql -ucs -h172.16.20.11 -pabcd123 -e 'insert into u value($i)' t">>mish;
+done
+
+======================generate like follow==========================
+cat mish
+mysql -ucs -h172.16.20.11 -pabcd123 -e 'insert into u value(1)' t
+mysql -ucs -h172.16.20.11 -pabcd123 -e 'insert into u value(2)' t
+mysql -ucs -h172.16.20.11 -pabcd123 -e 'insert into u value(3)' t
+#####################################################################
+#####################################################################
+###########batch insert mysql bash script end########################
+
+
+
+
+
 ####index tuning 索引优化#####
 deferred join 延迟关联
 https://www.bennadel.com/blog/3168-high-performance-mysql-optimization-backups-and-replication-by-baron-schwartz-peter-zaitsev-and-vadim-tkachenko.htm
@@ -441,9 +540,9 @@ Windows Mysql配置
 # General and Slow logging.
 log-output=FILE
 general-log=1
-general_log_file="WLYD-WEB1.log"
+general_log_file="your-app-WEB1.log"
 slow-query-log=1
-slow_query_log_file="WLYD-WEB1-slow.log"
+slow_query_log_file="your-app-WEB1-slow.log"
 long_query_time=10
 
 
@@ -452,7 +551,7 @@ log-bin="mysql-bin.log" #binlog，可以使用flush log截断。
 
 
 # Error Logging.
-log-error="WLYD-WEB1.err"
+log-error="your-app-WEB1.err"
 
 
 # Server Id.
@@ -2193,9 +2292,9 @@ Windows Mysql配置
 # General and Slow logging.
 log-output=FILE
 general-log=1
-general_log_file="WLYD-WEB1.log"
+general_log_file="your-app-WEB1.log"
 slow-query-log=1
-slow_query_log_file="WLYD-WEB1-slow.log"
+slow_query_log_file="your-app-WEB1-slow.log"
 long_query_time=10
 
 
@@ -2226,6 +2325,15 @@ Qcache_total_blocks：缓存中块的数量。
 2 privileges(master) grant replication salve replication client on smsrc to 'smone'@'smhost' identified by 'pwd';
 3 start(salve) change master to master_host='$master',m_user='$user',m_p='pwd',m_log_file='logfile',m_log_pos=nn;
 4 relative directive: start/stop/reset slave show master/salve status
+
+GUID WITH REPLICATION UUID GTID
+change master to
+master_host='172.16.0.2',
+master_user='repli',
+master_password='replicat',
+master_auto_position=1;
+
+GRANT  REPLICATION SLAVE ON *.* TO 'repli'@'172.16.0.%' IDENTIFIED  BY 'replicat';
 
 
 【mysql备份权限】
