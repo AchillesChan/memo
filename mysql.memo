@@ -22,6 +22,12 @@ sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
 
 ##############haproxy on azure##############################
 =======================azure ilb set====================================
+Topology
+172.16.0.10--3306 frontend
+172.16.0.11--3306 backend1 master 
+172.16.0.12--3306 bacdend2 slave
+
+
 先创建ILB
 azure service internal-load-balancer add --serviceName your-service --internalLBName Mysqlilb  --subnet-name coredb-01 --static-virtualnetwork-ipaddress 172.16.0.10
 

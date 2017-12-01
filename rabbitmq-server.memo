@@ -1,0 +1,30 @@
+install rabbitmq on centos centOs6.7/7.3
+
+
+rpm -ivh erlang-18.3-1.el6.x86_64.rpm
+wget –no-cache http://www.convirture.com/repos/definitions/rhel/6.x/convirt.repo -O /etc/yum.repos.d/convirt.repo
+yum install socat
+rpm -ivh rabbitmq-server-3.6.6-1.el6.noarch.rpm
+service rabbitmq-server start
+rabbitmq-plugins enable rabbitmq_management
+rabbitmqctl add_user admin 123456
+ rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p "/" admin "." "." ".*"
+
+rabbitmqctl --help
+service iptables stop
+setenforce 0
+
+http://ip:15672
+user admin
+pw 123456
+
+
+参考：(注意参考资料中的中文字符和命令正确性，查看官网更高效)
+
+https://www.rabbitmq.com/management.html
+http://blog.csdn.net/zhu_tianwei/article/details/40832185
+FAQ http://blog.csdn.net/qq315737546/article/details/53105418
+RPM安装
+http://blog.csdn.net/zhu_tianwei/article/details/53572604
+
