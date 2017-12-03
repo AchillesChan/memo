@@ -174,6 +174,11 @@ PING 192.168.1.201 (192.168.1.201)
 。。。。。。
 ########xargs 替换参数位置End######
 
+
+
+
+#######################################
+#######################################
 ###使用parallel并行处理######
 -k后面的’与end后面的’之间直接可以运行多个命令，这些命令使用；区格；这些命令使用-k强制执行顺序相同
 To force the output in the same order as the arguments use --keep-order/-k:
@@ -193,11 +198,55 @@ Output:
 重定向错误到/dev/null
 # time cat pl.txt |parallel -j 8 2>/dev/null 'echo -n "{} " ;curl -X GET -IL {}|grep HTTP'
 
+
+
+
+
+
+
+####ping 172.16.21.1--11 success return 0;Failure return 1 
+seq 1 11 | parallel -j 32 -k 'ping -c 1 172.16.21.{} &>/dev/null && echo 0 || ech
+o 1'
+Academic tradition requires you to cite works you base your article on.
+When using programs that use GNU Parallel to process data for publication
+please cite:
+
+  O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
+  ;login: The USENIX Magazine, February 2011:42-47.
+
+This helps funding further development; and it won't cost you a cent.
+If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
+
+To silence the citation notice: run 'parallel --bibtex'.
+
+0
+1
+0
+1
+1
+0
+1
+1
+0
+0
+1
+
+####ping 172.16.21.1--11 success return 0;Failure return 1 
+
+
 GNU Parallel tutorial 精华 验证
 
 man parallel_tutorial 手册
 
 ###使用parallel并行处理######
+#######################################
+######################################
+
+
+
+
+
+
 
 #### ping youSite 端口80 直到成功才退出 #######
 
