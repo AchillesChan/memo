@@ -191,7 +191,7 @@ Output:
   1-end
 
 重定向错误到/dev/null
-# time cat pl.txt |parallel -j 8 2>/dev/nul l 'echo -n "{} " ;curl -X GET -IL {}|grep HTTP'
+# time cat pl.txt |parallel -j 8 2>/dev/null 'echo -n "{} " ;curl -X GET -IL {}|grep HTTP'
 
 GNU Parallel tutorial 精华 验证
 
