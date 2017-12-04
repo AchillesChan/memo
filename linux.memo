@@ -1,3 +1,32 @@
+##############################
+#####ssh/config example######
+ForwardAgent yes                                                                          
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r
+
+Host                  prefix-hostname1
+Hostname              4.19.14.4
+User                  username
+Port                  6001
+IdentityFile          ~/privity-key
+
+Host                  prefix2-hostname2
+Hostname              192.168.2.16
+User                  username  
+IdentityFile          ~/privity-key-2
+
+Host                  prefix-hostname3
+Hostname              example.cn  
+Port                  3021
+User                  username
+IdentityFile          ~/privity-key
+
+
+connect example:
+$>ssh prefix-hostname1
+##############################
+#####.ssh/config example######
+
 ###Linux inital install
 install and config tmux
 install and config screen
