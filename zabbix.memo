@@ -19,6 +19,10 @@ zabbix agent的网关配置到10010的NAT MAP
 完成后使用psping检查是否成功
 #######zabbix with nat port map on windows######
 
+######zabbix server clean database 清理数据库##########
+DELETE FROM history WHERE 'clock' < 1509984000;
+optimize table history;
+######zabbix server clean database##########
 
 
 ######windows 使用mobaxterm ssh tunnnel 
