@@ -292,6 +292,23 @@ $ end of a line
 PS C:\WINDOWS\system32> Get-ExecutionPolicy
 Unrestricted
 
+
+###########batch update multiple proxyAddress#####
+Import-CsvC:\Users\someone\Desktop\user20171205.csv|
+foreach{
+##set SMTP
+$user=get-aduser $_.username -Properties mail,department,ProxyAddresses
+$user.ProxyAddresses = 'SMTP:' + $_.username + '@example.com'
+set-aduser -instance $user
+##SET multiple smtp
+get-aduser $_.username |Set-ADUser -add @{Proxyaddresses="smtp:" + $_.username + "@eg2.com" }
+##view user ProxyAddresses
+get-aduser $_.username -Properties mail,department,ProxyAddresses
+}
+###########batch update multiple proxyAddress#####
+
+
+
 ######batch update proxyAddress of AD user                               
 Import-Csv C:\Users\user\Desktop\usertxt.csv |
 foreach{
