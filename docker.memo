@@ -1,12 +1,16 @@
 ####How To Install and Use Docker Compose on CentOS 7#######
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-centos-7    How To Install and Use Docker Compose on CentOS 7 
 1 install Docker
-2 install docker-compose
+2.0 install docker-compose
 sudo yum install epel-release
 sudo yum install -y python-pip
 sudo pip install docker-compose
 sudo yum upgrade python*
 pip install --upgrade pip
+2.1 install docker-compose on opensuse
+sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
 3 run demo
 mkdir hello-world
 cd hello-world
@@ -112,6 +116,15 @@ https://c.163.com/wiki/index.php?title=Dockerhub%E9%95%9C%E5%83%8F%E5%8A%A0%E9%8
 $ sudo echo "DOCKER_OPTS=\"\$DOCKER_OPTS --registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
 $ service docker restart
 
+
+docker offcial 官方
+ 为了永久性保留更改，您可以修改 /etc/docker/daemon.json 文件并添加上 registry-mirrors 键值。
+
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+
+修改保存后重启 Docker 以使配置生效。 
 #################################
 
 Error starting daemon: layer does not exist" centos 7
