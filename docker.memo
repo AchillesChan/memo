@@ -35,6 +35,9 @@ https://github.com/mikechernev/dockerised-php
 
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
 
+#######连接到已经后台运行的docker container
+$ docker exec -it containerid bash
+
 $ docker images ###########列镜像
 REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
 ubuntu/ubuntu_httpd v0 ba8ba558ddfb About an hour ago 227.9 MB
