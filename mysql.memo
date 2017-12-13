@@ -462,7 +462,7 @@ skip_ssl
 # Binary Logging.
 log-bin="mysql-bin.log"
 lower_case_table_names = 1
-
+innodb_buffer_pool_size=8192M
 # Error Logging.
 log-error="your-log.err"
 
