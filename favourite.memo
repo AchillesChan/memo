@@ -1,7 +1,18 @@
+https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/   Introducing Linux Network Namespaces
+
+
+https://www.percona.com/blog/2015/07/01/using-cgroups-to-limit-mysql-and-mongodb-memory-usage/           Using Cgroups to Limit MySQL and MongoDB memory usage
+
+
+http://www.techpaste.com/2016/04/limit-mongodb-memory-usage/
+
+http://colobu.com/2015/07/23/Using-Cgroups-to-Limit-MongoDB-memory-usage/   使用cgroups限制MongoDB的内存使用
+
+
 ###jenkins gitlab
 https://hub.docker.com/r/jenkins/jenkins/
 https://github.com/jenkinsci/docker/blob/master/README.md
-https://docs.gitlab.com/omnibus/docker/README.html
+rttps://docs.gitlab.com/omnibus/docker/README.html
 
 
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
