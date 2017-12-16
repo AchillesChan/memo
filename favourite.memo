@@ -8,7 +8,7 @@ http://www.techpaste.com/2016/04/limit-mongodb-memory-usage/
 
 http://colobu.com/2015/07/23/Using-Cgroups-to-Limit-MongoDB-memory-usage/   使用cgroups限制MongoDB的内存使用
 
-
+http://www.cnblogs.com/sparkdev/p/7258507.html PowerShell 脚本中的密码加密
 ###jenkins gitlab
 https://hub.docker.com/r/jenkins/jenkins/
 https://github.com/jenkinsci/docker/blob/master/README.md
