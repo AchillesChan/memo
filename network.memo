@@ -546,5 +546,9 @@ return
 
 
 
+######display h3c sn ####
+display device manuinfo
+slot 0
+DEVICE_NAME          : MSR 26-00
 
-
+######display h3c sn ####
