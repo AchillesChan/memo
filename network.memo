@@ -552,3 +552,98 @@ slot 0
 DEVICE_NAME          : MSR 26-00
 
 ######display h3c sn ####
+
+
+
+
+
+
+
+#########h3c site2site vpn##############
+#########h3c site2site vpn##############
+#########h3c site2site vpn##############
+===from 172.31.20/27/28/200 to 172.31.2.96 subnet
+===local public ip  2.3.4.5
+===remote public ip 1.2.3.4
+acl number 3002   ##########define vpn vlan                                                                                                                                                                                                                                                                                                         
+ rule 0 permit ip source 172.31.20.0 0.0.0.255 destination 172.31.2.96 0.0.0.7
+ rule 5 permit ip source 172.31.27.0 0.0.0.255 destination 172.31.2.96 0.0.0.7
+ rule 10 permit ip source 172.31.28.0 0.0.0.255 destination 172.31.2.96 0.0.0.7
+ rule 15 permit ip source 172.31.200.0 0.0.0.255 destination 172.31.2.96 0.0.0.7
+#
+ike proposal 3002   ############phase 1 encryption method
+ encryption-algorithm aes-cbc 128
+#                 
+ike peer name-prefix01-phase1-ike  #####phase 1 parameters,include encryption method,pre-share key,remote public ip,local public ip,nat-t feature
+ proposal 3002
+ pre-shared-key vpn-key
+ remote-address 1.2.3.4
+ local-address 2.3.4.5
+ nat traversal
+#
+ipsec transform-set name-prefix01-phase2-ipsec       #####phase2 parameter,include encapsulation model,encrytion and hash method
+ encapsulation-mode tunnel
+ transform esp
+ esp authentication-algorithm sha1 
+ esp encryption-algorithm aes-cbc-128
+#
+ipsec policy 3002 1 isakmp                           ####sa config ,call before phase1 and phase 2 ,acl config,addtional to sa reconnection policy
+ connection-name ipsec-2-name-prefix01
+ security acl 3002 
+ ike-peer name-prefix01-phase1-ike
+ transform-set name-prefix01-phase2-ipsec
+ sa duration traffic-based 1843200
+ sa duration time-based 3600 
+#
+ip route-static 172.31.2.96 255.255.255.248 GigabitEthernet 0/0 2.3.4.1   #####local gateway public ip address
+#
+interface GigabitEthernet0/0
+ ip address 2.3.4.5 255.255.255.0
+ ipsec policy 3002               #####??doing this not enter gui operation
+
+#####After before,enter GUI ,SELECT PUBLIC IP INTERFACE ASGATEWAY interface
+=========================================
+=======below is reverse config===========
+
+===from 172.31.2.96 to 172.31.20/27/28/28 subnet
+===local public ip  1.2.3.4
+===remote public ip 2.3.4.5
+
+acl number 3002 
+ rule 0 permit ip source 172.31.2.96 0.0.0.7 destination 172.31.20.0 0.0.0.255
+ rule 5 permit ip source 172.31.2.96 0.0.0.7 destination 172.31.27.0 0.0.0.255
+ rule 10 permit ip source 172.31.2.96 0.0.0.7 destination 172.31.28.0 0.0.0.255
+ rule 15 permit ip source 172.31.2.96 0.0.0.7 destination 172.31.200.0 0.0.0.255
+#
+ike proposal 3002 
+ encryption-algorithm aes-cbc 128
+#
+ike peer name-prefix01-phase1-ike
+ proposal 3002 
+ pre-shared-key vpn-key
+ remote-address 2.3.4.5
+ local-address 1.2.3.4
+ nat traversal
+#
+ipsec transform-set name-prefix01-phase2-ipsec
+ encapsulation-mode tunnel
+ transform esp
+ esp authentication-algorithm sha1 
+ esp encryption-algorithm aes-cbc-128
+#
+ipsec policy 1028532 1 isakmp
+ connection-name ipsec-2-chengdus-office
+ security acl 3002 
+ ike-peer name-prefix01-phase1-ike
+ transform-set name-prefix01-phase2-ipsec
+ sa duration traffic-based 1843200
+ sa duration time-based 3600 
+#
+ip route-static 172.31.20.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
+ip route-static 172.31.27.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
+ip route-static 172.31.28.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
+ip route-static 172.31.200.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
+
+#########h3c site2site vpn##############
+#########h3c site2site vpn##############
+#########h3c site2site vpn##############
