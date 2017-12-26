@@ -1160,6 +1160,8 @@ N250-mail
 AUTH PLAIN AHh0ODMzYQBtaW1haW1hOSk=
 535 Error: authentication failed
 
+#tcpdump -nNxXi eth0 -s 0 proto TCP and host 192.168.1.0 -w mail.txt
+#tcpdump -nNxXi eth0 -s 0 proto TCP and host 192.168.1.5 -w mail.txt   
 #VIM 空格高亮黄色  显示所有隐藏的字符
 set nohls取消搜索的高亮关键字。
 
