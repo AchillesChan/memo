@@ -1,7 +1,7 @@
 ####link https://www.howtoforge.com/nfs-server-and-client-on-centos-7
 
 如果stale之类的错误，使用umount解除已经mount的文件系统；
-如果umount失败，使用lsof查看正在打开文件系统的进程，kill相关进程，再umount。
+如果umount失败，client使用lsof(or ss -tlnp|grep rpc and kill pid)查看正在打开文件系统的进程，kill相关进程，再umount。
 ============Server config:
 yum install nfs-utils
 
@@ -34,6 +34,8 @@ systemctl restart nfs-server
 
 Again we need to add the NFS service override in CentOS 7.0 firewall-cmd public zone service as:
 firewall-cmd --permanent --zone=public --add-service=nfs
+firewall-cmd --add-port 111/tcp --perm
+firewall-cmd --add-port 2049/tcp --perm ###optional ?
 firewall-cmd --reload
 Note: If it will be not done, then it will give error for Connection Time Out at client side.
 Now we are ready with the NFS server part.
@@ -55,16 +57,57 @@ systemctl enable rpcbind
 systemctl enable nfs-server
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
+
 systemctl start rpcbind
 systemctl start nfs-server
 systemctl start nfs-lock
 systemctl start nfs-idmap
 
+
+
 Next we will mount the NFS shared content in the client machine as shown below:
 mount -t nfs 192.168.0.100:/home /mnt/nfs/home/
 
+
+Your can use rpcinfo -p server view rpc info
+# rpcinfo -p server
+
+   program vers proto   port  service
+    100000    4   tcp    111  portmapper
+    100000    3   tcp    111  portmapper
+    100000    2   tcp    111  portmapper
+    100000    4   udp    111  portmapper
+    100000    3   udp    111  portmapper
+    100000    2   udp    111  portmapper
+    100005    1   udp  20048  mountd
+    100005    1   tcp  20048  mountd
+    100024    1   udp  34057  status
+    100024    1   tcp  37592  status
+    100005    2   udp  20048  mountd
+    100005    2   tcp  20048  mountd
+    100005    3   udp  20048  mountd
+    100005    3   tcp  20048  mountd
+    100003    3   tcp   2049  nfs
+    100003    4   tcp   2049  nfs
+    100227    3   tcp   2049  nfs_acl
+    100003    3   udp   2049  nfs
+    100003    4   udp   2049  nfs
+    100227    3   udp   2049  nfs_acl
+    100021    1   udp  39854  nlockmgr
+    100021    3   udp  39854  nlockmgr
+    100021    4   udp  39854  nlockmgr
+    100021    1   tcp  40054  nlockmgr
+    100021    3   tcp  40054  nlockmgr
+    100021    4   tcp  40054  nlockmgr
+
+####display export list
+showmount -e
+Export list for nfs-server:
+/data/d2 172.16.1.*
+/data/d1 172.16.1.*
+
 It will mount /home of NFS server. Next we will /var/nfsshare mount as follows:
-=====this config add to /etc/crontab seem is a intellget way 
+=====this config add to /etc/crontab seem is a intellget way ?? 
 mount -t nfs 192.168.0.100:/var/nfsshare /mnt/nfs/var/nfsshare/
 
 Now we are connected with the NFS share, we will crosscheck it as follows:
