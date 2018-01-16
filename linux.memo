@@ -1,3 +1,10 @@
+###########OpenSSH Change a Passphrase With ssh-keygen command
+
+ ssh-keygen -f id_dsa -p
+
+###########OpenSSH Change a Passphrase With ssh-keygen command
+
+
 #############################
 #stress test memory cpu disk#
 #############################
