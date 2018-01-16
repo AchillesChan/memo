@@ -60,6 +60,27 @@ def add(param1, param2):
 if __name__ == '__main__':
     main()
 
+###########call linux command in python##########
+$>cat dp.py   ##code
+# -*- coding: utf-8 -*-
+
+import subprocess
+
+def main():
+    subprocess.call("date")
+    subprocess.call(["ls","-l","/home/Michael/dp.py"])
+
+if __name__ == '__main__':
+    main()
+
+
+$> python dp.py  ####run 
+Tue Jan 16 15:19:08 CST 2018
+-rwxr-xr-x 1 Michael users 178 Jan 16 15:18 /home/Michael/dp.py
+
+###########call linux command in python##########
+
+
 
 #####文件中添加行
 ####https://stackoverflow.com/questions/10507230/insert-line-at-middle-of-file-with-python
