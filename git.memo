@@ -15,8 +15,6 @@ core.logallrefupdates=true
 user@linux:~/git> ssh -T git@github.com
 Hi your-gitid! You've successfully authenticated, but GitHub does not provide shell access.
 
-user@linux:~/git> get clone git@github.com:your-gitid/your-repo
-If 'get' is not a typo you can use command-not-found to lookup the package that contains it, like this:
 
 user@linux:~/git> git clone git@github.com:your-gitid/your-repo
 Cloning into 'your-repo'...

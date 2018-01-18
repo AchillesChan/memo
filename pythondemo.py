@@ -9,7 +9,8 @@ import os
 import subprocess
 def ping_check(var_hostname):                                                                     ####can not use - to link 
     devnull = open(os.devnull,'w')                                                                ####link to /dev/null
-    response = subprocess.call(["ping","-c","1",var_hostname],stdout=devnull,stderr=devnull)      ####PATT CMD PARA var
+    response = subprocess.call \                                                                  ####use \ span lines
+    (["ping","-c","1",var_hostname],stdout=devnull,stderr=devnull)                                ####PATT CMD PARA var
     return response
 
 def main():
