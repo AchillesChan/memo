@@ -2,16 +2,17 @@
 git clone https://github.com/vim/vim.git
 cd vim/src
 zypper install python-devel
+zypper install gcc gcc-c++ cmake
 ./configure --prefix=/usr/local/vim8 --enable-pythoninterp=yes --with-python-config-dir=/usr/lib64/python/config ###dir is the config.c in
 make
 sudo make install
 ######install YouCompleteMe
-a .vimrc Plugin 'Valloric/YouCompleteMe'
-b .vimrc PluginInstall  ####need many time download staff
-c cd ~/.vim/bundle/YouCompleteMe
-  ./install.py --clang-completer ##?It's Ok with me on no --clang-completer
-d .vimrc something later of this memo
-e copy .ycm_extra_conf.py to ~ or YouCompleteMe ?
+a .vimrc Plugin 'Valloric/YouCompleteMe' ###add thi to .vimrc\
+b .vimrc PluginInstall  ####run :PluginInstall in .vimrc of vim \need many time download staff
+c cd ~/.vim/bundle/YouCompleteMe\
+  ./install.py --clang-completer \##?It's Ok with me on no --clang-completer
+d .vimrc something later of this m\emo
+e copy .ycm_extra_conf.py to ~ or Y\ouCompleteMe ?
 
 
 

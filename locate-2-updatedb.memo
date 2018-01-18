@@ -14,7 +14,7 @@
 PRUNENAMES=".git .hg .svn CVS .snapshots"  #####very import ,or many junk files
 
 # Skip bind mounts.
-#PRUNE_BIND_MOUNTS="yes"  ####very import ,or cannot search in user home directory
+#PRUNE_BIND_MOUNTS="yes"  ####very important ,or cannot search in user home directory
 
 
 ####on opensuse

@@ -3,13 +3,50 @@ http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy
 https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
 https://www.liaoxuefeng.com/ python教学
 
+#####call system cmd and get return code,suppress stdout and errout
+# -*- codingi:utf-8 -*-
+import os
+import subprocess
+def ping_check(var_hostname):                                                                     ####can not use - to link 
+    devnull = open(os.devnull,'w')                                                                ####link to /dev/null
+    response = subprocess.call(["ping","-c","1",var_hostname],stdout=devnull,stderr=devnull)      ####PATT CMD PARA var
+    return response
+
+def main():
+    flag = ping_check("192.168.5.3")
+    print flag
+
+if __name__ == '__main__':
+    main()    
+#####call system cmd and get return code,suppress stdout and errout
+
+
+#########function call and return 
+# -*- codingi:utf-8 -*-
+
+def main():
+    sum = add(3,5)                                                                                                                                                       
+    print sum
+def add(foo,bar):
+    res = foo + bar
+    return res
+
+if __name__ == '__main__':
+    main()
+
+#########function call and return 
+
+
+
+
+
 
 # -*- coding: utf-8 -*-
 # 给 Python 初学者的超快速脚本解说
 
 import os
 
-def main():
+def main(): 
     print '你好, 世界!'
     print "单引号，双引号，其实是一码事"
     print '字符串内的引号需被转义(如 O\'Neil)'
@@ -55,7 +92,7 @@ def add(param1, param2):
     else:
         print '嗯哼...'
         
-    return res      # 注释还可以像这样直接跟在一句代码的后面
+    return r es      # 注释还可以像这样直接跟在一句代码的后面
 
 if __name__ == '__main__':
     main()
