@@ -3,6 +3,21 @@ http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy
 https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
 https://www.liaoxuefeng.com/ python教学
 
+
+####read staff from stdin to var,stdout to file
+
+#-*- coding:utf-8 -*-
+import os
+def main():
+    file_handle = open("1.txt","a")                              ###define open file's handle,append style,"w" is rewrite style
+    name = raw_input("waht's your name:")                        ###keyboard input to name var
+    print >>file_handle, ("Nice to meet you " + name +"!")       ###Output to file,not support '>' operation
+    file_handle.close()
+if __name__ == '__main__':
+    main()
+
+####read staff from stdin to var,stdout to file
+
 #####call system cmd and get return code,suppress stdout and errout
 # -*- codingi:utf-8 -*-
 import os
