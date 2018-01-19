@@ -4,7 +4,18 @@
 3 client upload  rsa key to this user/ssh-copy-id -i someRSA somebody@server 
 4 usermod -s /sbin/nologin
 5 systemctl restart sshd/service sshd restart
-6 verify on centos 6.5
+
+6
+AutoRestart on Crontab
+# cat /etc/custom-scripts/auto-restart-ssh-tunnel.sh 
+#!/bin/bash
+if ! ps -ef |grep [5]618 2>&1 >/dev/null
+then
+    ssh -p 5618 -i .ssh/your-rsa -NCfqL 23306:localhost:3306 somebody@server
+fi
+
+7
+ verify on centos 6.5
 
 ####ssh tunnel with security
 
