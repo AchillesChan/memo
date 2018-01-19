@@ -4,7 +4,7 @@ link:http://blog.boa.nu/2012/10/python-threading-example-creating-pingerpy.html
 import subprocess
 import threading
 
-class Pinger(object):
+class Pinger(object): 
     status = {'alive': [], 'dead': []} # Populated while we are running
     hosts = [] # List of all hosts/ips in our input queue
 
@@ -19,9 +19,9 @@ class Pinger(object):
         ret = subprocess.call(['ping', '-c', '1', '-W', '1', ip],
                               stdout=open('/dev/null', 'w'), stderr=open('/dev/null', 'w'))
 
-        return ret == 0 # Return True if our ping command succeeds
-
-    def pop_queue(self):
+        return ret ==  0 # Return True if our ping command succeeds
+                         #equl if ret == 0 return true else return false
+    def pop_queue(self): 
         ip = None
 
         self.lock.acquire() # Grab or wait+grab the lock.
@@ -40,8 +40,8 @@ class Pinger(object):
             if not ip:
                 return None
 
-            result = 'alive' if self.ping(ip) else 'dead'
-            self.status[result].append(ip)
+            result = 'alive' if self.ping(ip) else 'dead' ##TernaryFunction
+            self.status[result].append(ip)                ##like c++ if a>b?a:b
 
     def start(self):
         threads = []
@@ -57,9 +57,9 @@ class Pinger(object):
         # Wait until all the threads are done. .join() is blocking.
         [ t.join() for t in threads ]
 
-        return self.status
+        return self.status 
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     ping = Pinger()
     ping.thread_count = 8
     ping.hosts = [
