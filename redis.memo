@@ -53,7 +53,10 @@ daemonize yes
 10: use blank password(not recommand)
 
 protected-mode yes
+requirepass "your-password"
 
+login path/to/redis/bin/redis-cli [-h localhost -p 6379 ]
+>auth your-password
 
 11:  
 redis-cli
@@ -66,3 +69,11 @@ OK
 echo "/path/2/redis-server /path/2/redis-conf" >>/etc/rc.local
 or
 echo "@reboot    root     /path/2/redis-server /path/2/redis-conf" >>/etc/crontab
+
+12: security
+redis.conf
+a: bind some-specfic ip and port
+b: set protected-mode 
+c: rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+d: or disable command rename-command CONFIG ""
+
