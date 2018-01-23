@@ -1,3 +1,9 @@
+####windows mysql  中文乱码 on  powershell cmd
+run
+chcp 65001
+####windows mysql  中文乱码 on  powershell cmd
+
+
 ######my.cnf config###############
 server-id = 2
 symbolic-links=0
