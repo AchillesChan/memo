@@ -25,6 +25,7 @@ fi
 ####route persist
 持久化：（自定义路由出接口时172.16.0.11，172.16.0.12）
 Option 1, include the below in /etc/sysconfig/network-scripts/route-eth0 file: –
+
 GATEWAY0=172.16.0.11
 NETMASK0=255.255.255.0
 ADDRESS0=192.168.1.0
