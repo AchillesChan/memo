@@ -10,7 +10,9 @@ AutoRestart on Crontab
 # cat /etc/custom-scripts/auto-restart-ssh-tunnel.sh 
 #!/bin/bash
 if ! ps -ef |grep [5]618 2>&1 >/dev/null
+##PATT 5618 MUST THE WHOLE FIELD,IF USE [5]61,WILL GET WRONG RESULT??
 then
+
     ssh -p 5618 -i .ssh/your-rsa -NCfqL 23306:localhost:3306 somebody@server
 fi
 
