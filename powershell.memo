@@ -1,3 +1,9 @@
+############get newes file in a folder
+$dir = "f:\"
+$latest = Get-ChildItem -Path $dir -Recurse -file | Sort-Object LastAccessTime -Descending| Select-Object -First 1
+$latest.name
+############get newes file in a folder
+
 ##########返回值 return value  exit code######################
 > ping 127.0.0.1 -n 1
 
