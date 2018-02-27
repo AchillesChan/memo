@@ -33,7 +33,7 @@ name  window                   Prex + ,
 create window                  Prex + c
 create sesseion                tmux
 link to named session          tmux a -t session-name
-
+create session                 tmux new-session -s session-name 
 
 
 
