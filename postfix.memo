@@ -15,6 +15,7 @@ $>yum install cyrus-sasl-*
 $>setenforce 0
 ##config selinux 
 $>yum install setroubleshoot setools
+$>sealert -a /var/log/audit/audit.log      //find out where is blocked by selinux
 
 $>semanage fcontext -a -t user_home_dir_t 'Maildir'
 $>restorecon -v 'Maildir'
