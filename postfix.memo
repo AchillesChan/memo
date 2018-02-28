@@ -1,7 +1,20 @@
 ######postfix config##########
 ##########plain txt###########
 ########Example.com has MX dns record
-# grep -v "#" main.cf |grep -v "^$"
+step 1
+#DNS record
+$> cat /var/named/example.com.zone |grep mail
+@                                IN  MX     10  mail;
+pop                              IN  CNAME  mail
+imtp                             IN  CNAME  mail
+mail                             IN  A          19.18.218.11
+
+step 2
+$>yum install cyrus-sasl-*
+$>setenforce 0
+
+step 3
+# grep -v "#" /etc/postfix/main.cf |grep -v "^$"
 queue_directory = /var/spool/postfix
 command_directory = /usr/sbin
 daemon_directory = /usr/libexec/postfix
@@ -32,7 +45,14 @@ html_directory = no
 manpage_directory = /usr/share/man
 sample_directory = /usr/share/doc/postfix-2.10.1/samples
 
+#sasl authentication                               //very important
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+broken_sasl_auth_clients = yes
+smtpd_recipient_restrictions = permit_sasl_authenticated,reject_unauth_destination,permit_mynetworks
+smtpd_client_restrictions = permit_sasl_authenticated
 
+step 4
 #######dovecot config#############
 # grep -v "#" /etc/dovecot/dovecot.conf |grep -v "^$"
 protocols = imap pop3   #####delete ssl support#####
@@ -54,24 +74,38 @@ auth_mechanisms = plain login
 !include auth-system.conf.ext
 
 
-#############client config###############
-#########outlook
-1 email address:       your_name@Example.com
-2 Account type:        pop3
-3 receive server:      example.com ###MX DNS record here
-4 send server:         example.com ###MX DNS RECORD HERE
-5 USER NAME:           your_name
-6 Password             your_password
+####
+vim /etc/dovecot/conf.d/10-auth.conf
+disable_plaintext_auth = no
+auth_mechanisms = plain
 
-7 Other setup
+###
+vim /etc/dovecot/conf.d/10-mail.conf
+mail_location = maildir:~/Maildir
 
-  7.0  check on: smtp need authentication
-  7.1  check on: logon in server before send mail 
-  7.2  pop3:     110
-  7.3  smtp:     25
+###
+vim /etc/dovecot/conf.d/10-ssl.conf
+ssl = no
+
+step 5
+###########sasl2 config
+vim /etc/sysconfig/saslauthd
+MECH=shadow  #指定以本地系统用户名认证
+
+vim /etc/sasl2/smtpd.conf
+pwcheck_method: saslauthd
+mech_list: PLAIN LOGIN
+log_level:3
+
+step 6
+########reboot service
+systemctl  start  dovecot
+systemctl  start  postfix
+systemctl  start  saslauthd
 
 
-####################user add 
+step 7
+####################add user
 >$groupadd postfixusers
 
 >$useradd -g postfixusers -d /data/mail_user  mail_user
@@ -92,16 +126,59 @@ drwxr-xr-x. 5 mail_user root 171 Oct 26 12:40 /data/mail_user/Maildir/
 drwx------. 3 mail_user postfixusers 77 Oct 26 11:32 /data/mail_user
 
 
-#########Tips ##########
-1 view logs on /var/log/malllog
-2 on outlook sometime test failuer,skip it,enter and use it,no Problem
 
-
+step 8
 #########telnet test mail function#####
 https://mediatemple.net/community/products/dv/204404584/sending-or-viewing-emails-using-telnet 
 
-https://www.ndchost.com/wiki/mail/test-smtp-auth-telnet
+perl -MMIME::Base64 -e 'print encode_base64("username");'   // with out domain name
+perl -MMIME::Base64 -e 'print encode_base64("password");'
 
+https://www.ndchost.com/wiki/mail/test-smtp-auth-telnet
+user@localhost [~]# telnet exampledomain.com 25 //user input command 
+Trying 1.1.1.1...
+Connected to exampledomain.com (1.1.1.1).
+Escape character is '^]'.
+220-server1.exampledomain.com ESMTP Exim 4.66 #1 Wed, 09 May 2007 23:55:12 +0200
+220-We do not authorize the use of this system to transport unsolicited,
+220 and/or bulk e-mail.
+EHLO exampledomain.com                          //user input command 
+250-server1.exampledomain.com Hello  [1.1.1.2]
+250-SIZE 52428800
+250-PIPELINING
+250-AUTH PLAIN LOGIN
+250-STARTTLS
+250 HELP
+AUTH LOGIN                                      //user input command 
+334 VXNlcm5hbWU6
+dXNlcm5hbWUuY29t                                //user input user name 
+334 UGFzc3dvcmQ6
+bXlwYXNzd29yZA==                                //user input user password
+
+235 Authentication succeeded
+
+step 9
+#############client config###############
+#########outlook
+1 email address:       your_name@Example.com
+2 Account type:        pop3
+3 receive server:      example.com ###MX DNS record here
+4 send server:         example.com ###MX DNS RECORD HERE
+5 USER NAME:           your_name
+6 Password             your_password
+
+7 Other setup
+
+  7.0  check on: smtp need authentication
+  7.1  check on: logon in server before send mail 
+  7.2  pop3:     110
+  7.3  smtp:     25
+
+
+
+#########Tips ##########
+1 view logs on /var/log/malllog
+2 on outlook sometime test failuer,skip it,enter and use it,no Problem
 
 #####How to send email using telnet
  Below are instructions on how to test SMTP AUTH against a mail server using Telnet and entering the commands by hand.
