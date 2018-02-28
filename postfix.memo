@@ -13,7 +13,7 @@ example.com. TXT "v=spf1 mx example.com -all"
 step 2
 $>yum install cyrus-sasl-*
 $>setenforce 0
-##config selinux 
+##config selinux                           //waiting for make perfect 
 $>yum install setroubleshoot setools
 $>sealert -a /var/log/audit/audit.log      //find out where is blocked by selinux
 
@@ -28,8 +28,6 @@ $>restorecon -v 'dovecot-uidlist.tmp'
 $>ausearch -c 'saslauthd' --raw | audit2allow -M my-saslauthd
 $>semodule -i my-saslauthd.pp
 $>auditctl -w /etc/shadow -p w
-$>ausearch -m avc -ts recent
-$>ausearch -m avc -ts recentsetsebool -P saslauthd_read_shadow 1  //This and next take effective? 
 $>setsebool -P saslauthd_read_shadow 1
 
 
@@ -133,7 +131,8 @@ step 7
 >$mkdir -p /data/mail_user/Maildir
 >$passwd mail_user
 
->$ deny ssh login in system
+#deny ssh login
+>$ usermod -s /sbin/nologin mail_user  and/or AllowGroups postfixusers@127.0.0.1 in /etc/ssh/sshd_config
 
 >$cat /etc/passwd
 mail_user:x:1002:1001::/data/mail_user:/bin/bash
