@@ -13,6 +13,24 @@ example.com. TXT "v=spf1 mx example.com -all"
 step 2
 $>yum install cyrus-sasl-*
 $>setenforce 0
+##config selinux 
+$>yum install setroubleshoot setools
+
+$>semanage fcontext -a -t user_home_dir_t 'Maildir'
+$>restorecon -v 'Maildir'
+$>ausearch -c 'local' --raw | audit2allow -M my-local
+$>semodule -i my-local.pp
+$>ausearch -c 'pop3' --raw | audit2allow -M my-pop3
+$>semodule -i my-pop3.pp
+$>semanage fcontext -a -t data_home_t 'dovecot-uidlist.tmp'
+$>restorecon -v 'dovecot-uidlist.tmp'
+$>ausearch -c 'saslauthd' --raw | audit2allow -M my-saslauthd
+$>semodule -i my-saslauthd.pp
+$>auditctl -w /etc/shadow -p w
+$>ausearch -m avc -ts recent
+$>ausearch -m avc -ts recentsetsebool -P saslauthd_read_shadow 1  //This and next take effective? 
+$>setsebool -P saslauthd_read_shadow 1
+
 
 step 3
 # grep -v "#" /etc/postfix/main.cf |grep -v "^$"
@@ -120,6 +138,8 @@ step 7
 mail_user:x:1002:1001::/data/mail_user:/bin/bash
 
 >$chown -R mail_user.postfixusers   /data/mail_user/
+>$chmod 700 /data/mail_user
+
 
 >$ ls -ld /data/mail_user/Maildir/
 drwxr-xr-x. 5 mail_user root 171 Oct 26 12:40 /data/mail_user/Maildir/
