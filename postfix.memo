@@ -2,12 +2,13 @@
 ##########plain txt###########
 ########Example.com has MX dns record
 step 1
-#DNS record
+#DNS record https://support.rackspace.com/how-to/create-an-spf-txt-record/
 $> cat /var/named/example.com.zone |grep mail
 @                                IN  MX     10  mail;
 pop                              IN  CNAME  mail
 imtp                             IN  CNAME  mail
 mail                             IN  A          19.18.218.11
+example.com. TXT "v=spf1 mx example.com -all" 
 
 step 2
 $>yum install cyrus-sasl-*
