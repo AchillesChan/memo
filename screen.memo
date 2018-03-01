@@ -88,6 +88,6 @@ As documented in the man page, screen looks for a null title-escape-sequence. ba
 To disable this feature for a particular window, I just run unset PROMPT_COMMAND from that window. Of course, one could just add this to their ~/.bashrc or to a specific environment file to make it more persistent.
 shareimprove this answer
 
-add unset PROMPT_COMMAND  TO ~/.bashrc
+add unset PROMPT_COMMAND  TO ~/.bashrc end or /etc/profile end
 
 If $PROMPT_COMMAND is empty, check $PS1. – choroba Oct 22 '14 at 22:44
