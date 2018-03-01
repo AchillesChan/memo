@@ -1,3 +1,13 @@
+####get date from timestamp
+# date -d @1267619929
+Wed Mar  3 07:38:49 EST 2010
+####get timestamp from date
+> date -d '2012-03-22 22:00:05 EDT' +%s
+1332468005
+> date +%s
+1519889699
+
+
 
 ####get endpoint automated
 $>cat vm.txt
