@@ -1,3 +1,14 @@
+####detect ssh tunnel failed restart ssh shell
+
+#!/bin/bash
+if  curl -IL hostname.example.com|grep "Bad Gateway"
+then
+        ssh -R external-port:internal-ip:internal-port -N -q -f -C -i rsa-key ssh-tunnel-user@external-ip-or-domain
+fi
+
+####detect ssh tunnel failed restart ssh shell
+
+
 ####get date from timestamp
 # date -d @1267619929
 Wed Mar  3 07:38:49 EST 2010
