@@ -7,8 +7,17 @@ select fld1,fld2.. from table t use index(index_name) where ... group by ...
 ###use index from table 
 
 ###set memory engine size(For Example 512MB)
+
 mysql> set max_heap_table_size = 512 * 1024 *1024;
-mysql>show variables like '%heap%';
+
+mysql> show variables like '%heap%'; //verification
++---------------------+-----------+
+| Variable_name       | Value     |
++---------------------+-----------+
+| max_heap_table_size | 536870912 |
++---------------------+-----------+
+1 row in set (0.00 sec)
+
 ###set memory engine size
 
 
