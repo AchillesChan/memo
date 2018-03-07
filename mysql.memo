@@ -1,3 +1,17 @@
+###get data input from another table
+create table new_table as select field1,field2,...filedn from another_table
+###get data input from another table
+
+###use index from table 
+select fld1,fld2.. from table t use index(index_name) where ... group by ...
+###use index from table 
+
+###set memory engine size(For Example 512MB)
+mysql> set max_heap_table_size = 512 * 1024 *1024;
+mysql>show variables like '%heap%';
+###set memory engine size
+
+
 ####windows mysql  中文乱码 on  powershell cmd
 run
 chcp 65001

@@ -1,3 +1,8 @@
+#####grep or#####
+1 grep -E 'condition1|condition2' some-text
+2 grep 'condition1\|condition2' some-text
+#####grep or#####
+
 ####detect ssh tunnel failed restart ssh shell
 
 #!/bin/bash
