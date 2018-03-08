@@ -128,9 +128,30 @@ log_level:3
 
 step 6
 ########reboot service
-systemctl  start  dovecot
-systemctl  start  postfix
-systemctl  start  saslauthd
+systemctl  restart  dovecot
+systemctl  restart  postfix
+systemctl  restart  saslauthd
+
+
+###reboot auto run
+[root@localhost ~]# systemctl enable postfix
+[root@localhost ~]# systemctl enable dovecot
+[root@localhost ~]# systemctl enable saslauthd
+
+###open firewall-port 
+[root@localhost ~]# firewall-cmd --add-service smtp --permanent
+success
+[root@localhost ~]# firewall-cmd --add-service pop3 --permanent
+success
+[root@localhost ~]# firewall-cmd --reload
+success
+[root@localhost ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens192
+  sources: 
+  services: dhcpv6-client pop3 smtp ssh
 
 
 step 7
