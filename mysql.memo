@@ -1,3 +1,28 @@
+###import table from another_table on different database
+If you have shell access you may use mysqldump to dump the content of database1.table1 and pipe it to mysql to database2. The problem here is that table1 is still table1.
+
+$>mysqldump --user=user1 --password=password1 database1 table1 \
+| mysql --user=user2 --password=password2 database2
+
+Maybe you need to rename table1 to table2 with another query. On the other way you might use sed to change table1 to table2 between the to pipes.
+
+$>mysqldump --user=user1 --password=password1 database1 table1 \
+| sed -e 's/`table1`/`table2`/' \
+| mysql --user=user2 --password=password2 database2
+
+If table2 already exists, you might add the parameters to the first mysqldump which dont let create the table-creates.
+
+$>mysqldump --no-create-info --no-create-db --user=user1 --password=password1 database1 table1 \
+| sed -e 's/`table1`/`table2`/' \
+| mysql --user=user2 --password=password2 database2
+
+
+
+mysql>CREATE TABLE db1.table1 SELECT * FROM db2.table1
+
+###import table from another_table on different database
+
+
 ###get data input from another table
 create table new_table as select field1,field2,...filedn from another_table
 ###get data input from another table
