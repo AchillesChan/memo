@@ -2373,7 +2373,8 @@ mysql> SHOW MASTER STATUS; 显示当前二进制日志及POSITION
 $> mysqlbinlog binlog.000001 > /tmp/statements.sql
 $> mysqlbinlog binlog.000002 >> /tmp/statements.sql
 $> mysql -u root -p -e "source /tmp/statements.sql"
-
+###windows source
+mysql >source d:\path\to\backup.sql;
 
 $> mysqlbinlog --stop-datetime="2005-04-20 9:59:59" \
 /var/log/mysql/bin.123456 | mysql -u root -p
