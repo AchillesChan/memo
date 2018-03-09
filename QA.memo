@@ -1,0 +1,25 @@
+###update testlink version:database update
+
+Okay, finally I understand how to update the db schame. Here is the way:
+
+# mysql -u root -p
+MariaDB [(none)]> use testlink;
+MariaDB [testlink]> source /opt/lampp/htdocs/testlink/install/sql/alter_tables/1.9.14/mysql/DB.1.9.14/step1/db_schema_update.sql
+MariaDB [testlink]> source /opt/lampp/htdocs/testlink/install/sql/alter_tables/1.9.14/mysql/DB.1.9.14/stepZ/z_final_step.sql
+MariaDB [testlink]> source /opt/lampp/htdocs/testlink/install/sql/alter_tables/1.9.15/mysql/DB.1.9.15/step1/db_schema_update.sql
+MariaDB [testlink]> source /opt/lampp/htdocs/testlink/install/sql/alter_tables/1.9.15/mysql/DB.1.9.15/stepZ/z_final_step.sql
+DONE!
+
+The truth is, want to upgrade a lower version testlink to a higher version, then it should be execute the /opt/lampp/htdocs/testlink/install/sql/alter_tables/**/step1/db_schema_update.sql and /opt/lampp/htdocs/testlink/install/sql/alter_tables/**/stepZ/db_schema_update.sql step by step. For example, if want to upgrade testlink from 1.9.10 to 1.9.15, then the db schema should be upgrade as below:
+
+1.9.10 -> 1.9.11
+1.9.11 -> 1.9.12
+1.9.12 -> 1.9.13
+1.9.13 -> 1.9.14
+1.9.14 -> 1.9.15
+
+Tips:Windows operation in mysql
+source d:/1.9.13/mysql/DB.1.9.13/step1/db_schema_update.sql;
+source d:/1.9.13/mysql/DB.1.9.13/stepZ/z_final_step.sql;
+source d:/1.9.14/mysql/DB.1.9.14/step1/db_schema_update.sql;
+source d:/1.9.14/mysql/DB.1.9.14/stepZ/z_final_step.sql;
