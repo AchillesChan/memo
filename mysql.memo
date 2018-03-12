@@ -1,6 +1,7 @@
 ####simulate the DeadLock issue################
 
-1)create table 
+1)initialize
+ 
 mysql>use test ;
 mysql> create table table_a ( emp int, ename varchar(100));
 mysql> create table table_b ( emp int, ename varchar(100));
@@ -29,7 +30,7 @@ ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting trans
 
 3)verification
 
-mysql> SHOW ENGINE INNODB STATUS\G;
+mysql> SHOW ENGINE INNODB STATUS\G;                                //key step
 ......omit something......
 ------------
 TRANSACTIONS
@@ -49,15 +50,7 @@ Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
  0: len 6; hex 000000823f3f; asc     ??;;
  1: len 6; hex 00000000376a; asc     7j;;
  2: len 7; hex eb000001e00110; asc        ;;
- 3: len 4; hex 80000002; asc     ;;
- 4: len 5; hex 73756e696c; asc sunil;;
-
-------------------
----TRANSACTION 14196, ACTIVE 822 sec
-4 lock struct(s), heap size 1136, 6 row lock(s), undo log entries 4
-MySQL thread id 185, OS thread handle 139730707105536, query id 1118247 localhost 127.0.0.1 root starting
-SHOW ENGINE INNODB STATUS
-.......omit......
+.......omit something......
 ####simulate the Dead Lock issue################
 
 
