@@ -12,16 +12,16 @@ mysql> insert into table_b values (1,'anil');
 
 2)open two sessions,geneate deadlock
 
-first session
+1st session
 mysql> use test;
-mysql> start transaction;
+mysql> start transaction;                                            //not commit 
 mysql> update table_a set ename='xxx' where emp=1;
 mysql> update table_b set ename='xxx' where emp=1;
 
-second session
+2nd session
 mysql> use test;
 mysql> start transaction;
-mysql> update table_b set ename='xxx' where emp=1;
+mysql> update table_b set ename='xxx' where emp=1;                  //on 5.7.xx deadlock detected here
 mysql> update table_a set ename='xxx' where emp=1;
 mysql>  update table_a set ename='zzz' where emp=1;
 ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction
