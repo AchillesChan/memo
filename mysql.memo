@@ -1,3 +1,65 @@
+####simulate the Dead Lock issue################
+use test ;
+create table table_a ( emp int, ename varchar(100));
+create table table_b ( emp int, ename varchar(100));
+mysql> insert into table_a values (1,'anil');
+mysql> insert into table_a values (2,'sunil');
+mysql> insert into table_b values (2,'sunil');
+mysql> insert into table_b values (1,'anil');
+open two sessions
+
+first session
+
+prompt session1>
+session1> start transaction;
+session1> update table_a set ename='xxx' where emp=1;
+session1> update table_b set ename='xxx' where emp=1;
+
+second session
+
+prompt session2>
+session2> use test;
+session2> start transaction;
+session2> update table_b set ename='xxx' where emp=1;
+session2> update table_a set ename='xxx' where emp=1;
+session2>  update table_a set ename='zzz' where emp=1;
+ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction
+
+
+
+###verification
+mysql> SHOW ENGINE INNODB STATUS\G;
+......omit something......
+------------
+TRANSACTIONS
+------------
+Trx id counter 14198
+Purge done for trx's n:o < 14196 undo n:o < 0 state: running but idle
+History list length 32
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 14197, ACTIVE 785 sec starting index read
+mysql tables in use 1, locked 1
+LOCK WAIT 2 lock struct(s), heap size 1136, 4 row lock(s)        //thread id is show processlist id
+MySQL thread id 186, OS thread handle 139730706839296, query id 1118246 localhost 127.0.0.1 root updating
+update table_b set ename='xxx' where emp=1                       //deadlock sql clause
+------- TRX HAS BEEN WAITING 5 SEC FOR THIS LOCK TO BE GRANTED:  //below is database and tables 
+RECORD LOCKS space id 457 page no 3 n bits 72 index GEN_CLUST_INDEX of table `t1`.`table_b` trx id 14197 lock_mode X waiting
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 5; compact format; info bits 0
+ 0: len 6; hex 000000823f3f; asc     ??;;
+ 1: len 6; hex 00000000376a; asc     7j;;
+ 2: len 7; hex eb000001e00110; asc        ;;
+ 3: len 4; hex 80000002; asc     ;;
+ 4: len 5; hex 73756e696c; asc sunil;;
+
+------------------
+---TRANSACTION 14196, ACTIVE 822 sec
+4 lock struct(s), heap size 1136, 6 row lock(s), undo log entries 4
+MySQL thread id 185, OS thread handle 139730707105536, query id 1118247 localhost 127.0.0.1 root starting
+SHOW ENGINE INNODB STATUS
+
+####simulate the Dead Lock issue################
+
+
 ###purge delete binary log
 mysql>show binary logs;  //view result
 mysql>PURGE BINARY LOGS TO 'mysql-bin.010';
