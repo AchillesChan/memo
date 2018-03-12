@@ -1,5 +1,5 @@
 ###purge delete binary log
-mysql>show binary logs;
+mysql>show binary logs;  //view result
 mysql>PURGE BINARY LOGS TO 'mysql-bin.010';
 or 
 mysql>PURGE BINARY LOGS BEFORE '2008-04-02 22:46:26';
