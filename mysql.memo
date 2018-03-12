@@ -412,7 +412,7 @@ mysql> show variables like "%schedule%"; ####Here must be ON
 ===========================================  
 
 
-
+############xtrabackup mysql##################################
 ####install
 环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
 mysql5.7需要xtrabackup2.4
@@ -439,7 +439,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 上面的tables-file需要接完整的路径
 
 ###restore
-0 tablennobackupex --apply-log --exports your-backup-full-path
+0 innobackupex --apply-log --exports your-backup-full-path
 
 1 systemctl stop mysqld
 
@@ -490,6 +490,7 @@ shutdown mysql，copy back，chown ，start mysql，done
 备份结果才可以使用。
 ==============================================
 
+############xtrabackup mysql##################################
 
 
 
