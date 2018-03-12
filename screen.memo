@@ -1,4 +1,5 @@
 ########screen config 20170320######
+###prex-key(ie Ctrl+a) + Esc and up row scroll
 hardstatus on
 hardstatus alwayslastline
 hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
