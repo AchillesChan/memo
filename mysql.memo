@@ -1,3 +1,26 @@
+###purge delete binary log
+mysql>show binary logs;
+mysql>PURGE BINARY LOGS TO 'mysql-bin.010';
+or 
+mysql>PURGE BINARY LOGS BEFORE '2008-04-02 22:46:26';
+###purge delete binary log
+
+####disable slow log or general log online
+mysql>set global slow_query_log = off
+and/or 
+mysql>set global general_log =off
+
+then add
+slow_query_log = off 
+and/or
+general_log =off
+in my.cnf
+
+even 
+$>echo "" > /path/to/log_file to free space
+
+####disable slow log or general log 
+
 ###import table from another_table on different database
 If you have shell access you may use mysqldump to dump the content of database1.table1 and pipe it to mysql to database2. The problem here is that table1 is still table1.
 
