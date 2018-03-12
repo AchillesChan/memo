@@ -10,14 +10,15 @@ mysql>set global slow_query_log = off
 and/or 
 mysql>set global general_log =off
 
-then add
+then add those in my.cnf
+
 slow_query_log = off 
 and/or
 general_log =off
-in my.cnf
 
-even 
-$>echo "" > /path/to/log_file to free space
+even free disk space  
+
+$>echo "" > /path/to/log_file 
 
 ####disable slow log or general log 
 
