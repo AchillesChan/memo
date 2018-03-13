@@ -1,4 +1,4 @@
-####profile analyze ######
+####profile analyze  ######
 
 mysql> show variables like '%profil%';
 +------------------------+-------+
@@ -9,7 +9,7 @@ mysql> show variables like '%profil%';
 | profiling_history_size | 15    |
 +------------------------+-------+
 3 rows in set (0.00 sec)
-
+   
 mysql> set profiling = 1;
 Query OK, 0 rows affected, 1 warning (0.00 sec)
 
