@@ -27,39 +27,38 @@ mysql> show profiles;
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
 | Query_ID | Duration   | Query                                                                                                                     |
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
-|       28 | 0.08340375 | select * from t1 limit 100000,15                                                                                          |
-|       29 | 0.80679275 | select * from t1 limit 1000000,15                                                                                         |
+|       56 | 0.00567875 | select * from t1 where create_time <'2017-09-24'                                                                          |
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
 15 rows in set, 1 warning (0.00 sec)
 
-mysql> select sum(duration) FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 29;
+mysql> select sum(duration) FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 56;
 +---------------+
 | sum(duration) |
 +---------------+
-|      0.806793 |
+|      0.00567875 |
 +---------------+
 1 row in set, 1 warning (0.00 sec)
 
-mysql> select state,concat((round(duration/0.806793,4)*100),'%') FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 29;
-+----------------------+----------------------------------------------+
-| state                | concat((round(duration/0.806793,4)*100),'%') |
-+----------------------+----------------------------------------------+
-| starting             | 0.0100%                                      |
-| checking permissions | 0.0000%                                      |
-| Opening tables       | 0.0000%                                      |
-| init                 | 0.0000%                                      |
-| System lock          | 0.0000%                                      |
-| optimizing           | 0.0000%                                      |
-| statistics           | 0.0000%                                      |
-| preparing            | 0.0000%                                      |
-| executing            | 0.0000%                                      |
-| Sending data         | 99.9500%                                     |
-| end                  | 0.0000%                                      |
-| query end            | 0.0000%                                      |
-| closing tables       | 0.0000%                                      |
-| freeing items        | 0.0100%                                      |
-| cleaning up          | 0.0000%                                      |
-+----------------------+----------------------------------------------+
+mysql> select state,concat((round(duration/0.00567875,4)*100),'%') FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 56;
++----------------------+------------------------------------------------+
+| state                | concat((round(duration/0.00567875,4)*100),'%') |
++----------------------+------------------------------------------------+
+| starting             | 2.1000%                                        |
+| checking permissions | 0.2600%                                        |
+| Opening tables       | 0.4800%                                        |
+| init                 | 0.8500%                                        |
+| System lock          | 0.4200%                                        |
+| optimizing           | 0.2600%                                        |
+| statistics           | 3.1700%                                        |
+| preparing            | 0.5100%                                        |
+| executing            | 0.1200%                                        |
+| Sending data         | 88.1900%                                       |
+| end                  | 0.2600%                                        |
+| query end            | 0.9000%                                        |
+| closing tables       | 0.2300%                                        |
+| freeing items        | 1.8100%                                        |
+| cleaning up          | 0.4600%                                        |
++----------------------+------------------------------------------------+
 15 rows in set, 1 warning (0.00 sec)
 
 ####profile analyze ######
