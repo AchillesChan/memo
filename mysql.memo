@@ -23,6 +23,10 @@ mysql> show variables like '%profil%';
 +------------------------+-------+
 3 rows in set (0.00 sec)
 
+
+mysql>select * from t1 where create_time <'2017-09-24';
+
+
 mysql> show profiles;
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
 | Query_ID | Duration   | Query                                                                                                                     |
