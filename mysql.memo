@@ -1,3 +1,70 @@
+####profile analyze ######
+
+mysql> show variables like '%profil%';
++------------------------+-------+
+| Variable_name          | Value |
++------------------------+-------+
+| have_profiling         | YES   |
+| profiling              | OFF   |
+| profiling_history_size | 15    |
++------------------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> set profiling = 1;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> show variables like '%profil%';
++------------------------+-------+
+| Variable_name          | Value |
++------------------------+-------+
+| have_profiling         | YES   |
+| profiling              | ON    |
+| profiling_history_size | 15    |
++------------------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show profiles;
++----------+------------+---------------------------------------------------------------------------------------------------------------------------+
+| Query_ID | Duration   | Query                                                                                                                     |
++----------+------------+---------------------------------------------------------------------------------------------------------------------------+
+|       28 | 0.08340375 | select * from t1 limit 100000,15                                                                                          |
+|       29 | 0.80679275 | select * from t1 limit 1000000,15                                                                                         |
++----------+------------+---------------------------------------------------------------------------------------------------------------------------+
+15 rows in set, 1 warning (0.00 sec)
+
+mysql> select sum(duration) FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 29;
++---------------+
+| sum(duration) |
++---------------+
+|      0.806793 |
++---------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> select state,concat((round(duration/0.806793,4)*100),'%') FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 29;
++----------------------+----------------------------------------------+
+| state                | concat((round(duration/0.806793,4)*100),'%') |
++----------------------+----------------------------------------------+
+| starting             | 0.0100%                                      |
+| checking permissions | 0.0000%                                      |
+| Opening tables       | 0.0000%                                      |
+| init                 | 0.0000%                                      |
+| System lock          | 0.0000%                                      |
+| optimizing           | 0.0000%                                      |
+| statistics           | 0.0000%                                      |
+| preparing            | 0.0000%                                      |
+| executing            | 0.0000%                                      |
+| Sending data         | 99.9500%                                     |
+| end                  | 0.0000%                                      |
+| query end            | 0.0000%                                      |
+| closing tables       | 0.0000%                                      |
+| freeing items        | 0.0100%                                      |
+| cleaning up          | 0.0000%                                      |
++----------------------+----------------------------------------------+
+15 rows in set, 1 warning (0.00 sec)
+
+####profile analyze ######
+
+
 #####deferred join延迟关联#########
 
 https://www.bennadel.com/blog/3168-high-performance-mysql-optimization-backups-and-replication-by-baron-schwartz-peter-zaitsev-and-vadim-tkachenko.htm
