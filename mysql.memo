@@ -31,17 +31,20 @@ mysql> show profiles;
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
 15 rows in set, 1 warning (0.00 sec)
 
-mysql> select sum(duration) FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 56;
-+---------------+
-| sum(duration) |
-+---------------+
-|      0.00567875 |
-+---------------+
-1 row in set, 1 warning (0.00 sec)
+mysql> select sum(duration) FROM INFORMATION_SCHEMA.PROFILING  WHERE QUERY_ID = 56 into @total_time;
+Query OK, 1 row affected, 1 warning (0.00 sec)
 
-mysql> select state,concat((round(duration/0.00567875,4)*100),'%') FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 56;
+mysql> select @total_time;
++-------------+
+| @total_time |
++-------------+
+|    0.0567875|
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select state,concat((round(duration/@total_time,4)*100),'%') as Percent FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID = 56;
 +----------------------+------------------------------------------------+
-| state                | concat((round(duration/0.00567875,4)*100),'%') |
+| state                | Percent                                        |
 +----------------------+------------------------------------------------+
 | starting             | 2.1000%                                        |
 | checking permissions | 0.2600%                                        |
