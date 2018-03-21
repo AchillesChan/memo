@@ -1,7 +1,7 @@
 #####docker php#####
 
 # cat Dockerfile
-FROM php
+FROM php               //or FROM php:7-fpm
 ADD index.php /var/www/
 EXPOSE 8080
 WORKDIR /var/www/
