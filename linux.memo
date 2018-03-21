@@ -638,7 +638,7 @@ This variant of the -exec action runs the specified command on the selected file
 find ./ -name '*article*' -exec mv {}  ../backup  \;
 find ./ -name '*article*' -exec mv {}  ../backup  \;
 
-对于有特殊字符的情况，xargs不能争取处理，而find+exec可以 ，如下
+对于有特殊字符的情况，xargs不能正确处理，而find+exec可以 ，如下
 #touch "ab c\\ \"'.txt"
 注意后边有分号
 # find ./ -maxdepth 1 -type f -exec rm -fv {} \;
