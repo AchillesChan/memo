@@ -1,3 +1,35 @@
+#####docker php#####
+
+# cat Dockerfile
+FROM php
+ADD index.php /var/www/
+EXPOSE 8080
+WORKDIR /var/www/
+ENTRYPOINT ["php","-S","0.0.0.0:8080"]
+
+# cat /usr/local/php/index.php
+<?php
+echo "your-php-script";
+?>
+
+# docker run --rm -v /usr/local/php:/var/www/ -p 8080:8080 09bcc
+[Wed Mar 21 04:23:06 2018] 10.0.0.10:63443 [200]: /index.php
+
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                 CREATED              STATUS              PORTS                    NAMES
+2c407b93086f        09bcc               "php -S 0.0.0.0:8080"   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp   sick_wing
+
+# ip addr show |grep 161
+    inet 10.0.0.161/24 brd 10.0.0.255 scope global eth0
+
+# curl 10.0.0.161:8080/index.php
+your-php-script
+
+
+#####docker php#####
+
+
+
 ####How To Install and Use Docker Compose on CentOS 7#######
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-centos-7    How To Install and Use Docker Compose on CentOS 7 
 1 install Docker
