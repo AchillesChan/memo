@@ -152,6 +152,7 @@ $ curl 172.17.0.26 ##########nginx启动了,curl 192.168.1.93:8080也是一样##
 <title>Welcome to nginx!</title>
 .............OMIT MANY URL CONTENT..........................
 
+
 使用宿主机器的目录作为工作目录(冒号前面是宿主机器目录，后面是容器目录）
 $docker run -d -p 1080:80 --name website \
 -v $PWD/website:/var/www/html/website jamtur01/nginx nginx
