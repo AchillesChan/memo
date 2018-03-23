@@ -159,7 +159,10 @@ $docker run -d -p 1080:80 --name website \
 $ ls $PWD
 default.htm index.html lb.html Test.html
 \
-创建私有HUB
+
+
+
+创建私有HUB             //here 172.31.11.144 is Host IP Address
 docker run -dp 5000:5000 registry  #创建服务器
 docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu #标记待上传image
 docker push 172.31.11.144:5000/your-name/ubuntu #上传image
@@ -167,14 +170,27 @@ docker push 172.31.11.144:5000/your-name/ubuntu #上传image
 vim /etc/default/docker  #使用http的方式，编辑这个文件，加入下一句
 DOCKER_OPTS="--insecure-registry 172.31.11.144:5000"
 
-# docker push 192.168.200.161:5000/michael/my-private-image
-The push refers to a repository [192.168.200.161:5000/michael/my-private-image]
+# docker push 172.31.11.144:5000/michael/my-private-image
+The push refers to a repository [172.31.11.144:5000/michael/my-private-image]
 
-# cat /etc/docker/daemon.json
-{ "insecure-registries":[
-        "192.168.200.161:5000"
+# cat /etc/docker/daemon.json               //PATT format style
+{"registry-mirrors": [
+"http://9993f789.m.daocloud.io"],           //This is speed up 
+ "insecure-registries":[                    //This is http private repository
+        "172.31.11.144:5000"
         ]
  }
+
+# docker pull 172.31.11.144:5000/hw
+Using default tag: latest
+Trying to pull repository 172.31.11.144:5000/hw ... 
+latest: Pulling from 172.31.11.144:5000/hw
+Digest: sha256:8a8e4ca374451ac419bacb36ffe21edf3eee360d290d846b2c75e7b084fb5887
+
+# docker images
+REPOSITORY                      TAG                 IMAGE ID            CREATED             SIZE
+172.31.11.144:5000/hw         latest              09bccff3fdd3        2 days ago          352 MB
+
 
 
 “Unable to locate package” while trying to install packages by apt
