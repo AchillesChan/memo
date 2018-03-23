@@ -1,4 +1,4 @@
-####docker-compose nginx php 
+####docker-compose nginx php #####################
 # pwd
 /usr/local/lnmp
 # cat docker-compose.yml
@@ -48,7 +48,7 @@ server {
 echo "0322-1434";
 ?>
 
-####docker-compose nginx php 
+####docker-compose nginx php ############################
 
 
 #####docker php#####
@@ -162,7 +162,7 @@ default.htm index.html lb.html Test.html
 
 
 
-创建私有HUB             //here 172.31.11.144 is Host IP Address
+###########创建私有HUB             //here 172.31.11.144 is Host IP Address###########
 docker run -dp 5000:5000 registry  #创建服务器
 docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu #标记待上传image
 docker push 172.31.11.144:5000/your-name/ubuntu #上传image
@@ -181,7 +181,7 @@ The push refers to a repository [172.31.11.144:5000/michael/my-private-image]
         ]
  }
 
-# docker pull 172.31.11.144:5000/hw
+# docker pull 172.31.11.144:5000/hw        //pull private repository 
 Using default tag: latest
 Trying to pull repository 172.31.11.144:5000/hw ... 
 latest: Pulling from 172.31.11.144:5000/hw
@@ -191,6 +191,7 @@ Digest: sha256:8a8e4ca374451ac419bacb36ffe21edf3eee360d290d846b2c75e7b084fb5887
 REPOSITORY                      TAG                 IMAGE ID            CREATED             SIZE
 172.31.11.144:5000/hw         latest              09bccff3fdd3        2 days ago          352 MB
 
+###########创建私有HUB             //here 172.31.11.144 is Host IP Address###########
 
 
 “Unable to locate package” while trying to install packages by apt
