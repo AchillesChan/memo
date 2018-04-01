@@ -1,4 +1,6 @@
 ########zabbix with self signature certificate########
+###ca.pem is CA certificate,Not CA key
+
 1. server end key cfg 
 # grep -v '#' /etc/zabbix/zabbix_server.conf |grep -v '^$'|grep TLS
 TLSCAFile=/etc/zabbix/ca.pem
