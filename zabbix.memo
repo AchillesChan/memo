@@ -1,3 +1,20 @@
+########zabbix with self signature certificate########
+1. server end key cfg 
+# grep -v '#' /etc/zabbix/zabbix_server.conf |grep -v '^$'|grep TLS
+TLSCAFile=/etc/zabbix/ca.pem
+TLSCertFile=/etc/zabbix/server.crt
+TLSKeyFile=/etc/zabbix/server.key
+
+2. client end key cfg
+grep -v '#' /etc/zabbix/zabbix_agentd.conf |grep -v '^$'|grep TLS
+TLSConnect=cert
+TLSAccept=cert
+TLSCAFile=/etc/zabbix/ca.pem
+TLSCertFile=/etc/zabbix/client.crt
+TLSKeyFile=/etc/zabbix/client.key
+
+########zabbix with self signature certificate########
+
 #######zabbix with nat port map on windows######
 ###server
 ZABBIX_SERVER的网关配置到10051的nat map

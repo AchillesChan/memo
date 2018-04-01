@@ -1,0 +1,53 @@
+1. view openssl CA's path
+$ openssl version -d
+OPENSSLDIR: "/etc/pki/tls"
+
+2. self singnature CA                     ####run on CA server
+$ openssl genrsa -out ca.key 2048 && ll   ####generate private key
+
+Generating RSA private key, 2048 bit long modulus
+...........................+++
+...........+++
+e is 65537 (0x10001)
+total 4
+-rw-r--r--. 1 root root 1675 Apr  1 15:53 ca.key
+
+$ openssl req -x509 -new -nodes -key ca.key -sha256 -days 1024 -out ca.pem && ll ####use private key generate CA
+
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:cn
+State or Province Name (full name) []:sc
+Locality Name (eg, city) [Default City]:cd
+Organization Name (eg, company) [Default Company Ltd]:abc
+Organizational Unit Name (eg, section) []:op
+Common Name (eg, your name or your server's hostname) []:adan
+Email Address []:
+total 8
+-rw-r--r--. 1 root root 1261 Apr  1 15:55 ca.pem
+
+3. singnature other certifacate from CA 
+$ openssl req -newkey rsa:2048 -days 1000 -nodes \         ####run on client
+-keyout server.key -subj /CN=common-name/OU=ou-name/O=org-name/DC=2nd-dc-name/DC=1st-dc-name > server.csr
+Generating a 2048 bit RSA private key
+.....+++
+..........+++
+writing new private key to 'server.key'
+-----
+$ ls
+server.csr  server.key
+
+
+$ openssl x509 -req -in server.csr -CA ca.pem -CAkey ca.key \  ####run on CA server
+ -CAcreateserial -out server.crt -days 500 -sha256 && ls server.crt
+Signature ok
+subject=/CN=server/OU=Development group/O=Zabbix SIA/DC=zabbix/DC=com
+Getting CA Private Key
+server.crt
+
+
