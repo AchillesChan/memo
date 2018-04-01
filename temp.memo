@@ -1,3 +1,10 @@
+postfix with gui
+http://www.trustfm.net/ebooks/DedicatedServer.php?page=Email
+http://www.trustfm.net/ebooks/DedicatedServer.php?page=EmailAccounts
+https://github.com/postfixadmin/postfixadmin/tree/master/DOCUMENTS
+https://www.techrepublic.com/blog/tr-dojo/administer-postfix-with-this-web-based-tool/
+
+
 www.spamhelp.org/shopenrelay/shopenrelaytest.php                SMTP Open Relay Test
 postfix.state-of-mind.de/patrick.koetter/smtpauth/smtp_auth_mailclients.html                      12. SMTP Authentication for Mail clients
 http://www.adeptus-mechanicus.com/codex/smtprly/smtprly.php         SMTP Relay Authentication - Postfix
