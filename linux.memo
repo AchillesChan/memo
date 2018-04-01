@@ -1,3 +1,7 @@
+###find out the biggest file in current folder (exclude .snapshots)
+find . -name .snapshots -prune -o -type f -print0 2>/dev/null |xargs -0 du 2>/dev/null |sort -nr|head -n 1
+###find out the biggest file in current folder
+
 #####grep or#####
 1 grep -E 'condition1|condition2' some-text
 2 grep 'condition1\|condition2' some-text
