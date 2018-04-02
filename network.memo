@@ -647,3 +647,30 @@ ip route-static 172.31.200.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
 #########h3c site2site vpn##############
 #########h3c site2site vpn##############
 #########h3c site2site vpn##############
+
+
+####h3c pppoe#####
+interface Dialer2
+
+ bandwidth 102400
+
+ ppp chap password cipher user-password 
+
+ ppp chap user user-name 
+
+ ppp pap local-user user-name password cipher user-password 
+
+ dialer bundle enable
+
+ dialer-group 2
+
+ dialer timer idle 0
+
+ dialer timer autodial 1
+
+ ip address ppp-negotiate
+
+ nat outbound
+
+####h3c pppoe#####
+
