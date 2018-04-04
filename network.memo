@@ -454,7 +454,14 @@ H3C设备的权限默认分为0-3这四种级别
 
 
 
+###########debug mode###########
+<h3c> debugging ike sa    //debug something
+<H3C>terminal debugging   //display debug message on screen
 
+<H3C>terminal monitor     //dispay dbug message on screen
+
+<h3c>undo debug all  //revoke all debug on other session
+###########debug mode###########
 
 =====================NAT=====================
 ============example==========================
