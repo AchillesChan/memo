@@ -1,3 +1,22 @@
+###detect service status 
+[array] $Services = "zabbix agent","EFS","BITS";
+
+
+while(1){
+    foreach($srv in $Services)
+    {
+        if(get-service -name $srv |findstr  "Running")
+        {
+            #write-host "$srv ok"               //output to console
+            write-output "error $Srv Running">>c:\s.txt     //output to file
+        }
+    }
+    start-sleep -Seconds 30
+}
+
+###detect service status to file 
+
+
 ############get newes file in a folder
 $dir = "f:\"
 $latest = Get-ChildItem -Path $dir -Recurse -file | Sort-Object LastAccessTime -Descending| Select-Object -First 1
