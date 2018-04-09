@@ -1,3 +1,39 @@
+$Username = "mail_user@mail.com";
+$Password = "mail_password";
+
+
+$orgin_ip = "";
+
+
+function Send-ToEmail([string]$email){
+
+    $message = new-object Net.Mail.MailMessage;
+    $message.From = "your-send-title@a.com.cn";
+    $message.To.Add($email);
+    $message.Subject = "your-send-title@$ip";
+    $message.Body = "$ip";
+ 
+    $smtp = new-object Net.Mail.SmtpClient("mail.com", "25");
+    $smtp.Credentials = New-Object System.Net.NetworkCredential($Username, $Password);
+    $smtp.send($message);
+ }
+
+ while(1)
+ {
+ $ip=Invoke-RestMethod -Uri https://www.example.com/ip.php;
+ if ($orgin_ip -ne $ip){
+    Send-ToEmail  -email "your-name@example.com";
+    start-sleep -Seconds 300;
+    Send-ToEmail  -email "your-name@example.com";
+    start-sleep -Seconds 300;
+    Send-ToEmail  -email "your-name@example.com";
+    $orgin_ip = $ip;
+    start-sleep -Seconds 3;
+    }
+ }
+
+
+
 ###detect service status 
 [array] $Services = "zabbix agent","EFS","BITS";
 
