@@ -1,3 +1,70 @@
+###########remote powershell######
+1
+登录您的Windows 2012 服务器，开启WinRM服务。以管理员权限打开PowerShell控制台，运行命令Enable-PSRemoting：
+
+所有确认选择Y
+
+
+2
+Windows2012需要使用HTTPS连接，需要一个ssl自签名证书。
+ssl自签名证书一般有三种途径生成：
+•	使用第三方工具
+•	使用visual studio tool
+•	使用IIS
+我这里安装IIS
+
+
+安装role service-->centralized ssl certificate support
+click server certifcates
+click create self-signed certificate
+generate cert
+
+
+3 
+
+powershell> ls Cert:\LocalMachine\My\
+
+PS C:\Users\Administrator> ls Cert:\LocalMachine\My\
+
+
+    目录: Microsoft.PowerShell.Security\Certificate::LocalMachine\My
+
+
+Thumbprint                                Subject
+----------                                -------
+CEA9F345AE37D3D313F954F0C1B49FD1579AD7DA  CN=your-host-name
+
+
+
+4
+使用管理员打开CMD执行如下命令：
+////注意主机名和证书指纹替换为生成的信息。
+c:\>winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{
+Port="5986" ;Hostname="your-host-name" ;CertificateThumbprint="CEA9F345AE37D3D313F954F0C1B49FD1579AD7DA"}
+
+c:\>netstat -an|findstr "5986"
+TCP    0.0.0.0:5986           0.0.0.0:0              LISTENING
+TCP    [::]:5986              [::]:0                 LISTENING
+
+
+5
+enable 5986 port on server and security group on nat map(omit...)
+
+
+6
+client connect
+在客户端您只需要使用命令链接就可以了：
+Enter-Pssession -ComputerName IP-or-dns -port 5986 -Credential your-user-name -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+
+
+7
+powershell copy file
+•	PS C:\Windows\system32> $TargetSession = New-PSSession -ComputerName your-ip -Port  5986  -Credential your-user-name -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+•	PS C:\Windows\system32> Copy-Item  -ToSession $TargetSession -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
+•	PS C:\Windows\system32> Enter-PSSession  -ComputerName your-ip -Port  5986  -Credential  your-user-name
+
+###########remote powershell######
+
 ###detect service status 
 [array] $Services = "zabbix agent","EFS","BITS";
 
