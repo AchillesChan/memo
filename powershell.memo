@@ -20,6 +20,7 @@ click server certifcates
 click create self-signed certificate
 generate cert
 
+or powershell>$Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName "myHost"
 
 3 
 
