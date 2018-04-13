@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+
+Get-ChildItem -Path e:\path -Recurse -file|Get-ItemProperty -Name lastwritetime|ft pspath,lastwritetime
+
+
 ###########remote powershell######
 1
 登录您的Windows 2012 服务器，开启WinRM服务。以管理员权限打开PowerShell控制台，运行命令Enable-PSRemoting：
