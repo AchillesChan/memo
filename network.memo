@@ -679,5 +679,12 @@ interface Dialer2
 
  nat outbound
 
+
+
+
+interface GigabitEthernet0/0
+ port link-mode route
+ pppoe-client dial-bundle-number 2
+
 ####h3c pppoe#####
 
