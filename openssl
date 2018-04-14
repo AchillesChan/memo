@@ -1,3 +1,16 @@
+####verify csr
+$>openssl req -in abc.csr -noout -text
+Certificate Request:
+    Data:
+        Version: 0 (0x0)
+        Subject: C=CN, ST=SiChuan, L=Chengdu, O=Your-org, OU=some-ou, CN=*.abc.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+              Modulus:
+######verify csr
+
+
 1. view openssl CA's path
 $ openssl version -d
 OPENSSLDIR: "/etc/pki/tls"

@@ -1,3 +1,26 @@
+
+##############source mysql in bash############
+$>cat /etc/custom-scripts/backup-yc50-mysql.sh
+#!/bin/bash
+PATH=/usr/local/mysql/bin:$PATH
+op_date=$(date +%Y%m%d-%H%M)
+mysql_backup_file=/root/backup.sql
+scriptErrorLog="/var/log/scriptErrorLog"
+operationVM=$(hostname)
+bak_password="bak-password"
+if ! mysqldump -umybak -h127.0.0.1 -P23306 -p"$bak_password" --set-gtid-purged=OFF  backup-db1 backup-db2 > "$mysql_backup_file"
+
+then
+        echo "WRONG $op_date backup your-db database $0 ON $operationVM" >>$scriptErrorLog
+fi
+
+if ! mysql -pAbcd-123* -e  'source /root/backup.sql' your-db_pro
+then
+        echo "WRONG $op_date restore your-db database $0 ON $operationVM" >>$scriptErrorLog
+fi
+##############source mysql in bash############
+
+
 ####profile analyze  ######
 
 mysql> show variables like '%profil%';
