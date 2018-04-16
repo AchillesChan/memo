@@ -655,7 +655,31 @@ ip route-static 172.31.200.0 255.255.255.0 GigabitEthernet 0/0 1.2.3.1
 #########h3c site2site vpn##############
 #########h3c site2site vpn##############
 
+####h3c site2site vpn with adsl#########
+1 adsl end
+a deny nat current on vpn current in nat acl 
+b define vpn current in vpn acl
+c1 set ike local-name adsl-end
+c2 set id-type name in ike peer segment
+c3 set remote-name in ike peer segment
+c4 set remote-address in ike peer segment(remote public fixed ip)
+d config other setting like site to site fixed ip
+e on vpn pc set a script ping fixed ip end lan address
 
+2 fixed ip end
+a define vpn current in vpn acl 
+b set ike local-name fixed-end
+c set id-type name in ike peer segment
+d set remote-name in ike peer segment
+e set local-address in ike peer segment(local public fixed ip)
+f config other setting like site to site fixed ip
+####h3c site2site vpn with adsl#########
+
+
+3 PATT
+if outboud interface set some DNAT server entry,
+MUST set ipsec no-nat-process enable in outboud interface segment,
+the DNAT port only access in the vpn lan segment.
 ####h3c pppoe#####
 interface Dialer2
 
