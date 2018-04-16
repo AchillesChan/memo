@@ -1,3 +1,81 @@
+#######install crontab on centos 6/7
+Link:https://stackoverflow.com/questions/21802223/how-to-install-crontab-on-centos
+As seen in Install crontab on CentOS, the crontab package in CentOS is vixie-cron. Hence, do install it with:
+
+yum install vixie-cron
+And then start it with:
+
+service crond start
+To make it persistent, so that it starts on boot, use:
+
+chkconfig crond on
+On CentOS 7 you need to use cronie:
+
+yum install cronie
+On CentOS 6 you can install vixie-cron, but the real package is cronie:
+
+yum install vixie-cron
+and
+
+yum install cronie
+In both cases you get the same output:
+
+.../...
+==================================================================
+ Package         Arch       Version         Repository      Size
+==================================================================
+Installing:
+ cronie          x86_64     1.4.4-12.el6    base             73 k
+Installing for dependencies:
+ cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
+ crontabs        noarch     1.10-33.el6     base             10 k
+ exim            x86_64     4.72-6.el6      epel            1.2 M
+
+Transaction Summary
+==================================================================
+Install       4 Package(s)
+As seen in Install crontab on CentOS, the crontab package in CentOS is vixie-cron. Hence, do install it with:
+
+$>yum install vixie-cron
+And then start it with:
+
+service crond start
+To make it persistent, so that it starts on boot, use:
+
+$>chkconfig crond on
+On CentOS 7 you need to use cronie:
+
+$>yum install cronie
+On CentOS 6 you can install vixie-cron, but the real package is cronie:
+
+$>yum install vixie-cron
+and
+
+$>yum install cronie
+In both cases you get the same output:
+
+.../...
+==================================================================
+ Package         Arch       Version         Repository      Size
+==================================================================
+Installing:
+ cronie          x86_64     1.4.4-12.el6    base             73 k
+Installing for dependencies:
+ cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
+ crontabs        noarch     1.10-33.el6     base             10 k
+ exim            x86_64     4.72-6.el6      epel            1.2 M
+
+Transaction Summary
+==================================================================
+Install       4 Package(s)
+
+#######install crontab on centos 6/7
+
+
+
+
+
+
 ###find out the biggest file in current folder (exclude .snapshots)
 find . -name .snapshots -prune -o -type f -print0 2>/dev/null |xargs -0 du 2>/dev/null |sort -nr|head -n 1
 ###find out the biggest file in current folder
