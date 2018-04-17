@@ -1,3 +1,38 @@
+iis asp cd/ci
+https://stackoverflow.com/questions/20118783/web-deploy-from-visual-studio-2012-to-a-remote-iis-8-server
+ 30
+down vote
+accepted
+
+OK I found the solution but it took me a whole day to get it working! Basically the steps are as follows. This is very sketchy but see the detailed guides below which helped me.
+
+    Enable the IIS Web Management role feature.
+    Install Web Deploy 3.0 (or higher). Make sure to customise the install to include the handlers (See notes below). If you're not presented with this option go to add/remove programs, find webdeploy, right click and select "change" option.
+    In IIS click on the server node and find the "Management Service" icon. Enable remote access and configure a dedicated IIS User for remote deployment (These will be the credentials that will go in the user name and password boxes).
+    At the site level in IIS assign this user to manage the website.
+    Make sure port 8172 is open on the web server (you can check this port here).
+    Try reconnecting from Visual Studio. There was some trial and error here for me but the error messages do link to a MS guide for decoding :)
+    Even after connecting successfully I had to wrangle with permissions, so my IIS user had sufficient privileges to create the app pool, directories and general file management jobs.
+
+The following links really helped!
+
+Configuring the handler on the web server:
+
+http://www.iis.net/learn/publish/using-web-deploy/configure-the-web-deployment-handler
+
+Connecting via Visual Studio:
+
+http://msdn.microsoft.com/en-us/library/dd465337(v=vs.110).aspx
+
+NOTES:
+
+To ensure the handler is running, login into your IIS server and point your browser to the following URL.
+
+https://<servername>:8172/MsDeploy.axd
+
+F12 to open up the dev tools to see the HTTP response. Also MsDeploy also creates IIS logs in inetpub/logs which should give you some clue if you're having connectivity problems.
+
+
 openldap with webmin
 https://doxfer.webmin.com/Webmin/LDAP_Server
 https://www.virtualmin.com/documentation/installation/ldap
