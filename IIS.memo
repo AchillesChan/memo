@@ -5,7 +5,7 @@ https://www.digicert.com/csr-ssl-installation/iis-8-and-8.5.htm
 
 Windows 2012 IIS 8.5 Install Certificate
 This manual prevent Error "0x80070520 A specified logon session does not exist" when assign cert to sites
-
+and disable user export pfx file from server certificte,survived after reboot.
 10 convert pfx from crt
 openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile CACert.crt
 
