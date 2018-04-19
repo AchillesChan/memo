@@ -1,3 +1,15 @@
+####sed tip
+replace all abc to def of files in current path 
+$>find ./ -type f|xargs -t -P 1 -n 1 -i sed -i 's:abc:def:g'
+
+append multiple line after pattern
+$>sed -i "/abc/aI-add-three\nline\n\'s" files
+
+insert multiple line before pattern
+$>sed -i "/abc/iI-add-three\nline\n\'s" files
+####sed tip
+
+
 #######install crontab on centos 6/7
 Link:https://stackoverflow.com/questions/21802223/how-to-install-crontab-on-centos
 As seen in Install crontab on CentOS, the crontab package in CentOS is vixie-cron. Hence, do install it with:

@@ -1,0 +1,50 @@
+#####install certificate
+link:
+https://knowledge.geotrust.com/support/knowledge-base/index?page=content&id=SO22115&actp=search&viewlocale=en_US&searchid=1481962109651
+https://www.digicert.com/csr-ssl-installation/iis-8-and-8.5.htm
+
+Windows 2012 IIS 8.5 Install Certificate
+This manual prevent Error "0x80070520 A specified logon session does not exist" when assign cert to sites
+
+10 convert pfx from crt
+openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile CACert.crt
+
+20
+delete all user cert and install computer cert in windows 2012
+MMC-->ADD SNIP-->ADD CERTIFICATE-->ADD USER-->ADD COMPUTER-->OK
+
+With the MMC and the Certificates snap-in open, expand the Personal > Certificates folder.
+	1. Right click on the certificate > Delete
+	2. Click Yes
+
+
+Step 3: Re-import certificate (.pfx) file using Microsoft Management Console (MMC) Snap-in for managing certificates
+
+	1. With the MMC and the Certificates snap-in open, double click on Certificates (Local Computer) in the center window.
+	2. Right click on the Personal Certificates Store (folder)
+	3. Choose > ALL TASKS > Import
+	4. Follow the Certificate Import Wizard to import your .pfx file. You will need to browse for .pfx file.
+	5. Enter the password that was used when exporting the certificate to a .pfx file.
+	6. If desired, check the box to "Mark this key as exportable."--UNCHECK
+	7. When prompted, choose to automatically place the certificates in the certificate stores based on the type of the certificate.
+	8. Click Finish to close the certificate wizard.
+	9. Close the MMC console. In the case that you are prompted, it is not necessary to save the changes made to the MMC console.
+
+30 IIS set
+Step 4: Binding certificate to the web site
+
+	1. Click Start > Administrative Tools > Internet Information Services (IIS) Manager
+	2. Browse to your server name > Sites > Your SSL-based site
+	3. In the Actions pane, click Bindings...
+
+In the Site Bindings window, If there is no existing https binding, choose Add and change Type from HTTP to HTTPS.
+Note: If there is already a https binding, select it and click Edit.
+
+From the {SSL} Certificate drop down, Select the Friendly Name for the SSL certificate that will be used for this site.
+
+
+40 Verify Certificate in IIS
+
+	1. Click Start > Administrative Tools > Internet Information Services (IIS) Manager
+	2. Click IIS server >double click Server Certifcate >The Certificate listed >Verify Certificate domain,expire date,hash,Store is in Person
+#####install certificate
