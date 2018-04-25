@@ -712,3 +712,29 @@ interface GigabitEthernet0/0
 
 ####h3c pppoe#####
 
+
+
+#####tftp backup file###
+1 install tftp on windows or linux
+windows use tftpd32
+linux use tftpd server
+
+2 backup on network device
+
+<swith>save
+The current configuration will be written to the device. Are you sure? [Y/N]:y
+Please input the file name(*.cfg)[flash:/startup.cfg]
+(To leave the existing filename unchanged, press the enter key):Your-switch1.cfg
+Validating file. Please wait...
+Saved the current configuration to mainboard device successfully.
+
+<swith>tftp 192.168.1.1 put Your-switch1.cfg
+Press CTRL+C to abort.
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  6720    0     0  100  6720      0   310k --:--:-- --:--:-- --:--:--  386k
+
+<swith>
+
+3 need same subnet ? 
+#####tftp backup file###
