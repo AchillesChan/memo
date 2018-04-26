@@ -746,6 +746,7 @@ then correctly set firewall on server.
 #######SCP backup file to remote public ip###
 Tips:operation on router or switch
 example.com is your target storage server address.
+Backup file stored in user-name's home directory.
 
 router1>dir
 dir
@@ -754,10 +755,10 @@ Directory of flash:
    ......
    ......
 
-router1>scp example.com ssh-port-here(ie.22) put startup.cfg start-zs.cfg
+router1>scp example.com ssh-port(ie.22) put startup.cfg start-zs.cfg
 Username: user-name
 Press CTRL+C to abort.
-Connecting to 1.2.3.4 port ssh-port-here(ie.22).
+Connecting to 1.2.3.4 port ssh-port(ie.22).
 The server is not authenticated. Continue? [Y/N]:y
 Do you want to save the server public key? [Y/N]:y
 user-name@1.2.3.4's password:
