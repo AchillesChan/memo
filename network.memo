@@ -767,3 +767,45 @@ user-name@1.2.3.4's password:
 startup.cfg                     100% 5421     5.3KB/s   00:00           
 
 #######SCP backup file to remote public ip###
+
+
+
+##########modify MTU#############
+1 windows 10
+PS C:\WINDOWS\system32> netsh interface ipv4 show subinterfaces
+
+   MTU  MediaSenseState   传入字节  传出字节      接口
+------  ---------------  ---------  ---------  -------------
+  1500                1  26450591265  4335320272  以太网
+4294967295                1          0     375863  Loopback Pseudo-Interface 1
+
+
+PS C:\WINDOWS\system32> netsh interface ipv4 set subinterface "以太网" mtu=1492 store=persistent
+确定。
+
+
+PS C:\WINDOWS\system32> netsh interface ipv4 show subinterfaces
+
+   MTU  MediaSenseState   传入字节  传出字节      接口
+------  ---------------  ---------  ---------  -------------
+  1492                1  26450845265  4335383496  以太网
+4294967295                1          0     375863  Loopback Pseudo-Interface 1
+
+
+2 linux 
+https://www.cyberciti.biz/faq/centos-rhel-redhat-fedora-debian-linux-mtu-size/
+
+
+Edit /etc/sysconfig/network-scripts/ifcfg-eth0, enter
+# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+Add MTU, settings:
+MTU="9000"
+
+Save and close the file. Restart networking:
+# service network restart
+
+
+3 find out MTU
+At the DOS prompt, type in ping www.yahoo.com -f -l 1492 and hit the Enter key:
+The results above indicate that the packet needs to be fragmented. Repeat this test, lowering the size the packet in increments of +/-10 (e.g. 1472, 1462, 1440, 1400) until you have a packet size that does not fragment:
