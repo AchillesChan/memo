@@ -1,3 +1,77 @@
+###powershell manangement iis####
+
+
+1. server level
+用法:
+
+iisreset [计算机名]
+
+
+
+    /RESTART            停止并重新启动所有 Internet 服务。
+
+    /START              启动所有 Internet 服务。
+
+    /STOP               停止所有 Internet 服务。
+
+    /REBOOT             重新启动计算机。
+
+    /REBOOTONERROR      如果启动、停止或重新启动 Internet 服务时
+
+                        发生错误，则重新启动计算机。
+
+    /NOFORCE            尝试正常停止 Internet 服务失败时
+
+                        不进行强制终止。
+
+    /TIMEOUT:val        指定等待成功停止 Internet 服务的超时值(秒)。
+
+                        如果指定了 /REBOOTONERROR 参数，
+
+                        则超过超时期限后会重新启动计算机。
+
+                        重新启动服务、停止服务和重新启动计算机的默认值
+
+                        分别是 20 秒、60 秒和 0 秒。
+
+    /STATUS             显示所有 Internet 服务的状态。
+
+    /ENABLE             启用本地系统上 Internet 服务的重新启动。
+
+    /DISABLE            禁用本地系统上 Internet 服务的重新启动。
+
+
+2. website level
+
+
+[WebServer]: PS C:\Users\user\Documents> get-website
+
+Name             ID   State      Physical Path                  Bindings                                                                                                                               
+----             --   -----      -------------                  --------                                                                                                                               
+OpeningPortal    1    Started    C:\Site\OpenningPortal         http *:80:                                                                                                                             
+......
+
+
+[WebServer]: PS C:\Users\user\Documents> Stop-Website "OpeningPortal"
+
+[WebServer]: PS C:\Users\user\Documents> get-website
+
+Name             ID   State      Physical Path                  Bindings                                                                                                                               
+----             --   -----      -------------                  --------                                                                                                                               
+OpeningPortal    1    Stopped    C:\Site\OpenningPortal         http *:80:                                                                                                                             
+......
+
+[WebServer]: PS C:\Users\user\Documents> Start-Website "OpeningPortal"
+
+[WebServer]: PS C:\Users\user\Documents> get-website
+
+Name             ID   State      Physical Path                  Bindings                                                                                                                               
+----             --   -----      -------------                  --------                                                                                                                               
+OpeningPortal    1    Started    C:\Site\OpenningPortal         http *:80:              
+
+###powershell manangement iis####
+
+
 
 Get-ChildItem -Path e:\path -Recurse -file|Get-ItemProperty -Name lastwritetime|ft pspath,lastwritetime
 
