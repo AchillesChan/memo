@@ -4,6 +4,33 @@ https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html
 https://www.liaoxuefeng.com/ python教学
 
 
+#########sftp update file#####
+1 link
+http://mingxinglai.com/cn/2015/06/paramiko/
+https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html
+
+
+2 code
+
+# -*- coding:utf-8 -*-
+import paramiko
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect("ip-or-host" ,port_number , "user", "passwd")
+
+sftp = paramiko.SFTPClient.from_transport(ssh.get_transport())
+sftp = ssh.open_sftp()
+sftp.chdir('operation_dir')
+sftp.put('/exact/path/2/local_file', 'remote_file')
+
+
+#########sftp update file#####
+
+
+
+
+
+
 ####read staff from stdin to var,stdout to file
 
 #-*- coding:utf-8 -*-
