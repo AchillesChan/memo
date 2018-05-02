@@ -2755,7 +2755,7 @@ for db in $dbs;do
 done
 
 #####3 tar file and transfer to lsync path
-if tar vzcf "$lsyncPath"/b-wms-db02-"$optDate".tar.gz "$bakPath"/*  
+if tar vzcf "$lsyncPath"/db-srv-"$optDate".tar.gz "$bakPath"/*  
 then
     rm -f "$bakPath"/*
 else
