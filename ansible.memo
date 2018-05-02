@@ -1,3 +1,15 @@
+####ping##########
+ansible hostGrp -m ping -u user --ask-pass
+###ping###############
+
+
+####tips############
+ansible hostGrp -m shell -a 'some-command' --keyfile=path/2/key -u user --sudo --ask-sudo    //MayBe need keyfile register in keychain
+                          //and some self installed command only support shell but not raw 
+####tips############
+
+
+
 ####报selinx错误处理（目标被操作主机上操作）
 yum -y install libselinux-python
 
