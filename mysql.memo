@@ -2740,7 +2740,8 @@ lsyncPath="/root/backup"
 
 
 ####1 get dbs need backup
-if ! dbs=$(mysql -e 'show databases;' -u"$bakUser" -p"$bakPwd" -h"$bakHost"|grep -Ev 'mysql|Database|information_schema|performance_schema|sys')
+if ! dbs=$(mysql -e 'show databases;' -u"$bakUser" -p"$bakPwd" -h"$bakHost" \
+            |grep -Ev 'mysql|Database|information_schema|performance_schema|sys')
 
 then
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
@@ -2748,18 +2749,19 @@ fi
 
 #####2 bakup dbs in seperately files
 for db in $dbs;do
-      if !  mysqldump -u"$bakUser" -h"$bakHost" -p"$bakPwd" --databases "$db">"$bakPath""$db"-"$optDate".sql
+      if !  mysqldump -u"$bakUser" -h"$bakHost" -p"$bakPwd" --databases "$db" \
+            >"$bakPath""$db"-"$optDate".sql
       then
-             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
+            echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
       fi
 done
 
 #####3 tar file and transfer to lsync path
 if tar vzcf "$lsyncPath"/db-srv-"$optDate".tar.gz "$bakPath"/*  
 then
-    rm -f "$bakPath"/*
+            rm -f "$bakPath"/*
 else
-             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
+            echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
 fi
 
 
