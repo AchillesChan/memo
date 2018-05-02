@@ -2749,7 +2749,8 @@ fi
 #####2 bakup dbs in seperately files
 for db in $dbs;do
       if !  mysqldump -u"$bakUser" -h"$bakHost" -p"$bakPwd" --databases "$db">"$bakPath""$db"-"$optDate".sql
-            then echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
+      then
+             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
       fi
 done
 
