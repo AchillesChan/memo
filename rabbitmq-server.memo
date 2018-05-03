@@ -1,16 +1,32 @@
 install rabbitmq on centos centOs6.7/7.3
 
-
+##step 10
 rpm -ivh erlang-18.3-1.el6.x86_64.rpm
+
+##step 20 way 1,maybe failure
 wget –no-cache http://www.convirture.com/repos/definitions/rhel/6.x/convirt.repo -O /etc/yum.repos.d/convirt.repo
 yum install socat
+
+##step 20 way 2
+wget http://www.dest-unreach.org/socat/download/socat-1.7.0.1.tar.gz
+tar -zxvf socat-1.7.0.1.tar.gz && cd socat-1.7.0.1
+./configure --disable-fips && make && make install
+
+##step 30
 rpm -ivh rabbitmq-server-3.6.6-1.el6.noarch.rpm
+
+##step 40
 service rabbitmq-server start
+or
+systemctl enable rabbitmq-server && systemctl start rabbitmq-server
+
+##step 50
 rabbitmq-plugins enable rabbitmq_management
 rabbitmqctl add_user admin 123456
 rabbitmqctl set_user_tags admin administrator
 rabbitmqctl set_permissions -p "/" admin "." "." ".*"
 
+##step 60
 rabbitmqctl --help
 service iptables stop
 setenforce 0
@@ -18,6 +34,13 @@ setenforce 0
 http://ip:15672
 user admin
 pw 123456
+
+##step 70
+
+$>ss -tlnp|grep 5672
+LISTEN     0      128          *:15672                    *:*                   users:(("beam.smp",pid=39937,fd=54))
+LISTEN     0      128          *:25672                    *:*                   users:(("beam.smp",pid=39937,fd=43))
+LISTEN     0      128         :::5672                    :::*                   users:(("beam.smp",pid=39937,fd=53))
 
 
 参考：(注意参考资料中的中文字符和命令正确性，查看官网更高效)
