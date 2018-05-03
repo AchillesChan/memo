@@ -1,3 +1,34 @@
+#####awk form-letter with given value####
+User~/> cat replace.value 
+a1000|b2000|c300
+
+
+User~/> cat replace.cmd 
+ BEGIN {        FS = "|"
+                   while (getline <"form.letter")
+                   line[++n] = $0
+   }
+   {       for (i = 1; i <= n; i++) {
+                   s = line[i]
+                   for (j = 1; j <= NF; j++)
+                              gsub("\\$"j, $j, s)
+                   print s
+           }
+   }
+
+User~/> cat form.letter 
+This is a form letter.
+The first field is $1, the second $2, the third $3.
+The third is $3, second is $2, and first is $1.
+
+User~/> awk -f replace.cmd replace.value 
+This is a form letter.
+The first field is a1000, the second b2000, the third c300.
+The third is c300, second is b2000, and first is a1000.
+
+
+#####awk form-letter with given value####
+
 
 {
 if($0 ~"Directory\ of")  #根据是否含“Directory of”判断是否是包含目录的那一行
