@@ -1,0 +1,65 @@
+
+{
+if($0 ~"Directory\ of")  #根据是否含“Directory of”判断是否是包含目录的那一行
+        {
+f=""         
+for(i=3;i<=NF;i++) 
+f=f " " $i    
+        }#以上为把完整的路径赋给变量f
+else
+        {
+printf("%s\\",f) #打印完整路径，并跟一个\
+for(i=5;i<=NF;i++)printf("%s ",$i) #打印完整文件名称,注意%s后的空格,用于输出文件名中的空格.
+                {
+                printf("|") #打印界定符，方便EXCEL导入
+                printf("%s",$4)  #打印所有者
+                printf("|") #打印界定符，方便EXCEL导入
+                print $3 #打印文件大小
+                }
+        }
+}
+
+
+
+
+
+
+awk输出全路径文件及文件大小.txt
+dir  c: /s |grep -v "<DIR>|字节$|^$"| awk -v f="" -f 1.txt #-v必须紧随在AWK后，不然会错
+
+
+下面是1.txt 的内容
+{
+if($0 ~".*的目录$")         #~是包含的操作方法
+
+        #自定义变量f不需要加前缀$;""""(也可以是空格如$1 " " $2)是字符串之间的连接操作符
+        {
+f=""         #变量f赋初值，一定要在写在这里
+for(i=1;i<NF;i++) #路径的值赋给变量f
+f=f " " $i    #路径的值赋给变量f
+        }
+else
+        {
+printf("%s\\",f) #输出文件完整路径（包括空格） 
+for(i=4;i<=NF;i++)printf("%s ",$i) #接着上面的输出文件完整名称（包括空格） 
+print $3  #输出字节数
+printf("\n")  #换行
+        }
+}
+
+
+结果象这样（注意路径和文件名内部的空格都保留的哦^_^）
+ C:\Documents and Settings\All Users\Application Data\Microsoft\OFFICE\DATAOPA11.BAK 8,200
+
+ C:\Documents and Settings\All Users\Application Data\Microsoft\OFFICE\DATAopa11.dat 8,206
+
+ C:\Documents and Settings\All Users\Application Data\Microsoft\USMTiconlib.dll 2,560
+
+ C:\Documents and Settings\All Users\Application Data\Windows Genuine Advantage\Datadata.dat 3,104
+
+ C:\Documents and Settings\All Users\桌面Google Chrome.lnk 1,723
+
+ C:\Documents and Settings\All Users\「开始」菜单Windows Update.lnk 1,411
+
+ C:\Documents and Settings\All Users\「开始」菜单Windows Catalog.lnk 398
+
