@@ -27,13 +27,13 @@ _________安装END_______________
 
 -----------备份源设置----------------
 settings {
-    insist = true,   ##如果出错，不断进行
+    insist = true,  --如果出错，不断进行
     logfile = "/var/log/lsyncd.log",
     statusFile = "/var/log/lsyncd.stat",
     statusInterval = 2
 }
 
-
+--comment 10,backup A
 sync {
     default.rsync,
     source="/home/user/",
@@ -50,6 +50,12 @@ sync {
     }
 }
 
+--comment 20 backup B
+sync {
+
+......like backup A segment
+
+}
 以上的配置文件名为backupcfg.lua,
 调用方法：/path/2/lsyncd /path/2/backupcfg.lua
 调用排错：使用ps -ef |grep lua查看进程是否运行，没有网络端口开放，使用netstat看不到状态。
