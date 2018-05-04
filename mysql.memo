@@ -2757,12 +2757,11 @@ for db in $dbs;do
 done
 
 #####3 tar file and transfer to lsync path
-if tar vzcf "$lsyncPath"/db-srv-"$optDate".tar.gz "$bakPath"/*  
+if tar vzcf "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"/*.sql
 then
-            rm -f "$bakPath"/*
+            rm -f "$bakPath"/*.sql                                                                                                                                       
+            mv "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"
 else
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
 fi
-
-
 
