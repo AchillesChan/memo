@@ -11,7 +11,7 @@ IP:192.168.1.1
 Mask:255.255.255.0
 GW:172.16.1.2
 
---call and result
+--30 call and result,$1 is IP,$2 is templete.bak
 $> ./segw.sh IP templete.bak 
 Interface:g0/0
 IP:192.168.1.1
