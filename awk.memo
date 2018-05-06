@@ -1,3 +1,25 @@
+####warp awk in shell########
+--10 $1 is shell argv1,$2 is shell argv2
+$> cat segw.sh 
+awk 'BEGIN {RS = ""} /'$1'/' $2 
+
+--20 seperate is space line 
+$> cat templete.bak 
+Interface:g0/0
+IP:192.168.1.1
+
+Mask:255.255.255.0
+GW:172.16.1.2
+
+--call and result
+$> ./segw.sh IP templete.bak 
+Interface:g0/0
+IP:192.168.1.1
+
+####warp awk in shell########
+
+
+
 ###replace newline enter to space####
 link:
 https://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed
