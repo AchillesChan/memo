@@ -1,3 +1,34 @@
+###replace newline enter to space####
+link:
+https://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed
+
+#10 initial
+$>cat templete.bak 
+Interface:g0/0
+IP:192.168.1.1
+Mask:255.255.255.0
+GW:172.16.1.2
+
+#20 way 1 the best
+$> awk -F ":" '{print $1}' templete.bak |sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g'
+Interface IP Mask GW
+
+--or--
+#20 way 2
+$> awk -F ":" '{print $1}' templete.bak |sed ':a;N;$!ba;s/\n/ /g'
+Interface IP Mask GW
+
+Explanation:
+
+    Create a label via :a.
+    Append the current and next line to the pattern space via N.
+    If we are before the last line, branch to the created label $!ba ($! means not to do it on the last line as there should be one final newline).
+    Finally the substitution replaces every newline with a space on the pattern space (which is the whole file).
+
+
+###replace newline enter to space####
+
+
 #####awk form-letter with given value####
 
 User~/> cat replace.value 
