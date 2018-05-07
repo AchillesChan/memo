@@ -1,3 +1,8 @@
+####sed append newline after some pattern
+#---10 here append set -u AFTER #!/bin/bash
+sed -i 's:#!/bin/bash:#!/bin/bash\nset -u:g' somefile
+####sed append newline after some pattern
+
 ####bash shell safe 
 set -u  ###Meaning if some undefine while being call will exit shell
 ####that protect some accident 
