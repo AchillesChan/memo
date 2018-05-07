@@ -1,3 +1,51 @@
+######vlookup#################
+--10 link
+https://unix.stackexchange.com/questions/257002/vlookup-work-in-awk-on-linux
+
+--20 requirement
+file1:
+4,abc
+3,xyz
+5,fut
+6,gfd
+
+file2:
+gfd,2.3
+xyz,4.5
+abc,6.7
+fut,3.2
+
+fil3:(result)
+4,6.7
+3,4.5
+5,3.2
+6,2.3
+
+--30 way 1
+With join:
+
+join -t, -1 2 -2 1 -o 1.1,2.2 <(sort -t, -k2 file1) <(sort -t, -k1 file2)
+
+    -t, set delimiter to ,.
+    -1 2 the first files join field is the second one.
+    -2 1 the second files join field is the first one.
+    -o 1.1,2.2 the output format
+    <(sort ...) join need input files, which are sorted on the join field.
+
+--30 way 2
+
+FNR==NR{
+    var[$2]=$1
+}
+FNR!=NR{
+    print(var[$1]","$2)
+}
+
+call:
+awk -F, -f script.awk file1 file2
+######vlookup#################
+
+
 ####warp awk in shell########
 --10 $1 is shell argv1,$2 is shell argv2
 $> cat segw.sh 
