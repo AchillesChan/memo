@@ -2754,7 +2754,7 @@ fi
 #####2 bakup dbs in seperately files
 for db in $dbs;do
       if !  mysqldump -u"$bakUser" -h"$bakHost" -p"$bakPwd" --databases "$db" \
-           --hex-blob --routines >"$bakPath""$db"-"$optDate".sql
+         --hex-blob --triggers --routines --events >"$bakPath""$db"-"$optDate".sql
       then
             echo "WRONG $0 ON $operationVM on dump $db" >>$scriptErrorLog
       fi
