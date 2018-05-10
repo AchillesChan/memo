@@ -1,4 +1,7 @@
 ####debug
+--10 centos 7 not work
+
+--20 operation
 $>awk -D -f some-file.awk operation-fiel
 gawk> watch s
 Watchpoint 1: s
