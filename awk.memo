@@ -1,3 +1,32 @@
+####debug
+$>awk -D -f some-file.awk operation-fiel
+gawk> watch s
+Watchpoint 1: s
+gawk> run
+Starting program: 
+Stopping in Rule ...
+Watchpoint 1: s
+  Old value: untyped variable
+  New value: " rule 10 permit ip source #4 #5 destination #10"
+main() at `replace.awk':7
+7                          for (j = 1; j <= NF; j++){
+gawk> n
+8                                  gsub("#"j, $j, s)
+gawk> 
+Watchpoint 1: s
+  Old value: " rule 10 permit ip source #4 #5 destination #10"
+  New value: " rule 10 permit ip source #4 #5 destination -R10"
+main() at `replace.awk':7
+7                          for (j = 1; j <= NF; j++){
+gawk> 
+8                                  gsub("#"j, $j, s)
+gawk> quit
+The program is running. Exit anyway (y/n)? y
+
+
+####debug
+
+
 ######vlookup#################
 --10 link
 https://unix.stackexchange.com/questions/257002/vlookup-work-in-awk-on-linux
