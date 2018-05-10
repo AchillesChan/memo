@@ -1,3 +1,23 @@
+######How to continue execution on failed task after fixing error in playbook?
+--10 Link:
+https://stackoverflow.com/questions/29900096/how-to-continue-execution-on-failed-task-after-fixing-error-in-playbook
+
+--20 failed here
+TASK [zabbix : create scriptErrorLog]
+
+--30 start from fixing error
+$> ansible-playbook task.yml --start-at-task "zabbix : create scriptErrorLog" -u --ask-pass --sudo --ask-sudo-pass
+
+######How to continue execution on failed task after fixing error in playbook?
+
+
+#########login before ansible######
+ "failed": true, 
+    "msg": "Using a SSH password instead of a key is not possible because Host Key checking is enabled and sshpass does not support this.  Please add this host's fingerprint to your known_hosts file to manage this host."
+#########login before ansible######
+
+
+
 ####ping##########
 ansible hostGrp -m ping -u user --ask-pass
 ###ping###############
