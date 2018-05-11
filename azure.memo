@@ -1,11 +1,15 @@
 ####set fixed public for cloud service##
 
-New-AzureReservedIP -ReservedIPName "your-name-reservedIP" -Location "China East" -ServiceName "B-WAAS2"
+--10 service must have least one vm 
 
-Set-AzureReservedIPAssociation -ReservedIPName your-name-reservedIP -ServiceName B-WAAS2
+--20 powershell cmd
 
-Get-AzureSubscription
+>New-AzureReservedIP -ReservedIPName "your-name-reservedIP" -Location "China East" -ServiceName "your-service"
 
-Select-AzureSubscription -SubscriptionName "提前支付"
+>Set-AzureReservedIPAssociation -ReservedIPName your-name-reservedIP -ServiceName your-service
+
+>Get-AzureSubscription
+
+Select-AzureSubscription -SubscriptionName "your-scubscription"
 
 ####set fixed public for cloud service##
