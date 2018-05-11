@@ -420,17 +420,17 @@ Generating Keys...
 [Router] ssh server enable
 
 # 设置SSH 客户端登录用户界面的认证方式为AAA 认证。
-[Router] user-interface vty 0 4
+[Router] %user-interface vty 0 4
 [Router-ui-vty0-4] authentication-mode scheme
 # 设置Router 上远程用户登录协议为SSH。
 [Router-ui-vty0-4] protocol inbound ssh
 [Router-ui-vty0-4] quit
 # 创建本地用户client001，并设置用户访问的命令级别为3。
 [Router] local-user client001
-[Router-luser-client001] password simple aabbcc
-[Router-luser-client001] service-type ssh
-[Router-luser-client001] authorization-attribute level 3
-[Router-luser-client001] quit
+[Router-l%user-client001] password simple aabbcc
+[Router-l%user-client001] service-type ssh
+[Router-l%user-client001] authorization-attribute level 3
+[Router-l%user-client001] quit
 
 # 配置SSH 用户client001 的服务务器类型为Stelnet，认证方式为password 认证。（此步骤可以不
 配置）
@@ -469,7 +469,7 @@ H3C设备的权限默认分为0-3这四种级别
  sysname H3C-router-NAME
 #
  nat address-group 0  ####NAT ITEM####
-  address your-public-ip  your-public-ip
+  address %your--public-ip  %your--public-ip
 #
  domain default enable system 
 #
@@ -482,7 +482,7 @@ H3C设备的权限默认分为0-3这四种级别
  password-recovery enable
 #  
 acl number 2000  ####NAT ITEM####
- rule 0 permit source your-local-subnet.1.0 0.0.0.255 
+ rule 0 permit source %your--local-subnet.1.0 0.0.0.255 
 #
 vlan 1
 #
@@ -494,40 +494,40 @@ domain system
  idle-cut disable 
  self-service-url disable 
 #
-user-group system
+%user-group system
  group-attribute allow-guest
-user-group -in
+%user-group -in
 #
 local-user admin
- password cipher your-encryed-password-here 
+ password cipher %your--encryed-password-here 
  authorization-attribute level 3
  service-type web
 local-user ssh-user   ####SSH ITEM####
- password cipher your-encryed-password-here 
+ password cipher %your--encryed-password-here 
  authorization-attribute level 3
  service-type ssh
 
 #
 interface Vlan-interface10
- ip address your-local-subnet.1.254 255.255.255.0 
+ ip address %your--local-subnet.1.254 255.255.255.0 
 #
 interface GigabitEthernet0/0 ####NAT ITEM####
  port link-mode route
  nat outbound 2000 address-group 0   ####NAT ITEM####
- nat server 1 protocol tcp global current-interface 58833 inside your-local-subnet.1.100 8833 ####NAT MAP ITEM####
- nat server 2 protocol tcp global current-interface 58330 inside your-local-subnet.1.101 8833 ####NAT MAP ITEM####
- ip address your-public-ip 255.255.255.0 
- dns server your-dns-ip 
+ nat server 1 protocol tcp global current-interface 58833 inside %your--local-subnet.1.100 8833 ####NAT MAP ITEM####
+ nat server 2 protocol tcp global current-interface 58330 inside %your--local-subnet.1.101 8833 ####NAT MAP ITEM####
+ ip address %your--public-ip 255.255.255.0 
+ dns server %your--dns-ip 
 #
 interface GigabitEthernet0/9
  port link-mode route
- ip address your-local-subnet.1 255.255.255.0 
+ ip address %your--local-subnet.1 255.255.255.0 
 #
 interface GigabitEthernet0/8
  port link-mode bridge
  port access vlan 10
 #
- ip route-static 0.0.0.0 0.0.0.0 GigabitEthernet0/0 your-public-ip-gateway
+ ip route-static 0.0.0.0 0.0.0.0 GigabitEthernet0/0 %your--public-ip-gateway
 #
  ssh server enable  ####SSH ITEM####
  ssh user ssh-user service-type stelnet authentication-type password
@@ -540,12 +540,12 @@ interface GigabitEthernet0/8
 #
  load tr069-configuration
 #
-user-interface tty 12
-user-interface aux 0
-user-interface vty 0 ####SSH ITEM####
+%user-interface tty 12
+%user-interface aux 0
+%user-interface vty 0 ####SSH ITEM####
  authentication-mode scheme
  protocol inbound ssh
-user-interface vty 1 4 
+%user-interface vty 1 4 
  authentication-mode scheme
 #
 return
@@ -667,33 +667,33 @@ interface GigabitEthernet0/0                                                    
  ipsec apply policy to-center
 #
  ip route-static 0.0.0.0 0 GigabitEthernet0/0 gate-way                             //70 route must define vpn flow
- ip route-static peer-lan-seg 24 GigabitEthernet0/0 gate-way
+ ip route-static %peer-lan-seg 24 GigabitEthernet0/0 gate-way
 #
 acl advanced nat-acl-number                                                        //40 nat acl,PATT DENY VPN
- rule 10 deny ip source your-lan-seg 0.0.0.7 destination peer-lan-seg 0.0.0.255
- rule 20 permit ip source your-lan-seg 0.0.0.7
+ rule 10 deny ip source %your--lan-seg 0.0.0.7 destination %peer-lan-seg 0.0.0.255
+ rule 20 permit ip source %your--lan-seg 0.0.0.7
 #
 acl advanced some-id-number                                                        //50 VPN ACL,PERMIT NAT
- rule 10 permit ip source your-lan-seg 0.0.0.7 destination peer-lan-seg 0.0.0.255
+ rule 10 permit ip source %your--lan-seg 0.0.0.7 destination %peer-lan-seg 0.0.0.255
 #
 ipsec policy to-center 1 isakmp
- transform-set your01-phase2-ipsec 
+ transform-set %your-01-phase2-ipsec 
  security acl some-id-number 
- remote-address peer-public-ip
- ike-profile your-profile1
+ remote-address %peer-public-ip
+ ike-profile %your--profile1
  sa duration time-based 3600
  sa duration traffic-based 1843200
 #
-ike profile your-profile1                                                            //30 ike phase 3
+ike profile %your--profile1                                                            //30 ike phase 3
  keychain benjing01-phase-ike
  local-identity address public-ip
- match remote identity address peer-public-ip 255.255.255.0
+ match remote identity address %peer-public-ip 255.255.255.0
 #
 ike proposal some-id-number                                                           //10 ike phase1
  encryption-algorithm aes-cbc-128
 #
 ike keychain bengjing01-phase-ike                                                     //20 ike phase1-2
- pre-shared-key address peer-public-ip 255.255.255.255 key simple your-key-here
+ pre-shared-key address %peer-public-ip 255.255.255.255 key simple %your--key-here
 
 ########h3c site2sitevpn 2600 v7######
 
@@ -728,11 +728,11 @@ interface Dialer2
 
  bandwidth 102400
 
- ppp chap password cipher user-password 
+ ppp chap password cipher %user-password 
 
- ppp chap user user-name 
+ ppp chap user %user-name 
 
- ppp pap local-user user-name password cipher user-password 
+ ppp pap local-user %user-name password cipher %user-password 
 
  dialer bundle enable
 
@@ -788,8 +788,8 @@ then correctly set firewall on server.
 
 #######SCP backup file to remote public ip###
 Tips:operation on router or switch
-example.com is your target storage server address.
-Backup file stored in user-name's home directory.
+example.com is %your- target storage server address.
+Backup file stored in %user-name's home directory.
 
 router1>dir
 dir
@@ -799,12 +799,12 @@ Directory of flash:
    ......
 
 router1>scp example.com ssh-port(ie.22) put startup.cfg start-zs.cfg
-Username: user-name
+Username: %user-name
 Press CTRL+C to abort.
 Connecting to 1.2.3.4 port ssh-port(ie.22).
 The server is not authenticated. Continue? [Y/N]:y
 Do you want to save the server public key? [Y/N]:y
-user-name@1.2.3.4's password:
+%user-name@1.2.3.4's password:
 ******
 
 startup.cfg                     100% 5421     5.3KB/s   00:00           
