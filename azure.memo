@@ -1,0 +1,11 @@
+####set fixed public for cloud service##
+
+New-AzureReservedIP -ReservedIPName "your-name-reservedIP" -Location "China East" -ServiceName "B-WAAS2"
+
+Set-AzureReservedIPAssociation -ReservedIPName your-name-reservedIP -ServiceName B-WAAS2
+
+Get-AzureSubscription
+
+Select-AzureSubscription -SubscriptionName "提前支付"
+
+####set fixed public for cloud service##
