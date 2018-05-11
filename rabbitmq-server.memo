@@ -12,6 +12,12 @@ wget http://www.dest-unreach.org/socat/download/socat-1.7.0.1.tar.gz
 tar -zxvf socat-1.7.0.1.tar.gz && cd socat-1.7.0.1
 ./configure --disable-fips && make && make install
 
+--???need these???
+yum -y install epel-release
+rm -f /etc/yum.repos.d/ep*
+yum -y install socat
+
+
 ##step 30
 rpm -ivh rabbitmq-server-3.6.6-1.el6.noarch.rpm
 
