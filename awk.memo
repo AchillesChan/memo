@@ -1,3 +1,40 @@
+
+##############awk vlookup replace by array#############
+$> cat array-replace.awk
+
+NR==FNR{
+        temp[$1]=$2
+        }
+
+NR!=FNR{
+        for(j=1;j<=NF;j++){
+              if($j~/^var/)           ###start with var field
+                   $j = temp[$j]      ###vlookup replace
+              s=$0                    ###result write back
+        }
+              print s
+    }        
+
+$> cat array-replace-templete 
+my pub-int var-public-ip var-mask var-wildcode 
+my  privity-ip var-privity-ip var-wildcode  
+my privity-ip var-privity-ip var-wildcode
+
+$> cat array-replace-keys
+var-wildcode 0.0.0.7
+var-network 192.168.20.0
+var-mask 255.255.255.0
+var-public-ip 1.2.3.4
+var-privity-ip 192.168.20.100
+
+
+$> awk -f array-replace.awk array-replace-keys array-replace-templete 
+my pub-int 1.2.3.4 255.255.255.0 0.0.0.7
+my privity-ip 192.168.20.100 0.0.0.7
+my privity-ip 192.168.20.100 0.0.0.7
+##############awk vlookup replace by array#############
+
+
 ####debug
 --10 centos 7 not work
 
