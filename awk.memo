@@ -146,7 +146,7 @@ User~/> cat replace.cmd
    }
  NR<2{next}{for (i = 1; i <= n; i++) {   //skip first line 
                    s = line[i]          //read line of form.letter to s
-                   for (j = 1; j <= NF; j++)  //read field from replace.value in order
+                   for (j = NF; j >= 1; j--)  //read field from replace.value in order,reverse order Must.
                               gsub("\\$"j, $j, s)
                    print s
            }
