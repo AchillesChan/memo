@@ -15,10 +15,6 @@ NR!=FNR{
               print s
     }        
 
-$> cat array-replace-templete 
-my pub-int var-public-ip var-mask var-wildcode 
-my  privity-ip var-privity-ip var-wildcode  
-my privity-ip var-privity-ip var-wildcode
 
 $> cat array-replace-keys
 var-wildcode 0.0.0.7
@@ -28,10 +24,16 @@ var-public-ip 1.2.3.4
 var-privity-ip 192.168.20.100
 
 
+$> cat array-replace-templete 
+my pub-int var-public-ip var-mask var-wildcode 
+my  privity-ip var-privity-ip var-mask  
+privity-ip var-privity-ip var-wildcode
+
 $> awk -f array-replace.awk array-replace-keys array-replace-templete 
 my pub-int 1.2.3.4 255.255.255.0 0.0.0.7
-my privity-ip 192.168.20.100 0.0.0.7
-my privity-ip 192.168.20.100 0.0.0.7
+my privity-ip 192.168.20.100 255.255.255.0
+privity-ip 192.168.20.100 0.0.0.7
+
 ##############awk vlookup replace by array#############
 
 
