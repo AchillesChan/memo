@@ -638,7 +638,7 @@ ipsec transform-set name-prefix01-phase2-ipsec
  esp authentication-algorithm sha1 
  esp encryption-algorithm aes-cbc-128
 #
-ipsec policy 1028532 1 isakmp
+ipsec policy %your-policy-name 1 isakmp
  connection-name ipsec-2-chengdus-office
  security acl 3002 
  ike-peer name-prefix01-phase1-ike
@@ -676,12 +676,12 @@ acl advanced nat-acl-number                                                     
 acl advanced some-id-number                                                        //50 VPN ACL,PERMIT NAT
  rule 10 permit ip source %your--lan-seg 0.0.0.7 destination %peer-lan-seg 0.0.0.255
 #
-ipsec transform-set %router-name-phase2-ipsec                                       //35 phase2-ipsec
+ipsec transform-set %your-phase2-ipsec                                       //35 phase2-ipsec
  esp encryption-algorithm aes-cbc-128
  esp authentication-algorithm sha1
 #
 ipsec policy to-center 1 isakmp
- transform-set %your-01-phase2-ipsec 
+ transform-set %your-phase2-ipsec 
  security acl some-id-number 
  remote-address %peer-public-ip
  ike-profile %your--profile1
@@ -689,7 +689,7 @@ ipsec policy to-center 1 isakmp
  sa duration traffic-based 1843200
 #
 ike profile %your--profile1                                                            //30 phase1-ike-3
- keychain benjing01-phase-ike
+ keychain %your-phase1-ike
  local-identity address public-ip
  match remote identity address %peer-public-ip 255.255.255.0
 #
