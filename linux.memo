@@ -1,3 +1,26 @@
+#####non-greedy and backreference in vim ########
+--10 orgin text 
+%network-add %network-mask 
+%public-interface% and mask                                                                                                                                                          
+
+--20 processed text      
+%network-add% %network-mask% 
+%public-interface% and mask                                                                                                                                                               
+
+--30 vim command 
+1,2s:\(%.\{-}\)\s:\1% :g
+
+
+--40 explain 
+1,2 Execute lines 
+s:replace meta char
+
+\(%.\{-}\)\s:\1%  replace begin with % after some char with first space to those staff add % 
+\(\)  is backreference define \1 is reference
+.\{-} is non-greedy match 
+
+#####non-greedy and backreference in vim ########
+
 ####sed append newline after some pattern
 #---10 here append set -u AFTER #!/bin/bash
 sed -i 's:#!/bin/bash:#!/bin/bash\nset -u:g' somefile
