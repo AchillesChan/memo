@@ -676,6 +676,10 @@ acl advanced nat-acl-number                                                     
 acl advanced some-id-number                                                        //50 VPN ACL,PERMIT NAT
  rule 10 permit ip source %your--lan-seg 0.0.0.7 destination %peer-lan-seg 0.0.0.255
 #
+ipsec transform-set %router-name-phase2-ipsec                                       //35 phase2-ipsec
+ esp encryption-algorithm aes-cbc-128
+ esp authentication-algorithm sha1
+#
 ipsec policy to-center 1 isakmp
  transform-set %your-01-phase2-ipsec 
  security acl some-id-number 
@@ -684,15 +688,15 @@ ipsec policy to-center 1 isakmp
  sa duration time-based 3600
  sa duration traffic-based 1843200
 #
-ike profile %your--profile1                                                            //30 ike phase 3
+ike profile %your--profile1                                                            //30 phase1-ike-3
  keychain benjing01-phase-ike
  local-identity address public-ip
  match remote identity address %peer-public-ip 255.255.255.0
 #
-ike proposal some-id-number                                                           //10 ike phase1
+ike proposal some-id-number                                                           //10  phase1-ike-1
  encryption-algorithm aes-cbc-128
 #
-ike keychain bengjing01-phase-ike                                                     //20 ike phase1-2
+ike keychain bengjing01-phase-ike                                                     //20  phase1-ike-2
  pre-shared-key address %peer-public-ip 255.255.255.255 key simple %your--key-here
 
 ########h3c site2sitevpn 2600 v7######
