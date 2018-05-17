@@ -1,0 +1,39 @@
+##########detecv port status V4####################
+----10 main prog
+#cat /data/backup/detectServiceStatusV4.mon01.sh
+
+#!/bin/bash
+PATH="/usr/local/bin:/usr/bin:/bin"
+export PATH
+managedServiceFile="/data/backup/managedServiceListMon01"
+logFile="/var/log/serviceStatusLogs/serviceStatusLog"
+operationDate=$(date +%Y%m%d-%H%M)
+echo -n "$operationDate:">"$logFile"
+###每次的操作输入到一个文件，多个错误拼接到一行
+while IFS= read -r managedServiceItem
+do(
+        if echo "$managedServiceItem"|grep '#' &>/dev/null
+        then
+           continue
+        fi
+
+        host=$(echo "$managedServiceItem"|awk '{print $1}')
+        port=$(echo "$managedServiceItem"|awk '{print $2}')
+        name=$(echo "$managedServiceItem"|awk '{print $3}')
+        if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+                echo -n "WRONG $name ">>"$logFile"
+        fi)&
+done <"$managedServiceFile"
+wait
+echo "">>"$logFile"              ##打印换行
+sed -i 's# WRONG##g' "$logFile"  ##删除多余的WRONG字符
+
+----20 cfg
+# cat managedServiceListMon01
+192.168.2.56        3307        haproxy1
+192.168.2.57        3307        haproyx2
+192.168.2.56        3306        mysql2
+
+----30 output
+##输出格式：2017xxxx：WRONG HOST1 HOST2  .....
+##########detecv port status V4 END侦测端口开启状态 ####################

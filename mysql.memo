@@ -2721,6 +2721,7 @@ GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_progress TO 'backup-user-name
 GRANT CREATE, INSERT, SELECT, DROP, UPDATE ON mysql.backup_history TO 'backup-user-name'@'ip-address';
 GRANT REPLICATION CLIENT ON *.* TO 'backup-user-name'@'ip-address';
 GRANT SUPER ON *.* TO 'backup-user-name'@'ip-address';
+GRANT EVENT ON *.* TO 'backup-user-name'@'ip-address';
 GRANT PROCESS ON *.* TO 'backup-user-name'@'ip-address';
 GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'backup-user-name'@'ip-address';
 GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'backup-user-name'@'ip-address';
