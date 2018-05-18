@@ -504,22 +504,39 @@ Output:
   1-end
 
 --{} represented variables,after ::: the value of the variables list here--
-$>time parallel -j3 -k 'curl --connect-timeout 2 -sL -w "%{http_code}\\n" "{}" -o /dev/null' ::: 192.168.5.14 192.168.5.118 192.168.5.118:8080
+$>time parallel -j8 -k 'ping -c 1 172.16.1.{}' ::: 10 20 118 136
+
 Academic tradition requires you to cite works you base your article on.
-When using programs that use GNU Parallel to process data for publication
-please cite:
-
-  O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
-  ;login: The USENIX Magazine, February 2011:42-47.
-
-This helps funding further development; AND IT WON'T COST YOU A CENT.
-If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
-
+......
 To silence the citation notice: run 'parallel --bibtex'.
 
-200
-200
-200
+PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+
+PING 172.16.1.20 (172.16.1.20) 56(84) bytes of data.
+From 172.16.1.156 icmp_seq=1 Destination Host Unreachable
+
+--- 172.16.1.20 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+PING 172.16.1.118 (172.16.1.118) 56(84) bytes of data.
+64 bytes from 172.16.1.118: icmp_seq=1 ttl=128 time=0.585 ms
+
+--- 172.16.1.118 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.585/0.585/0.585/0.000 ms
+PING 172.16.1.136 (172.16.1.136) 56(84) bytes of data.
+64 bytes from 172.16.1.136: icmp_seq=1 ttl=128 time=1.13 ms
+
+--- 172.16.1.136 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 1.138/1.138/1.138/0.000 ms
+
+real    0m10.346s
+user    0m0.294s
+sys     0m0.139s
 
 
 
