@@ -1,3 +1,28 @@
+############Linux script with curl to check webservice is up 
+link:https://stackoverflow.com/questions/12747929/linux-script-with-curl-to-check-webservice-is-up
+curl -sL -w "%{http_code}\\n" "http://www.google.com/" -o /dev/null
+
+    -s = Silent cURL's output
+    -L = Follow redirects
+    -w = Custom output format
+    -o = Redirects the HTML output to /dev/null
+
+Example:
+
+[~]$ curl -sL -w "%{http_code}\\n" "http://www.google.com/" -o /dev/null
+200
+
+I would probably remove the \\n if I were to capture the output.
+
+
+
+Also of note: the \\n (escaped backslash) is only required if you're using bash as your shell interactively, but if you put this in a script OR you use tcsh you should use \n instead. This is a quoting issue; the command line works the same in both shells, interactively and in scripts if you use single quotes instead, à la: '%{http_code}\n' Probably best for consistency to use that instead.
+
+
+
+############Linux script with curl to check webservice is up 
+
+
 #####non-greedy and backreference in vim ########
 --10 orgin text 
 %network-add %network-mask 
