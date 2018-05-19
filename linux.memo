@@ -1,6 +1,6 @@
 ############Linux script with curl to check webservice is up 
 link:https://stackoverflow.com/questions/12747929/linux-script-with-curl-to-check-webservice-is-up
-curl -sL -w "%{http_code}\\n" "http://www.google.com/" -o /dev/null
+curl -sL -w "%{url_effective} %{remote_ip} %{http_code}\\n" "http://www.google.com/" -o /dev/null
 
     -s = Silent cURL's output
     -L = Follow redirects
@@ -9,8 +9,8 @@ curl -sL -w "%{http_code}\\n" "http://www.google.com/" -o /dev/null
 
 Example:
 
-[~]$ curl -sL -w "%{http_code}\\n" "http://www.google.com/" -o /dev/null
-200
+[~]$ curl -sL -w "%{url_effective} %{remote_ip} %{http_code}\\n" "http://www.google.com/" -o /dev/null
+https://www.google.com 1.2.3.4 200
 
 I would probably remove the \\n if I were to capture the output.
 
