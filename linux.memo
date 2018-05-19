@@ -16,7 +16,10 @@ I would probably remove the \\n if I were to capture the output.
 
 
 
-Also of note: the \\n (escaped backslash) is only required if you're using bash as your shell interactively, but if you put this in a script OR you use tcsh you should use \n instead. This is a quoting issue; the command line works the same in both shells, interactively and in scripts if you use single quotes instead, à la: '%{http_code}\n' Probably best for consistency to use that instead.
+Also of note: the \\n (escaped backslash) is only required if you're using bash as your shell interactively, but
+if you put this in a script OR you use tcsh you should use \n instead. This is a quoting issue; the command line 
+works the same in both shells, interactively and in scripts if you use single quotes instead, 
+à la: '%{http_code}\n' Probably best for consistency to use that instead.
 
 
 
