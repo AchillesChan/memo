@@ -1,5 +1,7 @@
 ########How to create and format a partition using a bash script?
-Similar to the previous suggestions, piping commands to fidsk, I've found this approach useful to leave details for subsequent maintainers. The sed bits strip off all the comments before fdisk gets the input.
+Similar to the previous suggestions, piping commands to fidsk, I've found 
+this approach useful to leave details for subsequent maintainers. The sed
+bits strip off all the comments before fdisk gets the input.
 
 # to create the partitions programatically (rather than manually)
 # we're going to simulate the manual input to fdisk
