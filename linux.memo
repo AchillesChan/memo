@@ -13,7 +13,7 @@ nameserver 8.8.8.8      ###public DNS server
 --enablemkhomedir \
 --update
 
---30 add to domain (MUST domain Admin user)
+--30 add to domain (MUST domain Admin user) ##Your_password can used by "$x" in shell script  
 echo -n 'Your_passw0$d'|adcli join --login-user=domain_admin domain.name --stdin-password
 
 --40 vim /etc/sssd/sssd.con
