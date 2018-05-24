@@ -1,3 +1,23 @@
+####here documented in bash script#######
+--10 bash script  
+#> cat change-user-password.sh 
+#!/bin/bash
+cat <<eof|passwd $1
+$2
+$2
+eof
+
+--20 call 
+#> sh -x change-user-password.sh zhang bcd-pa
++ cat
++ passwd zhang
+Changing password for user zhang.
+New password: BAD PASSWORD: The password is shorter than 7 characters
+Retype new password: passwd: all authentication tokens updated successfully.
+
+####here documented in bash script#######
+
+
 ########How to create and format a partition using a bash script?
 Similar to the previous suggestions, piping commands to fidsk, I've found 
 this approach useful to leave details for subsequent maintainers. The sed
