@@ -711,8 +711,60 @@ c2 set id-type name in ike peer segment
 c3 set remote-name in ike peer segment
 c3-1 set nat traversal in ike peer segment
 c4 set remote-address in ike peer segment(remote public fixed ip)
+c5 set ipsec no-nat-process enable in public interface
 d config other setting like site to site fixed ip
 e on vpn pc set a script ping fixed ip end lan address
+
+--example of adsl end with privite lan
+#--10 define ike local name 
+ ike local-name your-adsl-end
+
+#--20 deny vpn currence in nat acl（nat-acl-number） and permit vpn currence in vpn acl(vpn-acl-number）
+acl number nat-acl-number
+ rule 3 deny ip source LOCAL-LAN 0.0.0.7 destination HUB-LAN 0.0.0.255
+acl number vpn-acl-number
+ rule 10 permit ip source LOCAL-LAN 0.0.0.7 destination HUB-LAN 0.0.0.255
+
+#--30
+ike proposal vpn-acl-number
+ encryption-algorithm aes-cbc 128
+
+#--40 phase1
+ike peer your-adsl-end-phase1-ike
+ exchange-mode aggressive           ###important
+ proposal vpn-acl-number
+ pre-shared-key your-pre-share-key 
+ id-type name                       ###must exist
+ remote-name center01               ###remote name
+ remote-address 12.4.1.42           ##HUB end fixed public IP
+ nat traversal                      ###needed if cross privite lan 
+
+#--50 phase2
+ipsec transform-set your-adsl-end-phase2-ipsec
+ encapsulation-mode tunnel
+ transform esp
+ esp authentication-algorithm sha1
+ esp encryption-algorithm aes-cbc-128
+
+#--60 integration
+ipsec policy tocenter vpn-acl-number isakmp
+ connection-name to-center
+ security acl vpn-acl-number
+ ike-peer your-adsl-end-phase1-ike
+ transform-set your-adsl-end-phase2-ipsec
+#
+
+#--70 outboud interface call
+interface GigabitEthernet0/0
+ port link-mode route
+ firewall packet-filter nat-acl-number inbound  ####not need ????
+ nat outbound nat-acl-number
+ ip address 10.0.1.1 255.255.255.0
+ ipsec no-nat-process enable          ####Must present,prevent vpn currence from nat 
+ ipsec policy tocenter                ####call policy
+
+#--80 route
+ ip route-static HUB-LAN 255.255.255.0 GigabitEthernet0/0 10.1.1.1
 
 2 fixed ip end
 a define vpn currence in vpn acl 
