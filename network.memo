@@ -709,6 +709,7 @@ b define vpn currence in vpn acl
 c1 set ike local-name adsl-end
 c2 set id-type name in ike peer segment
 c3 set remote-name in ike peer segment
+c3-1 set nat traversal in ike peer segment
 c4 set remote-address in ike peer segment(remote public fixed ip)
 d config other setting like site to site fixed ip
 e on vpn pc set a script ping fixed ip end lan address
