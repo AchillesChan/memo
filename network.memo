@@ -704,8 +704,8 @@ ike keychain your-phase-ike                                                     
 
 ####h3c site2site vpn with adsl#########
 1 adsl end
-a deny nat current on vpn current in nat acl 
-b define vpn current in vpn acl
+a deny nat currence on vpn current in nat acl 
+b define vpn currence in vpn acl
 c1 set ike local-name adsl-end
 c2 set id-type name in ike peer segment
 c3 set remote-name in ike peer segment
@@ -714,7 +714,7 @@ d config other setting like site to site fixed ip
 e on vpn pc set a script ping fixed ip end lan address
 
 2 fixed ip end
-a define vpn current in vpn acl 
+a define vpn currence in vpn acl 
 b set ike local-name fixed-end
 c set id-type name in ike peer segment
 d set remote-name in ike peer segment
