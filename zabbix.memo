@@ -1,3 +1,23 @@
+#######passive mode
+--10 zabbix_agentd.conf 
+LogFile=C:\zabbix_agentd.log
+StartAgents=0
+Server=srv-name-or-ip
+#ServerActive=srv-name-or-ip:port
+HostnameItem=system.hostname
+HostMetadataItem=system.uname
+
+--20 portal config
+configuration-->hosts-->target host-->host-->ip address change to 0.0.0.0
+
+-->Dns name change to null-->update
+
+configuration-->hosts-->target host-->host-->templates-->delete old temp
+-->select an active mode template-->add-->update
+
+
+#######passive mode
+
 ########zabbix_get syntax
 ./zabbix_get -s 127.0.0.1 -p 10050 -k "system.cpu.load[all,avg1]"
   
