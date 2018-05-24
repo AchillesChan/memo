@@ -53,7 +53,7 @@ sync {
 --comment 20 backup B
 sync {
 
-......like backup A segment
+......similar to backup A 
 
 }
 以上的配置文件名为backupcfg.lua,
