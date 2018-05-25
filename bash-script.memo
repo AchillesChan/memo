@@ -25,7 +25,7 @@ w #
 eof
 
 
-[[ -d $filePath ]] || mkdir -p "$filePath"
+[[ -d "$filePath" ]] || mkdir -p "$filePath"
 mkfs."$fileType" "$devicePartition"
 deviceUUID=$(blkid|grep "$devicePartition"|awk '{print $2}'|sed  's:"::g')
 
