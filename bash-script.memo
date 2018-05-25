@@ -1,3 +1,43 @@
+######auto create data partition###################
+#> cat auto-partition.sh 
+--10 requirement
+--1 1GB disk in /dev/sdc,fdisk to ext4,mount on /data
+
+--20 bash script
+#!/bin/bash
+set -u
+devicePath="/dev/sdc"
+filePath="/data"
+devicePartition="/dev/sdc5"
+fstabFile="/etc/fstab"
+fileType=ext4
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<eof |fdisk "$devicePath"    ####fdisk operation
+n #new
+e #extend
+  # space
+  # space
+  # space
+n #logical
+l #logical
+  # space
+  # space
+w #
+eof
+
+
+[[ -d $filePath ]] || mkdir -p "$filePath"
+mkfs."$fileType" "$devicePartition"
+deviceUUID=$(blkid|grep "$devicePartition"|awk '{print $2}'|sed  's:"::g')
+
+cp "$fstabFile" /tmp/                                          ###backup && write to fstab             
+echo "$deviceUUID    $filePath    "$fileType"     defaults       0 0" >>"$fstabFile"
+
+mount -a
+
+######auto create data partition###################
+
+
+
 ##########detecv port status V4####################
 ----10 main prog
 #cat /data/backup/detectServiceStatusV4.mon01.sh
