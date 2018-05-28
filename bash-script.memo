@@ -1,3 +1,51 @@
+######detect web status###########
+--10 script.sh
+#!/bin/bash
+set -u
+var_orgin=""
+var_new=""
+saved_var_file="saved_var"
+[ -e "$saved_var_file" ] || touch "$saved_var_file"
+while(true)
+do
+var_orgin=$(cat "$saved_var_file")
+var_new=$(parallel -a websites -j 4 -k 'curl -sL --connect-timeout 2 \
+        -w "%{url_effective} %{http_code}\n"  \
+        {} -o  /dev/null')
+
+if [ "$var_new" != "$var_orgin" ]
+then                                                                                                                                                                                      
+        echo "var-orgin value is $var_orgin"
+        echo "var-new value is $var_new"
+        echo -n "====++++====somethin wrong======++++===="
+        echo "$var_new" > "$saved_var_file"
+        var_orgin="$var_new"
+fi
+sleep 3s
+done
+
+
+--20 websites content
+www.abc.com
+www.abc.com:8080
+
+
+--30 call
+sh script.sh
+
+--40 result
+--8080 port from 000 to 200
+
+......
+var-orgin value is HTTP://www.abc.com:8080/ 000
+HTTP://www.abc.com/ 200
+var-new value is HTTP://www.abc.com:8080/ 200
+HTTP://www.abc.com/ 200
+====++++====somethin wrong======++++====
+......
+######detect web status###########
+
+
 ######auto create data partition###################
 #> cat auto-partition.sh 
 --10 requirement
