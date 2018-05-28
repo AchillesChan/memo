@@ -1,28 +1,23 @@
 ######detect web status###########
 --10 script.sh
-#!/bin/bash
 set -u
 var_orgin=""
-var_new=""
+var_new="new_var"
 saved_var_file="saved_var"
-[ -e "$saved_var_file" ] || touch "$saved_var_file"
+[ -e "$saved_var_file" ] || touch "$saved_var_file" 
+[ -e "$var_new" ] || touch "$var_new" 
 while(true)
 do
-var_orgin=$(cat "$saved_var_file")
-var_new=$(parallel -a websites -j 4 -k 'curl -sL --connect-timeout 2 \
+var_orgin=$(cat "$saved_var_file")    
+parallel -a websites -j 4 -k 'curl -sL --connect-timeout 2 \ 
         -w "%{url_effective} %{http_code}\n"  \
-        {} -o  /dev/null')
+        {} -o  /dev/null' >"$var_new" 
+awk -v af="new_var" -v bf="saved_var" 'FNR==NR{temp[$1]=$2}
+     FNR!=NR{
+     if(temp[$1]!=$2)
+             {system("cp new_var saved_var")}
+     }' "$var_new" "$saved_var_file"      
 
-if [ "$var_new" != "$var_orgin" ]
-then                                                                                                                                                                                      
-        echo "var-orgin value is $var_orgin"
-        echo "var-new value is $var_new"
-        echo -n "====++++====somethin wrong======++++===="
-        echo "$var_new" > "$saved_var_file"
-        var_orgin="$var_new"
-fi
-sleep 3s
-done
 
 
 --20 websites content
@@ -34,15 +29,7 @@ www.abc.com:8080
 sh script.sh
 
 --40 result
---8080 port from 000 to 200
 
-......
-var-orgin value is HTTP://www.abc.com:8080/ 000
-HTTP://www.abc.com/ 200
-var-new value is HTTP://www.abc.com:8080/ 200
-HTTP://www.abc.com/ 200
-====++++====somethin wrong======++++====
-......
 ######detect web status###########
 
 
