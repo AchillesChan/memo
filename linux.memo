@@ -49,52 +49,61 @@ vim zero-width assertions
  12 yyyxxxyyy
 
 --110   
-vim-cmd  %s:xxx\(yyy\)\@=:-eks-Followed-wai-:g
+vim-cmd  %s:xxx\(yyy\)\@=:3x-Followed-3y:g
 
 Result:
 
-  7 -eks-Followed-wai-yyy
+  7 3x-Followed-3y-yyy
   8 yyyxxx
   9 xxx yyy
  10 yyy xxx
- 11 -eks-Followed-wai-yyyxxx
- 12 yyy-eks-Followed-wai-yyy  
+ 11 3x-Followed-3y-yyyxxx
+ 12 yyy-3x-Followed-3y-yyy  
 
 --120
-vim-cmd  %s:xxx\(yyy\)\@!:-eks-not-Followed-wai-:g
+vim-cmd  %s:xxx\(yyy\)\@!:3x-not-Followed-3y:g
 
 Result:
 
   7 xxxyyy
-  8 yyy-eks-not-Followed-wai-
-  9 -eks-not-Followed-wai- yyy
- 10 yyy -eks-not-Followed-wai-
- 11 xxxyyy-eks-not-Followed-wai-                                                                                            
+  8 yyy-3x-not-Followed-3y
+  9 3x-not-Followed-3y yyy
+ 10 yyy 3x-not-Followed-3y
+ 11 xxxyyy-3x-not-Followed-3y                                                                                            
+ 12 yyyxxxyyy
+
+
+--100 orgin
+  7 xxxyyy                                                                                                                  
+  8 yyyxxx
+  9 xxx yyy
+ 10 yyy xxx
+ 11 xxxyyyxxx
  12 yyyxxxyyy
 
 --130 
-vim-cmd  %s:\(yyy\)\@<!xxx:-eks-NotPrecededWith-wai:g
+vim-cmd  %s:\(yyy\)\@<!xxx:3x-NotPrecededWith-3y:g
 
 Result:
 
-  7 -eks-NotPrecededWith-waiyyy
+  7 3x-NotPrecededWith-3y-yyy
   8 yyyxxx
-  9 -eks-NotPrecededWith-wai yyy
- 10 yyy -eks-NotPrecededWith-wai
- 11 -eks-NotPrecededWith-waiyyyxxx                                                                                                 
+  9 3x-NotPrecededWith-3y yyy
+ 10 yyy 3x-NotPrecededWith-3y
+ 11 3x-NotPrecededWith-3y-yyyxxx                                                                                                 
  12 yyyxxxyyy
 
 --140
-vim-cmd  %s:\(yyy\)\@<=xxx:-eks-PrecededWith-wai:g
+vim-cmd  %s:\(yyy\)\@<=xxx:3x-PrecededWith-3y:g
 
 Result:
 
   7 xxxyyy
-  8 yyy-eks-PrecededWith-wai
+  8 yyy-3x-PrecededWith-3y
   9 xxx yyy
  10 yyy xxx
- 11 xxxyyy-eks-PrecededWith-wai
- 12 yyy-eks-PrecededWith-waiyyy    
+ 11 xxxyyy-3x-PrecededWith-3y
+ 12 yyy-3x-PrecededWith-3y-yyy    
 
 ####sed and vim regex#####
 
