@@ -1,3 +1,113 @@
+####sed and vim regex#####
+--05 sed cmd  
+sed -En 's/(12|34|56)(abc){1,3}[a-d]/num/p' 
+()represented group
+[]represented list
+{}represented repeat
+
+vim extended regex mode
+--10 vim cmd
+
+:%s:\v(12|34)(abc){1}[a-d]:NumB:g
+  key is \v represented extended mode 
+--20
+orgin
+  1 12abcd1
+  2 34abcabce2
+  3 56abcabcabcd3
+  4 34abcabce4
+  5 56abcabcabc1    
+--30
+processed
+  1 NumB1
+  2 NumBbce2
+  3 56abcabcabcd3
+  4 NumBbce4                                                                                                                
+  5 56abcabcabc1
+
+
+vim zero-width assertions
+:help \@
+\@=     Matches the preceding atom with zero width. {not in Vi}
+        Like "(?=pattern)" in Perl.
+        Example                 matches  
+        foo\(bar\)\@=           "foo" in "foobar"
+        foo\(bar\)\@=foo        nothing
+
+---link: https://quickteckiteasy.blogspot.com.au/2011/06/vim-search-with-zero-width.html
+\@=   Zero-width positive look ahead assertion 
+\@!   Zero-width negative look ahead assertion
+\@<=  Zero-width positive look behind assertion
+\@<!  Zero-width negative look behind assertion
+
+--100 orgin
+  7 xxxyyy                                                                                                                  
+  8 yyyxxx
+  9 xxx yyy
+ 10 yyy xxx
+ 11 xxxyyyxxx
+ 12 yyyxxxyyy
+
+--110   
+vim-cmd  %s:xxx\(yyy\)\@=:-eks-Followed-wai-:g
+
+Result:
+
+  7 -eks-Followed-wai-yyy
+  8 yyyxxx
+  9 xxx yyy
+ 10 yyy xxx
+ 11 -eks-Followed-wai-yyyxxx
+ 12 yyy-eks-Followed-wai-yyy  
+
+--120
+vim-cmd  %s:xxx\(yyy\)\@=:-eks-Followed-wai-:g
+
+Result:
+
+  7 xxxyyy
+  8 yyy-eks-not-Followed-wai-
+  9 -eks-not-Followed-wai- yyy
+ 10 yyy -eks-not-Followed-wai-
+ 11 xxxyyy-eks-not-Followed-wai-                                                                                            
+ 12 yyyxxxyyy
+
+--130 
+vim-cmd  %s:\(yyy\)\@<!xxx:-eks-NotPrecededWith-wai:g
+
+Result:
+
+  7 -eks-NotPrecededWith-waiyyy
+  8 yyyxxx
+  9 -eks-NotPrecededWith-wai yyy
+ 10 yyy -eks-NotPrecededWith-wai
+ 11 -eks-NotPrecededWith-waiyyyxxx                                                                                                 
+ 12 yyyxxxyyy
+
+--140
+vim-cmd  %s:\(yyy\)\@<=xxx:-eks-PrecededWith-wai:g
+
+Result:
+
+  7 xxxyyy
+  8 yyy-eks-PrecededWith-wai
+  9 xxx yyy
+ 10 yyy xxx
+ 11 xxxyyy-eks-PrecededWith-wai
+ 12 yyy-eks-PrecededWith-waiyyy    
+
+####sed and vim regex#####
+
+######去掉windows下的回车符（^M 写法 ^M 是回车换行符,先CTRL+v,松开v,按m)
+1)sed -i 's/^M//g' filename
+
+2) 在vim下类似(probably not take effect yet)
+
+:%s/^M//g
+######去掉windows下的回车符（^M 写法 ^M 是回车换行符,先CTRL+v,松开v,按m)
+
+
+
 #######linux add to Windows AD#######
 --05 set dns server
 at /etc/resolv.conf 
