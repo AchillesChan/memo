@@ -61,7 +61,7 @@ Result:
  12 yyy-eks-Followed-wai-yyy  
 
 --120
-vim-cmd  %s:xxx\(yyy\)\@=:-eks-Followed-wai-:g
+vim-cmd  %s:xxx\(yyy\)\@!:-eks-not-Followed-wai-:g
 
 Result:
 
