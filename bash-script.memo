@@ -1,3 +1,21 @@
+#########calculate#########
+--10 code
+#> cat calculate.sh 
+#!/bin/bash
+varA=10
+varB=20
+varC=4
+result=""
+result=$((($varA+$varB)/$varC))
+echo $result
+
+--20 result 
+#> sh calculate.sh 
+7
+
+#########calculate#########
+
+
 ######detect web status###########
 --10 script.sh
 set -u
