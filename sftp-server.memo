@@ -13,18 +13,13 @@ $> ll -d /home/
 drwxr-xr-x 4 root root 4096 May 31 14:32 /home/
 $> ll -d /home/sftp-user/ 
 drwxr-xr-x 3 sftp-user sftp-group 4096 May 31 15:15 /home/sftp-user/
-$> ll -d /home/sftp-user/
-.bash_logout   .bash_profile  .bashrc        data/           
 $> ll -d /home/sftp-user/data/
 drwxr-xr-x 3 sftp-user sftp-group 4096 May 31 15:15 /home/sftp-user/data/
-
-
 
 $> cat /etc/passwd |grep sftp-data
 sftp-user:x:1005:1006::/home/sftp-user:/sbin/nologin
 $> id  sftp-user
 uid=1005(sftp-user) gid=1006(sftp-group) groups=1006(sftp-group)
-
 
 $> grep -A 3 sftp-group /etc/ssh/sshd_config 
 ......
@@ -35,11 +30,8 @@ Match group sftp-group
     ForceCommand internal-sftp
     PasswordAuthentication yes
 
-
 $> systemctl restart sshd 
 ####verified
-
-
 
 
 
