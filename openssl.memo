@@ -1,3 +1,5 @@
+######Startmemoof openssl.memo #######
+######Start openssl.memo #######
 ####verify csr
 $>openssl req -in abc.csr -noout -text
 Certificate Request:
@@ -64,3 +66,5 @@ Getting CA Private Key
 server.crt
 
 
+######End openssl.memo #######
+######Endmemoof openssl.memo #######

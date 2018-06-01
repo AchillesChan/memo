@@ -1,3 +1,5 @@
+######Startmemoof nfs.memo #######
+######Start nfs.memo #######
 ####link https://www.howtoforge.com/nfs-server-and-client-on-centos-7
 
 如果stale之类的错误，使用umount解除已经mount的文件系统；
@@ -144,3 +146,5 @@ This will make the permanent mount of the NFS-share. Now you can reboot the mach
 
 Cheers now we have a successfully configured NFS-server over CentOS 7.0 :)
 
+######End nfs.memo #######
+######Endmemoof nfs.memo #######

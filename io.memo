@@ -1,3 +1,5 @@
+######Startmemoof io.memo #######
+######Start io.memo #######
 ==========windows=================
 during 60s random write 99% file 1G block 8k threads 8 on t1.dat-to-8.dat
 .\diskspd.exe -d60 -r -w99 -c1G -b 8k -t8 t1.dat t2.dat t3.dat t4.dat 5.dat 6.dat 7.dat 8.dat
@@ -141,3 +143,5 @@ lasting 10 seconds:
   diskspd -c1G -b4K -t2 -d10 -a0,1 testfile1.dat testfile2.dat
 
 ==========windows=================
+######End io.memo #######
+######Endmemoof io.memo #######

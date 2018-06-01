@@ -1,3 +1,5 @@
+######Startmemoof vsftpd.memo #######
+######Start vsftpd.memo #######
 ########vsftpd.conf
 anonymous_enable=NO
 local_enable=YES
@@ -167,3 +169,5 @@ then set required permission on /var/www/
 tips 启动出错时，可以直接运行vsftpd查看出错信息；
 可以查看/var/log/secure和/var/log/messages日志
 
+######End vsftpd.memo #######
+######Endmemoof vsftpd.memo #######

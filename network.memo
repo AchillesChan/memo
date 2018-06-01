@@ -1,3 +1,5 @@
+######Startmemoof network.memo #######
+######Start network.memo #######
 ====================================================
 ====================================================
 ====================================================
@@ -910,3 +912,5 @@ Save and close the file. Restart networking:
 At the DOS prompt, type in ping www.yahoo.com -f -l 1492 and hit the Enter key:
 The results above indicate that the packet needs to be fragmented. Repeat this test, lowering the size the packet in increments of +/-10 (e.g. 1472, 1462, 1440, 1400) until you have a packet size that does not fragment:
 
+######End network.memo #######
+######Endmemoof network.memo #######

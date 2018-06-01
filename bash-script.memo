@@ -1,3 +1,5 @@
+######Startmemoof bash-script.memo #######
+######Start bash-script.memo #######
 #########calculate#########
 --10 code
 #> cat calculate.sh 
@@ -130,3 +132,5 @@ sed -i 's# WRONG##g' "$logFile"  ##删除多余的WRONG字符
 ----30 output
 ##输出格式：2017xxxx：WRONG HOST1 HOST2  .....
 ##########detecv port status V4 END侦测端口开启状态 ####################
+######End bash-script.memo #######
+######Endmemoof bash-script.memo #######

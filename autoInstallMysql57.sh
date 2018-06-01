@@ -1,3 +1,5 @@
+######Startmemoof autoInstallMysql57.sh #######
+######Start autoInstallMysql57.sh #######
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/usr/local/mysq/bin
 export PATH
@@ -63,3 +65,5 @@ systemctl start mysqld
 ln -s $installPath/bin/* /bin/
 
 echo "Install mysqld successful"
+######End autoInstallMysql57.sh #######
+######Endmemoof autoInstallMysql57.sh #######

@@ -1,3 +1,5 @@
+######Startmemoof powershell.memo #######
+######Start powershell.memo #######
 ###powershell manangement iis####
 
 
@@ -566,3 +568,5 @@ Set-AzureStaticVNetIP $_.myipaddr |
 New-AzureVM -ServiceName $mycloud -VNetName $mynet
 }
 
+######End powershell.memo #######
+######Endmemoof powershell.memo #######

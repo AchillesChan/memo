@@ -1,3 +1,5 @@
+######Startmemoof sniffer.memo #######
+######Start sniffer.memo #######
 Tcpdump usage examples from https://www.rationallyparanoid.com/articles/tcpdump.html
 
 #############get sniffer packages and use string read it
@@ -110,3 +112,5 @@ Capture all bytes of data within the packet:
 tcpdump -s 0
 
 Article first published March 13, 2010. Last updated October 1, 2014.
+######End sniffer.memo #######
+######Endmemoof sniffer.memo #######

@@ -1,3 +1,5 @@
+######Startmemoof redis.memo #######
+######Start redis.memo #######
 Redis下载安装
 
 0:insatll dependent
@@ -77,3 +79,5 @@ b: set protected-mode
 c: rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
 d: or disable command rename-command CONFIG ""
 
+######End redis.memo #######
+######Endmemoof redis.memo #######

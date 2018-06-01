@@ -1,3 +1,5 @@
+######Startmemoof awk.memo #######
+######Start awk.memo #######
 
 ##############awk vlookup replace by array#############
 $> cat array-replace.awk
@@ -274,3 +276,5 @@ printf("\n")  #换行
 
  C:\Documents and Settings\All Users\「开始」菜单Windows Catalog.lnk 398
 
+######End awk.memo #######
+######Endmemoof awk.memo #######

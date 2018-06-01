@@ -1,3 +1,5 @@
+######Startmemoof azure.memo #######
+######Start azure.memo #######
 ####set fixed public for cloud service##
 
 --10 service must have least one vm 
@@ -13,3 +15,5 @@
 Select-AzureSubscription -SubscriptionName "your-scubscription"
 
 ####set fixed public for cloud service##
+######End azure.memo #######
+######Endmemoof azure.memo #######

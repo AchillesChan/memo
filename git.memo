@@ -1,3 +1,5 @@
+######Startmemoof git.memo #######
+######Start git.memo #######
 
 user@linux:~/git> ssh-add ~/.ssh/rsa-key
 Enter passphrase for /home/user/.ssh/rsa-key:
@@ -72,3 +74,5 @@ Author: root <root@your-name.localdomain>
 Date:   Fri Aug 4 17:48:58 2017 +0800
 
 5th
+######End git.memo #######
+######Endmemoof git.memo #######

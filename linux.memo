@@ -1,3 +1,5 @@
+######Startmemoof linux.memo #######
+######Start linux.memo #######
 ####sed and vim regex#####
 --05 sed cmd  
 sed -En 's/(12|34|56)(abc){1,3}[a-d]/num/p' 
@@ -2380,3 +2382,5 @@ diff
 
 #空格高亮黄色
 set nohls取消搜索的高亮关键字。
+######End linux.memo #######
+######Endmemoof linux.memo #######

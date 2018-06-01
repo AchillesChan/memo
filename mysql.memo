@@ -1,3 +1,5 @@
+######Startmemoof mysql.memo #######
+######Start mysql.memo #######
 ########SQL: Find out number of rows of all tables within a MySQL database
 mysql>SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database' order by table_rows;
 
@@ -2767,3 +2769,5 @@ then
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
 fi
 
+######End mysql.memo #######
+######Endmemoof mysql.memo #######

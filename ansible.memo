@@ -1,3 +1,5 @@
+######Startmemoof ansible.memo #######
+######Start ansible.memo #######
 ######How to continue execution on failed task after fixing error in playbook?
 --10 Link:
 https://stackoverflow.com/questions/29900096/how-to-continue-execution-on-failed-task-after-fixing-error-in-playbook
@@ -515,3 +517,5 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr
 export PATH
 yum install -y vsftpd
 service vsftpd start
+######End ansible.memo #######
+######Endmemoof ansible.memo #######

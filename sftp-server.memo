@@ -1,3 +1,5 @@
+######Startmemoof sftp-server.memo #######
+######Start sftp-server.memo #######
 --10 server end 
 #server on centos 7.3 azure
 ##This can use sftp but not ssh login
@@ -54,3 +56,5 @@ shahrilk@ip_or_dns's password:
 Could not chdir to home directory /data/shahrilk/upload: No such file or directory
 This service allows sftp connections only.
 Connection to ip_or_dns closed.
+######End sftp-server.memo #######
+######Endmemoof sftp-server.memo #######

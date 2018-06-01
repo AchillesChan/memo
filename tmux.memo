@@ -1,3 +1,5 @@
+######Startmemoof tmux.memo #######
+######Start tmux.memo #######
 tmux.conf
 set -g prefix M-q  
 
@@ -39,3 +41,5 @@ scroll                         Prex + [ or Prex + PageUP //input 'q' exit scroll
 
 
 
+######End tmux.memo #######
+######Endmemoof tmux.memo #######

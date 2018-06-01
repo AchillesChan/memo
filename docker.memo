@@ -1,3 +1,5 @@
+######Startmemoof docker.memo #######
+######Start docker.memo #######
 
  
 ####kubernetes best practice####
@@ -373,3 +375,5 @@ fi
 ] 27.57MB/82.5MB
 eca642e7826b: Download complete
 3638d91a9039: Download complete ########################################################
+######End docker.memo #######
+######Endmemoof docker.memo #######

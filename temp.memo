@@ -1,3 +1,5 @@
+######Startmemoof temp.memo #######
+######Start temp.memo #######
 https://www.zybuluo.com/ncepuwanghui/note/953929 使用kubeadm在CentOS 7上安装Kubernetes 1.8
 https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/  How to Install Kubernetes (k8s) 1.7 on CentOS 7 / RHEL 7
 https://blog.csdn.net/aixiaoyang168/article/details/78411511 国内使用 kubeadm 在 Centos 7 搭建 Kubernetes 集群
@@ -64,3 +66,5 @@ https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
 https://www.tecmint.com/mysql-mariadb-performance-tuning-and-optimization/  15 Useful MySQL/MariaDB Performance Tuning and Optimization Tips 有调优建议脚本
 
 https://www.percona.com/blog/2016/10/12/mysql-5-7-performance-tuning-immediately-after-installation/ MySQL 5.7 Performance Tuning Immediately After Installation
+######End temp.memo #######
+######Endmemoof temp.memo #######

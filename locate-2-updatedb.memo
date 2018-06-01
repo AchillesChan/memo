@@ -1,3 +1,5 @@
+######Startmemoof locate-2-updatedb.memo #######
+######Start locate-2-updatedb.memo #######
 # /etc/updatedb.conf: config file for mlocate
 
 # This file sets variables that are used by updatedb.
@@ -20,3 +22,5 @@ PRUNENAMES=".git .hg .svn CVS .snapshots"  #####very import ,or many junk files
 ####on opensuse
 sudo updatedb
 locate /somepath somefile 
+######End locate-2-updatedb.memo #######
+######Endmemoof locate-2-updatedb.memo #######

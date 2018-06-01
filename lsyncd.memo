@@ -1,3 +1,5 @@
+######Startmemoof lsyncd.memo #######
+######Start lsyncd.memo #######
 ############使用证书的成功的配置############
 PATT，注意：源和目标都要有rsync软件
 源一定有lsyncd,版本2.1.6;
@@ -112,3 +114,5 @@ https://www.lucasrolff.com/ha/replication-using-lsyncd/
 http://blog.uouo123.com/post/100.html
 https://www.scalescale.com/tips/nginx/lsyncd-live-file-syncronization-linux/#
 
+######End lsyncd.memo #######
+######Endmemoof lsyncd.memo #######

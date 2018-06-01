@@ -1,3 +1,5 @@
+######Startmemoof IIS.memo #######
+######Start IIS.memo #######
 #####install certificate
 link:
 https://knowledge.geotrust.com/support/knowledge-base/index?page=content&id=SO22115&actp=search&viewlocale=en_US&searchid=1481962109651
@@ -48,3 +50,5 @@ From the {SSL} Certificate drop down, Select the Friendly Name for the SSL certi
 	1. Click Start > Administrative Tools > Internet Information Services (IIS) Manager
 	2. Click IIS server >double click Server Certifcate >The Certificate listed >Verify Certificate domain,expire date,hash,Store is in Person
 #####install certificate
+######End IIS.memo #######
+######Endmemoof IIS.memo #######

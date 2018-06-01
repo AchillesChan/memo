@@ -1,3 +1,5 @@
+######Startmemoof pythondemo.py #######
+######Start pythondemo.py #######
 http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy SFTP uploading with paramiko
 
 https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
@@ -332,3 +334,5 @@ except:
 
 # 关闭数据库连接
 db.close()                     
+######End pythondemo.py #######
+######Endmemoof pythondemo.py #######

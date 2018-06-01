@@ -1,3 +1,5 @@
+######Startmemoof parellel-ping.py #######
+######Start parellel-ping.py #######
 link:http://blog.boa.nu/2012/10/python-threading-example-creating-pingerpy.html
 #!/usr/bin/env python
 
@@ -68,3 +70,5 @@ if __name__ == '__main__':
         ]
 
     print ping.start()
+######End parellel-ping.py #######
+######Endmemoof parellel-ping.py #######

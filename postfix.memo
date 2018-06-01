@@ -1,3 +1,5 @@
+######Startmemoof postfix.memo #######
+######Start postfix.memo #######
 ######postfix config##########
 ##########plain txt###########
 ########Example.com has MX dns record
@@ -332,3 +334,5 @@ perl -MMIME::Base64 -e 'print encode_base64("password");'
 
     When you are done checking your email, type quit.
 
+######End postfix.memo #######
+######Endmemoof postfix.memo #######

@@ -1,3 +1,5 @@
+######Startmemoof rabbitmq-server.memo #######
+######Start rabbitmq-server.memo #######
 install rabbitmq on centos centOs6.7/7.3
 
 ##step 10
@@ -57,3 +59,5 @@ FAQ http://blog.csdn.net/qq315737546/article/details/53105418
 RPM安装
 http://blog.csdn.net/zhu_tianwei/article/details/53572604
 
+######End rabbitmq-server.memo #######
+######Endmemoof rabbitmq-server.memo #######

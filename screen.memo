@@ -1,3 +1,5 @@
+######Startmemoof screen.memo #######
+######Start screen.memo #######
 ########screen config 20170320######
 ###prex-key(ie Ctrl+a) + Esc and up row scroll
 hardstatus on
@@ -92,3 +94,5 @@ shareimprove this answer
 add unset PROMPT_COMMAND  TO ~/.bashrc end or /etc/profile end
 
 If $PROMPT_COMMAND is empty, check $PS1. – choroba Oct 22 '14 at 22:44
+######End screen.memo #######
+######Endmemoof screen.memo #######

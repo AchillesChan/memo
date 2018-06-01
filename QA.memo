@@ -1,3 +1,5 @@
+######Startmemoof QA.memo #######
+######Start QA.memo #######
 ###update testlink version:database update
 
 Okay, finally I understand how to update the db schame. Here is the way:
@@ -23,3 +25,5 @@ source d:/1.9.13/mysql/DB.1.9.13/step1/db_schema_update.sql;
 source d:/1.9.13/mysql/DB.1.9.13/stepZ/z_final_step.sql;
 source d:/1.9.14/mysql/DB.1.9.14/step1/db_schema_update.sql;
 source d:/1.9.14/mysql/DB.1.9.14/stepZ/z_final_step.sql;
+######End QA.memo #######
+######Endmemoof QA.memo #######

@@ -1,3 +1,5 @@
+######Startmemoof zabbix.memo #######
+######Start zabbix.memo #######
 #######passive mode
 --10 zabbix_agentd.conf 
 LogFile=C:\zabbix_agentd.log
@@ -97,3 +99,5 @@ HostnameItem=system.hostname  ###自动注册
 HostMetadataItem=system.uname ###按照操作系统自动归类
 
 ######windows 使用mobaxterm ssh tunnnel 
+######End zabbix.memo #######
+######Endmemoof zabbix.memo #######

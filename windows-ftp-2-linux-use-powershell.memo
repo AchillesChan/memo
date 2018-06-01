@@ -1,3 +1,5 @@
+######Startmemoof windows-ftp-2-linux-use-powershell.memo #######
+######Start windows-ftp-2-linux-use-powershell.memo #######
 # FTP Server Variables
 $FTPHost = 'ftp://host:port/'
 $FTPUser = 'user'
@@ -72,3 +74,5 @@ foreach ($UploadFolder in "local-dest-directory")
 	}
 }  
 
+######End windows-ftp-2-linux-use-powershell.memo #######
+######Endmemoof windows-ftp-2-linux-use-powershell.memo #######
