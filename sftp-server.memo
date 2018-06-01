@@ -1,3 +1,4 @@
+--10 server end 
 #server on centos 7.3 azure
 ##This can use sftp but not ssh login
 ###Reference https://www.howtoforge.com/tutorial/how-to-setup-an-sftp-server-on-centos/
@@ -31,11 +32,8 @@ Match group sftp-group
     PasswordAuthentication yes
 
 $> systemctl restart sshd 
-####verified
 
-
-
-#####client
+--20 client
 ~> sftp -P Your_port shahrilk@ip_or_dns_name
 shahrilk@ip_or_dns_name's password: 
 Connected to ip_or_dns_name.
@@ -44,7 +42,7 @@ upload
 sftp> cd upload
 sftp> put demo.py
 Uploading demo.py to /upload/demo.py
-demo.py                                                                                                                                                                      100%  423     0.4KB/s   00:00    
+demo.py             100%  423     0.4KB/s   00:00    
 sftp> cd /tmp
 Couldn't canonicalize: No such file or directory
 sftp> ls
