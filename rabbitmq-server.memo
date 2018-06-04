@@ -51,6 +51,11 @@ LISTEN     0      128          *:25672                    *:*                   
 LISTEN     0      128         :::5672                    :::*                   users:(("beam.smp",pid=39937,fd=53))
 
 
+###security access management protal
+ssh -NCfqL 15672:localhost:15672 user@rabbit-server
+http://127.0.0.1:15672
+
+
 参考：(注意参考资料中的中文字符和命令正确性，查看官网更高效)
 
 https://www.rabbitmq.com/management.html
