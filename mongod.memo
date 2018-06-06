@@ -119,11 +119,5 @@ $ >sudo systemctl status mongod
    CGroup: /system.slice/mongod.service
            └─1061 /usr/bin/mongod -f /etc/mongod.conf
 
-Jun 05 16:55:47 b-wms-app02l systemd[1]: Starting High-performance, schema-free document-oriented database...
-Jun 05 16:55:47 b-wms-app02l mongod[1019]: about to fork child process, waiting until server is ready for connections.
-Jun 05 16:55:47 b-wms-app02l mongod[1019]: forked process: 1061
-Jun 05 16:55:50 b-wms-app02l systemd[1]: Started High-performance, schema-free document-oriented database.
-
-
 ######End  mongod.memo #######
 ######Endmemoof mongod.memo #######
