@@ -94,6 +94,7 @@ $> cat /etc/delay_start_mongod.sh
 #!/bin/sh
 sleep 8s
 echo never >/sys/kernel/mm/transparent_hugepage/defrag
+echo never >/sys/kernel/mm/transparent_hugepage/enabled
 sleep 2s
 systemctl start mongod
 
