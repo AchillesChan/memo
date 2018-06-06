@@ -1,0 +1,126 @@
+
+
+--10 add repo
+$> sudo vi /etc/yum.repos.d/mongodb-org.repo
+/etc/yum.repos.d/mongodb-org.repo
+
+[mongodb-org-3.4]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+
+$ > yum repolist
+
+--20 install mongo
+sudo yum -y install mongodb-org
+
+sudo systemctl start mongod
+
+sudo systemctl enable mongod
+
+--30 setup cfg ##PATT DBPATH, LOGPATH, PIDPATH, LISTEN INTERFACE
+$>sudo  cat /etc/mongod.conf |grep -v '#'
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+storage:
+  dbPath: /data/mongo
+  journal:
+    enabled: true
+
+processManagement:
+
+net:
+  port: 27017
+
+
+
+
+$>sudo systemctl cat mongod.service
+# /usr/lib/systemd/system/mongod.service
+[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+Documentation=https://docs.mongodb.org/manual
+
+[Service]
+User=mongod
+Group=mongod
+Environment="OPTIONS=-f /etc/mongod.conf"
+ExecStart=/usr/bin/mongod $OPTIONS
+ExecStartPre=/usr/bin/mkdir -p /data/mongo
+ExecStartPre=/usr/bin/chown mongod:mongod /data/mongo
+ExecStartPre=/usr/bin/chmod 0755 /data/mongo
+PermissionsStartOnly=true
+PIDFile=/data/mongo/mongod.pid
+Type=forking
+# file size
+LimitFSIZE=infinity
+# cpu time
+LimitCPU=infinity
+# virtual memory size
+LimitAS=infinity
+# open files
+LimitNOFILE=64000
+# processes/threads
+LimitNPROC=64000
+# locked memory
+LimitMEMLOCK=infinity
+# total threads (user+kernel)
+TasksMax=infinity
+TasksAccounting=false
+# Recommended limits for for mongod as specified in
+# http://docs.mongodb.org/manual/reference/ulimit/#recommended-settings
+
+[Install]
+WantedBy=multi-user.target
+
+$ >sudo systemctl daemon-reload && systemctl restart mongod
+
+$>sudo echo never >/sys/kernel/mm/transparent_hugepage/enabled
+
+--35 delay_start_mongod After disable THB
+$>grep never -A 1 -B 1 /var/log/mongodb/mongod.log
+###need prevent message from log like those:
+** WARNING: /sys/kernel/mm/transparent_hugepage/defrag is 'always'.
+**        We suggest setting it to 'never'
+
+$> cat /etc/delay_start_mongod.sh 
+#!/bin/sh
+sleep 8s
+echo never >/sys/kernel/mm/transparent_hugepage/defrag
+sleep 2s
+systemctl start mongod
+
+$> cat /etc/crontab
+......
+@reboot     root   /etc/delay_start_mongod.sh
+......
+
+--40 result
+$ >sudo ss -tlnp|grep 27017
+LISTEN     0      128          *:27017                    *:*                   users:(("mongod",pid=1061,fd=7))
+
+$ >sudo systemctl status mongod
+● mongod.service - High-performance, schema-free document-oriented database
+   Loaded: loaded (/usr/lib/systemd/system/mongod.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2018-06-05 16:55:50 CST; 5min ago
+     Docs: https://docs.mongodb.org/manual
+  Process: 1019 ExecStart=/usr/bin/mongod $OPTIONS (code=exited, status=0/SUCCESS)
+  Process: 1015 ExecStartPre=/usr/bin/chmod 0755 /data/mongo (code=exited, status=0/SUCCESS)
+  Process: 1007 ExecStartPre=/usr/bin/chown mongod:mongod /data/mongo (code=exited, status=0/SUCCESS)
+  Process: 965 ExecStartPre=/usr/bin/mkdir -p /data/mongo (code=exited, status=0/SUCCESS)
+ Main PID: 1061 (mongod)
+   CGroup: /system.slice/mongod.service
+           └─1061 /usr/bin/mongod -f /etc/mongod.conf
+
+Jun 05 16:55:47 b-wms-app02l systemd[1]: Starting High-performance, schema-free document-oriented database...
+Jun 05 16:55:47 b-wms-app02l mongod[1019]: about to fork child process, waiting until server is ready for connections.
+Jun 05 16:55:47 b-wms-app02l mongod[1019]: forked process: 1061
+Jun 05 16:55:50 b-wms-app02l systemd[1]: Started High-performance, schema-free document-oriented database.
+
+
