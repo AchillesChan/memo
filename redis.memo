@@ -68,11 +68,26 @@ OK
  "david"
 
 12: on boot 
+Centos 6:
 echo "/path/2/redis-server /path/2/redis-conf" >>/etc/rc.local
 or
 echo "@reboot    root     /path/2/redis-server /path/2/redis-conf" >>/etc/crontab
 
-12: security
+Centos7
+$> cat /usr/lib/systemd/system/redis.service 
+[Unit]
+Description=redis
+After=network.target
+[Service]
+WorkingDirectory=/usr/local/redis
+ExecStart=/usr/local/redis/src/redis-server    
+User=root                                                                                                                                                                                 
+[Install]
+WantedBy=multi-user.target
+
+$> systemctl daemon-reload && systemctl enable redis && systemctl start redis
+
+13: security
 redis.conf
 a: bind some-specfic ip and port
 b: set protected-mode 
