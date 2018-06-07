@@ -2,6 +2,20 @@
 ######Start linux.memo #######
 
 
+#####strace##########
+strace -f -r -s 30 -o debug.log  -e trace=file \
+ /path/2/cmd -f /path/2/conf --args 
+
+-f follow forks
+-r relative time 
+-s char number 
+-e trace filter
+-o save to file 
+
+PATT:exec native cmd instead service or systemctl
+to get more exactly info
+#####strace##########
+
 ###Centos 7 opt####
 --10 set somaxconn
 #> sysctl -a|grep somaxconn
