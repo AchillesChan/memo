@@ -1,5 +1,29 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
+--05 install with tar
+a> sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+b> useradd mongod -s /bin/false
+
+c> mkdir -p /var/log/mongodb && chown -R mongod.mongod /var/log/mongodb
+
+d> tar zxf /tmp/mongodb-linux-x86_64-3.6.5.tgz && mv mongodb-linux-x86_64-3.6.5 /usr/local/mongod
+
+e> ln -s /usr/local/mongod/bin/* /bin
+
+f> setup mongod.conf                ##see below
+
+g> setup mongo.service              ##see below
+
+h> set daemon and firewall 
+ systemctl daemon-reload &&  firewall-cmd --add-port 27017/tcp --permanent && firewall-cmd --reload
+
+i> dd delay_start_mongod to crontab
+
+@reboot    root    /etc/delay_start_mongod.sh
+
+j> start mongod
+/bin/sh /etc/delay_start_mongod.sh
 
 --10 add repo
 $> sudo vi /etc/yum.repos.d/mongodb-org.repo
@@ -23,20 +47,50 @@ sudo systemctl enable mongod
 
 --30 setup cfg ##PATT DBPATH, LOGPATH, PIDPATH, LISTEN INTERFACE
 $>sudo  cat /etc/mongod.conf |grep -v '#'
+# mongod.conf                                                                                                                                                                                                 
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# where to write logging data.
 systemLog:
   destination: file
   logAppend: true
   path: /var/log/mongodb/mongod.log
 
+# Where and how to store data.
 storage:
   dbPath: /data/mongo
   journal:
     enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
 
+# how the process runs
 processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /data/mongo/mongod.pid  # location of pidfile
 
+# network interfaces
 net:
   port: 27017
+  bindIp: 172.18.8.9  # Listen to local interface only, comment to listen on all interfaces.
+
+
+#security:
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options
+
+#auditLog:
+
+#snmp:
 
 
 
@@ -94,7 +148,8 @@ $> cat /etc/delay_start_mongod.sh
 #!/bin/sh
 sleep 8s
 echo never >/sys/kernel/mm/transparent_hugepage/defrag
-echo never >/sys/kernel/mm/transparent_hugepage/enabled
+###not need?
+###echo never >/sys/kernel/mm/transparent_hugepage/enabled
 sleep 2s
 systemctl start mongod
 
