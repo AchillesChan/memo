@@ -1,5 +1,52 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
+
+####calculate how many days no data####
+
+--10 script
+$> cat calculate-how-many-days-backup-file-not-received.sh 
+#!bin/bash
+bak_path_list_file=backup_list
+while IFS= read -r backup_item
+do
+        if echo "$backup_item"|grep '#' &>/dev/null
+        then
+           continue
+        fi
+        
+        item_name=$(echo "$backup_item" |awk '{print $1}')
+        item_path=$(echo "$backup_item" |awk '{print $2}')
+        item_max_days=$(echo "$backup_item" |awk '{print $3}')
+
+        file_timestamp=$(find "$item_path" -type f -printf '%T@ %p\n' | sort -nr |head -1| cut -f1- -d" "|awk '{print $1}'|awk -F. '{print $1}')
+        current_timestamp=$(date +%s)
+        diff_timestamp_in_days=$((($current_timestamp-$file_timestamp)/86400))
+        if (("$diff_timestamp_in_days" > "item_max_days"))
+        then
+            echo "$item_name" has "$diff_timestamp_in_days" days no date.
+        fi
+done <"$bak_path_list_file"
+
+--20 config file
+$> cat backup_list 
+###name         path               max-days########
+web-db         /backup/web             3
+web-image      /backup/wlycimage/      3
+app22-db       /backup/app22db         2
+app2-mong      /backup/app2            2
+App2-db        /backup/App2db          2
+App2-mongo     /backup/App2mongo       2
+App-mongo      /backup/App             2
+App-db         /backup/App             2
+
+--30 running result 
+$> sh calculate-how-many-days-backup-file-not-received.sh 
+App-mongo has 16 days no date.
+App-db has 16 days no date.
+
+####calculate how many days no data####
+
+
 #########calculate#########
 --10 code
 #> cat calculate.sh 
