@@ -31,7 +31,7 @@ done <"$bak_path_list_file"
 $> cat backup_list 
 ###name         path               max-days########
 web-db         /backup/web             3
-web-image      /backup/wlycimage/      3
+web-image      /backup/image/          3
 app22-db       /backup/app22db         2
 app2-mong      /backup/app2            2
 App2-db        /backup/App2db          2
