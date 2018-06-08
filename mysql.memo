@@ -2727,6 +2727,7 @@ GRANT EVENT ON *.* TO 'backup-user-name'@'ip-address';
 GRANT PROCESS ON *.* TO 'backup-user-name'@'ip-address';
 GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'backup-user-name'@'ip-address';
 GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'backup-user-name'@'ip-address';
+mysql> grant event on *.* to  'backup-user-name'@'ip-address';
 flush privileges;
 
  backup bash shell //backup every dbs but system dbs,then package with tar and move to lsyncd dir to transfer to other place
@@ -2748,7 +2749,7 @@ lsyncPath="/data/lsyncd"
 
 ####1 get dbs need backup
 if ! dbs=$(mysql -e 'show databases;' -u"$bakUser" -p"$bakPwd" -h"$bakHost" \
-            |grep -Ev 'mysql|Database|information_schema|performance_schema|sys')
+            |grep -Ev 'Database|information_schema|performance_schema|sys')
 
 then
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
@@ -2757,7 +2758,7 @@ fi
 #####2 bakup dbs in seperately files
 for db in $dbs;do
       if !  mysqldump -u"$bakUser" -h"$bakHost" -p"$bakPwd" --databases "$db" \
-         --hex-blob --triggers --routines --events >"$bakPath""$db"-"$optDate".sql
+       --set-gtid-purged=OFF --hex-blob --triggers --routines >"$bakPath""$db"-"$optDate".sql
       then
             echo "WRONG $0 ON $operationVM on dump $db" >>$scriptErrorLog
       fi

@@ -1,6 +1,7 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+ln -s /usr/local/mongod/bin/* /bin 
 
 #####lsof##########
 ##list Michael's bash command 
