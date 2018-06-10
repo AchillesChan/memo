@@ -1,6 +1,79 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
 
+
+####source in same process and set default var##
+--10 script
+$> cat var-in-same-process.sh 
+#!/bin/bash
+set -u            ##if var not exist ,exit
+${result_old:=0}  ##if not exist,set to 0,or keep orgin
+${result_new:=0}  ##if not exist,set to 0,or keep orgin
+while(true)
+sleep 1s
+do
+        echo "result_old is $result_old"
+        printf "result_new is $result_new"
+        printf "\n"
+        
+        if ! ls f2 &>/dev/null
+        then
+                result_new=1
+        else
+                result_new=0
+        fi
+
+        if [[ "$result_new" -ne "$result_old" ]]
+        then  
+               echo "result change from $result_old to $result_new"
+               result_old="$result_new"
+        fi
+done
+
+--20 initial and call
+$> unset result_old
+$> unset result_new
+$> echo $result_old
+-bash: result_old: unbound variable
+$> echo $result_new
+-bash: result_new: unbound variable   ###initial completely
+$> source var-in-same-process.sh
+-bash: MC_SID: unbound variable
+-bash: MC_SID: unbound variable 
+result_old is 0                      ###var value from ${result_old:=0}
+result_new is 0                      ###var value from ${result_new:=0}  
+result change from 0 to 1            ###f2 not exist,status change to 1
+result_old is 1
+result_new is 1
+......
+
+Ctrl+c                              ####end it 
+
+
+--25 view vars,result saved in vars
+$> echo $result_old                                                                                   
+1
+$> echo $result_new
+1
+
+
+--30 swith 
+$> mv f3 f2                       ###f2 exist now
+
+--40 swith result
+$> source var-in-same-process.sh
+-bash: MC_SID: unbound variable
+-bash: MC_SID: unbound variable
+result_old is 1
+result_new is 1                 ####last saved vars
+result change from 1 to 0       ###status changed,so result change
+result_old is 0
+result_new is 0
+
+####source in same process and set default var##
+
+
+
 ####calculate how many days no data####
 
 --10 script
@@ -84,7 +157,7 @@ awk -v af="new_var" -v bf="saved_var" 'FNR==NR{temp[$1]=$2}
      if(temp[$1]!=$2)
              {system("cp new_var saved_var")}
      }' "$var_new" "$saved_var_file"      
-
+done
 
 
 --20 websites content
