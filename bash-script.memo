@@ -7,8 +7,8 @@
 $> cat var-in-same-process.sh 
 #!/bin/bash
 set -u            ##if var not exist ,exit
-${result_old:=0}  ##if not exist,set to 0,or keep orgin
-${result_new:=0}  ##if not exist,set to 0,or keep orgin
+result_old=${result_old:=0}  ##if not exist,set to 0,or keep orgin
+result_new=${result_new:=0}  ##if not exist,set to 0,or keep orgin
 while(true)
 sleep 1s
 do
@@ -38,8 +38,6 @@ $> echo $result_old
 $> echo $result_new
 -bash: result_new: unbound variable   ###initial completely
 $> source var-in-same-process.sh
--bash: MC_SID: unbound variable
--bash: MC_SID: unbound variable 
 result_old is 0                      ###var value from ${result_old:=0}
 result_new is 0                      ###var value from ${result_new:=0}  
 result change from 0 to 1            ###f2 not exist,status change to 1
@@ -62,8 +60,6 @@ $> mv f3 f2                       ###f2 exist now
 
 --40 swith result
 $> source var-in-same-process.sh
--bash: MC_SID: unbound variable
--bash: MC_SID: unbound variable
 result_old is 1
 result_new is 1                 ####last saved vars
 result change from 1 to 0       ###status changed,so result change
