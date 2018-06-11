@@ -135,7 +135,7 @@ echo $result
 
 
 ######detect web status###########
---10 script.sh
+--10 script-A.sh      ###use temp file save mid values
 set -u
 var_orgin=""
 var_new="new_var"
@@ -146,7 +146,7 @@ while(true)
 do
 var_orgin=$(cat "$saved_var_file")    
 parallel -a websites -j 4 -k 'curl -sL --connect-timeout 2 \ 
-        -w "%{url_effective} %{http_code}\n"  \
+        -w "%{url_effective} %{http_code}\n"  \ 
         {} -o  /dev/null' >"$var_new" 
 awk -v af="new_var" -v bf="saved_var" 'FNR==NR{temp[$1]=$2}
      FNR!=NR{
@@ -155,6 +155,40 @@ awk -v af="new_var" -v bf="saved_var" 'FNR==NR{temp[$1]=$2}
      }' "$var_new" "$saved_var_file"      
 done
 
+--or script-B    ####use variables save mid values,call by issue source script-B 
+
+#!/bin/bash
+set -u
+result_old=${result_old:=""}
+result_new=${result_new:=""}
+
+while(true)
+do
+        result_new=$(parallel -a websites -j 4 -k \
+        'curl -sL --connect-timeout 2 \
+        -w "%{url_effective} %{http_code}\n"  \
+        {} -o  /dev/null')
+
+                
+        awk 'FNR==NR{
+        temp[$1]=$2
+            }
+
+        FNR!=NR{
+        if(temp[$1]!=$2)
+             {
+                     print $1,"status changed from",$2,"to",temp[$1]
+             }
+        }' <(echo -e "$result_new") <(echo -e "$result_old")               
+
+
+        if [[ "$result_new" != "$result_old" ]]
+        then
+            result_old="$result_new"
+        fi
+
+        sleep 2s
+done
 
 --20 websites content
 www.abc.com
@@ -163,9 +197,11 @@ www.abc.com:8080
 
 --30 call
 sh script.sh
+or 
+source script.sh ####use var save mid values
 
 --40 result
-
+www.abc.com status changed from 200 to 000
 ######detect web status###########
 
 
