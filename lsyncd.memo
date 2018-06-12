@@ -1,5 +1,44 @@
 ######Startmemoof lsyncd.memo #######
 ######Start lsyncd.memo #######
+
+####centos 7 use service####
+$> cat /usr/lib/systemd/system/syncd.service
+
+[Unit]
+Description=lsyncd daemon
+After=network.target
+
+[Service]
+User=root
+Group=root
+Restart=always                ############crashed auto restart key 
+ExecStart=/usr/local/bin/lsyncd /etc/lsyncd_backup.lua
+Type=forking
+# file size
+LimitFSIZE=infinity
+# cpu time
+LimitCPU=infinity
+# virtual memory size
+LimitAS=infinity
+# open files
+LimitNOFILE=64000
+# processes/threads
+LimitNPROC=64000
+# locked memory
+LimitMEMLOCK=infinity
+# total threads (user+kernel)
+TasksMax=infinity
+TasksAccounting=false
+
+[Install]
+WantedBy=multi-user.target
+
+$> systemctl daemon-reload
+$> systemctl start syncd
+$> systemctl enable syncd
+
+####centos 7 use service####
+
 ############使用证书的成功的配置############
 PATT，注意：源和目标都要有rsync软件
 源一定有lsyncd,版本2.1.6;
