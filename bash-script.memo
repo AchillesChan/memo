@@ -177,7 +177,7 @@ do
         FNR!=NR{
         if(temp[$1]!=$2)
              {
-                     print $1,"status changed from",$2,"to",temp[$1]
+                     print "Fatal Error:",$1,"status changed from",$2,"to",temp[$1] >>/path/2/log/file
              }
         }' <(echo -e "$result_new") <(echo -e "$result_old")               
 
