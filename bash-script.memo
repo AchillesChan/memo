@@ -177,7 +177,7 @@ do
         FNR!=NR{
         if(temp[$1]!=$2)
              {
-                     print "Fatal Error:",$1,"status changed from",$2,"to",temp[$1] >>/path/2/log/file
+               print strftime("%H:%M-%m%d-%Y",systime()),"FATAL ERROR:",$1,"status changed from",$2,"to",temp[$1] >"/path/2/log/file"
              }
         }' <(echo -e "$result_new") <(echo -e "$result_old")               
 
@@ -201,7 +201,7 @@ or
 source script.sh ####use var save mid values
 
 --40 result
-www.abc.com status changed from 200 to 000
+18:18-0613-2018 FATAL ERROR: HTTP://www.abc.com/ status changed from 404 to 200
 ######detect web status###########
 
 
