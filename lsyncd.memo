@@ -1,6 +1,102 @@
 ######Startmemoof lsyncd.memo #######
 ######Start lsyncd.memo #######
 
+
+
+
+####centos 6 service####
+--10 script
+$> cat /etc/init.d/syncd 
+
+#!/bin/sh
+#
+# Startup sript for lsyncd call 
+# 
+# chkconfig: - 80 20
+# description: lsyncd call 
+# processname: lsyncd
+# config: /etc/lsyncd_backup.lua
+#
+
+PROG=lsyncd
+EXEC=/usr/local/bin/lsyncd
+PIDFILE=/var/run/lsyncd.pid           ##same as lsyncd_backup.lua 
+LOCKFILE=/var/lock/subsys/lsyncd
+CONF=/etc/lsyncd_backup.lua
+RETVAL=0
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+start() {
+        if [ -f $PIDFILE ]
+        then
+                RETVAL=1
+                echo "$PIDFILE exists, process is already running or crashed" && failure
+                echo
+                return $RETVAL
+        else
+                echo "Staring lsyncd ..."
+                #ulimit -Hn 10240
+                #ulimit -Sn 10240
+                $EXEC  $CONF  > /dev/null 2>&1 &
+                RETVAL=$?
+                [ $RETVAL -eq 0 ] && touch $LOCKFILE &&  success || failure
+                echo
+                return $RETVAL
+        fi
+}
+
+stop() {
+        echo "Stopping..."
+        if [ ! -f $PIDFILE ]
+        then
+                RETVAL=1
+                echo "$PIDFILE does not exist, process is not running" && warning
+                echo
+            return $RETVAL
+        else
+                PID=$(cat $PIDFILE)
+                pkill $PROG
+                rm -f $LOCKFILE
+                rm -f $PIDFILE
+                echo "lsyncd stopped" && success
+                echo
+        fi
+}
+
+
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        restart)
+                stop
+                start
+                ;;
+        *)
+                echo "Please use start, stop or restart as first argument"
+                RETVAL=2
+                ;;
+esac
+
+exit $RETVAL
+
+--20 setup service
+ $> chmod +x /etc/init.d/syncd
+
+ $> chkconfig syncd on
+ 
+ $> service syncd start
+
+####centos 6 service####
+
+
+
 ####centos 7 use service####
 $> cat /usr/lib/systemd/system/syncd.service
 
@@ -58,7 +154,7 @@ no-agent-forwarding,no-pty,no-port-forwarding ssh-rsa AAAAB3ZeENJrZ2RRb root@bac
 
 
 _________安装_______________
-lua cmake lua-devel gcc gcc-c++ rsync
+$> yum install -y lua cmake lua-devel gcc gcc-c++ rsync
 cmake .
 make       
 make install
@@ -70,7 +166,8 @@ _________安装END_______________
 settings {
     insist = true,  --如果出错，不断进行
     logfile = "/var/log/lsyncd.log",
-    statusFile = "/var/log/lsyncd.stat",
+    statusFile = "/var/log/lsyncd.stat", --same as /etc/init.d/syncd
+    pidfile = "/var/run/lsyncd.pid",   
     statusInterval = 2
 }
 
@@ -82,7 +179,7 @@ sync {
     delete = false,
     exclude = {"your-directory/dir1","your-directory/dir2"},  --排查特定的目录，注意时相对于$source的路径 
     rsync = {
-        rsh ="/usr/bin/ssh -i /root/.ssh/your-ssh-rsa-privity-key -p your-port -l your-user-name",
+        rsh ="/usr/bin/ssh -i /root/.ss h/your-ssh-rsa-privity-key -p your-port -l your-user-name",
         compress = true,
         perms = ture,
         acls = true,
