@@ -201,7 +201,7 @@ or
 source script.sh ####use var save mid values
 
 --40 result
-18:18-0613-2018 FATAL ERROR: HTTP://www.abc.com/ status changed from 404 to 200
+12:18-0215-2012 FATAL ERROR: HTTP://www.abc.com/ status changed from 404 to 200
 ######detect web status###########
 
 
