@@ -166,8 +166,8 @@ _________安装END_______________
 settings {
     insist = true,  --如果出错，不断进行
     logfile = "/var/log/lsyncd.log",
-    statusFile = "/var/log/lsyncd.stat", --same as /etc/init.d/syncd
-    pidfile = "/var/run/lsyncd.pid",   
+    statusFile = "/var/log/lsyncd.stat", 
+    pidfile = "/var/run/lsyncd.pid",     --same as /etc/init.d/syncd 
     statusInterval = 2
 }
 
