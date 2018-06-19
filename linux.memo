@@ -1,6 +1,20 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+#####cggroup resource restrict###########
+$>  cat /usr/lib/systemd/system/mongod.service
+[Unit]
+......
+
+[Service]
+CPUShares=2048            ####default is 1024
+MemoryLimit=1G
+BlockIOWeight=500        ####valid from 10 to 1000?
+......
+
+#####cggroup resource restrict###########
+
 ln -s /usr/local/mongod/bin/* /bin 
 
 #####lsof##########
