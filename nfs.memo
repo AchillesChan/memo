@@ -15,10 +15,10 @@ Next we need to start the services and add them to the boot menu.systemctl enabl
 systemctl enable nfs-server
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
-systemctl start rpcbind
-systemctl start nfs-server
-systemctl start nfs-lock
-systemctl start nfs-idmap
+systemctl restart rpcbind
+systemctl restart nfs-server
+systemctl restart nfs-lock
+systemctl restart nfs-idmap
 
 Now we will share the NFS directory over the network a follows:
 nano /etc/exports
