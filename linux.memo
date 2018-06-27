@@ -1,6 +1,12 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+##########centos install iftop####
+$>yum install -y epel-release
+$>yum install -y iftop
+
+$>iftop -n -P -o 10 ##-o 10 IntervalBy 10s,-P pid -n no-dns-lookup
+##########centos install iftop####
 ####php nginx opt###
 $>cat /usr/local/nginx/conf/nginx.conf
 ......
