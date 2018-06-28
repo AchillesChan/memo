@@ -1,6 +1,40 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+###add custom item###
+05
+$>vim  /usr/local/zabbix/etc/zabbix_agentd.conf
+Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/
+
+10 
+$> cat /usr/local/zabbix/etc/zabbix_agentd.conf.d/userparameter_custom.conf 
+UserParameter=myCPU.cpunumber,/bin/cat /proc/cpuinfo | /bin/grep process | /bin/wc -l
+UserParameter=myOS.TCP_ESTABLISHED_COUNT,ss -tlnpa|/bin/grep ESTAB|wc -l
+UserParameter=myOS.TCP_LISTEN_COUNT,ss -tlnpa|/bin/grep LISTEN|wc -l
+UserParameter=myOS.TCP_TIMEWAIT_COUNT,ss -tlnpa|/bin/grep TIME-WAIT|wc -l
+
+
+20 
+$> service zabbix_agentd restart && ss -tlnp |grep 10050
+Restarting zabbix_agentd (via systemctl):                  [  OK  ]
+LISTEN     0      128          *:10050                    *:*                   users:(("zabbix......
+
+30 check result 
+$>/usr/local/zabbix/sbin/zabbix_agentd -t myOS.TCP_TIMEWAIT_COUNT
+myOS.TCP_TIMEWAIT_COUNT                       [t|337]   ####here 337 is the value
+
+40 add item on zabbix web protal
+template-->your-select-template-->item-->create item-->name:numbers_of_TCP_TIMEWAIT-->type:zabbix agent-->
+key:myOS.TCP_TIMEWAIT_COUNT-->Applications:OS-->UPDATE
+
+50 view item on zabbix web portal
+open host of the templates-->open item-->select OS-->check your custom item
+
+60 tips
+ PATT set conf need restart zabbix_agentd
+ PATT conf dir must clean,have not any other files
+###add custom item###
+
 #####get real ip php####
 # cat ip.php 
 link https://stackoverflow.com/questions/13646690/how-to-get-real-ip-from-visitor
