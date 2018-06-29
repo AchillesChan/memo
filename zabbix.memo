@@ -3,7 +3,7 @@
 
 ###import dashboard json url####
 import json then save as something-copy dashbard name on dashbard setting;
-import the same the other like json with different datasource,
+import the same json  with different datasource,
 the last write something-copy back.
 
 grafana.yousite.com/dashboard/import
