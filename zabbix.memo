@@ -1,6 +1,11 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+###import dashboard json url####
+grafana.yousite.com/dashboard/import
+This can use different dashboard with different datasource with same json???
+###import dashboard json url####
+
 ###add custom item###
 05
 $>vim  /usr/local/zabbix/etc/zabbix_agentd.conf
