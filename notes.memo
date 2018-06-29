@@ -1,0 +1,5 @@
+ 
+####note all memo to all.memo
+find ./ -type f -maxdepth 1|grep -v png >all.memo
+find ./ -type f -maxdepth 1|grep -v png|xargs cat >>all.memo 
+
