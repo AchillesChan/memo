@@ -21,7 +21,7 @@ UserParameter=myCPU.cpunumber,/bin/cat /proc/cpuinfo | /bin/grep process | /bin/
 UserParameter=myOS.TCP_ESTABLISHED_COUNT,ss -tlnpa|/bin/grep ESTAB|wc -l
 UserParameter=myOS.TCP_LISTEN_COUNT,ss -tlnpa|/bin/grep LISTEN|wc -l
 UserParameter=myOS.TCP_TIMEWAIT_COUNT,ss -tlnpa|/bin/grep TIME-WAIT|wc -l
-
+UserParameter=myOS.FILE_DESCRIBE_COUNT,cat /proc/sys/fs/file-nr|awk '{print $1}'
 
 20 
 $> service zabbix_agentd restart && ss -tlnp |grep 10050

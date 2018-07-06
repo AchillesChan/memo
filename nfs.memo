@@ -5,7 +5,7 @@
 如果stale之类的错误，使用umount解除已经mount的文件系统；
 如果umount失败，client使用lsof(or ss -tlnp|grep rpc and kill pid)查看正在打开文件系统的进程，kill相关进程，再umount。
 ============Server config:
-yum install nfs-utils
+yum install -y nfs-utils
 
 Now the configuration part will include as:mkdir /var/nfsshare
 Change the permissions of the folder as follows:chmod -R 777 /var/nfsshare/
