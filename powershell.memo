@@ -149,6 +149,15 @@ powershell copy file
 
 
 tips
+10 need version 5.1 ???
+PS C:\WINDOWS\system32> $PSVersionTable.PSVersion
+
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+5      1      16299  98      
+
+20
  windows 8.1 only support Administrator use enter-pssession ???
 ###########remote powershell######
 
