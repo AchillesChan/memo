@@ -1,6 +1,40 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+####Using Shell Variables in Programs 
+https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
+
+$>cat awk-use-bash-var.sh 
+
+#!/bin/bash
+op_file=a1
+printf "Enter search pattern: "
+read pattern
+awk -v pat="$pattern" '$0 ~ pat { nmatches++ }
+       END { print nmatches, "found" }' "$op_file"
+
+#cat a1 
+able
+can
+able to
+cannot
+might
+
+#sh awk-use-bash-var.sh 
+Enter search pattern: can
+2 found
+
+#sh awk-use-bash-var.sh 
+Enter search pattern: migh
+1 found
+
+#sh awk-use-bash-var.sh 
+Enter search pattern: cannot
+1 found
+
+####Using Shell Variables in Programs 
+
+
 ##############awk vlookup replace by array#############
 $> cat array-replace.awk
 
