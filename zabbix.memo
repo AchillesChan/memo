@@ -88,7 +88,7 @@ echo $user_ip; // Output IP address [Ex: 177.87.193.134]
 LogFile=C:\zabbix_agentd.log
 StartAgents=0
 Server=srv-name-or-ip
-#ServerActive=srv-name-or-ip:port
+ServerActive=srv-name-or-ip:port   ###MUST present
 HostnameItem=system.hostname
 HostMetadataItem=system.uname
 
