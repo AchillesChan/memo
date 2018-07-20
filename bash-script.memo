@@ -1,6 +1,24 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
 
+###qutoes and doller
+--10
+# cat quote.sh
+
+#!/bin/bash
+db=dbName
+dboption='exec mysql -e "show databases;" -p"$MYSQL_ROOT_PASSWORD"'     ####double quote is same output in single quote
+echo db="$dboption"
+dumpoption="exec  mysqldump  --databases $db  -p\$MYSQL_ROOT_PASSWORD"  ####dollar is same output behind backslash \
+echo dump="$dumpoption"
+
+--20
+# sh  quote.sh 
+db=exec mysql -e "show databases;" -p"$MYSQL_ROOT_PASSWORD"
+dump=exec  mysqldump   --databases dbName   -p$MYSQL_ROOT_PASSWORD
+
+###qutoes and doller
+
 
 ####source in same process and set default var##
 --10 script
