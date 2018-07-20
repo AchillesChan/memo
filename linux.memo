@@ -1,6 +1,35 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+#crontab problem log 
+cat /var/spool/mail/root    #######command
+From root@serverName.localdomain  Fri Jul 20 05:00:02 2018
+Return-Path: <root@serverName.localdomain>
+X-Original-To: root
+Delivered-To: root@serverName.localdomain
+Received: by serverName.localdomain (Postfix, from userid 0)
+        id 009313073AAB; Fri, 20 Jul 2018 05:00:01 +0800 (CST)
+From: "(Cron Daemon)" <root@serverName.localdomain>
+To: root@serverName.localdomain
+Subject: Cron <root@serverName>       /path/2/script.sh
+Content-Type: text/plain; charset=UTF-8
+Auto-Submitted: auto-generated
+Precedence: bulk
+X-Cron-Env: <XDG_SESSION_ID=33852>
+X-Cron-Env: <XDG_RUNTIME_DIR=/run/user/0>
+X-Cron-Env: <LANG=en_US.UTF-8>
+X-Cron-Env: <SHELL=/bin/bash>
+X-Cron-Env: <PATH=/sbin:/bin:/usr/sbin:/usr/bin>
+X-Cron-Env: <MAILTO=root>
+X-Cron-Env: <HOME=/root>
+X-Cron-Env: <LOGNAME=root>
+X-Cron-Env: <USER=root>
+Message-Id: <20180719210002.009313073AAB@serverName.localdomain>
+Date: Fri, 20 Jul 2018 05:00:01 +0800 (CST)
+                       #####error message 
+/bin/bash: /path/2/script.sh: bin/bash: bad interpreter: No such file or directory
+#crontab problem log 
+
 ##########centos install iftop####
 $>yum install -y epel-release
 $>yum install -y iftop
@@ -559,7 +588,7 @@ And I missed the part of plural; if you want more then the latest file, just bum
 
 6
 AutoRestart on Crontab
-# cat /etc/custom-scripts/auto-restart-ssh-tunnel.sh 
+# cat /path/2/auto-restart-ssh-tunnel.sh 
 #!/bin/bash
 if ! ps -ef |grep [5]618 2>&1 >/dev/null
 ##PATT 5618 MUST THE WHOLE FIELD,IF USE [5]61,WILL GET WRONG RESULT??
