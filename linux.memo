@@ -1,6 +1,78 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+###ubuntu basic
+10 nano meta key 
+ ^ represent Ctrl
+ ^+O save
+ ^+X exit
+ ...
+
+20 set ip
+   $ cat /etc/network/interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp0s3
+#iface enp0s3 inet dhcp
+iface enp0s3 inet static
+        address 10.0.0.9
+        netmask 255.255.255.0
+        gateway 10.0.0.1
+dns-nameserver 8.8.8.8
+
+$sudo ip flush enp0s3 && sudo systemctl restart networking.service
+
+
+30 ssh
+sudo apt-get install openssh-server
+
+sudo service ssh restart
+
+sudo service ssh status
+
+
+40 firewall
+
+
+  sudo ufw allow 22
+ sudo ufw allow 6000:6007/tcp
+sudo ufw allow from 15.15.15.51
+sudo ufw allow from 15.15.15.51 to any port 22
+sudo ufw allow from 15.15.15.0/24 to any port 22
+
+sudo ufw status numbered
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22                         ALLOW IN    15.15.15.0/24
+[ 2] 80                         ALLOW IN    Anywhere
+sudo ufw delete 2
+
+sudo ufw delete allow http
+sudo ufw delete allow 80
+
+sudo ufw status verbose
+sudo ufw disable
+sudo ufw enable 
+
+sudo ufw reset ####danger
+This will disable UFW and delete any rules that were previously defined. Keep in mind that the default policies won't change to their original settings, if you modified them at any point. This should give you a fresh start with UFW.
+
+
+
+###ubuntu basic
+
+
 #crontab problem log 
 cat /var/spool/mail/root    #######command
 From root@serverName.localdomain  Fri Jul 20 05:00:02 2018
@@ -1532,7 +1604,7 @@ ssh tunnel 隧道
 ssh -R 28000:172.16.10.118:80 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 ssh -R 28080:172.16.10.118:8080 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 ###########shunfeng waas#################
-ssh -R 30080:192.168.28.99:80 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
+ssh -R 30080:10.0.0.99:80 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 ssh -R 30180:172.16.10.124:9010 -p 30023 -N -q -f -C -i you-privity-ssh-key user@www.example.com
 
 #############################
@@ -1771,7 +1843,7 @@ alias scs='screen -S'
 #!/bin/bash
 #Filename: fast_ping.sh
 # Change base address 192.168.0 according to your network.
-for ip in 192.168.28.{1..255} ;
+for ip in 10.0.0.{1..255} ;
  do   (ping $ip -c2 &> /dev/null ;
      if [ $? -eq 0 ];
     then

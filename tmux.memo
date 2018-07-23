@@ -25,6 +25,7 @@ detatch sesseion               Prex + z
 enter copy mode                Prex + [
 paste recently                 Prex + ]
 chosse paste                   Prex + =
+kill window                    Prex + &
 delete paste buffer            Prex + -
 create horizontally            Prex + %
 create vertically              Prex + "
