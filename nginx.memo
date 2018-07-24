@@ -1,5 +1,5 @@
-######Startmemoof ansible.memo #######
-######Start ansible.memo #######
+######Startmemoof nginx.memo #######
+######Start nginx.memo #######
 
 ######nginx.conf###########
 access_log /usr/local/nginx/logs/proxy.log upstreamlog;
