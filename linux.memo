@@ -3,8 +3,12 @@
 
 ######
 #tar some file find filter pick up 
+--10 xargs process 
 find ./ -mtime -77 -type f -print0 |xargs -0 -P 1 -n 1 -I {} tar vzcf a.tar.gz {}
+--20 pipe process --null -T read relative  find print0 generated output 
+--/dev/stdin or - receive find output 
 find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T /dev/stdin
+find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T - 
 ######
 
 
