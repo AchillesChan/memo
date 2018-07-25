@@ -1,6 +1,12 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+######
+#tar some file find filter pick up 
+find ./ -mtime -77 -type f -print0 |xargs -0 -P 1 -n 1 -I {} tar vzcf a.tar.gz {}
+find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T /dev/stdin
+######
+
 
 ###ubuntu basic
 10 nano meta key 
