@@ -819,7 +819,7 @@ Practice https://www.researchgate.net/publication/267253313_Tuning_the_Linux_Ker
 File Handle LimitsWhen you're serving a lot of traffic it is usually the case that the traffic you're serving is coming from a large number of local files.
 The kernel has built-in limits on the number of files that a process can open, and raising these limits, at a cost of some system memory, is usually a sane thing to attempt.
 You can view the current limit on the number of open-files by running:
-$ cat /proc/sys/fs/file-max
+ cat /proc/sys/fs/file-max
 
 The limit can be raised interactively by running, as root:
 # sysctl -w fs.file-max=100000
@@ -891,6 +891,7 @@ Filesystem TuningYou almost certainly want to disable the "atime" option on your
 With this disabled that the last time a file was accessed won't be constantly updated every time you read a file, since this information isn't generally useful inand causes extra disk hits, its typically disabled.
 To do this, just edit /etc/fstab and add "notime" as a mount option for the filesystem. For example:
     /dev/rd/c0d0p3          /test                    ext3    noatime        1 2
+
 
 ############server opt
 

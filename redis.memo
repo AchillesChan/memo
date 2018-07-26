@@ -74,7 +74,13 @@ or
 echo "@reboot    root     /path/2/redis-server /path/2/redis-conf" >>/etc/crontab
 
 Centos7
+opt:
+   
+     sysctl -w net.core.somaxconn=65535
+    sysctl -w vm.overcommit_memory=1
+
 $> cat /usr/lib/systemd/system/redis.service 
+###PATT NEED cp redis.conf to /etc/
 [Unit]
 Description=redis
 After=network.target

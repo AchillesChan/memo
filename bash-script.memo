@@ -1,6 +1,42 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
 
+=====vim command in bash script==========
+--10
+$> cat dummy.out
+old sen
+old2sen
+old-3sen
+old-old2-old3
+old3-old2-old
+
+--20
+$> cat viminbash.sh 
+#!/bin/bash
+OPERATION_FILE=dummy.out
+vim -E -s $"OPERATION_FILE" <<-EOF
+:%s/old/new/g
+:%s/old2/new2/g
+:%s/old3/new3/g
+:update
+:quit
+EOF
+
+--30
+$> sh viminbash.sh 
+
+--40
+$> cat dummy.out
+new sen
+new2sen
+new-3sen
+new-new2-new3
+new3-new2-new
+
+=====vim command in bash script==========
+
+
+
 ###qutoes and doller
 --10
 # cat quote.sh
