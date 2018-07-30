@@ -1,0 +1,33 @@
+####start of svn.memo#####
+backup scrip in windows
+S:\backup>type backupSvn.bat
+@echo off
+
+set svnLogFile="s:\backup\svn_backup_log.txt"
+set hour=%time:~0,2%
+if "%hour:~0,1%" == " " set hour=0%hour:~1,1%
+set minute=%time:~3,2%
+
+set opDate=%date:~0,4%-%date:~5,2%%date:~8,2%
+set startOpTime=%opDate%-%hour%%minute%
+echo %startOpTime%
+
+
+for /F "tokens=*" %%A in (s:\backup\svnList.txt) do (
+svnadmin dump s:\repositories\%%A > s:\backup\%%A-%startOpTime%.DUMP
+echo %startOpTime%-%%A-%errorlevel% >>%svnLogFile%
+
+S:\backup>type svnList.txt
+rep0 
+rep1
+
+
+
+###dump process
+* Dumped revision 791.
+* Dumped revision 792.
+* Dumped revision 793.
+* Dumped revision 794.
+* Dumped revision 795.
+* Dumped revision 796.
+####end  of svn.memo#####
