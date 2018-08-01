@@ -1,6 +1,33 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
 
+#######http auth with htpasswd
+
+--10 install 
+$>sudo yum install httpd-tools -y
+
+--20 create auth file and user 
+$>sudo htpasswd -c -d /usr/local/nginx/conf/auth_file zhang
+--30 update user 
+$>sudo htpasswd htpasswd /usr/local/nginx/conf/auth_file zhang
+--40 nginx conf 
+$>sudo vim /usr/local/nginx/conf/nginx.conf
+
+
+        location /download/ {
+            auth_basic "Auth";
+            auth_basic_user_file /usr/local/nginx/conf/auth_file;
+            autoindex on; 
+            autoindex_exact_size on; 
+            autoindex_localtime on; 
+            root /data/source; 
+            index index.html;  
+        }  
+--50 restart nginx 
+$>sudo nginx -s reload
+#######http auth with htpasswd
+
+
 ######nginx.conf###########
 access_log /usr/local/nginx/logs/proxy.log upstreamlog;
 upstream webapi-back-server {
