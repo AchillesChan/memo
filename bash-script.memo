@@ -340,7 +340,22 @@ sed -i 's# WRONG##g' "$logFile"  ##删除多余的WRONG字符
 ##########detecv port status V4 END侦测端口开启状态 ####################
 
 
+####here document var expand and not in same line
+$> cat here-with-para.sh 
+--10
+#!/bin/bash
+NAME=ZHANGSAN
+cat <<-ENDOFMESSAGE
+        \$NAME=$NAME
+ENDOFMESSAGE
 
+
+
+--20
+$> sh here-with-para.sh
+  $NAME=ZHANGSAN
+
+####here document var expand and not in same line
 ############install vsftpd and nfs
 #!/bin/bash
 ####10 variables set
