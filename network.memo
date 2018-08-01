@@ -759,7 +759,7 @@ ipsec policy tocenter vpn-acl-number isakmp
 #--70 outboud interface call
 interface GigabitEthernet0/0
  port link-mode route
- firewall packet-filter nat-acl-number inbound  ####not need ????
+ firewall packet-filter 3000 inbound  ####not need here,demo for firewall set
  nat outbound nat-acl-number
  ip address 10.0.1.1 255.255.255.0
  ipsec no-nat-process enable          ####Must present,prevent vpn currence from nat 
