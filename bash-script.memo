@@ -37,7 +37,7 @@ new3-new2-new
 
 
 
-###qutoes and doller
+###qutoes and doller variable reference or not in bash script 
 --10
 # cat quote.sh
 
@@ -53,7 +53,7 @@ echo dump="$dumpoption"
 db=exec mysql -e "show databases;" -p"$MYSQL_ROOT_PASSWORD"
 dump=exec  mysqldump   --databases dbName   -p$MYSQL_ROOT_PASSWORD
 
-###qutoes and doller
+###qutoes and doller variable reference or not in bash script 
 
 
 ####source in same process and set default var##
