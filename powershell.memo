@@ -3,6 +3,51 @@
 ###powershell manangement iis####
 
 
+#####remote powershell auto complete password Credentials 
+Get-MpComputerStatus                                        ####anti virus 
+Get-MpThreat
+Update-MpSignature  -Verbose                                ####升级
+Set-ExecutionPolicy Unrestricted                            ####permit out powershell
+Start-MpScan -ScanType QuickScan
+Start-MpScan -ScanPath c:\ -ScanType FullScan -ErrorAction Ignore -Verbose
+
+Set-MpPreference -DisableRealtimeMonitoring $true           ###关闭defender
+Set-MpPreference -DisableRealtimeMonitoring $false          ###开启defender
+
+###client enable remote powershell
+Enable-PSRemoting
+$Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName your-vm
+ls Cert:\LocalMachine\My\
+
+7DE993538B7D7234EDFE5A592881D682487BA591  CN=remote-powershell-vm 
+
+
+###cmd root 
+winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{
+Port="5986" ;Hostname="your-vm" ;CertificateThumbprint="7DE993538B7D7234EDFE5A592881D682487BA591"}
+
+
+##POWERSHELL FIREWALL ADD REMOTE POWSHELL 5986 HTTPS PORT
+New-NetFirewallRule -DisplayName "Permit Remote powershell" -Direction Inbound -Action Allow -RemoteAddress 172.16.28.0/24 -Protocol TCP -LocalPort 5986
+Set-NetFirewallRule -DisplayName "Permit Remote powershell" -Action block
+
+###CHECK PORT STATUS
+Get-NetFirewallRule -DisplayName "Permit Remote powershell" | Get-NetFirewallPortFilter|select PROTOCOL,LOCALPORT,REMOTEPORT
+
+####enter remote 
+Enter-PSSession -ComputerName 172.16.28.247 -Port 5986 -Credential domain\user  -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+
+Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
+
+
+
+
+
+$password = ConvertTo-SecureString "your-password-plain-text-here" -AsPlainText -Force
+$cred=new-object System.Management.Automation.PSCredential("wlyd\sfwmop-1",$password)
+Enter-PSSession -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -Sk
+#####remote powershell auto complete password Credentials 
+
 1. server level
 用法:
 
@@ -241,12 +286,12 @@ $latest.name
 0
 > $?
 True
-> ping 192.168.1.1 -n 1
+> ping 172.16.1.1 -n 1
 
-正在 Ping 192.168.1.1 具有 32 字节的数据:
+正在 Ping 172.16.1.1 具有 32 字节的数据:
 请求超时。
 
-192.168.1.1 的 Ping 统计信息:
+172.16.1.1 的 Ping 统计信息:
     数据包: 已发送 = 1，已接收 = 0，丢失 = 1 (100% 丢失)，
 > $?
 False
