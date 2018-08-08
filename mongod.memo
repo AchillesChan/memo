@@ -1,5 +1,41 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
+
+########delete multi collection 
+--10 before delete
+
+> show collections;
+business_log_logisticsorder_D5101071804005_TMSWaybillRoute
+log_Queue_201710
+log_Queue_201711
+log_Queue_201701
+log_Queue_201702
+log_Queue_201703
+log_Queue_201704
+log_Queue_201705
+log_Queue_201706
+log_Queue_201707
+log_Queue_201708
+> 
+
+--20 delete command                                                                                                                                                                                            
+var collectionNames = db.getCollectionNames();
+for(var i = 0, len = collectionNames.length; i < len ; i++){
+    var collectionName = collectionNames[i];
+    if(collectionName.indexOf('log_') == 0){
+        db[collectionName].drop()
+    }
+}
+
+--30 after delete
+
+> show collections;
+business_log_logisticsorder_D5101071804005_TMSWaybillRoute
+
+########delete multi collection 
+
+
+######install with tar package 
 --05 install with tar
 a> sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
