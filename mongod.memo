@@ -3,27 +3,81 @@
 
 
 ###auto delete collections script
-sed -e 's:\(\s*[\w\s]*\)#.*$:\1:g' <<eof |mongo                                                                                                                                                               
+$ cat auto-delete-mongo-collections.sh
+#!/bin/bash
+echo " "
+echo "Before delete:"
+sed -e 's:\(\s*[\w\s]*\)#.*$:\1:g' <<eof |mongo
 show databases;
-use YourDB;
-show collections;                    ####below is delete op
+use MongoApp;
+show collections;
+eof
+
+
+echo " "
+echo "Deleting:"
+sed -e 's:\(\s*[\w\s]*\)#.*$:\1:g' <<eof |mongo
+####below is op ####
+use MongoApp;         ###           ####below is delete op
 var collectionNames = db.getCollectionNames();
 for(var i = 0, len = collectionNames.length; i < len ; i++){
     var collectionName = collectionNames[i];
-    if(collectionName.indexOf('log_') == 0){    #####start with log_ will be deleted
+    if(collectionName.indexOf('log_') == 0){  ###delete start with log_
         db[collectionName].drop()
     }
 }
+eof
 
+
+echo " "
+echo "After delete:"
+sed -e 's:\(\s*[\w\s]*\)#.*$:\1:g' <<eof |mongo
+use MongoApp;
 show collections;
 eof
+
+$ sh auto-delete-mongo-collections.sh
+
+Before delete:
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+MongoApp  0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+switched to db MongoApp
+app_logisticsorder_D5101071804005_TMSWaybillRoute
+app_operation_C0000017
+log_16                      ####3 log_ collecitons
+log_18
+log_19
+bye
+
+Deleting:
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+switched to db MongoApp
+true
+bye
+
+After delete:
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+switched to db MongoApp
+app_logisticsorder_D5101071804005_TMSWaybillRoute
+app_operation_C0000017     ####log_ collections deleted
+bye
+
 ###auto delete collections script
 
 ########delete multi collection 
 --10 before delete
 
 > show collections;
-business_log_logisticsorder_D5101071804005_TMSWaybillRoute
+app_logisticsorder_D5101071804005_TMSWaybillRoute
 log_Queue_201710
 log_Queue_201711
 log_Queue_201701
@@ -48,7 +102,7 @@ for(var i = 0, len = collectionNames.length; i < len ; i++){
 --30 after delete
 
 > show collections;
-business_log_logisticsorder_D5101071804005_TMSWaybillRoute
+app_logisticsorder_D5101071804005_TMSWaybillRoute
 
 ########delete multi collection 
 
