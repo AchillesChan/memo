@@ -1,6 +1,26 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
 
+
+###auto delete collections script
+sed -e 's:\(\s*[\w\s]*\)#.*$:\1:g' <<eof |mongo                                                                                                                                                               
+#sed -e 's/\s*\(\w\+\)\#.*$/\1/' <<eof | mongo 
+#cat <<eof | mongo 
+show databases;
+use MongoOMS;
+show collections;                    ####below is delete op
+var collectionNames = db.getCollectionNames();
+for(var i = 0, len = collectionNames.length; i < len ; i++){
+    var collectionName = collectionNames[i];
+    if(collectionName.indexOf('log_') == 0){
+        db[collectionName].drop()
+    }
+}
+
+show collections;
+eof
+###auto delete collections script
+
 ########delete multi collection 
 --10 before delete
 
