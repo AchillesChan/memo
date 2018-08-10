@@ -3,7 +3,48 @@
 ###powershell manangement iis####
 
 
-#####remote powershell auto complete password Credentials 
+#####remote powershell auto complete password Credentials
+####enter remote host run something and out 
+--10 powershell script 
+$password = ConvertTo-SecureString "Mypassword" -AsPlainText -Force
+$cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
+Invoke-Command -ComputerName  host-or-ip  -Port 5986  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+    hostname.exe
+    Set-NetFirewallRule -DisplayName "Mysql 3306 in" -Action Allow
+    Get-NetFirewallRule -DisplayName "Mysql 3306 in"
+} 
+--20 result
+remote-machine
+
+
+Name                  : {0932BAF0-D656-4087-8A0C-5CA154091FA1}
+DisplayName           : MYSQL 3306 IN
+Description           : 
+DisplayGroup          : 
+Group                 : 
+Enabled               : True
+Profile               : Any
+Platform              : {}
+Direction             : Inbound
+Action                : Allow
+EdgeTraversalPolicy   : Block
+LooseSourceMapping    : False
+LocalOnlyMapping      : False
+Owner                 : 
+PrimaryStatus         : OK
+Status                : 已从存储区成功分析规则。 (65536)
+EnforcementStatus     : NotApplicable
+PolicyStoreSource     : PersistentStore
+PolicyStoreSourceType : Local
+PSComputerName        : ip address Here 
+
+--end
+
+
+
+
+
+
 Get-MpComputerStatus                                        ####anti virus 
 Get-MpThreat
 Update-MpSignature  -Verbose                                ####升级
