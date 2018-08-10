@@ -3,6 +3,35 @@
 ###powershell manangement iis####
 
 
+########port open and set continue
+$Ipaddress= Read-Host "Enter the IP address:"
+$Port= Read-host "Enter the port number to access:"
+$ManagementPort=5986
+$t = New-Object Net.Sockets.TcpClient
+$p="pwd-text"
+$user="domain\user"
+$t.Connect($Ipaddress,$Port)
+
+
+    if($t.Connected)
+    {
+        "Port $Port is operational"
+
+$password = ConvertTo-SecureString $p  -AsPlainText -Force
+$cred=new-object System.Management.Automation.PSCredential($user,$password)
+Invoke-Command -ComputerName $Ipaddress -Port $ManagementPort  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+    hostname.exe
+}
+    }
+    else
+    {
+        "Port $Port is closed, You may need to contact your IT team to open it. "
+    }
+    
+
+########port open and set continue
+
+
 #####remote powershell auto complete password Credentials
 ####enter remote host run something and out 
 --10 powershell script 
