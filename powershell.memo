@@ -2,6 +2,13 @@
 ######Start powershell.memo #######
 ###powershell manangement iis####
 
+
+#######powershell set env variable permanent
+$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
+$newpath = “$oldpath;$MysqlBin”
+Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH -Value $newPath
+#######powershell set env variable permanent
+
 ####powershell Install winrm
 Enable-PSRemoting
 $hn=hostname.exe
