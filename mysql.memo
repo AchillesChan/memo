@@ -1,5 +1,14 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
+
+windows io acid security set?
+innodb_flush_log_at_trx_commit=1
+innodb_flush_method=unbuffered
+
+windows io acid security set?
+
+
+
 ########SQL: Find out number of rows of all tables within a MySQL database
 mysql>SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database' order by table_rows;
 
@@ -20,7 +29,7 @@ then
         echo "WRONG $op_date backup your-db database $0 ON $operationVM" >>$scriptErrorLog
 fi
 
-if ! mysql -pAbcd-123* -e  'source /root/backup.sql' your-db_pro
+if ! mysql -pmypassword -e  'source /root/backup.sql' your-db_pro
 then
         echo "WRONG $op_date restore your-db database $0 ON $operationVM" >>$scriptErrorLog
 fi
