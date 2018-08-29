@@ -2,6 +2,17 @@
 ######Start powershell.memo #######
 ###powershell manangement iis####
 
+#####redirction null and exit code judge###
+Get-Service essj |Out-Null
+IF ($? -eq "True")
+{
+ "OK"
+}
+ELSE
+{
+ "Wrong"
+}
+#####redirction null and exit code judge###
 
 #######powershell set env variable permanent
 $oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
