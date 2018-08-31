@@ -117,7 +117,7 @@ function Download_and_install_Mysql{
     $grantuserwlydess127="grant all on *.* to user@'127.0.0.1' with grant option;"
     $grantuserwlydesslocal="grant all on *.* to user@localhost with grant option;"
     $resetpassword="alter user root@localhost identified by '$newPassword'"
-    mysql.exe -C -B "-e$resetpassword" -uroot "-p$initPassword" --connect-expired-password
+    mysql.exe -C -B "-e $resetpassword" -uroot "-p$initPassword" --connect-expired-password
     mysql.exe -C -B "-e $createessconfigdb" -uroot "-p$newPassword" --connect-expired-password
     mysql.exe -C -B "-e $createuserwlydess172" -uroot "-p$newPassword" --connect-expired-password
     mysql.exe -C -B "-e $createuserwlydess127" -uroot "-p$newPassword" --connect-expired-password

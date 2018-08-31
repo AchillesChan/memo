@@ -2,6 +2,11 @@
 ######Start powershell.memo #######
 ###powershell manangement iis####
 
+$initPassword=$initPasswordLine -replace "^([\w\ ].*)(root@localhost: )(.*)",'$3'   ####regex replace sed
+
+mysql -e "alter user root@localhost identified by 'pwd'"  2>$NULL ###redirect error to null in powershell
+
+
 #####redirction null and exit code judge###
 Get-Service essj |Out-Null
 IF ($? -eq "True")
