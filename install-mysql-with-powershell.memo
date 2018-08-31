@@ -1,0 +1,140 @@
+
+##-------------------------------------------------------------------
+## Name           Mysql Automated
+## Usage          Mysql_Automated_v1.0.ps1
+## Note           Change variables were needed to fit your needs
+## PSVersion      Windows PowerShell 5.0
+## Creator        Wim Matthyssen
+## Date           21/02/17
+## Version        1
+##-------------------------------------------------------------------
+
+
+## Requires -RunAsAdministrator
+
+
+## Variables
+
+$MysqlDLLUrl = 'http://download.source.com/Mysql5.7-4-windows-X64-dll.zip'
+$MysqlDLLZip='d:\Mysql5.7-4-windows-X64-dll.zip'
+$MysqlPackageUrl = 'http://download.source.com/Mysql-5.7.18-winx64.zip'
+$MysqlPackageZip='d:\Mysql-5.7.18-winx64.zip'
+$MysqlFolder = 'd:\Mysql'
+$MysqlCfg='d:\Mysql\my.ini'
+$ForegroundColorYellow = 'yellow'
+$System32Folder=‘C:\WINDOWS\SYSTEM32'
+$Hostname=hostname.exe
+$Mysqld='d:\Mysql\bin\Mysqld.exe'
+$lanSection ='172.16.28.'
+$IP=Get-NetIPAddress|Where-Object{$_ -match $lanSection}|Select-Object IPAddress|findstr $lanSection|%{$_ -replace "$lanSection",""}
+$MysqlBin="d:\\Mysql\\bin"
+$MysqlInstallLog='d:\Mysql_install.txt'
+$newPassword='AB-15'  
+## Set date/time variable and write blank lines
+
+$global:currenttime= Set-PSBreakpoint -Variable currenttime -Mode Read -Action { $global:currenttime= Get-Date }
+for ($i = 1; $i -lt 4; $i++) {write-host}
+Write-Host "Download started" $currenttime -foregroundcolor $ForegroundColorYellow
+
+#Create Mysql folder on d: if not exists
+function Initial{
+    Stop-Service Mysql
+    cmd /c sc delete Mysql
+    If((test-path $MysqlFolder))
+        {
+         Remove-Item $MysqlFolder -Recurse -Force
+        }
+    New-Item -ItemType Directory -Force -Path $MysqlFolder
+    Write-Host 'Mysql folder created' -foregroundcolor $ForegroundColorYellow
+}
+
+
+
+
+## Download, save and extract Mysql file to d:\Mysql
+
+function Download_and_install_dll{
+    if(![System.IO.File]::Exists($MysqlDLLZip)){
+        Write-Host "Download Mysql-dll package..."
+         Invoke-WebRequest -Uri $MysqlDLLUrl -OutFile $MysqlDLLZip
+    }
+    Expand-Archive -LiteralPath $MysqlDLLZip -DestinationPath $System32Folder -Force
+    for ($i = 1; $i -lt 2; $i++) {write-host}
+        Write-Host 'Mysql DLL available' $currenttime -foregroundcolor $ForegroundColorYellow
+}
+
+function Download_and_install_Mysql{
+    if(![System.IO.File]::Exists($MysqlPackageZip)){
+        Write-Host "Download Mysql package..." $currenttime -foregroundcolor $ForegroundColorYellow
+        Invoke-WebRequest -Uri $MysqlPackageUrl -OutFile $MysqlPackageZip
+    }
+    If(!(test-path $MysqlInstallLog))
+    {
+        New-Item -ItemType file -Path  $MysqlInstallLog
+        Write-Host 'Mysql log created' -foregroundcolor $ForegroundColorYellow
+    }
+
+    Expand-Archive -LiteralPath $MysqlPackageZip -DestinationPath $MysqlFolder -Force 
+    (Get-Content $MysqlCfg)|%{$_ -replace "MACHINE",$Hostname}|Set-Content $MysqlCfg
+    (Get-Content $MysqlCfg)|%{$_ -replace "IPADDR",$IP}|Set-Content $MysqlCfg
+    Write-Host 'Install Mysqld initialize' -foregroundcolor $ForegroundColorYellow
+    cmd /c $Mysqld --defaults-file=$MysqlCfg --initialize --console  --explicit_defaults_for_timestamp 2>&1 >$MysqlInstallLog
+    Write-Host 'Install Mysqld service with Mysqld.exe' -foregroundcolor $ForegroundColorYellow
+    cmd /c $Mysqld --install >>$MysqlInstallLog
+    Start-Service Mysql
+    Set-Service -Name Mysql -StartupType Automatic 
+
+    ###Setup Path into ENVIRMENT 
+    $oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
+    $envISnull = $oldpath|Where-Object{$_ -match $MysqlBin} 
+    IF ($envISnull -ne $null)
+        {
+        Write-Host "Envirment variables alread add"  $currenttime -foregroundcolor $ForegroundColorYellow
+        }
+    ELSE
+        {
+        $newPath = “$oldpath;$MysqlBin”
+        Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH -Value $newPath
+        Write-Host "Set up new Envirment variables sucssesful" $currenttime -foregroundcolor $ForegroundColorYellow
+        }
+
+
+    for ($i = 1; $i -lt 2; $i++) {write-host}
+        Write-Host 'Mysql available' $currenttime -foregroundcolor $ForegroundColorYellow
+ }
+
+ function Config_Mysql{
+    Write-Host 'Configure mysql database and permission' $currenttime -foregroundcolor $ForegroundColorYellow
+    $initPasswordLine=Get-Content $MysqlInstallLog |Where-Object {$_ -match 'localhost'}
+    $initPassword=$initPasswordLine -replace "^([\w\ ].*)(root@localhost: )(.*)",'$3'  ##get init password from install log####
+    Write-Host 'initPassword is:'$initPassword $currenttime -foregroundcolor $ForegroundColorYellow
+    $flushprivileges="flush privileges;"
+    $createessconfigdb="create database essconfig;"                   ####mysql query clause
+    $createuserwlydess172="create user user@'172.16.%' identified by 'user_p@ssw0rd';"
+    $createuserwlydess127="create user user@'127.0.0.1' identified by 'user_p@ssw0rd';"
+    $createuserwlydesslocal="create user user@localhost identified by 'user_p@ssw0rd';"
+    $granguserwlydess172="grant all on *.* to user@'172.16.%'with grant option;"
+    $grantuserwlydess127="grant all on *.* to user@'127.0.0.1' with grant option;"
+    $grantuserwlydesslocal="grant all on *.* to user@localhost with grant option;"
+    $resetpassword="alter user root@localhost identified by '$newPassword'"
+    mysql.exe -C -B "-e$resetpassword" -uroot "-p$initPassword" --connect-expired-password
+    mysql.exe -C -B "-e $createessconfigdb" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $createuserwlydess172" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $createuserwlydess127" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $createuserwlydesslocal" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $granguserwlydess172" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $granguserwlydess127" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e $granguserwlydesslocal" -uroot "-p$newPassword" --connect-expired-password
+    mysql.exe -C -B "-e$flushprivileges" -uroot "-p$newPassword" --connect-expired-password
+    Restart-Service MySQL
+    
+
+##main section
+## Close PowerShell windows upon completion
+Initial
+Download_and_install_dll
+Download_and_install_Mysql
+Config_Mysql
+#stop-process -Id $PID 
+
+##-------------------------------------------------------------------
