@@ -680,6 +680,15 @@ $op_log="$op_log_pos\rc-$op_time.log"
 
 
 
+####escape dollar###
+--10 display double quote lead a quote first
+$var="d:\user\zhang san"
+write-host "dir is ""$var"""
+
+Result:
+dir is "d:\user\zhang san"
+####escape dollar###
+
 #Backup with robocpy & Log
 robocopy $op_src $op_dst /copy:dt /e /log:$op_log /purge /r:5 /w:5 
 
