@@ -12,6 +12,7 @@ And if you prefer vice versa (urls without trailing slashes), just use the follo
 rewrite ^/(.*)/$ /$1 permanent;
 
 http://www.osbmedia.com/blog/view/adding-a-trailing-slash-to-your-urls-on-nginx
+https://www.digrouz.com/mediawiki/index.php/HOWTO_fix_the_trailing_slash_problem_in_Nginx
 #####trailing slash##########
 
 #######http auth with htpasswd
