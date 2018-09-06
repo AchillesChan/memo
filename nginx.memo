@@ -1,5 +1,18 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
+#####trailing slash##########
+I come across this question a lot from people. It’s a simple solution really and I’ll tell you how. Some may ask what’s the point (it works as is with or without)? Well, when it comes to Search Engine Optimization, having duplicate may hurt your rankings. Therefore, it’s good practice to have a permanent (301) redirect for one or the other. For me, I prefer adding a trailing slash. And you simply do this by adding a nginx rewrite to your vhost:
+
+# Adds a trailing slash to any urls that is missing a trailing slash
+rewrite ^(.*[^/])$ $1/ permanent;
+
+And if you prefer vice versa (urls without trailing slashes), just use the following rewrite instead:
+
+# Remove trailing slash
+rewrite ^/(.*)/$ /$1 permanent;
+
+http://www.osbmedia.com/blog/view/adding-a-trailing-slash-to-your-urls-on-nginx
+#####trailing slash##########
 
 #######http auth with htpasswd
 
