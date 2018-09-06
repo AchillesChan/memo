@@ -680,14 +680,23 @@ $op_log="$op_log_pos\rc-$op_time.log"
 
 
 
+####escape dollar###
+--10 display double quote lead a quote first
+$var="d:\user\zhang san"
+write-host "dir is ""$var"""
+
+Result:
+dir is "d:\user\zhang san"
+####escape dollar###
+
 #Backup with robocpy & Log
 robocopy $op_src $op_dst /copy:dt /e /log:$op_log /purge /r:5 /w:5 
 
 
 +++++++++++PATT++++++++++
 taskschd set 任务计划的设置
-program:%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe #powshell路径
-add parameter:-File D:\shell\bak-waas-iis.ps1 #脚本路径加上前缀写到附加参数中
+program:%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe #powshell path 
+add parameter:-File "D:\shell\bak-waas-iis.ps1" #full path of powershell script with doble quote!!!!
 ++++++++++++++++++++++++++
 
 ===========计划任务互操作结束===========
