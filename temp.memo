@@ -1,7 +1,10 @@
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
-
- sed -ibak 's/\(\$[a-zA-Z0-9]\+=\)/\U\1/g' sth 
+https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+https://nginx.org/en/docs/http/ngx_http_core_module.html
+https://www.liaohuqiu.net/posts/nginx-proxy-pass/
+ 
+sed -ibak 's/\(\$[a-zA-Z0-9]\+=\)/\U\1/g' sth 
  sed -i 's/\(read -r \)\([a-zA-Z0-9]\+\)/\1\U\2/g' sth set $2 upper
 
 https://support.hpe.com/hpsc/doc/public/display?docId=emr_na-sg419en_us&docLocale=en_US where to download megaraid management software
