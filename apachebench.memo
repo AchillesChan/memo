@@ -1,0 +1,76 @@
+####post 
+ab    -n 1000    -c 20   -s 30  -p post-data.txt  -T 'application/x-www-form-urlencoded; charset=UTF-8'   \
+-v 3              \
+-H "X-Requested-With: XMLHttpRequest"   \
+-H "X-Ajax-Referer: http://example.com" \
+-H "Accept-Encoding: gzip, deflate"   \
+-H "Accept-Language: en-US,en;q=0.8,bn;q=0.6"   \
+-H "User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36"  \
+-H "Accept: application/json, text/javascript, */*; q=0.01"  \
+-H "Referer: http://www.native-instruments.com/forum/members/" \
+http://example.com/
+
+post-data.txt
+q=test&limit=10&skip=10
+
+####post 
+
+$>ab -n 30000 -c 2000  -k http://example.com/                                                                                                             
+This is ApacheBench, Version 2.3 <$Revision: 1430300 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking example.com (be patient)
+Completed 3000 requests
+Completed 6000 requests
+Completed 9000 requests
+Completed 12000 requests
+Completed 15000 requests
+Completed 18000 requests
+Completed 21000 requests
+Completed 24000 requests
+Completed 27000 requests
+Completed 30000 requests
+Finished 30000 requests
+
+
+Server Software:        nginx/1.10.2
+Server Hostname:        example.com
+Server Port:            80
+
+Document Path:          /
+Document Length:        3700 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   2.657 seconds
+Complete requests:      30000
+Failed requests:        503
+   (Connect: 0, Receive: 0, Length: 503, Exceptions: 0)
+Write errors:           0
+Non-2xx responses:      503
+Keep-Alive requests:    29497
+Total transferred:      116367248 bytes
+HTML transferred:       109235979 bytes
+Requests per second:    11290.02 [#/sec] (mean)
+Time per request:       177.148 [ms] (mean)
+Time per request:       0.089 [ms] (mean, across all concurrent requests)
+Transfer rate:          42766.56 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   35 178.1      0    1150
+Processing:     2   96  93.5     90    1353
+Waiting:        1   96  93.5     90    1353
+Total:          2  131 212.6     91    1449
+
+Percentage of the requests served within a certain time (ms)
+  50%     91
+  66%    108
+  75%    122
+  80%    139
+  90%    210
+  95%    237
+  98%   1208
+  99%   1283
+ 100%   1449 (longest request)
+
