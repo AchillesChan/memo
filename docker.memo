@@ -56,6 +56,20 @@ server {
 echo "0322-1434";
 ?>
 
+
+###up and down,PATT option and command sequ,FUCK
+$ docker-compose -f mysql.yml up -d
+Creating network "dockermysql_default" with the default driver
+Creating mysql-docker ... done
+$ ss -tlnp|grep 3306
+LISTEN     0      128         :::3306                    :::*                   users:(("docker-proxy-cu",pid=23515,fd=4))
+$ docker-compose -f mysql.yml down
+Stopping mysql-docker ... done
+Removing mysql-docker ... done
+Removing network dockermysql_default
+$ ss -tlnp|grep 3306
+$ 
+
 ####docker-compose nginx php ############################
 
 
