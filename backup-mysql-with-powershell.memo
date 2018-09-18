@@ -1,0 +1,13 @@
+$MySQLPath = "D:\mysql\bin"
+$Hostname = "localhost"
+$Username = "root"
+$Password = "your-password"
+$BackupFile="d:\DBBackup.sql"
+
+#####could use -notmatch "not-matched-tables" below
+$Tables = [System.Collections.Generic.List[String]] (
+    & $MySQLPath\mysql.exe -h"$Hostname" -u"$Username" -p"$Password" -B -N -e"show tables;" your-database |Where-Object{$_ -match "matched_tables"}
+)
+
+
+& $MySQLPath\mysqldump.exe -h"$HostName" -u"$Username" -p"$Password" your-database  $($Tables) | Out-File $BackupFile
