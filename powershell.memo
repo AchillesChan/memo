@@ -1,5 +1,38 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
+
+###set powershell code
+[System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+###get system time
+$global:currenttime= Set-PSBreakpoint -Variable currenttime -Mode Read -Action { $global:currenttime= Get-Date }
+
+$ForegroundColorYellow = 'yellow'  ###define display color
+
+####display info with time and color
+Write-Host "Download started" $currenttime -foregroundcolor $ForegroundColorYellow
+
+$Hostname=hostname.exe          #########get hostname
+
+###test folder or file existing 
+    If((test-path $MysqlFolder))
+        {
+         Remove-Item $MysqlFolder -Recurse -Force 2>$NULL
+        }
+    New-Item -ItemType Directory -Force -Path $MysqlFolder
+
+        if(![System.IO.File]::Exists($MysqlPackageZip)){
+        Write-Host "Download Mysql package..." $currenttime -foregroundcolor $ForegroundColorYellow
+        Invoke-WebRequest -Uri $MysqlPackageUrl -OutFile $MysqlPackageZip
+    }
+
+###get ip address to variables
+$lanSection=192.168.1.0 
+$IP=Get-NetIPAddress|Where-Object{$_ -match $lanSection}|Select-Object IPAddress|findstr $lanSection|%{$_ -replace "$lanSection",""}
+$MysqlBin="d:\\Mysql\\bin"         ############define directory variables
+
+
+
 ###powershell manangement iis####
 
 $initPassword=$initPasswordLine -replace "^([\w\ ].*)(root@localhost: )(.*)",'$3'   ####regex replace sed
