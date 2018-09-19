@@ -1,9 +1,10 @@
 $MySQLPath = "D:\mysql\bin"
 $Hostname = "localhost"
 $Username = "root"
-$Password = "your-password"
+$Password = "YOUR-PASSWORD"
 $BackupFile="d:\DBBackup.sql"
 
+[System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8        ###setup powershell encode
 #####could use -notmatch "not-matched-tables" below
 $Tables = [System.Collections.Generic.List[String]] (
     & $MySQLPath\mysql.exe -h"$Hostname" -u"$Username" -p"$Password" -B -N -e"show tables;" your-database |Where-Object{$_ -match "matched_tables"}
