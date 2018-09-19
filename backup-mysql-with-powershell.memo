@@ -11,4 +11,4 @@ $Tables = [System.Collections.Generic.List[String]] (
 )
 
 
-& $MySQLPath\mysqldump.exe -h"$HostName" -u"$Username" -p"$Password" your-database  $($Tables) | Out-File $BackupFile
+& $MySQLPath\mysqldump.exe -h"$HostName" -u"$Username" -p"$Password" your-database  $($Tables) | Out-File $BackupFile  -Encoding utf8
