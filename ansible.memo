@@ -1,5 +1,15 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
+
+
+##ad-
+ ansible hostGroup -m raw -a "/bin/sed -i 's/Server=srvIP:60051/Server=srvIP/g' /usr/local/zabbix/etc/zabbix_agentd.conf" -u User -k --become --ask-sudo-pass
+ ansible hostGroup -m raw -a "/usr/local/zabbix/sbin/zabbix_agentd" -u User -k --become --ask-sudo-pass
+ ansible hostGroup -m raw -a "systemctl stop zabbix_agentd" -u User -k --become --ask-sudo-pass
+ ansible hostGroup -m raw -a "pkill -9 zabbix" -u User -k --become --ask-sudo-pass
+ ansible hostGroup -m raw -a "/usr/local/zabbix/sbin/zabbix_agentd" -u User -k --become --ask-sudo-pass
+
+
 ######How to continue execution on failed task after fixing error in playbook?
 --10 Link:
 https://stackoverflow.com/questions/29900096/how-to-continue-execution-on-failed-task-after-fixing-error-in-playbook
