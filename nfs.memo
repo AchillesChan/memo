@@ -11,14 +11,14 @@ Now the configuration part will include as:mkdir /var/nfsshare
 Change the permissions of the folder as follows:chmod -R 777 /var/nfsshare/
 We have used /var/nfsshare as, if we uses any other drive such as any /home directory then it will cause a massive permissions problem and ruin the whole hierarchy. If in case we want to share the /home directory then permissions must not be changed.
 
-Next we need to start the services and add them to the boot menu.systemctl enable rpcbind
+Next we need to restart the services and add them to the boot menu.systemctl enable rpcbind
 systemctl enable nfs-server
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
-systemctl restart rpcbind
-systemctl restart nfs-server
-systemctl restart nfs-lock
-systemctl restart nfs-idmap
+systemctl rerestart rpcbind
+systemctl rerestart nfs-server
+systemctl rerestart nfs-lock
+systemctl rerestart nfs-idmap
 
 Now we will share the NFS directory over the network a follows:
 nano /etc/exports
@@ -31,8 +31,8 @@ or
 Note 192.168.0.101 is the IP of client machine, if you wish that any other client should access it you need to add the it IP wise other wise you can add "*" instead of IP for all IP access.
 Condition is that it must be pingable at both ends.
 
-Finally start the NFS service as follows:
-systemctl restart nfs-server
+Finally restart the NFS service as follows:
+systemctl rerestart nfs-server
 
 Again we need to add the NFS service override in CentOS 7.0 firewall-cmd public zone service as:
 firewall-cmd --permanent --zone=public --add-service=nfs
@@ -60,10 +60,10 @@ systemctl enable nfs-server
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
 
-systemctl start rpcbind
-systemctl start nfs-server
-systemctl start nfs-lock
-systemctl start nfs-idmap
+systemctl restart rpcbind
+systemctl restart nfs-server
+systemctl restart nfs-lock
+systemctl restart nfs-idmap
 
 
 

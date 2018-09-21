@@ -2,12 +2,26 @@
 ######Start ansible.memo #######
 
 
-##ad-
- ansible hostGroup -m raw -a "/bin/sed -i 's/Server=srvIP:60051/Server=srvIP/g' /usr/local/zabbix/etc/zabbix_agentd.conf" -u User -k --become --ask-sudo-pass
- ansible hostGroup -m raw -a "/usr/local/zabbix/sbin/zabbix_agentd" -u User -k --become --ask-sudo-pass
- ansible hostGroup -m raw -a "systemctl stop zabbix_agentd" -u User -k --become --ask-sudo-pass
- ansible hostGroup -m raw -a "pkill -9 zabbix" -u User -k --become --ask-sudo-pass
- ansible hostGroup -m raw -a "/usr/local/zabbix/sbin/zabbix_agentd" -u User -k --become --ask-sudo-pass
+##ad-hoc example 
+
+ansible HostGrp -m raw -a "getenforce" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "grep -i disable /etc/selinux/config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "grep SELINUX /etc/selinux/config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "sed -i 's/=enforcing/disabled/' /etc/selinux/config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "grep SELINUX /etc/selinux/config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "grep Port /etc/ssh/sshd_config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "sed -i 's:#Port 22:Port 6001:' /etc/ssh/sshd_config" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "firewall-cmd --add-port 6001/tcp --perm" -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "firewall-cmd --reload"  -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "firewall-cmd --list-all"  -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "systemctl restart firewalld"  -u User --sudo --ask-sudo-pass
+ansible HostGrp -m raw -a "systemctl  enable firewalld"  -u User --sudo --ask-sudo-pass
+
+ansible hostGroup -m raw -a "/bin/sed -i 's/Server=srvIP:60051/Server=srvIP/g' ./etc/zabbix_agentd.conf" -u User --sudo --ask-sudo-pass
+ansible hostGroup -m raw -a "./sbin/zabbix_agentd" -u User --sudo --ask-sudo-pass
+ansible hostGroup -m raw -a "systemctl stop zabbix_agentd" -u User --sudo --ask-sudo-pass
+ansible hostGroup -m raw -a "pkill -9 zabbix" -u User --sudo --ask-sudo-pass
+ansible hostGroup -m raw -a "./sbin/zabbix_agentd" -u User --sudo --ask-sudo-pass
 
 
 ######How to continue execution on failed task after fixing error in playbook?
@@ -65,7 +79,7 @@ SUDO password: ###下面是结果
 }
 
 使用密码连接远程的方式
-ansible HostGrp -m raw -a "/cmd" -u userName -k --become --ask-sudo-pass
+ansible HostGrp -m raw -a "/cmd" -u userName --sudo --ask-sudo-pass
 
 ###ansible with expect ####
 cat /tmp.com.sh
