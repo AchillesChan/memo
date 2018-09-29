@@ -7,7 +7,14 @@ innodb_flush_method=unbuffered
 
 windows io acid security set?
 
+#####optimizing debug script 
+https://github.com/major/MySQLTuner-perl
+--10
+wget http://mysqltuner.pl/ -O mysqltuner.pl
+--20
+perl mysqltuner.pl --host targetDNS_IP --user admin_user --pass admin_password
 
+#####optimizing debug script 
 
 ########SQL: Find out number of rows of all tables within a MySQL database
 mysql>SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database' order by table_rows;
