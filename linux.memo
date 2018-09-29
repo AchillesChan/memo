@@ -1,6 +1,8 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 ####security audit
+--00 check,interactive,improve url function
+
 --10 install 
 git clone https://github.com/CISOfy/lynis
 or https://downloads.cisofy.com/lynis/lynis-2.6.9.tar.gz
@@ -16,6 +18,12 @@ cat /var/log/lynis.log
 
 --50 view result 
  cat result|more
+
+--55 interactive test 
+ sudo ./lynis audit system --wait
+
+--58 help
+ sudo ./lynis 
 
 --60
 https://www.linuxtechi.com/lynis-security-auditing-tool-linux-servers/
