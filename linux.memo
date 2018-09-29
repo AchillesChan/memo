@@ -18,6 +18,7 @@ cat /var/log/lynis.log
 
 --50 view result 
  cat result|more
+ cat /var/log/lynis-report.dat
 
 --55 interactive test 
  sudo ./lynis audit system --wait
