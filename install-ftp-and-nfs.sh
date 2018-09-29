@@ -1,17 +1,17 @@
 #!/bin/bash
 ####10 variables set
 set -u
-PROJECT_BASE=shijiazhuang-sfwm
-FTP_USER_NAME="$PROJECT_BASE"-ftpuser
-FTP_USER_PASSWORD=79dc1c2-01e5-4ca7-8960-a2080f
+PROJECT_BASE=baseName
+FTP_USER_NAME="$PROJECT_BASE"-ftp
+FTP_USER_PASSWORD=password 
 FTP_USER_HOME=/data/"$PROJECT_BASE"
 FTP_CONTROL=21
-FTP_WAN_CONTROL=50020
-FTP_PORT_START=50100
-FTP_PORT_END=50101
+FTP_WAN_CONTROL=5002
+FTP_PORT_START=5010
+FTP_PORT_END=501
 FTP_GROUP=ftp_group
 FTP_CFG_FILE=/etc/vsftpd/vsftpd.conf
-PERMIT_NFS_LAN='172.16.48.*'
+PERMIT_NFS_LAN='172.16.*'
 SSH_CFG_FILE=/etc/ssh/sshd_config
 PUBLIC_IP=$(curl -L cindy.50yc.com/ip.php)
 NFS_CFG_FILE=/etc/exports
@@ -19,7 +19,7 @@ SELINUX_CFG_FILE=/etc/selinux/config
 MNT_BASE=/mnt/nfs/
 LOCAL_SUBNET="172.16"
 LOCAL_IP=$(ip addr show|grep "$LOCAL_SUBNET"|awk '{print $2}'|sed -e 's:/.*$::g')
-AZURE_HOST_NAME=B-SFWM-FILE8
+AZURE_HOST_NAME=AZURE_HOST
 DEVICE_PATH="/dev/sdd"
 FILE_PATH="/data/$PROJECT_BASE"
 DEVICE_PARTITION="/dev/sdd5"
@@ -57,7 +57,7 @@ userlist_enable=YES
 tcp_wrappers=YES
 use_localtime=YES
 pasv_enable=Yes
-pasv_address=your_public_ip
+pasv_address="$PUBLIC_IP"
 pasv_min_port="$FTP_PORT_START"
 pasv_max_port="$FTP_PORT_END"
 port_enable=YES
