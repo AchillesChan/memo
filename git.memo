@@ -1,6 +1,56 @@
 ######Startmemoof git.memo #######
 ######Start git.memo #######
 
+###set up your own git server 
+https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-git-server-on-a-vps
+--10  server End
+yum install git
+useradd git
+passwd git
+
+$ cd /srv/git
+$ mkdir project.git
+$ cd project.git
+$ git init --bare
+Initialized empty Git repository in /srv/git/project.git/
+
+
+--20 Client End
+ssh-keygen -C "youremail@mailprovider.com"
+ssh-copy-id -i your-public-key git@server-addr
+
+
+$ cd myproject
+$ git init
+$ git add .
+$ git commit -m 'initial commit'
+$ git remote add origin git@gitserver:/srv/git/project.git
+$ git push origin master
+
+or 
+
+
+$ git clone git@gitserver:/srv/git/project.git
+$ cd project
+$ vim README
+$ git commit -am 'fix for the README file'
+$ git push origin master
+
+ 
+--30 security Server End
+
+$ cat /etc/shells   # see if `git-shell` is already in there.  If not...
+$ which git-shell   # make sure git-shell is installed on your system.
+$ sudo vim /etc/shells  # and add the path to git-shell from last command
+$ sudo chsh git -s $(which git-shell)
+
+$ ssh git@gitserver
+fatal: Interactive git shell is not enabled.
+hint: ~/git-shell-commands should exist and have read and execute access.
+Connection to gitserver closed.
+###set up your own git server 
+
 user@linux:~/git> ssh-add ~/.ssh/rsa-key
 Enter passphrase for /home/user/.ssh/rsa-key:
 Identity added: /home/user/.ssh/rsa-key (/home/user/.ssh/rsa-key)
