@@ -1,6 +1,155 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+####loop opertion https://en.wikiversity.org/wiki/PowerShell/Loops
+While
+
+The while statement runs a statement list zero or more times based on the results of a conditional test.[1]
+
+$i = 0
+while($i -lt 3)
+{
+    Write-Output $i
+    $i++
+}
+
+Do While
+
+The do while statement runs a statement list one or more times based on the affirmative results of a conditional test.[2]
+
+$i = 0
+do
+{
+    Write-Output $i
+    $i++
+}while($i -lt 3)
+
+It is important to note that, unlike while, a do while or do until will always execute at least once.
+
+$i = 0
+do
+{
+    Write-Output $i
+    $i--
+}while($i -gt 0)
+
+Do Until
+
+The do until statement runs a statement list one or more times based on the negative results of a conditional test.[3]
+
+$i = 0
+do
+{
+    Write-Output $i
+    $i++
+}until($i -ge 3)
+
+For
+
+The for statement runs a statement list zero or more times based on an initial setting, a conditional test, and a repeated statement, most often used with numeric counters.[4]
+
+for($i = 0; $i -lt 3; $i++)
+{
+    Write-Output $i
+}
+
+For loops are often nested to repeat actions, such as for rows and columns. For example:
+
+for($i = 0; $i -lt 3; $i++)
+{
+    $line = ''
+    for($j = 0; $j -lt 3; $j++)
+    {
+        $line += $i.ToString() + $j.ToString() + '  '
+    }
+    Write-Output $line
+}
+
+ForEach
+
+The foreach statement runs a statement list once for each item in a collection.[5]
+
+$processes = Get-Process
+foreach($process in $processes)
+{
+    if($process.PM / 1024 / 1024 -gt 100)
+    {
+        Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+    }
+}
+
+Continue
+
+The continue statement immediately returns script flow to the top of the innermost While, Do, For, or ForEach loop.[6]
+
+$processes = Get-Process
+foreach($process in $processes)
+{
+    if($process.PM / 1024 / 1024 -le 100)
+    {
+        continue
+    }
+    Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+}
+
+Break
+
+The break statement causes Windows PowerShell to immediately exit the innermost While, Do, For, or ForEach loop or Switch code block.[7]
+
+$processes = Get-Process
+foreach($process in $processes)
+{
+    if($process.PM / 1024 / 1024 -gt 100)
+    {
+        Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+        break
+    }
+}
+
+Exit
+
+Exit causes Windows PowerShell to exit a script or a Windows PowerShell instance.[8]
+
+if(<some fatal error>)
+{
+    Exit <optional return code>
+}
+
+Foreach-Object
+
+The ForEach-Object cmdlet runs a command list once for each item in a collection.[9] While the ForEach-Object cmdlet is often more convenient, the foreach statement and a coded loop usually offers better performance.
+
+Get-Process | ForEach-Object { if($_.PM / 1024 / 1024 -gt 100) {'Process ' + $_.Name + ' is using more than 100 MB RAM.'} }
+
+Start-Sleep
+
+The Start-Sleep cmdlet allows you to pause Windows PowerShell activity for a specified period of time.[10] It is particularly useful with long-running scripts or infinite loops.
+
+while($true)
+{
+    if((Get-Date -Format 'hh:mm') -eq '00:00')
+    {
+        'It''s midnight.  You should go to sleep.'
+    }
+    Start-Sleep -Seconds 60
+}
+
+Get-Counter
+
+The Get-Counter cmdlet gets performance counter data from local and remote computers.[11]
+
+Get-Counter
+
+Activities
+
+    Create a script that asks the user to enter grade scores. Start by asking the user how many scores they would like to enter. Then use a loop to request each score and add it to a total. Finally, calculate and display the average for the entered scores. Revise the script several times to compare the code required when the loop control structure is based on while, do while, do until, and for statements, respectively.
+    Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Rather than simply creating a 10 by 10 table, ask the user to enter the starting and ending values.
+    Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Use a condition with (<variable> % 2) to test for odd or even values. Generate the multiplication table only for even values. For odd values, use the continue statement to continue the next iteration of the loop.
+    Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Rather than simply creating a 10 by 10 table, ask the user to enter the starting and ending values. Use a break statement to terminate the loop if the count exceeds 10.
+    Create a script that retrieves a list of all services and then uses foreach to display the names of all running services. While this could also be done using Select-Object, there are times when processing objects is faster and easier using foreach.
+    Review Microsoft TechNet: Using the Start-Sleep Cmdlet. Write a script that uses an infinite loop to call the Get-Counter cmdlet every sixty seconds. Redirect the Get-Counter output and append it to a file. Run the script for a few minutes and then check the file contents to observe system utilization.
+
+
 ###set powershell code
 [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
@@ -508,7 +657,7 @@ function Send-ToEmail([string]$email){
 ###detect service status 
 [array] $Services = "zabbix agent","EFS","BITS";
 
-
+#######loop operation
 while(1){
     foreach($srv in $Services)
     {
@@ -835,6 +984,7 @@ Unrestricted
 
 
 ###########batch update multiple proxyAddress#####
+#####loop operation
 Import-CsvC:\Users\someone\Desktop\user20171205.csv|
 foreach{
 ##set SMTP
