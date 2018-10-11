@@ -74,17 +74,6 @@ smtpd_client_restrictions = permit_sasl_authenticated
 
 step 4
 #######dovecot config#############
-# grep -v "#" /etc/dovecot/dovecot.conf |grep -v "^$"
-protocols = imap pop3   #####delete ssl support#####
-mail_location = maildir:~/Maildir
-pop3_uidl_format = %08Xu%08Xv
-login_process_size = 64
-login_trusted_networks = 0.0.0.0/0
-disable_plaintext_auth = no
-dict {
-}
-!include conf.d/*.conf
-!include_try local.conf
 [root@mail-server dovecot]# grep -v "#" /etc/dovecot/dovecot.conf
 protocols = imap pop3 
 mail_location = maildir:~/Maildir
@@ -99,16 +88,12 @@ dict {
 !include conf.d/*.conf
 !include_try local.conf
 
-# grep -v "#" /etc/dovecot/conf.d/10-auth.conf |grep -v "^$"
-disable_plaintext_auth = no 
-auth_mechanisms = plain login
-!include auth-system.conf.ext
-
 
 ####
 vim /etc/dovecot/conf.d/10-auth.conf
 disable_plaintext_auth = no
 auth_mechanisms = plain
+!include auth-system.conf.ext
 
 ###
 vim /etc/dovecot/conf.d/10-mail.conf
