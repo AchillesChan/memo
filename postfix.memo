@@ -3,6 +3,9 @@
 ######postfix config##########
 ##########plain txt###########
 ########Example.com has MX dns record
+postfix take charge of sendmail use mail address
+dovecot take chareg of receive mail from other mail 
+
 step 1
 #DNS record https://support.rackspace.com/how-to/create-an-spf-txt-record/
 $> cat /var/named/example.com.zone |grep mail
@@ -13,9 +16,9 @@ mail                             IN  A          19.18.218.11
 example.com. TXT "v=spf1 mx example.com -all" 
 
 step 2
-$>yum install cyrus-sasl-*
+$>yum install -y cyrus-sasl-*
 $>setenforce 0
-##config selinux                           //waiting for make perfect 
+##config selinux or disable  on /etc/selinux/config  //waiting for make perfect 
 $>yum install setroubleshoot setools
 $>sealert -a /var/log/audit/audit.log      //find out where is blocked by selinux
 
@@ -34,7 +37,7 @@ $>setsebool -P saslauthd_read_shadow 1
 
 
 step 3
-# grep -v "#" /etc/postfix/main.cf |grep -v "^$"
+# vim /etc/postfix/main.cf 
 queue_directory = /var/spool/postfix
 command_directory = /usr/sbin
 daemon_directory = /usr/libexec/postfix
@@ -74,7 +77,7 @@ smtpd_client_restrictions = permit_sasl_authenticated
 
 step 4
 #######dovecot config#############
-[root@mail-server dovecot]# grep -v "#" /etc/dovecot/dovecot.conf
+# vim /etc/dovecot/dovecot.conf
 protocols = imap pop3 
 mail_location = maildir:~/Maildir
 pop3_uidl_format = %08Xu%08Xv
@@ -121,18 +124,18 @@ systemctl  restart  saslauthd
 
 
 ###reboot auto run
-[root@localhost ~]# systemctl enable postfix
-[root@localhost ~]# systemctl enable dovecot
-[root@localhost ~]# systemctl enable saslauthd
+# systemctl enable postfix
+# systemctl enable dovecot
+# systemctl enable saslauthd
 
 ###open firewall-port 
-[root@localhost ~]# firewall-cmd --add-service smtp --permanent
+# firewall-cmd --add-service smtp --permanent
 success
-[root@localhost ~]# firewall-cmd --add-service pop3 --permanent
+# firewall-cmd --add-service pop3 --permanent
 success
-[root@localhost ~]# firewall-cmd --reload
+# firewall-cmd --reload
 success
-[root@localhost ~]# firewall-cmd --list-all
+# firewall-cmd --list-all
 public (active)
   target: default
   icmp-block-inversion: no
