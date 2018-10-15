@@ -134,7 +134,7 @@ echo "mkdir -p "$MNT_BASE$FTP_USER_NAME" && mount -t nfs "$LOCAL_IP":"$FTP_USER_
 cat <<Endofmessage
 echo "if ! ls $MNT_BASE$FTP_USER_NAME/Image 
 then 
-        echo "WRONG $MNT_BASE$FTP_USER_NAME nfs ON $OPERATIONVM >>\$scriptErrorLog"
+    echo \"WRONG $MNT_BASE$FTP_USER_NAME nfs ON $OPERATIONVM >>$SCRIPTERRORLOG\"
 fi" >>$ESP_NFS_DEBUG_FILE
 Endofmessage
 	echo "==========running ON ESP1=========" 
