@@ -26,7 +26,7 @@ DEVICE_PARTITION="/dev/sdd5"
 FSTAB_FILE="/etc/fstab"
 FILE_TYPE=ext4
 OPERATIONVM=$(hostname)
-#SCRIPTERRORLOG=scriptErrorLog 
+SCRIPTERRORLOG=/var/logs/scriptErrorLog 
 ESP_NFS_DEBUG_FILE=/etc/custom-scripts/detect-nfs-status.sh
 
 ####20 function set
