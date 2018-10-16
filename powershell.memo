@@ -1,6 +1,19 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+
+#####parallel process on remote windows server 
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$User="Domain\user"
+$Cred=new-object System.Management.Automation.PSCredential($User,$Password)
+$job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL -ThrottleLimit 4 -AsJob -ComputerName (Get-Content e:\list.csv) -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+    hostname.exe
+    Get-MpComputerStatus
+} 
+
+Receive-job $job -keep
+###########
+
 ####loop opertion https://en.wikiversity.org/wiki/PowerShell/Loops
 While
 
