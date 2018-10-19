@@ -912,5 +912,57 @@ Save and close the file. Restart networking:
 At the DOS prompt, type in ping www.yahoo.com -f -l 1492 and hit the Enter key:
 The results above indicate that the packet needs to be fragmented. Repeat this test, lowering the size the packet in increments of +/-10 (e.g. 1472, 1462, 1440, 1400) until you have a packet size that does not fragment:
 
+
+
+
+
+
+#####H3C SCHEDULE PING OPERATION#######
+--10 config on system-view
+[switch]nqa entry admin AutoPingGateway
+  type icmp-echo
+  destination ip 10.0.8.2
+  frequency 100000
+  reaction 1 checked-element probe-fail threshold-type consecutive 3 action-type trap-only
+  source ip 10.0.0.129
+#
+[switch] nqa schedule admin AutoPingGateway start-time now lifetime forever
+
+--20 result and debut
+<switch>disp nqa statistics
+NQA entry (admin admin, tag AutoPingGateway) test statistics:
+  NO. : 1
+    Start time: 2013-03-21 23:08:40.2
+    Life time: 3362 seconds
+    Send operation times: 337            Receive response times: 337
+    Min/Max/Average round trip time: 27/89/29
+    Square-Sum of round trip time: 317807
+  Extended results:
+    Packet loss ratio: 0%
+    Failures due to timeout: 0
+    Failures due to internal error: 0
+    Failures due to other errors: 0
+  Reaction statistics:
+    Index  Checked Element  Threshold Type  Checked Num  Over-threshold Num
+    1      probe-fail       consecutive     337          0
+
+<switch>disp nqa result
+NQA entry (admin admin, tag AutoPingGateway) test results:
+    Send operation times: 1              Receive response times: 1
+    Min/Max/Average round trip time: 27/27/27
+    Square-Sum of round trip time: 729
+    Last succeeded probe time: 2013-03-22 00:04:50.4
+  Extended results:
+    Packet loss ratio: 0%
+    Failures due to timeout: 0
+    Failures due to internal error: 0
+    Failures due to other errors: 0
+
+
+
+
+
+
+
 ######End network.memo #######
 ######Endmemoof network.memo #######
