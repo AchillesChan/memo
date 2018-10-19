@@ -1,6 +1,12 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+####powershell operation wsus
+ Install-Module PSWindowsUpdate -MaximumVersion 1.5.2.6
+ Get-Command -Module PSWindowsUpdate
+ Get-WindowsUpdate
+ Get-WUInstall -AcceptAll
+####powershell operation wsus
 
 #####parallel process on remote windows server 
 $Password=Read-host "Enter PASSWORD" -AsSecureString
