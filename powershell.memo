@@ -273,12 +273,10 @@ $ID=((Get-Content 1.txt|select-string "CN=RD") -split  " +")[0]
 #$HN=((Get-Content 1.txt|select-string "CN=") -split  " +")[1]|%{$_ -replace "CN=",""}
 #Write-Host $id
 #Write-Host $HN
-
 cmd /c "winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Port=""$port"" ;Hostname=""$hn"";CertificateThumbprint=""$id""}"
 
 ###get winrm service && remove winrm service
 cmd /c "winrm get winrm/config/Listener?Address=*+Transport=HTTPS"
-cmd /c "winrm delete winrm/config/Listener?Address=*+Transport=HTTPS"
 #cmd /c "winrm delete winrm/config/Listener?Address=*+Transport=HTTPS"   ###clean winrm setting
 ####powershell Install winrm
 
