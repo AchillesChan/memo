@@ -1,6 +1,43 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+
+###export csv to arrays
+--10 code 
+$userdata= Import-CSV C:\Users\\Desktop\pa.csv
+$userdata 
+
+ForEach($row in $userdata)
+		{
+		if($row.Status -EQ "Y"){
+				write-host $row.vm,'was',$row.Description}
+		}
+
+
+--20 result 
+PS C:\Users\> $userdata= Import-CSV C:\Users\\Desktop\pa.csv
+$userdata 
+
+VM  Description NumCpu Status
+--  ----------- ------ ------
+VM1 SQL VM      4      Y     
+VM2 App VM      2      Y     
+VM3 VCenter     4      N     
+VM4 Redis       8      N     
+
+
+--30 operation
+PS C:\Users\> ForEach($row in $userdata)
+		{
+		if($row.Status -EQ "Y"){
+				write-host $row.vm,'was',$row.Description}
+		}
+VM1 was SQL VM
+VM2 was App VM
+
+
+###export csv to arrays
+
 ####powershell operation wsus
  Install-Module PSWindowsUpdate -MaximumVersion 1.5.2.6
  Get-Command -Module PSWindowsUpdate
