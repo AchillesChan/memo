@@ -1,6 +1,91 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+###export arrays to csv
+--10 code 
+$serverList = import-csv "C:\Users\datafile.csv"
+write-host "====initial serverlist start========"
+$serverList
+write-host "====initial serverlist end=========="
+write-host ""
+
+write-host "====initial Allobjects start========"
+$AllObjects = @()
+write-host "====initial Allobjects end=========="
+write-host ""
+
+$AllObjects
+$serverList | ForEach-Object {
+    $AllObjects += [pscustomobject]@{
+        Servername = $_.Servername
+        Name = $_.Servername
+        Blk = ""
+        Blk2 = ""
+        Method = "RDP"
+        Port = "3389"
+    }
+}
+
+write-host "=======filled Allobjects start========="
+$AllObjects
+write-host "=======filled Allobjects end==========="
+$AllObjects | Export-Csv -Path "outfile.csv" -NoTypeInformation
+
+
+--20 result
+====initial serverlist start========
+
+
+Servername : a1
+Name       : 
+Blk        : 
+Blk2       : 
+Method     : RDP
+Port       : 3389
+
+Servername : a2
+Name       : 
+Blk        : 
+Blk2       : 
+Method     : 
+Port       : 
+
+Servername : a3
+Name       : 
+Blk        : 
+Blk2       : 
+Method     : 
+Port       : 
+
+====initial serverlist end==========
+
+====initial Allobjects start========  ####empty value 
+====initial Allobjects end==========  ####empty value 
+
+=======filled Allobjects start=========
+Servername : a1
+Name       : a1
+Blk        : 
+Blk2       : 
+Method     : RDP
+Port       : 3389
+
+Servername : a2
+Name       : a2
+Blk        : 
+Blk2       : 
+Method     : RDP
+Port       : 3389
+
+Servername : a3
+Name       : a3
+Blk        : 
+Blk2       : 
+Method     : RDP
+Port       : 3389
+
+=======filled Allobjects end===========
+###export arrays to csv
 
 ###export csv to arrays
 --10 code 
