@@ -56,7 +56,9 @@ session     required      pam_unix.so
 --20 
 # tail -n 3 /etc/bashrc
 export HISTTIMEFORMAT="%F %T "                                                                                  
-export PROMPT_COMMAND='RETRN_VAL=$?;logger -p local6.debug "$(who am i) [$$]: $(history 1 | sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"'                                                                                                           
+export PROMPT_COMMAND='RETRN_VAL=$?;logger -p local6.debug "$(who am i) [$$]: $(history 1 | sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"'                                              
+--25 sed with escaped char insert 
+sed -i "\$iexport PROMPT_COMMAND=\'RETRN_VAL=\$?;logger -p local6\.debug \"\$\(who am i\) \[\$\$]: \$\(history 1 | sed \"s/^\[ ]\*\[0-9]\+\[ ]\*//\" \) \[\$RETRN_VAL]\"\' " /etc/bashrc
 # vim:ts=4:sw=4
 
 
