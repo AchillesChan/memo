@@ -1,6 +1,29 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+###forget reset centos7 password
+--10 https://www.unixmen.com/reset-root-password-centos-7/
+
+--20 
+1 – In the boot grub menu select option to edit.
+2 – Select Option to edit (e).
+3 – Go to the line of Linux 16 and change ro with rw init=/sysroot/bin/sh     ####KEY STEP
+4 – Now press Control+x to start on single user mode.
+5 – Now access the system with this command.
+chroot /sysroot
+6 – Reset the password.
+passwd root
+7 – Update selinux information
+touch /.autorelabel
+8 – Exit chroot
+exit
+9 – Reboot your system
+reboot
+###forget reset centos7 password
+
+
+
 ####kernel harden security audit 
 --10
  $ cat /etc/pam.d/system-auth
