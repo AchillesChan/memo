@@ -340,7 +340,8 @@ sshd    34694 Michael    3u  IPv4 12012985      0t0  TCP Srv:22->client:59416 (E
 sshd    34721 Michael    3u  IPv4 12014314      0t0  TCP Srv:22->client:59426 (ESTABLISHED)
 #####lsof##########
 
-
+sed insert somethin into a file from before-last-three-lines
+ tac anaconda-ks.cfg |sed -e '3i3rdNEW LINE!' |tac >>index.php && mv -fv index.php anaconda-ks.cfg 
 #####strace##########
 strace -f -r -s 30 -o debug.log  -e trace=file \
  /path/2/cmd -f /path/2/conf --args 
