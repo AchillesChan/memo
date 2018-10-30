@@ -1,7 +1,7 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
-####kernel harden
+####kernel harden security audit 
 --10
  $ cat /etc/pam.d/system-auth
 #%PAM-1.0
