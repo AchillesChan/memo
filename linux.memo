@@ -1,5 +1,82 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+
+####kernel harden
+--10
+ $ cat /etc/pam.d/system-auth
+#%PAM-1.0
+# This file is auto-generated.
+# User changes will be destroyed the next time authconfig is run.
+auth     required       pam_tally2.so deny=5 even_deny_root unlock_time=60  ####HARDEN
+auth        required      pam_env.so
+auth        sufficient    pam_unix.so nullok try_first_pass
+auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
+auth        required      pam_deny.so
+
+account     required      pam_unix.so
+account     sufficient    pam_localuser.so
+account     sufficient    pam_succeed_if.so uid < 1000 quiet
+account     required      pam_permit.so
+
+password required         pam_cracklib.so minclass=3                          ###HARDEN
+password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok
+password    required      pam_deny.so
+
+session     optional      pam_keyinit.so revoke
+session     required      pam_limits.so
+-session     optional      pam_systemd.so
+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+session     required      pam_unix.so
+
+
+--20 
+# tail -n 3 /etc/bashrc
+export HISTTIMEFORMAT="%F %T "                                                                                  
+export PROMPT_COMMAND='RETRN_VAL=$?;logger -p local6.debug "$(who am i) [$$]: $(history 1 | sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"'                                                                                                           
+# vim:ts=4:sw=4
+
+
+--30
+tail -n 1 /etc/profile
+export TMOUT=1800
+
+--40 
+# cat /etc/rsyslog.conf |grep local6
+local6.*                                                 /var/log/bash_history.log
+
+--50
+# cat /etc/pam.d/sshd 
+#%PAM-1.0
+auth       substack     system-auth                 ###HARDEN
+auth       required     pam_sepermit.so
+auth       substack     password-auth
+auth       include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-auth      optional     pam_reauthorize.so prepare
+account    required     pam_nologin.so
+account    include      system-auth                 ###HARDEN
+
+account    include      password-auth
+password   include      password-auth
+password   include      system-auth                 ###HARDEN
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    include      system-auth                ###HARDEN
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    include      password-auth
+session    include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-session   optional     pam_reauthorize.so prepare
+
+####kernel harden
+
+
+
 ####security audit
 --00 check,interactive,improve url function
 
