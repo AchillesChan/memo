@@ -45,6 +45,18 @@ export TMOUT=1800
 # cat /etc/rsyslog.conf |grep local6
 local6.*                                                 /var/log/bash_history.log
 
+--45       logrotate 
+# cat /etc/logrotate.d/syslog 
+......                                       ####omit staff 
+/var/log/bash_history.log                    ####add log file here
+{
+    missingok
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
+
 --50
 # cat /etc/pam.d/sshd 
 #%PAM-1.0
