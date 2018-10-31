@@ -143,5 +143,36 @@ lasting 10 seconds:
   diskspd -c1G -b4K -t2 -d10 -a0,1 testfile1.dat testfile2.dat
 
 ==========windows=================
+
+++++++++++++Linux++++++++++++++++++++
+yum install -y make gcc libaio-devel || ( apt-get update && apt-get install -y make gcc libaio-dev </dev/null )
+wget https://github.com/Crowd9/Benchmark/raw/master/fio-2.0.9.tar.gz ; tar xf fio*
+cd fio*
+make
+
+
+Random read performance
+./fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=4G --readwrite=randread
+Random write performance
+./fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=4G --readwrite=randwrite
+
+
+./fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=4G --readwrite=randrw --rwmixread=752
+   
+This will create a 4 GB file, and perform 4KB reads and writes using a 75%/25% (ie 3 reads are performed for every 1 write) split within the file, with 64 operations running at a time. The 3:1 ratio is a rough approximation of your typical database
+
+
+
+
+++++ioping 
+cd /root
+yum install -y make gcc libaio-devel || ( apt-get update && apt-get install -y make gcc libaio-dev </dev/null )
+wget https://github.com/koct9i/ioping/archive/master.zip ; mv master.zip ioping.zip;unzip ioping.zip
+cd ioping*
+make
+
+./ioping -c 10 .
+++++++++++++Linux++++++++++++++++++++
+
 ######End io.memo #######
 ######Endmemoof io.memo #######
