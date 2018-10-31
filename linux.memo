@@ -52,6 +52,16 @@ session     required      pam_limits.so
 session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
 session     required      pam_unix.so
 
+--15 sed with insert/append line before(after) match lin
+--syntax sed -i "/matched line/operator(a,i,A,I..ETC) newline" FILE
+  sed -i.bak "/#%PAM-1.0/a auth       substack     system-auth" sshd
+  sed -i "/account    required     pam_nologin.so/a account    include      system-auth" sshd
+  sed -i "/password   include      password-auth/a password   include      system-auth" sshd
+  sed -i "/session    required     pam_selinux.so close/a session    include      system-auth" sshd
+
+ sed -i.bak "/# User changes will be destroyed the next time authconfig is run./a auth     required       pam_tally2.so deny=5 even_deny_root unlock_time=60" system-auth
+ sed -i "/password    requisite     pam_pwquality\.so try_first_pass local_users_only retry=3 authtok_type=/i password required         pam_cracklib\.so minclass=3" system-auth
+
 
 --20 
 # tail -n 3 /etc/bashrc
