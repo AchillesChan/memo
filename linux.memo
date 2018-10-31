@@ -123,6 +123,30 @@ session    include      postlogin
 # Used with polkit to reauthorize users in remote sessions
 -session   optional     pam_reauthorize.so prepare
 
+
+
+--60 all-in-one command collection
+
+sed -i.bak "/#PermitRootLogin yes/a PermitRootLogin no" /etc/ssh/sshd_config
+systemctl restart sshd
+sed -i.bak "$ i export TMOUT=1800" /etc/profile
+sed -i.bak "/#%PAM-1.0/a auth       substack     system-auth" /etc/pam.d/sshd
+sed -i "/account    required     pam_nologin.so/a account    include      system-auth" /etc/pam.d/sshd
+sed -i "/password   include      password-auth/a password   include      system-auth" /etc/pam.d/sshd
+sed -i "/session    required     pam_selinux.so close/a session    include      system-auth" /etc/pam.d/sshd
+sed -i.bak "/# User changes will be destroyed the next time authconfig is run./a auth     required       pam_tally2.so deny=5 even_deny_root unlock_time=60" /etc/pam.d/system-auth
+sed -i "/password    requisite     pam_pwquality\.so try_first_pass local_users_only retry=3 authtok_type=/i password required         pam_cracklib.so minclass=3" /etc/pam.d/system-auth
+sed -i "\$i export HISTTIMEFORMAT=\"%F %T \""  /etc/bashrc
+sed -i "\$iexport PROMPT_COMMAND=\'RETRN_VAL=\$?;logger -p local6\.debug \"\$\(who am i\) \[\$\$]: \$\(history 1 | sed \"s/^\[ ]\*\[0-9]\+\[ ]\*//\" \) \[\$RETRN_VAL]\"\' "  /etc/bashrc
+source /etc/bashrc
+echo "local6.*    /var/log/bash_history.log" >/etc/rsyslog.d/bash.conf
+sed -i.bak "/{/i/var/log/bash_history.log" /etc/logrotate.d/syslog
+chmod 600 /var/log/cron
+chmod 600 /var/log/message
+chmod 600 /var/log/secure
+systemctl restart rsyslog
+
+
 ####kernel harden
 
 
