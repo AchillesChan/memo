@@ -354,7 +354,7 @@ $hn=hostname.exe
 $port=5986
 $Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName $hn
 ls Cert:\LocalMachine\My\ >1.txt
-$ID=((Get-Content 1.txt|select-string "CN=RD") -split  " +")[0]
+$ID=((Get-Content 1.txt|select-string "CN=") -split  " +")[0]
 #$HN=((Get-Content 1.txt|select-string "CN=") -split  " +")[1]|%{$_ -replace "CN=",""}
 #Write-Host $id
 #Write-Host $HN
