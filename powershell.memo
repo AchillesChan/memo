@@ -460,6 +460,21 @@ stop-process -Id $PID
 ##-------------------------------------------------------------------
 #######Automation install bginfo
 
+###head and tail####
+Get-Content (alias: gc) is your usual option for reading a text file. You can then filter further:
+
+gc log.txt | select -first 10 # head
+gc -TotalCount 10 log.txt     # also head
+gc log.txt | select -last 10  # tail
+gc -Tail 10 log.txt           # also tail (since PSv3), also much faster than above option
+gc log.txt | more             # or less if you have it installed
+gc log.txt | %{ $_ -replace '\d+', '($0)' }         # sed
+This works well enough for small files, larger ones (more than a few MiB) are probably a bit slow.
+
+The PowerShell Community Extensions include some cmdlets for specialised file stuff (e.g. Get-FileTail).
+
+https://stackoverflow.com/questions/9682024/how-to-do-what-head-tail-more-less-sed-do-in-powershell/41626586
+###head and tail####
 
 ####awk sed grep###
 ####awk
