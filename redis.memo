@@ -100,5 +100,18 @@ b: set protected-mode
 c: rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
 d: or disable command rename-command CONFIG ""
 
+
+
+###error handle####
+MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+In case you encounter the error and some important data cannot be discarded on the running redis instance (problems with permissions for the rdb file or its directory incorrectly, or running out of disk space), you can always redirect the rdb file to be written somewhere else.
+
+Using redis-cli, you can do something like this:
+
+CONFIG SET dir /tmp/some/directory/other/than/var  ====here is solution
+CONFIG SET dbfilename temp.rdb                     ===here is solution
+After this, you might want to execute a BGSAVE command to make sure that the data will be written to the rdb file. Make sure that when you execute INFO, bgsave_in_progress is already 0 (either the operation is successful or there is an error encountered). After that, you can now start backing up the generated rdb file somewhere safe.
+###error handle####
 ######End redis.memo #######
 ######Endmemoof redis.memo #######
