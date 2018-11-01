@@ -562,6 +562,10 @@ BEGIN
   SET @x = 0;
   REPEAT SET @x = @x + 1; UNTIL @x > p1 END REPEAT;
 END;
+
+10. connect to mysql over ssh
+grant all privileges on *.* to 'root'@'::1' identified by 'your-password' with grant option;
+flush privileges 
 ###############mycli##########
 
 
