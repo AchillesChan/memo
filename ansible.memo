@@ -190,7 +190,7 @@ Shell> cat roles/screen/tasks/main.yml
   shell /bin/sh /tmp/ansibleInstallScreen.sh
 - name: delete/rm/remove src tar
   file: path=/tmp/redis-3.2.4.tar.gz state=absent
-- name: add auto restart critical service
+- name: add auto restart critical services
   lineinfile: dest=/etc/crontab  line='5     3     *     *     *     root /etc/custom-scripts/au.sh'
 
 Shell> cat roles/screen/files/ansibleInstallScreen.sh
