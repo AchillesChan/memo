@@ -157,6 +157,20 @@ bash -c echo  > ./s1.sh
 bash -c echo  > ./s2.sh 
 bash -c echo  > ./s3.sh 
 
+
+
+https://serverfault.com/questions/722287/why-use-bash-c-in-supervisor-instead-of-calling-script-directly
+
+Shell features such as pathname expansion (*, ?), command lists (;, &&, ||), redirection (<, >, |,) are not implemented by supervisord that only splits the command into an array of argument strings.
+
+The bash -c may be just a help for novice user who might be tempted to use such features in the command. For example it avoids the surprise that
+
+command=echo foo > /tmp/bar
+
+outputs foo > /tmp/bar instead of writing foo to /tmp/bar.
+
+-c has little to do with variables. Any additional arguments to the bash would only be available as script arguments $0, $1, etc. in the command, but that feature has seldom any use. For example bash -c 'echo $0 $0' foo outputs foo foo.
+
 ####
 
 
