@@ -749,9 +749,9 @@ Enter-Pssession -ComputerName IP-or-dns -port 5986 -Credential your-user-name -U
 
 7
 powershell copy file
-•	PS C:\Windows\system32> $TargetSession = New-PSSession -ComputerName your-ip -Port  5986  -Credential your-user-name -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+•	PS C:\Windows\system32> $TargetSession = New-PSSession -ComputerName SrvIP -Port  5986  -Credential UserName -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
 •	PS C:\Windows\system32> Copy-Item  -ToSession $TargetSession -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
-•	PS C:\Windows\system32> Enter-PSSession  -ComputerName your-ip -Port  5986  -Credential  your-user-name
+•	PS C:\Windows\system32> Enter-PSSession  -ComputerName SrvIP -Port  5986  -Credential  UserName
 
 
 tips
