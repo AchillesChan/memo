@@ -2373,9 +2373,7 @@ susam@nifty:~/so$ find . -regextype sed -regex ".*/[a-f0-9\-]\{36\}\.jpg"
 ./81397018-b84a-11e0-9d2a-001b77dc0bed.jpg
 https://stackoverflow.com/questions/6844785/how-to-use-regex-with-find-command
 
-EC2 AMI 登入方式及切換 root 權限
 
-ssh -i AWS_KEY.pem ubuntu@ec2-52-69-88-159.ap-northeast-1.compute.amazonaws.com aws云服务器
 
 去掉windows下的回车符 （注意^M 在linux 下写法 按^M 是回车换行符,输入方法是按住CTRL+v,松开v,按m)
 sed -i 's/^M//g' filename
