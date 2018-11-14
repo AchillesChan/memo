@@ -1,6 +1,47 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+#######winrm with powershell remote copy file run powershell script set schdule#####
+###05 prequest
+ client need add to AD? with 5986 port openning 
+ operation user is remote Administrators with AD user privileges 
+###10 copy file
+$TargetSession = New-PSSession -ComputerName your-srv -Port  5986  -Credential Domain\User -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+Copy-Item  -ToSession $TargetSession -Path "f:\Script.ps1"  -Destination "C:\Script.ps1" 
+
+###15 set login Credentials
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$User="Domain\User"
+$Cred=new-object System.Management.Automation.PSCredential($User,$Password)
+###20 winrm run on remote vm
+Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
+         -ThrottleLimit 4 -AsJob -ComputerName your-srv `
+         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+         -scriptblock {
+              Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+
+    ###20-10 run script once 
+              powershell.exe -File "C:\Script.ps1"         
+    ###20-20 add to schdule
+              $POWERSHELL='C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe'    
+              $USER='Domain\User' 
+              $TASKNAME='MySchdule'
+              $PASSWORD="your-srv-pw"
+              $Action = New-ScheduledTaskAction -Execute "$POWERSHELL" -Argument "-noninteractive -NoLogo -NoProfile -File 'C:\Script.ps1'"
+              $Trigger = New-ScheduledTaskTrigger -AtStartup
+              $Task = New-ScheduledTask -Action $Action -Trigger $Trigger -Settings (New-ScheduledTaskSettingsSet)
+              $Task | Register-ScheduledTask -TaskName $TASKNAME -User $USER -Password "$PASSWORD"
+              Start-ScheduledTask -TaskName $TASKNAME 
+                
+              Set-ExecutionPolicy -ExecutionPolicy Restricted
+                }     
+
+###30 check
+Enter-PSSession  -ComputerName your-srv -Port  5986  -Credential  Domain\User
+
+
+#######winrm with powershell remote copy file run powershell script set schdule#####
+
 ###export arrays to csv
 --10 code 
 $serverList = import-csv "C:\Users\datafile.csv"
