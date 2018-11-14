@@ -2358,6 +2358,20 @@ find正则类型 posix-awk, posix-basic, posix-egrep and posix-extended
 /etc/latrace.d/stdlib.conf
 /etc/latrace.d/inet.conf
 /etc/latrace.d/typedefs.conf
+find . -regextype sed -regex ".*/[a-f0-9\-]\{36\}\.jpg"
+Note that you need to specify .*/ in the beginning because find matches the whole path.
+
+Example:
+
+susam@nifty:~/so$ find . -name "*.jpg"
+./foo-111.jpg
+./test/81397018-b84a-11e0-9d2a-001b77dc0bed.jpg
+./81397018-b84a-11e0-9d2a-001b77dc0bed.jpg
+susam@nifty:~/so$ 
+susam@nifty:~/so$ find . -regextype sed -regex ".*/[a-f0-9\-]\{36\}\.jpg"
+./test/81397018-b84a-11e0-9d2a-001b77dc0bed.jpg
+./81397018-b84a-11e0-9d2a-001b77dc0bed.jpg
+https://stackoverflow.com/questions/6844785/how-to-use-regex-with-find-command
 
 EC2 AMI 登入方式及切換 root 權限
 
