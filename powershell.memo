@@ -50,7 +50,8 @@ Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
               Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
     ###20-10 run script once 
-              powershell.exe -File "C:\Script.ps1"         
+              powershell.exe -File "C:\Script.ps1"        
+			  Get-PSDrive E | Select-Object #Used,Free   ###get disk space info free capacity etc 
     ###20-20 add to schdule
               $POWERSHELL='C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe'    
               $USER='Domain\User' 
