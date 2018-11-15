@@ -1,6 +1,35 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+####Invoke-command  variable reference powershell#############
+$vmList= Import-CSV E:\ESG.csv
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$User="Domain\user"
+$Cred=new-object System.Management.Automation.PSCredential($User,$Password)
+#$vmList
+ForEach($row in $vmList)
+		{
+        $id=$row.ID
+        $ip=$row.IP
+        $port=$row.PORT
+
+        if($row.MYSQL -EQ "Y"){
+        $job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
+         -ThrottleLimit 4 -AsJob -ComputerName $ip `
+         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+         -scriptblock {
+                param($id,$ip,$port)    ###define call powershell var                                             
+                $hn=hostname.exe  
+		        $mysql=netstat -ano|findstr "0.0.0.0:3306" 
+                write-host $hn "ID:" $using:id "IP:" $using:ip  "Port:" $using:port  ###present $using:var
+                }     
+             } 
+		}
+
+####Invoke-command  variable reference powershell#############
+
+
+
 #######winrm with powershell remote copy file run powershell script set schdule#####
 ###05 prequest
  client need add to AD? with 5986 port openning 
@@ -21,7 +50,8 @@ Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
               Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
     ###20-10 run script once 
-              powershell.exe -File "C:\Script.ps1"         
+              powershell.exe -File "C:\Script.ps1"        
+			  Get-PSDrive E | Select-Object #Used,Free   ###get disk space info free capacity etc 
     ###20-20 add to schdule
               $POWERSHELL='C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe'    
               $USER='Domain\User' 
