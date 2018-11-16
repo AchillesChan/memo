@@ -15,10 +15,10 @@ Next we need to restart the services and add them to the boot menu.systemctl ena
 systemctl enable nfs-server
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
-systemctl rerestart rpcbind
-systemctl rerestart nfs-server
-systemctl rerestart nfs-lock
-systemctl rerestart nfs-idmap
+systemctl restart rpcbind
+systemctl restart nfs-server
+systemctl restart nfs-lock
+systemctl restart nfs-idmap
 
 Now we will share the NFS directory over the network a follows:
 nano /etc/exports
@@ -32,7 +32,7 @@ Note 192.168.0.101 is the IP of client machine, if you wish that any other clien
 Condition is that it must be pingable at both ends.
 
 Finally restart the NFS service as follows:
-systemctl rerestart nfs-server
+systemctl restart nfs-server
 
 Again we need to add the NFS service override in CentOS 7.0 firewall-cmd public zone service as:
 firewall-cmd --permanent --zone=public --add-service=nfs
