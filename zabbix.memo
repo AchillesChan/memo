@@ -10,6 +10,17 @@ grafana.yousite.com/dashboard/import
 This can use different dashboard with different datasource with same json???
 ###import dashboard json url####
 
+####import and export json grafana####
+
+Exporting a dashboard
+Dashboards are exported in Grafana JSON format, and contain everything you need (layout, variables, styles, data sources, queries, etc)to import the dashboard at a later time.
+
+The export feature is accessed in the share window which you open by clicking the share--export-->save to file button in the dashboard menu.
+
+Importing a dashboard
+To import a dashboard open dashboard search and then hit the import button.Click "+" sign on upper left-->import-->upload .json File 
+####import and export json grafana####
+
 ###add custom item###
 05
 $>vim  /usr/local/zabbix/etc/zabbix_agentd.conf
