@@ -69,7 +69,7 @@ systemctl restart nfs-idmap
 
 Next we will mount the NFS shared content in the client machine as shown below:
 mount -t nfs 192.168.0.100:/home /mnt/nfs/home/
-
+host.myserver.com:/share /mnt/nfs nfs rw,hard,intr,rsize=8192,wsize=8192,timeo=14 0 0
 
 Your can use rpcinfo -p server view rpc info
 # rpcinfo -p server
