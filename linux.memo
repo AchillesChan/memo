@@ -149,8 +149,10 @@ systemctl restart rsyslog
 
 ####kernel harden
 
+find file operation time in minute
 
-####find xargs echo empty to multiple  logfile
+find . -mmin -5 ###files created in 5 minutes
+####find with  xargs echo empty to multiple  logfile
 # find ./ -type f |grep -E '^./s.*.sh'|xargs -t -I {} bash -c 'echo  > {}'
 bash -c echo  > ./security.sh 
 bash -c echo  > ./s1.sh 
