@@ -54,7 +54,8 @@ cp  $srcPath/my.cnf $mysqlConf
 chown -R mysql.mysql $installPath  #basedir and data dir need exactly path 
 
 ####if $dataPath not EMPTY ,get error,rm everything in $dataPath
-$installPath/bin/mysqld --initialize --basedir=$installPath --datadir=$dataPath --user=mysql
+$installPath/bin/mysqld --initialize --basedir=$installPath --datadir=$dataPath --user=mysql 2>&1 | tee /usr/local/src/mysql_install.log
+init_pw=$(grep '20.*Note.*pass.*roo.*host' /usr/local/src/mysql_install.log|sed -e 's/20.*pass.*root.*host:\ //g')
 
 cp $srcPath/mysql-5.7.17/support-files/mysql.server /etc/init.d/mysqld
 
@@ -65,5 +66,9 @@ systemctl start mysqld
 ln -s $installPath/bin/* /bin/
 
 echo "Install mysqld successful"
+sleep 1s
+
+mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('my_new_password')" -uroot -p"$init_pw" --connect-expired-password
+
 ######End autoInstallMysql57.sh #######
 ######Endmemoof autoInstallMysql57.sh #######
