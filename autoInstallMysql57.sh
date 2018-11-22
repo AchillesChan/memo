@@ -7,7 +7,6 @@ ftpPwd="dangerous"
 mysqlPkg="mysql-5.7.17.tar.gz" ##需要boost版本
 ftpPath="ftp://$srvIP/$mysqlPkg"
 srcPath="/usr/local/src"
-initialpw='abcd-1238'
 installPath="/usr/local/mysql"
 mysqlConf="/etc/my.cnf"
 root_pwd="your-pass-here"
@@ -47,7 +46,7 @@ ls $install_log || touch $install_log
 
 $installPath/bin/mysqld --initialize --basedir=$installPath --datadir=$installPath/data/ --user=mysql 2>&1 | tee $install_log
 initial_password=$(grep '20.*Note.*pass.*roo.*host' "$install_log"|sed -e 's/20.*pass.*root.*host:\ //g')
-echo "PW:$initial_password"
+#echo "PW:$initial_password"
 
 cp $srcPath/mysql-5.7.17/support-files/mysql.server /etc/init.d/mysqld
 
