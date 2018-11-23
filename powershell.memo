@@ -1,6 +1,10 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+###########redirct output to file#################
+Receive-Job -id 60 -Keep 2>&1|Out-File -FilePath E:\result.txt -Append
+###########redirct output to file#################
+
 ####Invoke-command  variable reference powershell#############
 $vmList= Import-CSV E:\ESG.csv
 $Password=Read-host "Enter PASSWORD" -AsSecureString
