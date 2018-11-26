@@ -7,6 +7,26 @@ innodb_flush_method=unbuffered
 
 windows io acid security set?
 
+
+#####reset mysql 5.7 password######
+--10
+$>systemctl stop mysqld
+$>mysqld --user=mysql --skip-grant-tables
+
+--20
+mysql> UPDATE mysql.user SET authentication_string=PASSWORD('my_password') WHERE User='root';
+Query OK, 1 row affected, 1 warning (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+mysql> flush privileges；
+Query OK, 0 rows affected (0.00 sec)
+
+--30 
+$>pkill mysqld
+$>systemctl start mysqld 
+#####reset mysql 5.7 password######
+
+
 #####optimizing debug script 
 https://github.com/major/MySQLTuner-perl
 --10
