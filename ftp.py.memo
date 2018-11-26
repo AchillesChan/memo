@@ -1,0 +1,35 @@
+# -*- coding:utf-8 -*-
+import os
+from ftplib import FTP
+
+##10 put files in current directory into FILE_LIST
+FILE_LIST=[""]
+
+for root, dirs, files in os.walk("."):
+    for filename in files:
+        FILE_LIST.append(filename)
+FILE_LIST.remove(FILE_LIST[0])
+print FILE_LIST
+print len(FILE_LIST)
+print FILE_LIST[0]
+
+###20 ftp operation
+ftp = FTP('ftp-server')
+ftp.login(user='ftpuser', passwd = 'my_pwd')
+
+
+def grabFile():
+
+    filename = 'example.txt'
+    localfile = open(filename, 'wb')
+    ftp.retrbinary('RETR ' + filename, localfile.write, 1024)
+    ftp.quit()
+    localfile.close()
+
+def placeFile():
+
+    filename = 'parellel-ping.py'
+    ftp.storbinary('STOR '+filename, open(filename, 'rb'))
+    ftp.quit()
+
+placeFile()
