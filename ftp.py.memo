@@ -13,6 +13,12 @@ print FILE_LIST
 print len(FILE_LIST)
 print FILE_LIST[0]
 
+##15 sort file_list
+'''for root, dirs, files in os.walk('.'):
+   for filename in sorted(files):
+    ┆   print(filename)
+'''
+
 ###20 ftp operation
 ftp = FTP('ftp-server')
 ftp.login(user='ftpuser', passwd = 'my_pwd')
