@@ -2755,22 +2755,22 @@ GRANT  REPLICATION SLAVE ON *.* TO 'repli'@'172.16.0.%' IDENTIFIED  BY 'replicat
 
 
 【mysql备份权限】
-
-
-CREATE USER 'backup-user-name'@'ip-address' IDENTIFIED BY 'bak-password';
-GRANT RELOAD ON *.* TO 'backup-user-name'@'ip-address';
-GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_progress TO 'backup-user-name'@'ip-address';
-GRANT CREATE, INSERT, SELECT, DROP, UPDATE ON mysql.backup_history TO 'backup-user-name'@'ip-address';
-GRANT REPLICATION CLIENT ON *.* TO 'backup-user-name'@'ip-address';
-GRANT SUPER ON *.* TO 'backup-user-name'@'ip-address';
-GRANT EVENT ON *.* TO 'backup-user-name'@'ip-address';
-GRANT PROCESS ON *.* TO 'backup-user-name'@'ip-address';
-GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'backup-user-name'@'ip-address';
-GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'backup-user-name'@'ip-address';
-mysql> grant event on *.* to  'backup-user-name'@'ip-address';
+mysql>
+CREATE USER 'backup-User'@'127.0.0.1' IDENTIFIED BY 'Bak-pwd';
+GRANT RELOAD ON *.* TO 'backup-User'@'127.0.0.1';                                                                                                                                                    
+GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_progress TO 'backup-User'@'127.0.0.1';
+GRANT CREATE, INSERT, SELECT, DROP, UPDATE ON mysql.backup_history TO 'backup-User'@'127.0.0.1';
+GRANT REPLICATION CLIENT ON *.* TO 'backup-User'@'127.0.0.1';
+GRANT SUPER ON *.* TO 'backup-User'@'127.0.0.1';
+GRANT EVENT ON *.* TO 'backup-User'@'127.0.0.1';
+GRANT PROCESS ON *.* TO 'backup-User'@'127.0.0.1';
+GRANT LOCK TABLES, SELECT, CREATE, ALTER ON *.* TO 'backup-User'@'127.0.0.1';
+GRANT CREATE, INSERT, DROP, UPDATE ON mysql.backup_sbt_history TO 'backup-User'@'127.0.0.1';
+grant event on *.* to  'backup-User'@'127.0.0.1';
 flush privileges;
 
- backup bash shell //backup every dbs but system dbs,then package with tar and move to lsyncd dir to transfer to other place
+
+###script backup
 #!/bin/bash
 export PATH=/usr/local/mysql/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 optDate=$(date +%Y%m%d-%H%M)
@@ -2783,9 +2783,11 @@ bakHost="127.0.0.1"
 lsyncPath="/data/lsyncd"
 
 
-###0 delete old sql
+###0 delete old sql and create work directory
+            ls $bakPath || mkdir -p $bakPath
+            ls $lsyncPath || mkdir -p $lsyncPath
 
-            rm -f "$bakPath"*.sql                                                                                                                                       
+            rm -f "$bakPath"*.sql
 
 ####1 get dbs need backup
 if ! dbs=$(mysql -e 'show databases;' -u"$bakUser" -p"$bakPwd" -h"$bakHost" \
@@ -2806,9 +2808,10 @@ done
 
 #####3 tar file and transfer to lsync path
 if ! tar zcPf "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"*.sql
-then 
+then
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
 fi
+
 
 ######End mysql.memo #######
 ######Endmemoof mysql.memo #######

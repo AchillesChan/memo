@@ -1,41 +1,41 @@
 # -*- coding:utf-8 -*-
 import os
+import time
 from ftplib import FTP
 
-##10 put files in current directory into FILE_LIST
 FILE_LIST=[""]
-
 for root, dirs, files in os.walk("."):
-    for filename in files:
-        FILE_LIST.append(filename)
+    for filelist in sorted(files):
+        FILE_LIST.append(filelist)
 FILE_LIST.remove(FILE_LIST[0])
-print FILE_LIST
-print len(FILE_LIST)
-print FILE_LIST[0]
 
-##15 sort file_list
-'''for root, dirs, files in os.walk('.'):
-   for filename in sorted(files):
-    ┆   print(filename)
-'''
+def uploadFile(file):
+    try:    
+        ftp = FTP('your-ip')
+        ftp.login(user='ftpuser', passwd = 'ftp-pwd')
+        ftp.storbinary('STOR '+file, open(file, 'rb'))
+        ftp.quit()
+        time.sleep(3)
+        return True    
+    except:
+        time.sleep(5)
+        return False
 
-###20 ftp operation
-ftp = FTP('ftp-server')
-ftp.login(user='ftpuser', passwd = 'my_pwd')
 
+file=FILE_LIST[0] 
+while True:
+    upload_status = uploadFile(file)
 
-def grabFile():
+    if upload_status:
+        print("Success update")
+        FILE_LIST.remove(FILE_LIST[0])
+        print len(FILE_LIST)
+        if len(FILE_LIST)>0:
+            file=FILE_LIST[0]
+            upload_status = uploadFile(file)
+        else:
+            break
+    else:
+        upload_status = uploadFile(file)
+        print("Error update")
 
-    filename = 'example.txt'
-    localfile = open(filename, 'wb')
-    ftp.retrbinary('RETR ' + filename, localfile.write, 1024)
-    ftp.quit()
-    localfile.close()
-
-def placeFile():
-
-    filename = 'parellel-ping.py'
-    ftp.storbinary('STOR '+filename, open(filename, 'rb'))
-    ftp.quit()
-
-placeFile()
