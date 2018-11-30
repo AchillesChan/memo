@@ -4,7 +4,16 @@ http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy
 
 https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
 https://www.liaoxuefeng.com/ python教学
+###pylint
+--10 install
+pip install pylint || sudo zypper install pylint || \
+yum install pylint
 
+--20 run
+https://www.mantidproject.org/How_to_run_Pylint
+pylint your.py
+
+###pylint
 
 #########sftp update file#####
 1 link
