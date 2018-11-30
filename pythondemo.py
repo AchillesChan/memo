@@ -334,5 +334,27 @@ except:
 
 # 关闭数据库连接
 db.close()                     
+
+#####get full path and name ###########
+####--10 function
+# -*- coding:utf-8 -*-
+import os
+import time
+from ftplib import FTP
+
+def printfile(mypath):
+    shpfiles = []
+    for dirpath, subdirs, files in os.walk(mypath):                                                                                
+        for x in files:
+                shpfiles.append(os.path.join(dirpath, x))
+    print shpfiles
+
+
+####--20 call 
+printfile('/home/user')
+
+#####get full path and name ###########
+
+
 ######End pythondemo.py #######
 ######Endmemoof pythondemo.py #######
