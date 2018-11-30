@@ -25,26 +25,26 @@ def uploadFile(FILE):
         return False
 FILE=FILE_ARRAY[0]
 while True:
-    UPLOAD_FLAG = uploadFile(FILE)
+    UPLOAD_STATUS = uploadFile(FILE)
 
-    if UPLOAD_FLAG:
+    if UPLOAD_STATUS:
         print("Success update "+FILE)
         FILE_ARRAY.remove(FILE_ARRAY[0])
         if len(FILE_ARRAY)>0:
             FILE=FILE_ARRAY[0]
-            UPLOAD_FLAG = uploadFile(FILE)
+            UPLOAD_STATUS = uploadFile(FILE)
         else:
             break
     else:
         FAIL_COUNT=FAIL_COUNT+1
         print("Error update "+FILE)
         if FAIL_COUNT < MAX_RETRY:
-                UPLOAD_FLAG = uploadFile(FILE)
+                UPLOAD_STATUS = uploadFile(FILE)
         else:   
                 FILE_ARRAY.remove(FILE_ARRAY[0])
                 FILE=FILE_ARRAY[0]
                 FAIL_COUNT=0
-                UPLOAD_FLAG = uploadFile(FILE)
+                UPLOAD_STATUS = uploadFile(FILE)
 
 
 ###running result
