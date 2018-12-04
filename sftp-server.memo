@@ -1,5 +1,32 @@
 ######Startmemoof sftp-server.memo #######
 ######Start sftp-server.memo #######
+--05  user is remote-user,home is /home/remote-user
+# cat /etc/passwd|grep remote
+remote-user:x:1007:1007::/home/remote-user/:/sbin/nologin                                                                                      
+
+# grep Chroot /etc/ssh/sshd_config 
+Subsystem sftp internal-sftp
+Match group remote-group
+    ChrootDirectory /home/remote-user
+    ForceCommand internal-sftp
+    PasswordAuthentication yes
+
+# ll /home
+total 8
+drwxr-xr-x.  3 root    root      18 Dec  3 17:48 remote-user
+
+
+# ll /home/remote-user/
+total 0
+drwxr-x---. 2 remote-user remote-group 6 Dec  4 10:22 data
+
+# ll /home/remote-user/data/
+total 4
+-rw-r--r--. 1 remote-user remote-group 3622 Dec  4 10:24 files
+
+
+
+
 --10 server end 
 #server on centos 7.3 azure
 ##This can use sftp but not ssh login
