@@ -54,13 +54,13 @@ session     required      pam_unix.so
 
 --15 sed with insert/append line before(after) match lin
 --syntax sed -i "/matched line/operator(a,i,A,I..ETC) newline" FILE
-  sed -i.bak "/#%PAM-1.0/a auth       substack     system-auth" sshd
-  sed -i "/account    required     pam_nologin.so/a account    include      system-auth" sshd
-  sed -i "/password   include      password-auth/a password   include      system-auth" sshd
-  sed -i "/session    required     pam_selinux.so close/a session    include      system-auth" sshd
+sed -i.bak "/#%PAM-1.0/a auth       substack     system-auth" sshd
+sed -i "/account    required     pam_nologin.so/a account    include      system-auth" sshd
+sed -i "/password   include      password-auth/a password   include      system-auth" sshd
+sed -i "/session    required     pam_selinux.so close/a session    include      system-auth" sshd
 
- sed -i.bak "/# User changes will be destroyed the next time authconfig is run./a auth     required       pam_tally2.so deny=5 even_deny_root unlock_time=60" system-auth
- sed -i "/password    requisite     pam_pwquality\.so try_first_pass local_users_only retry=3 authtok_type=/i password required         pam_cracklib\.so minclass=3" system-auth
+sed -i.bak "/# User changes will be destroyed the next time authconfig is run./a auth     required       pam_tally2.so deny=5 even_deny_root unlock_time=60" system-auth
+sed -i "/password    requisite     pam_pwquality\.so try_first_pass local_users_only retry=3 authtok_type=/i password required         pam_cracklib\.so minclass=3" system-auth
 
 
 --20 
@@ -88,11 +88,11 @@ local6.*                                                 /var/log/bash_history.l
 ......                                       ####omit staff 
 /var/log/bash_history.log                    ####add log file here
 {
-    missingok
-    sharedscripts
-    postrotate
-        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
-    endscript
+missingok
+sharedscripts
+postrotate
+/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+endscript
 }
 
 --50
@@ -194,14 +194,14 @@ cat /var/log/lynis.log
 ./lynis audit system >result
 
 --50 view result 
- cat result|more
- cat /var/log/lynis-report.dat
+cat result|more
+cat /var/log/lynis-report.dat
 
 --55 interactive test 
- sudo ./lynis audit system --wait
+sudo ./lynis audit system --wait
 
 --58 help
- sudo ./lynis 
+sudo ./lynis 
 
 --60
 https://www.linuxtechi.com/lynis-security-auditing-tool-linux-servers/
@@ -222,13 +222,13 @@ find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T -
 
 ###ubuntu basic
 10 nano meta key 
- ^ represent Ctrl
- ^+O save
- ^+X exit
- ...
+^ represent Ctrl
+^+O save
+^+X exit
+...
 
 20 set ip
-   $ cat /etc/network/interfaces
+$ cat /etc/network/interfaces
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
@@ -242,9 +242,9 @@ iface lo inet loopback
 auto enp0s3
 #iface enp0s3 inet dhcp
 iface enp0s3 inet static
-        address 10.0.0.9
-        netmask 255.255.255.0
-        gateway 10.0.0.1
+address 10.0.0.9
+netmask 255.255.255.0
+gateway 10.0.0.1
 dns-nameserver 8.8.8.8
 
 $sudo ip flush enp0s3 && sudo systemctl restart networking.service
@@ -261,8 +261,8 @@ sudo service ssh status
 40 firewall
 
 
-  sudo ufw allow 22
- sudo ufw allow 6000:6007/tcp
+sudo ufw allow 22
+sudo ufw allow 6000:6007/tcp
 sudo ufw allow from 15.15.15.51
 sudo ufw allow from 15.15.15.51 to any port 22
 sudo ufw allow from 15.15.15.0/24 to any port 22
@@ -270,8 +270,8 @@ sudo ufw allow from 15.15.15.0/24 to any port 22
 sudo ufw status numbered
 Status: active
 
-     To                         Action      From
-     --                         ------      ----
+To                         Action      From
+--                         ------      ----
 [ 1] 22                         ALLOW IN    15.15.15.0/24
 [ 2] 80                         ALLOW IN    Anywhere
 sudo ufw delete 2
@@ -298,7 +298,7 @@ Return-Path: <root@serverName.localdomain>
 X-Original-To: root
 Delivered-To: root@serverName.localdomain
 Received: by serverName.localdomain (Postfix, from userid 0)
-        id 009313073AAB; Fri, 20 Jul 2018 05:00:01 +0800 (CST)
+id 009313073AAB; Fri, 20 Jul 2018 05:00:01 +0800 (CST)
 From: "(Cron Daemon)" <root@serverName.localdomain>
 To: root@serverName.localdomain
 Subject: Cron <root@serverName>       /path/2/script.sh
@@ -316,7 +316,7 @@ X-Cron-Env: <LOGNAME=root>
 X-Cron-Env: <USER=root>
 Message-Id: <20180719210002.009313073AAB@serverName.localdomain>
 Date: Fri, 20 Jul 2018 05:00:01 +0800 (CST)
-                       #####error message 
+               #####error message 
 /bin/bash: /path/2/script.sh: bin/bash: bad interpreter: No such file or directory
 #crontab problem log 
 
@@ -329,22 +329,22 @@ $>iftop -n -P -o 10 ##-o 10 IntervalBy 10s,-P pid -n no-dns-lookup
 ####php nginx opt###
 $>cat /usr/local/nginx/conf/nginx.conf
 ......
- location ~ \.php$ {
-            root           html;
-            proxy_set_header Host $host;
-            proxy_set_header            X-Forwarded-For    $proxy_add_x_forwarded_for;
-            proxy_set_header X-Real-IP $remote_addr;
-            fastcgi_pass   127.0.0.1:9000;
-            fastcgi_index  index.php;
-            fastcgi_param  SCRIPT_FILENAME  /path/2/$fastcgi_script_name;
-            include        fastcgi_params;
-            fastcgi_connect_timeout 60;    #####from here to end
-            fastcgi_send_timeout 180;
-            fastcgi_read_timeout 180;
-            fastcgi_buffer_size 128k;
-            fastcgi_buffers 256 16k;
-            client_body_buffer_size 1024k;    
-    }
+location ~ \.php$ {
+    root           html;
+    proxy_set_header Host $host;
+    proxy_set_header            X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr;
+    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME  /path/2/$fastcgi_script_name;
+    include        fastcgi_params;
+    fastcgi_connect_timeout 60;    #####from here to end
+    fastcgi_send_timeout 180;
+    fastcgi_read_timeout 180;
+    fastcgi_buffer_size 128k;
+    fastcgi_buffers 256 16k;
+    client_body_buffer_size 1024k;    
+}
 ......
 
 $> cat php.ini 
@@ -401,10 +401,10 @@ sshd    34721 Michael    3u  IPv4 12014314      0t0  TCP Srv:22->client:59426 (E
 #####lsof##########
 
 sed insert somethin into a file from before-last-three-lines
- tac anaconda-ks.cfg |sed -e '3i3rdNEW LINE!' |tac >>index.php && mv -fv index.php anaconda-ks.cfg 
+tac anaconda-ks.cfg |sed -e '3i3rdNEW LINE!' |tac >>index.php && mv -fv index.php anaconda-ks.cfg 
 #####strace##########
 strace -f -r -s 30 -o debug.log  -e trace=file \
- /path/2/cmd -f /path/2/conf --args 
+/path/2/cmd -f /path/2/conf --args 
 
 -f follow forks
 -r relative time 
@@ -445,30 +445,30 @@ vim extended regex mode
 --10 vim cmd
 
 :%s:\v(12|34)(abc){1}[a-d]:NumB:g
-  key is \v represented extended mode 
+key is \v represented extended mode 
 --20
 orgin
-  1 12abcd1
-  2 34abcabce2
-  3 56abcabcabcd3
-  4 34abcabce4
-  5 56abcabcabc1    
+1 12abcd1
+2 34abcabce2
+3 56abcabcabcd3
+4 34abcabce4
+5 56abcabcabc1    
 --30
 processed
-  1 NumB1
-  2 NumBbce2
-  3 56abcabcabcd3
-  4 NumBbce4                                                                                                                
-  5 56abcabcabc1
+1 NumB1
+2 NumBbce2
+3 56abcabcabcd3
+4 NumBbce4                                                                                                                
+5 56abcabcabc1
 
 
 vim zero-width assertions
 :help \@
 \@=     Matches the preceding atom with zero width. {not in Vi}
-        Like "(?=pattern)" in Perl.
-        Example                 matches  
-        foo\(bar\)\@=           "foo" in "foobar"
-        foo\(bar\)\@=foo        nothing
+Like "(?=pattern)" in Perl.
+Example                 matches  
+foo\(bar\)\@=           "foo" in "foobar"
+foo\(bar\)\@=foo        nothing
 
 ---link: https://quickteckiteasy.blogspot.com.au/2011/06/vim-search-with-zero-width.html
 \@=   Zero-width positive look ahead assertion 
@@ -477,69 +477,69 @@ vim zero-width assertions
 \@<!  Zero-width negative look behind assertion
 
 --100 orgin
-  7 xxxyyy                                                                                                                  
-  8 yyyxxx
-  9 xxx yyy
- 10 yyy xxx
- 11 xxxyyyxxx
- 12 yyyxxxyyy
+7 xxxyyy                                                                                                                  
+8 yyyxxx
+9 xxx yyy
+10 yyy xxx
+11 xxxyyyxxx
+12 yyyxxxyyy
 
 --110   
 vim-cmd  %s:xxx\(yyy\)\@=:3x-Followed-3y:g
 
 Result:
 
-  7 3x-Followed-3y-yyy
-  8 yyyxxx
-  9 xxx yyy
- 10 yyy xxx
- 11 3x-Followed-3y-yyyxxx
- 12 yyy-3x-Followed-3y-yyy  
+7 3x-Followed-3y-yyy
+8 yyyxxx
+9 xxx yyy
+10 yyy xxx
+11 3x-Followed-3y-yyyxxx
+12 yyy-3x-Followed-3y-yyy  
 
 --120
 vim-cmd  %s:xxx\(yyy\)\@!:3x-not-Followed-3y:g
 
 Result:
 
-  7 xxxyyy
-  8 yyy-3x-not-Followed-3y
-  9 3x-not-Followed-3y yyy
- 10 yyy 3x-not-Followed-3y
- 11 xxxyyy-3x-not-Followed-3y                                                                                            
- 12 yyyxxxyyy
+7 xxxyyy
+8 yyy-3x-not-Followed-3y
+9 3x-not-Followed-3y yyy
+10 yyy 3x-not-Followed-3y
+11 xxxyyy-3x-not-Followed-3y                                                                                            
+12 yyyxxxyyy
 
 
 --100 orgin
-  7 xxxyyy                                                                                                                  
-  8 yyyxxx
-  9 xxx yyy
- 10 yyy xxx
- 11 xxxyyyxxx
- 12 yyyxxxyyy
+7 xxxyyy                                                                                                                  
+8 yyyxxx
+9 xxx yyy
+10 yyy xxx
+11 xxxyyyxxx
+12 yyyxxxyyy
 
 --130 
 vim-cmd  %s:\(yyy\)\@<!xxx:3x-NotPrecededWith-3y:g
 
 Result:
 
-  7 3x-NotPrecededWith-3y-yyy
-  8 yyyxxx
-  9 3x-NotPrecededWith-3y yyy
- 10 yyy 3x-NotPrecededWith-3y
- 11 3x-NotPrecededWith-3y-yyyxxx                                                                                                 
- 12 yyyxxxyyy
+7 3x-NotPrecededWith-3y-yyy
+8 yyyxxx
+9 3x-NotPrecededWith-3y yyy
+10 yyy 3x-NotPrecededWith-3y
+11 3x-NotPrecededWith-3y-yyyxxx                                                                                                 
+12 yyyxxxyyy
 
 --140
 vim-cmd  %s:\(yyy\)\@<=xxx:3x-PrecededWith-3y:g
 
 Result:
 
-  7 xxxyyy
-  8 yyy-3x-PrecededWith-3y
-  9 xxx yyy
- 10 yyy xxx
- 11 xxxyyy-3x-PrecededWith-3y
- 12 yyy-3x-PrecededWith-3y-yyy    
+7 xxxyyy
+8 yyy-3x-PrecededWith-3y
+9 xxx yyy
+10 yyy xxx
+11 xxxyyy-3x-PrecededWith-3y
+12 yyy-3x-PrecededWith-3y-yyy    
 
 ####sed and vim regex#####
 
@@ -595,7 +595,7 @@ access_provider = ad
 --60 start sssd
 service sssd start /systemctl start sssd
 chkconfig --add sssd && chkconfig sssd on /systemctl enable sssd
- 
+
 --70 check 
 #>id domain\\user
 
@@ -636,22 +636,22 @@ bits strip off all the comments before fdisk gets the input.
 # Note that a blank line (commented as "defualt" will send a empty
 # line terminated with a newline to take the fdisk default.
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV} ###here documented 
-  o # clear the in memory partition table
-  n # new partition
-  p # primary partition
-  1 # partition number 1
-    # default - start at beginning of disk 
-  +100M # 100 MB boot parttion
-  n # new partition
-  p # primary partition
-  2 # partion number 2
-    # default, start immediately after preceding partition
-    # default, extend partition to end of disk
-  a # make a partition bootable
-  1 # bootable partition is partition 1 -- /dev/sda1
-  p # print the in-memory partition table
-  w # write the partition table
-  q # and we're done
+o # clear the in memory partition table
+n # new partition
+p # primary partition
+1 # partition number 1
+# default - start at beginning of disk 
++100M # 100 MB boot parttion
+n # new partition
+p # primary partition
+2 # partion number 2
+# default, start immediately after preceding partition
+# default, extend partition to end of disk
+a # make a partition bootable
+1 # bootable partition is partition 1 -- /dev/sda1
+p # print the in-memory partition table
+w # write the partition table
+q # and we're done
 EOF
 
 ############https://superuser.com/questions/332252/how-to-create-and-format-a-partition-using-a-bash-script
@@ -660,10 +660,10 @@ EOF
 link:https://stackoverflow.com/questions/12747929/linux-script-with-curl-to-check-webservice-is-up
 curl -sL -w "%{url_effective} %{remote_ip} %{http_code}\\n" "http://www.google.com/" -o /dev/null
 
-    -s = Silent cURL's output
-    -L = Follow redirects
-    -w = Custom output format
-    -o = Redirects the HTML output to /dev/null
+-s = Silent cURL's output
+-L = Follow redirects
+-w = Custom output format
+-o = Redirects the HTML output to /dev/null
 
 Example:
 
@@ -754,14 +754,14 @@ In both cases you get the same output:
 
 .../...
 ==================================================================
- Package         Arch       Version         Repository      Size
+Package         Arch       Version         Repository      Size
 ==================================================================
 Installing:
- cronie          x86_64     1.4.4-12.el6    base             73 k
+cronie          x86_64     1.4.4-12.el6    base             73 k
 Installing for dependencies:
- cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
- crontabs        noarch     1.10-33.el6     base             10 k
- exim            x86_64     4.72-6.el6      epel            1.2 M
+cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
+crontabs        noarch     1.10-33.el6     base             10 k
+exim            x86_64     4.72-6.el6      epel            1.2 M
 
 Transaction Summary
 ==================================================================
@@ -788,14 +788,14 @@ In both cases you get the same output:
 
 .../...
 ==================================================================
- Package         Arch       Version         Repository      Size
+Package         Arch       Version         Repository      Size
 ==================================================================
 Installing:
- cronie          x86_64     1.4.4-12.el6    base             73 k
+cronie          x86_64     1.4.4-12.el6    base             73 k
 Installing for dependencies:
- cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
- crontabs        noarch     1.10-33.el6     base             10 k
- exim            x86_64     4.72-6.el6      epel            1.2 M
+cronie-anacron  x86_64     1.4.4-12.el6    base             30 k
+crontabs        noarch     1.10-33.el6     base             10 k
+exim            x86_64     4.72-6.el6      epel            1.2 M
 
 Transaction Summary
 ==================================================================
@@ -822,7 +822,7 @@ find . -name .snapshots -prune -o -type f -print0 2>/dev/null |xargs -0 du 2>/de
 #!/bin/bash
 if  curl -IL hostname.example.com|grep "Bad Gateway"
 then
-        ssh -R external-port:internal-ip:internal-port -N -q -f -C -i rsa-key ssh-tunnel-user@external-ip-or-domain
+ssh -R external-port:internal-ip:internal-port -N -q -f -C -i rsa-key ssh-tunnel-user@external-ip-or-domain
 fi
 
 ####detect ssh tunnel failed restart ssh shell
@@ -885,11 +885,11 @@ if ! ps -ef |grep [5]618 2>&1 >/dev/null
 ##PATT 5618 MUST THE WHOLE FIELD,IF USE [5]61,WILL GET WRONG RESULT??
 then
 
-    ssh -p 5618 -i .ssh/your-rsa -NCfqL 23306:localhost:3306 somebody@server
+ssh -p 5618 -i .ssh/your-rsa -NCfqL 23306:localhost:3306 somebody@server
 fi
 
 7
- verify on centos 6.5
+verify on centos 6.5
 
 ####ssh tunnel with security
 
@@ -917,7 +917,7 @@ Option 2, include the below in /etc/sysconfig/network-scripts/route-eth0 file: �
 
 ###########OpenSSH Change a Passphrase With ssh-keygen command
 
- ssh-keygen -f id_dsa -p
+ssh-keygen -f id_dsa -p
 
 ###########OpenSSH Change a Passphrase With ssh-keygen command
 
@@ -1006,10 +1006,10 @@ $ top -b -o +%MEM | head -n 22
 As opposed to the previous tip, here you have to use +%MEM (note the plus sign) to sort the output in descending order:
 From the command above, the option:
 
-	1. -b : runs top in batch mode
-	2. -o : used to specify fields for sorting processes
-	3. head utility displays the first few lines of a file and
-	4. the -n option is used to specify the number of lines to be displayed.
+1. -b : runs top in batch mode
+2. -o : used to specify fields for sorting processes
+3. head utility displays the first few lines of a file and
+4. the -n option is used to specify the number of lines to be displayed.
 
 
 ####top tips
@@ -1028,7 +1028,7 @@ Practice https://www.researchgate.net/publication/267253313_Tuning_the_Linux_Ker
 File Handle LimitsWhen you're serving a lot of traffic it is usually the case that the traffic you're serving is coming from a large number of local files.
 The kernel has built-in limits on the number of files that a process can open, and raising these limits, at a cost of some system memory, is usually a sane thing to attempt.
 You can view the current limit on the number of open-files by running:
- cat /proc/sys/fs/file-max
+cat /proc/sys/fs/file-max
 
 The limit can be raised interactively by running, as root:
 # sysctl -w fs.file-max=100000
@@ -1099,7 +1099,7 @@ Then run the following command to make your change take effect:
 Filesystem TuningYou almost certainly want to disable the "atime" option on your filesystems.
 With this disabled that the last time a file was accessed won't be constantly updated every time you read a file, since this information isn't generally useful inand causes extra disk hits, its typically disabled.
 To do this, just edit /etc/fstab and add "notime" as a mount option for the filesystem. For example:
-    /dev/rd/c0d0p3          /test                    ext3    noatime        1 2
+/dev/rd/c0d0p3          /test                    ext3    noatime        1 2
 
 
 ############server opt
@@ -1123,8 +1123,8 @@ echo 'password' | sudo -kS ls
 　　将 HISTCONTROL 设置为 ignorespace，并在不想被记住的命令前面输入一个空格：
 
 　　# export HISTCONTROL=ignorespace  可以使用ansible处理，处理后下次登录到服务器就生效  
-    ansible sfwm -m lineinfile -a "dest=/etc/profile line='HISTCONTROL=ignorespace'" \
-     -f your-fork-number -u your-user --become --ask-pass --ask-sudo-pass
+ansible sfwm -m lineinfile -a "dest=/etc/profile line='HISTCONTROL=ignorespace'" \
+-f your-fork-number -u your-user --become --ask-pass --ask-sudo-pass
 
 ####set bash mode 设置bash模式
 set -o vi
@@ -1152,18 +1152,18 @@ PING 192.168.1.201 (192.168.1.201)
 ###使用parallel并行处理######
 -k后面的’与end后面的’之间直接可以运行多个命令，这些命令使用；区格；这些命令使用-k强制执行顺序相同
 To force the output in the same order as the arguments use --keep-order/-k:
-  parallel -j64 -k 'printf "%s-start\n%s" {} {};
-    sleep {};printf "%s\n" -middle;echo {}-end' ::: 4 2 1
+parallel -j64 -k 'printf "%s-start\n%s" {} {};
+sleep {};printf "%s\n" -middle;echo {}-end' ::: 4 2 1
 Output:
-  4-start
-  4-middle
-  4-end
-  2-start
-  2-middle
-  2-end
-  1-start
-  1-middle
-  1-end
+4-start
+4-middle
+4-end
+2-start
+2-middle
+2-end
+1-start
+1-middle
+1-end
 
 --{} represented variables,after ::: the value of the variables list here--
 $>time parallel -j8 -k 'ping -c 1 172.16.1.{}' ::: 10 20 118 136
@@ -1218,8 +1218,8 @@ Academic tradition requires you to cite works you base your article on.
 When using programs that use GNU Parallel to process data for publication
 please cite:
 
-  O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
-  ;login: The USENIX Magazine, February 2011:42-47.
+O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
+;login: The USENIX Magazine, February 2011:42-47.
 
 This helps funding further development; and it won't cost you a cent.
 If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
@@ -1259,9 +1259,9 @@ man parallel_tutorial 手册
 
 cat continue-test.sh
 while true
-    do
-        nc -vz youSite.com 80 >/dev/null 2>&1 && break;
-    done
+do
+nc -vz youSite.com 80 >/dev/null 2>&1 && break;
+done
 
 ====##command line run
 while true; do nc -vz ip-or-domain port >/dev/null 2>&1 && break; done
@@ -1354,7 +1354,7 @@ In /etc/audit/audit.rules we need to ensure that the following exists.
 ausearch  -ui 502 -i    ##502是用户ID
 ausearch -ui 501  -i |grep EXECVE -A 2 -B 2 --color
 
- 重新登录使用下面的方式查看
+重新登录使用下面的方式查看
 ausearch -m tty -i  ###过时？
 azure centos 6.X成功
 ####audit input审计键盘输入####
@@ -1395,25 +1395,25 @@ Scp_ip()
 cat /root/app.txt | while read line
 do
 (
-   /usr/bin/expect << EOF
-   set time 20
-   spawn scp /root/apache-tomcat-7.0.75.tar.gz root@$line:/root/
-   expect {
-        "*yes/no*"
-          { send "yes\r";exp_continue }
-        "*password:"
-          { send "Lh##U1H9Q"{}()\r"}
-   }
-   expect eof
+/usr/bin/expect << EOF
+set time 20
+spawn scp /root/apache-tomcat-7.0.75.tar.gz root@$line:/root/
+expect {
+"*yes/no*"
+  { send "yes\r";exp_continue }
+"*password:"
+  { send "Lh##U1H9Q"{}()\r"}
+}
+expect eof
 EOF
 ) &>/dev/null
 
-   if [ $? -eq 0 ]
-   then
-       echo "复制文件到$line成功！"
-   else
-       echo "复制文件到$line失败！"
-   fi
+if [ $? -eq 0 ]
+then
+echo "复制文件到$line成功！"
+else
+echo "复制文件到$line失败！"
+fi
 done
 }
 Scp_ip
@@ -1516,11 +1516,11 @@ This will read the whole file in a loop, then replaces the newline(s) with a
 space.
 
 Explanation:
-    Create a label via :a.
-    Append the current and next line to the pattern space via N.
-    If we are before the last line, branch to the created label $!ba ($! means
+Create a label via :a.
+Append the current and next line to the pattern space via N.
+If we are before the last line, branch to the created label $!ba ($! means
 not to do it on the last line as there should be one final newline).
-    Finally the substitution replaces every newline with a space on the pattern
+Finally the substitution replaces every newline with a space on the pattern
 space (which is the whole file).
 
 Here is cross-platform compatible syntax which works with BSD sed (as per
@@ -1577,18 +1577,25 @@ echo -n "$operationDate:">"$logFile"
 ###每次的操作输入到一个文件，多个错误拼接到一行
 while IFS= read -r managedServiceItem
 do(
-        if echo "$managedServiceItem"|grep '#' &>/dev/null
-        then
-           continue
-        fi
+if echo "$managedServiceItem"|grep '#' &>/dev/null
+then
+   continue
+fi
 
-        host=$(echo "$managedServiceItem"|awk '{print $1}')
-        port=$(echo "$managedServiceItem"|awk '{print $2}')
-        name=$(echo "$managedServiceItem"|awk '{print $3}')
-        if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
-        #if [ $? != 0 ];then
-                echo -n "WRONG $name ">>"$logFile"
-        fi)&
+host=$(echo "$managedServiceItem"|awk '{print $1}')
+port=$(echo "$managedServiceItem"|awk '{print $2}')
+name=$(echo "$managedServiceItem"|awk '{print $3}')
+if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+
+#https://stackoverflow.com/questions/19955260/what-is-dev-null-in-bash
+#Redirecting /dev/null to stdin will give an immediate EOF to any read call from that process. This is typically useful to detach a process from a tty (such a process is called a daemon). For example, when starting a background process remotely over ssh, you must redirect stdin to prevent the process waiting for local input.
+#
+#Another reason to redirect to /dev/null is to prevent an unused file descriptor being created for stdin. This can minimize the total open file handles when you have many long running processes.
+
+
+#if [ $? != 0 ];then
+        echo -n "WRONG $name ">>"$logFile"
+fi)&
 done <"$managedServiceFile"
 wait
 echo "">>"$logFile" ##打印换行
@@ -1611,20 +1618,20 @@ echo "$operationDate">>"$logFile"
 
 while IFS= read -r managedServiceItem
 do(
-        if echo "$managedServiceItem"|grep '#' &>/dev/null
-        then
-           continue
-        fi  ###如果配置行中有#，忽略该行
+if echo "$managedServiceItem"|grep '#' &>/dev/null
+then
+   continue
+fi  ###如果配置行中有#，忽略该行
 
-        host=$(echo "$managedServiceItem"|awk '{print $1}')
-        port=$(echo "$managedServiceItem"|awk '{print $2}')
-        name=$(echo "$managedServiceItem"|awk '{print $3}')
-        nc -w 2 "$host" "$port" < /dev/null &>/dev/null
-        if [ $? == 0 ];then
-                echo OK "$name" "$operationDate">>"$logFile"
-        else
-                echo !!WRONG!! "$name" "$operationDate">>"$logFile"
-        fi)&
+host=$(echo "$managedServiceItem"|awk '{print $1}')
+port=$(echo "$managedServiceItem"|awk '{print $2}')
+name=$(echo "$managedServiceItem"|awk '{print $3}')
+nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+if [ $? == 0 ];then
+        echo OK "$name" "$operationDate">>"$logFile"
+else
+        echo !!WRONG!! "$name" "$operationDate">>"$logFile"
+fi)&
 done <"$managedServiceFile"
 wait
 ##########detecv port status V3 END####################
@@ -1641,15 +1648,15 @@ echo "$operationDate">>"$logFile"
 
 while IFS= read -r managedServiceItem ##逐行读入处理
 do(
-        host=$(echo "$managedServiceItem"|awk '{print $1}')
-        port=$(echo "$managedServiceItem"|awk '{print $2}')
-        name=$(echo "$managedServiceItem"|awk '{print $3}')
-        if  nc -w 2 "$host" "$port" < /dev/null &>/dev/null
-        then
-                echo "$name" is OK at "$operationDate">>"$logFile"
-        else
-                echo "$name" is Wrong at "$operationDate">>"$logFile"
-        fi)&   ####后台处理，等待所有进程完成后才退出
+host=$(echo "$managedServiceItem"|awk '{print $1}')
+port=$(echo "$managedServiceItem"|awk '{print $2}')
+name=$(echo "$managedServiceItem"|awk '{print $3}')
+if  nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+then
+        echo "$name" is OK at "$operationDate">>"$logFile"
+else
+        echo "$name" is Wrong at "$operationDate">>"$logFile"
+fi)&   ####后台处理，等待所有进程完成后才退出
 done <"$managedServiceFile"
 wait ####后台处理，等待所有进程完成后才退出
 
@@ -1704,21 +1711,21 @@ do
 ####使用eval来逐层的剥离变量名字，得到实际的值
 ####$managedServic-->$cdbak01ssh-->"172.16.10.156 22 bak01ssh" 。。。。。。
 
-       host=$(eval eval echo "$managedService" |awk '{print $1}')
-        #echo host=$host
-        port=$(eval eval echo "$managedService" |awk '{print $2}')
-        name=$(eval eval echo "$managedService" |awk '{print $3}')
-        #echo port=$port
-        #echo name=$name
+host=$(eval eval echo "$managedService" |awk '{print $1}')
+#echo host=$host
+port=$(eval eval echo "$managedService" |awk '{print $2}')
+name=$(eval eval echo "$managedService" |awk '{print $3}')
+#echo port=$port
+#echo name=$name
 
-        nc -w 2 $host $port < /dev/null &>/dev/null
-        if [ $? == 0 ];then
-                #echo $name is OK at $op_date
-                echo $name is OK at $op_date>>$log_file
-        else
-                echo $name Wrong at $op_date>>$log_file
-                #echo $name Wrong at $op_date
-        fi
+nc -w 2 $host $port < /dev/null &>/dev/null
+if [ $? == 0 ];then
+        #echo $name is OK at $op_date
+        echo $name is OK at $op_date>>$log_file
+else
+        echo $name Wrong at $op_date>>$log_file
+        #echo $name Wrong at $op_date
+fi
 done
 ###############探测端口状态 detect port status End######################
 
@@ -1786,21 +1793,21 @@ mallimage_path="/data/backup/mall/attachement/"
 mallattache_path="/data/backup/mall/image/pictures/"
 dbbak_path="/data/backup/db/"
 if [ -d $mallimage_path ];then
-        find $mallimage_path  -ctime +10 |xargs rm  -rf
+find $mallimage_path  -ctime +10 |xargs rm  -rf
 else
-        echo "Error,Directory not exist!"
+echo "Error,Directory not exist!"
 fi
 
 if [ -d $mallattache_path ];then
-        find $mallattache_path -ctime +10 |xargs rm  -rf
+find $mallattache_path -ctime +10 |xargs rm  -rf
 else
-        echo "Error,Directory not exist!"
+echo "Error,Directory not exist!"
 fi
 
 if [ -d $dbbak_path ];then
-        find $dbbak_path -name "*.sql" -ctime +10 |xargs rm  -f
+find $dbbak_path -name "*.sql" -ctime +10 |xargs rm  -f
 else
-        echo "Error,Directory not exist!"
+echo "Error,Directory not exist!"
 fi
 ##########delete n days before files and directory END########
 
@@ -1964,54 +1971,54 @@ personScreenCfg=/root/.screenrc
 mv /etc/localtime /tmp
 ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 if [ `grep AlreadyInitiald $personBashCfg | wc -l` -eq 0 ];then
-        echo "alias hg='history |egrep -i --color'">>$personBashCfg
-        echo "alias h='history'">>$personBashCfg
-        echo "alias fcn='find ./ -name'">>$personBashCfg
-        echo "alias frn='find / -name'">>$personBashCfg
-        echo "alias lc='locate / | grep -i -E --color'">>$personBashCfg
-        echo "alias les='less -I'">>$personBashCfg
-        echo "alias ng='netstat -tlanp | grep -Ei --color'">>$personBashCfg
-        echo "alias pg='ps aux | grep -E -i --color'">>$personBashCfg
-        echo "alias ud='updatedb'">>$personBashCfg
-        echo "alias yuml='yum --disablerepo=\* --enablerepo=c6-media install'">>$personBashCfg
-        echo "alias gre='grep -E -i --color'">>$personBashCfg
-        echo "alias yumm='yum --enablerepo=c6-media install'">>$personBashCfg
-        echo "alias mc='mount /dev/cdrom /mnt/cdrom -t iso9660'">>$personBashCfg
-        echo "alias la='ls -Al'">>$personBashCfg
-        echo "alias lh='ls -hAl'">>$personBashCfg
-        echo "alias h='history'">>$personBashCfg
-        echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
-        echo "alias scs='screen -S'">>$personBashCfg
-        echo "alias scl='screen -li'">>$personBashCfg
-        echo "alias scd='screen -d'">>$personBashCfg
-        echo "alias scr='screen -r'">>$personBashCfg
-        echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
-        echo "alias gre='grep -i --color -A 3 -B 3 -n'">>$personBashCfg
-        source ~/.bashrc
-        rm -f $personScreenCfg
-        touch $personScreenCfg
-        echo  "hardstatus on ">$personScreenCfg
-        echo "hardstatus alwayslastline" >>$personScreenCfg
-        echo 'hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "'>>$personScreenCfg
-        echo "defscrollback 2048 " >>$personScreenCfg
-        echo "termcapinfo xterm* ti@:te@ ">>$personScreenCfg
-        ##bind shorcut Fn to switch screen
-        echo "bindkey -k k1 select 1 ">>$personScreenCfg
-        echo "bindkey -k k2 select 2 ">>$personScreenCfg
-        echo "bindkey -k k3 select 3 ">>$personScreenCfg
-        echo "bindkey -k k4 select 4 ">>$personScreenCfg
-        echo "bindkey -k k5 select 5 ">>$personScreenCfg
-        echo "##initail screen from 1 ">>$personScreenCfg
-        echo "bind c screen 1 ">>$personScreenCfg
-        echo "bind ^c screen 1 ">>$personScreenCfg
-        echo "bind 0 select 10 ">>$personScreenCfg
-        echo "screen 1 ">>$personScreenCfg
+echo "alias hg='history |egrep -i --color'">>$personBashCfg
+echo "alias h='history'">>$personBashCfg
+echo "alias fcn='find ./ -name'">>$personBashCfg
+echo "alias frn='find / -name'">>$personBashCfg
+echo "alias lc='locate / | grep -i -E --color'">>$personBashCfg
+echo "alias les='less -I'">>$personBashCfg
+echo "alias ng='netstat -tlanp | grep -Ei --color'">>$personBashCfg
+echo "alias pg='ps aux | grep -E -i --color'">>$personBashCfg
+echo "alias ud='updatedb'">>$personBashCfg
+echo "alias yuml='yum --disablerepo=\* --enablerepo=c6-media install'">>$personBashCfg
+echo "alias gre='grep -E -i --color'">>$personBashCfg
+echo "alias yumm='yum --enablerepo=c6-media install'">>$personBashCfg
+echo "alias mc='mount /dev/cdrom /mnt/cdrom -t iso9660'">>$personBashCfg
+echo "alias la='ls -Al'">>$personBashCfg
+echo "alias lh='ls -hAl'">>$personBashCfg
+echo "alias h='history'">>$personBashCfg
+echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
+echo "alias scs='screen -S'">>$personBashCfg
+echo "alias scl='screen -li'">>$personBashCfg
+echo "alias scd='screen -d'">>$personBashCfg
+echo "alias scr='screen -r'">>$personBashCfg
+echo "alias lrd='locate / | grep -Ei'">>$personBashCfg
+echo "alias gre='grep -i --color -A 3 -B 3 -n'">>$personBashCfg
+source ~/.bashrc
+rm -f $personScreenCfg
+touch $personScreenCfg
+echo  "hardstatus on ">$personScreenCfg
+echo "hardstatus alwayslastline" >>$personScreenCfg
+echo 'hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "'>>$personScreenCfg
+echo "defscrollback 2048 " >>$personScreenCfg
+echo "termcapinfo xterm* ti@:te@ ">>$personScreenCfg
+##bind shorcut Fn to switch screen
+echo "bindkey -k k1 select 1 ">>$personScreenCfg
+echo "bindkey -k k2 select 2 ">>$personScreenCfg
+echo "bindkey -k k3 select 3 ">>$personScreenCfg
+echo "bindkey -k k4 select 4 ">>$personScreenCfg
+echo "bindkey -k k5 select 5 ">>$personScreenCfg
+echo "##initail screen from 1 ">>$personScreenCfg
+echo "bind c screen 1 ">>$personScreenCfg
+echo "bind ^c screen 1 ">>$personScreenCfg
+echo "bind 0 select 10 ">>$personScreenCfg
+echo "screen 1 ">>$personScreenCfg
 
-        yum install -y epel-release.noarch  mlocate vim  gcc gcc++ gcc-c++ cmake screen
-        yum update -y
-        echo "#TheVMhasAlreadyInitialed">>$personBashCfg
+yum install -y epel-release.noarch  mlocate vim  gcc gcc++ gcc-c++ cmake screen
+yum update -y
+echo "#TheVMhasAlreadyInitialed">>$personBashCfg
 else
-        echo "AlreadyInitialed"
+echo "AlreadyInitialed"
 fi
 
 ++++++inital centos 6++++++
@@ -2064,20 +2071,20 @@ alias scs='screen -S'
 #Filename: fast_ping.sh
 # Change base address 192.168.0 according to your network.
 for ip in 10.0.0.{1..255} ;
- do   (ping $ip -c2 &> /dev/null ;
-     if [ $? -eq 0 ];
-    then
- echo $ip is alive
-        fi)&
- done
+do   (ping $ip -c2 &> /dev/null ;
+if [ $? -eq 0 ];
+then
+echo $ip is alive
+fi)&
+done
 wait
 ====bash shell 并行后台ping========
 ====end===================
 
 ====vim编辑替换时候的转意字符元字符meta char start===========
 必须转意：～ [ ] $ / \
-   (口诀：心 有一点邪，关门 撑伞 造美元,太浪，危险要转移（转义）,怎么转移，不走斜路(MS 是反斜路) 
-                 --> * .  /\ [ ^ $ ~  ==> \* \. \/ \\ \[ \^ \$ \~)
+(口诀：心 有一点邪，关门 撑伞 造美元,太浪，危险要转移（转义）,怎么转移，不走斜路(MS 是反斜路) 
+         --> * .  /\ [ ^ $ ~  ==> \* \. \/ \\ \[ \^ \$ \~)
 
 不必转意：@ > : - （) {
 随意：/ } ] space 
@@ -2147,7 +2154,7 @@ xmodmap -e "keycode 115 = l"                                    #remap End key t
 报什么display错误时，
 添加如下语句到.bashrc,然后source .bashrc
 if [ -n “${DISPLAY+x}”];then       #x是小写？
-     xmodmap -e "keycode 115 = l" #最后的字符时字母L的小写
+xmodmap -e "keycode 115 = l" #最后的字符时字母L的小写
 fi
 
 xmodmap -pke #显示所有键盘映射
@@ -2251,15 +2258,15 @@ shell> cat getVar.sh
 isFstBt=$(cat c.txt)
 case $isFstBt in
 1)
-  echo "Install something"
-  isFstBt=0
-  echo "$isFstBt" >c.txt #用0覆盖c.txt中的1
-  ;;
+echo "Install something"
+isFstBt=0
+echo "$isFstBt" >c.txt #用0覆盖c.txt中的1
+;;
 0)
-  echo "Done"
-  ;;
+echo "Done"
+;;
 *)
-  echo "something worong"
+echo "something worong"
 esac
 
 shell> echo 1 >c.txt
@@ -2271,7 +2278,7 @@ shell> echo e >c.txt
 shell> ./getVar.sh
 something worong
 
- LVM相关
+LVM相关
 1 fdisk /dev/sdb /dev/sdc -->logical partition-->type 8e
 2 vgcreate vg_web /dev/sd{b5,c5}
 3 vcreate -L 8G -n lv_web vg_web
@@ -2302,7 +2309,7 @@ service iptables restart
 
 # firewall-cmd --get-active-zone
 public
-  interfaces: enp0s3
+interfaces: enp0s3
 
 # firewall-cmd --add-port 1236/tcp --permanent
 success
@@ -2347,7 +2354,7 @@ iptables -t nat -I PREROUTING -i eth0 -p tcp \
 --dport 88 -j REDIRECT --to-ports 3306
 [root@lnmp ~]# mysql -uroot -P 88 -p #注意端口是88
 
- ssh自动输入密码 StrictHostKeyChecking=no 不要求输入yes
+ssh自动输入密码 StrictHostKeyChecking=no 不要求输入yes
 sshpass -p "PASS" ssh -o StrictHostKeyChecking=no USER@host:[port]
 没有sshpass就yum
 sshpass -p You_Pwd ssh-copy-id -i Your_Pub_key user@host    ##互信设置
