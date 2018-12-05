@@ -1,14 +1,14 @@
 $Password=Read-host "Enter PASSWORD" -AsSecureString
 $User="user1"
-$userdata= import-csv -Header id "C:\Users\vm.txt"
+$vmlist= import-csv -Header name "C:\Users\vm.txt"
 $Loop=0
-#Write-Host $userdata.id
+#Write-Host $vmlist.name
 
 if($Loop -le 2)
 {
 $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
          Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
-         -ThrottleLimit 8 -AsJob -ComputerName $userdata.id `
+         -ThrottleLimit 8 -AsJob -ComputerName $vmlist.name `
          -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
          -scriptblock {
 
