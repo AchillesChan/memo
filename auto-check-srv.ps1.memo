@@ -1,0 +1,47 @@
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$User="user1"
+$userdata= import-csv -Header id "C:\Users\vm.txt"
+$Loop=0
+#Write-Host $userdata.id
+
+if($Loop -le 2)
+{
+$Cred=new-object System.Management.Automation.PSCredential($User,$Password)
+         Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
+         -ThrottleLimit 8 -AsJob -ComputerName $userdata.id `
+         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+         -scriptblock {
+
+         function GET-DISK-USAGE{
+                Get-PSDrive E 
+            }
+         function GET-HOST-NAME{
+                HOSTNAME.EXE 
+            }
+         function SCAN-VIRUS{
+             #Update-MpSignature  -Verbose
+             #Start-MpScan -ScanType QuickScan
+             #Start-MpScan -ScanPath c:\ -ScanType FullScan -ErrorAction Ignore -Verbose
+             #Set-MpPreference -DisableRealtimeMonitoring $true           ###关闭defender
+             #Set-MpPreference -DisableRealtimeMonitoring $false          ###开启defender
+             Get-MpComputerStatus
+             # Get-PSDrive E #| Select-Object #Used,Free
+         }
+         function WINRM-OPERATION{
+         }
+             Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+             
+             
+             GET-DISK-USAGE
+             GET-HOST-NAME
+             #SCAN-VIRUS
+             
+             Set-ExecutionPolicy -ExecutionPolicy Restricted
+                }
+$Loop = $Loop + 1
+Write-Host $Loop
+}
+else 
+{
+write "Run complete"
+}
