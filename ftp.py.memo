@@ -25,7 +25,6 @@ def uploadFile(FILE):
     except:
         time.sleep(2)
         return False
-FILE = FILE_ARRAY[0]
 while True:
     UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
 
