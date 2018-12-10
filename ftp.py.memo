@@ -3,9 +3,9 @@ import os
 import time
 from ftplib import FTP
 
-FAIL_COUNT=0
+FAIL_COUNT = 0
 MAX_RETRY = 3
-FILE_ARRAY=[""]
+FILE_ARRAY = [""]
 for root, dirs, files in os.walk("."):
     for FILE in sorted(files):
         FILE_ARRAY.append(FILE)
@@ -14,8 +14,10 @@ FILE_ARRAY.remove(FILE_ARRAY[0])
 def uploadFile(FILE):
 
     try:
-        ftp = FTP('ftp-srv')
-        ftp.login(user='ftpuser', passwd = 'ftp_pwd')
+        
+        ftp = FTP()
+        ftp.connect('example.com',21)   ##21 is ftp-server port 
+        ftp.login(user='ftpuser', passwd='ftp-passwd')
         ftp.storbinary('STOR '+FILE, open(FILE, 'rb'))
         ftp.quit()
         time.sleep(1)
@@ -23,28 +25,28 @@ def uploadFile(FILE):
     except:
         time.sleep(2)
         return False
-FILE=FILE_ARRAY[0]
+FILE = FILE_ARRAY[0]
 while True:
-    UPLOAD_STATUS = uploadFile(FILE)
+    UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
 
     if UPLOAD_STATUS:
-        print("Success update "+FILE)
+        print("Success update "+FILE_ARRAY[0])
         FILE_ARRAY.remove(FILE_ARRAY[0])
-        if len(FILE_ARRAY)>0:
-            FILE=FILE_ARRAY[0]
-            UPLOAD_STATUS = uploadFile(FILE)
+        if len(FILE_ARRAY) > 0:
+            FILE_ARRAY[0] = FILE_ARRAY[0]
+            UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
         else:
             break
     else:
-        FAIL_COUNT=FAIL_COUNT+1
-        print("Error update "+FILE)
+        FAIL_COUNT = FAIL_COUNT+1
+        print("Error update "+FILE_ARRAY[0])
         if FAIL_COUNT < MAX_RETRY:
-                UPLOAD_STATUS = uploadFile(FILE)
+                UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
         else:   
                 FILE_ARRAY.remove(FILE_ARRAY[0])
-                FILE=FILE_ARRAY[0]
-                FAIL_COUNT=0
-                UPLOAD_STATUS = uploadFile(FILE)
+                FILE_ARRAY[0] = FILE_ARRAY[0]
+                FAIL_COUNT = 0
+                UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
 
 
 ###running result
