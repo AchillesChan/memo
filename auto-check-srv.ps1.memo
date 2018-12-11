@@ -1,47 +1,119 @@
 $Password=Read-host "Enter PASSWORD" -AsSecureString
-$User="user1"
-$vmlist= import-csv -Header name "C:\Users\vm.txt"
-$Loop=0
-#Write-Host $vmlist.name
+$User="domain\user"
+#$userdata= import-csv "C:\Users\vm.txt"
+$Loop=1
 
-if($Loop -le 2)
+function WINRM
 {
 $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
-         Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
-         -ThrottleLimit 8 -AsJob -ComputerName $vmlist.name `
-         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
-         -scriptblock {
+ Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
+ -ThrottleLimit 8 -AsJob -ComputerName $userdata.name `
+ -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+ -scriptblock {
+     function GET-DISK-USAGE{
+	    Get-PSDrive E 
+        }
+     function GET-HOST-NAME{
+	    HOSTNAME.EXE 
+        }
+     function SCAN-VIRUS{
+         #Update-MpSignature  -Verbose
+         #Start-MpScan -ScanType QuickScan
+         #Start-MpScan -ScanPath c:\ -ScanType FullScan -ErrorAction Ignore -Verbose
+         #Set-MpPreference -DisableRealtimeMonitoring $true           ###关闭defender
+         #Set-MpPreference -DisableRealtimeMonitoring $false          ###开启defender
+         Get-MpComputerStatus
+         # Get-PSDrive E #| Select-Object #Used,Free
+     }
 
-         function GET-DISK-USAGE{
-                Get-PSDrive E 
-            }
-         function GET-HOST-NAME{
-                HOSTNAME.EXE 
-            }
-         function SCAN-VIRUS{
-             #Update-MpSignature  -Verbose
-             #Start-MpScan -ScanType QuickScan
-             #Start-MpScan -ScanPath c:\ -ScanType FullScan -ErrorAction Ignore -Verbose
-             #Set-MpPreference -DisableRealtimeMonitoring $true           ###关闭defender
-             #Set-MpPreference -DisableRealtimeMonitoring $false          ###开启defender
-             Get-MpComputerStatus
-             # Get-PSDrive E #| Select-Object #Used,Free
-         }
-         function WINRM-OPERATION{
-         }
-             Set-ExecutionPolicy -ExecutionPolicy Unrestricted
-             
-             
-             GET-DISK-USAGE
-             GET-HOST-NAME
-             #SCAN-VIRUS
-             
-             Set-ExecutionPolicy -ExecutionPolicy Restricted
-                }
-$Loop = $Loop + 1
-Write-Host $Loop
+     function WINRM-OPERATION{
+     }
+    Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+    GET-DISK-USAGE
+    #GET-HOST-NAME
+    #SCAN-VIRUS
+    Set-ExecutionPolicy -ExecutionPolicy Restricted
+    }
+ } 
+
+function LOOPWINRM{
+while(1)
+	{
+	WINRM
+	Write-Host "Current loop:",$Loop
+	$Loop = $Loop + 1
+	Start-sleep -Seconds 6
+	$LastJob=get-job |Select-Object -Last 1
+	if($Loop -ge 20)
+		{
+		write-host "Break out"
+		break
+		}
+
+	if($LastJob.State -match "Running")
+		{
+		write-host "enter running loop"
+		while(1)
+		    {
+		 write-host "Waiting for end"
+		 Start-sleep -Seconds 15
+		 $LastJob=get-job |Select-Object -Last 1
+		 if($LastJob.State -notmatch "Running")
+			    {
+			    break
+			    }
+		    }
+		write-host "exit running loop"
+		}
+
+	if($LastJob.State -match "Completed")
+		{
+		    write-host "enter complete loop"
+		    write-host "Complete"
+		    write-host "exit complete loop"
+		    break
+		}
+	if($LastJob.State -match "Failed")
+		{
+		    write-host "enter failed loop"
+		    write-host "Failed"
+		    write-host "exit failed loop"
+		$MainJob=get-job |Select-Object -Last 1
+		
+		write-host "userdata.Length:",$userdata.Count
+		$len=$userdata.Count
+		for($len;$len -gt 0;$len--)
+			 {
+			   $CurrentJobID = $MainJob.id + $len
+			   write-host "CurrentJobID",$CurrentJobID
+			   $CurrentJob=get-job -id $CurrentJobID
+			   $CurrentJobState=$CurrentJob.State
+			   write-host "currentjob state:",$CurrentJobState
+			   if($CurrentJobState -match "Completed")
+				    {
+				     write-host "enter remove userdata loop"
+				     $userdata.RemoveAt($len-1)
+			             write-host "exit remove userdata loop"
+				    }
+			   write-host "userdata.Length After removed:",$userdata.Count  
+			    }
+			   write-host "userdata.count:",$userdata.Count
+               write-host "userdata",$userdata
+        Start-sleep -Seconds 30
+		LOOPWINRM
+
+		if($Loop -ge 20)
+			{
+			write-host "Break out"
+			break
+			}
+		}
+		    break
+	}
+	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append C:\Users\wlyd-1\Desktop\vmresult.txt
+	write-host "exit main loop"
+	break
 }
-else 
-{
-write "Run complete"
-}
+
+
+LOOPWINRM
