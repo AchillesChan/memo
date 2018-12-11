@@ -1,0 +1,21 @@
+RAID LSI PROBLEM
+
+--05 link
+https://serverfault.com/questions/511365/hardware-raid-controller-cache-battery-failure-frequency-lifetime
+
+--10 question
+ontroller cache discarded due to memory/battery problems 
+
+--20 answer
+I suspect your Supermicros are broken one way or the other - possibly the battery packs are overheating. Most recent LSIs would report the temperature through MegaCLI - you might want to monitor this value on servers which needed replacement.
+
+root@host:~/SOLARIS# ./MegaCli -AdpBbuCmd -GetBbuStatus -aALL
+
+BBU status for Adapter: 0
+
+BatteryType: BBU
+[...]
+Temperature: 41 C
+
+I have seen a couple of Dell and Fujitsu systems with LSI BBU controllers, none of them had yearly battery pack replacement (except you screwed the pack up by deep-discharge). The typical life time has been around 3 to 5 years.
+

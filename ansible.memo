@@ -32,7 +32,7 @@ https://stackoverflow.com/questions/29900096/how-to-continue-execution-on-failed
 TASK [zabbix : create scriptErrorLog]
 
 --30 start from fixing error
-$> ansible-playbook task.yml --start-at-task "zabbix : create scriptErrorLog" -u --ask-pass --sudo --ask-sudo-pass
+$> ansible-playbook task.yml --start-at-task "zabbix : create scriptErrorLog" --ask-pass --sudo --ask-sudo-pass
 
 ######How to continue execution on failed task after fixing error in playbook?
 
@@ -182,12 +182,12 @@ Shell> cat web.yml （在这以下的yml文件有严格的格式要求，否则�
     - screen
 Shell> cat roles/screen/tasks/main.yml
 ---
-- name copy tar.gz
-  copy src=screen.tar.gz dest=/tmp/screen.tar.gz
-- name copy sh
-  copy src=ansibleInstallScreen.sh dest=/tmp/ansibleInstallScreen.sh mode=0755
-- name run
-  shell /bin/sh /tmp/ansibleInstallScreen.sh
+- name: copy tar.gz
+  copy: src=screen.tar.gz dest=/tmp/screen.tar.gz
+- name: copy sh
+  copy: src=ansibleInstallScreen.sh dest=/tmp/ansibleInstallScreen.sh mode=0755
+- name: run
+  shell: /bin/sh /tmp/ansibleInstallScreen.sh
 - name: delete/rm/remove src tar
   file: path=/tmp/redis-3.2.4.tar.gz state=absent
 - lineinfile:
