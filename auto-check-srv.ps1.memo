@@ -110,7 +110,7 @@ while(1)
 		}
 		    break
 	}
-	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append C:\Users\wlyd-1\Desktop\vmresult.txt
+	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append C:\Users\vmresult.txt
 	write-host "exit main loop"
 	break
 }
