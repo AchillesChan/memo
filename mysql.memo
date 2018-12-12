@@ -1,6 +1,28 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
 
+###backup windows mysql with powershell exclude specfic files###
+$MySQLPath = "D:\mysql\bin"
+$Hostname = "localhost"
+$Username = "root"
+$Password = "my-pwd*"
+$db1BackupFilePrefix="d:\db1Backup"
+$db2BackupFilePrefix="d:\db2Backup"
+$opTime=get-date -format yyyyMd-HHmm
+$vmName=hostname.exe
+
+[System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8       
+& $MySQLPath\mysqldump.exe -h"$HostName" -u"$Username" -p"$Password" db1  | Out-File $db2BackupFilePrefix-$vmName-$opTime.sql -Encoding utf8
+
+$Tabl = [System.Collections.Generic.List[String]] (
+    & $MySQLPath\mysql.exe -h"$Hostname" -u"$Username" -p"$Password" -B -N -e"show tabl;" sconfig |Where-Object{$_ -notmatch "exclude_.*_\d{8}$"}
+)
+& $MySQLPath\mysqldump.exe -h"$HostName" -u"$Username" -p"$Password" db2  $($Tabl) | Out-File $db1BackupFilePrefix-$vmName-$opTime.sql -Encoding utf8
+
+###backup windows mysql with powershell exclude specfic files###
+
+
+
 windows io acid security set?
 innodb_flush_log_at_trx_commit=1
 innodb_flush_method=unbuffered

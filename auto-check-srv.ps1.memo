@@ -1,7 +1,10 @@
 $Password=Read-host "Enter PASSWORD" -AsSecureString
 $User="domain\user"
-#$userdata= import-csv "C:\Users\vm.txt"
-$Loop=1
+#$userdata= import-csv "C:\Users\Desktop\vm-less.txt"
+[System.Collections.ArrayList]$userdata= import-csv "C:\Users\Desktop\vm-less.txt"
+$Loop=0
+$MAX_Loop=5
+$LOG="C:\Users\Desktop\vmresult.txt"
 
 function WINRM
 {
@@ -44,7 +47,7 @@ while(1)
 	$Loop = $Loop + 1
 	Start-sleep -Seconds 6
 	$LastJob=get-job |Select-Object -Last 1
-	if($Loop -ge 20)
+	if($Loop -ge $MAX_Loop)
 		{
 		write-host "Break out"
 		break
@@ -99,20 +102,14 @@ while(1)
 			    }
 			   write-host "userdata.count:",$userdata.Count
                write-host "userdata",$userdata
-        Start-sleep -Seconds 30
+        Start-sleep -Seconds 5
 		LOOPWINRM
-
-		if($Loop -ge 20)
-			{
-			write-host "Break out"
-			break
-			}
-		}
-		    break
-	}
-	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append C:\Users\vmresult.txt
+		break
+	    }
+	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append $LOG
 	write-host "exit main loop"
 	break
+    }
 }
 
 
