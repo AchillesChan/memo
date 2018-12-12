@@ -93,7 +93,7 @@ while(1)
 				    {
 				     write-host "enter remove userdata loop"
 				     $userdata.RemoveAt($len-1)
-			             write-host "exit remove userdata loop"
+			         write-host "exit remove userdata loop"
 				    }
 			   write-host "userdata.Length After removed:",$userdata.Count  
 			    }
