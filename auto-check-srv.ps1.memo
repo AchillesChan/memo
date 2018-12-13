@@ -1,10 +1,8 @@
 $Password=Read-host "Enter PASSWORD" -AsSecureString
-$User="domain\user"
-#$userdata= import-csv "C:\Users\Desktop\vm-less.txt"
-[System.Collections.ArrayList]$userdata= import-csv "C:\Users\Desktop\vm-less.txt"
+$User="Domain\User"
+[System.Collections.ArrayList]$userdata= import-csv "C:\Users\Desktop\vm-more.txt"
 $Loop=0
-$MAX_Loop=5
-$LOG="C:\Users\Desktop\vmresult.txt"
+$MAX_Loop=3
 
 function WINRM
 {
@@ -40,6 +38,7 @@ $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
  } 
 
 function LOOPWINRM{
+$LOG="C:\Users\Desktop\vmresult.txt"
 while(1)
 	{
 	WINRM
@@ -74,6 +73,7 @@ while(1)
 		    write-host "enter complete loop"
 		    write-host "Complete"
 		    write-host "exit complete loop"
+            Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append $LOG
 		    break
 		}
 	if($LastJob.State -match "Failed")
@@ -81,11 +81,11 @@ while(1)
 		    write-host "enter failed loop"
 		    write-host "Failed"
 		    write-host "exit failed loop"
-		$MainJob=get-job |Select-Object -Last 1
+		    $MainJob=get-job |Select-Object -Last 1
 		
-		write-host "userdata.Length:",$userdata.Count
-		$len=$userdata.Count
-		for($len;$len -gt 0;$len--)
+		    write-host "userdata.Length:",$userdata.Count
+		    $len=$userdata.Count
+		    for($len;$len -gt 0;$len--)
 			 {
 			   $CurrentJobID = $MainJob.id + $len
 			   write-host "CurrentJobID",$CurrentJobID
@@ -103,10 +103,10 @@ while(1)
 			   write-host "userdata.count:",$userdata.Count
                write-host "userdata",$userdata
         Start-sleep -Seconds 5
-		LOOPWINRM
+		Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append $LOG
+        LOOPWINRM
 		break
 	    }
-	Receive-Job -id $LastJob.Id -ErrorAction Ignore -Keep |Out-File -Append $LOG
 	write-host "exit main loop"
 	break
     }
