@@ -1,0 +1,9 @@
+####Windows server 2012 r2 install mse####
+10 download mse for windows 
+20 right click-->compatibility-->run thi program in compatibility mode for Windows 7
+30 mseinstall.exe /disableoslimit
+
+
+https://www.rootusers.com/how-to-install-microsoft-security-essentials-in-windows-server-2012-r2/
+
+####Windows server 2012 r2 install mse####
