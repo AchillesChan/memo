@@ -2,6 +2,47 @@
 ######Start powershell.memo #######
 
 
+
+
+
+####windows log view##############
+Get-WinEvent -FilterHashTable  @{LogName='System';ID='6008';level='2'}    power down
+
+Get-WinEvent -FilterHashTable  @{LogName='Application';ID='345';level='2'}  raid error
+
+
+
+
+limit date and time
+$StartTime=Get-Date -Year 2018 -Month 12 -Day 18 -Hour 08 -Minute 30
+$EndTime=Get-Date -Year 2018 -Month 12 -Day 18 -Hour 14 -Minute 30
+Get-WinEvent -FilterHashtable @{LogName='Application';ID='345';level='2';StartTime=$StartTime;EndTime=$EndTime}
+ 
+===========================
+  ProviderName:MR_MONITOR
+
+TimeCreated                     Id LevelDisplayName Message                                                           
+-----------                     -- ---------------- -------                                                           
+2018/12/18 12:10:00            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
+2018/12/18 11:48:42            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
+
+
+
+
+
+Get-WinEvent -FilterHashTable  @{LogName='Application';ID='345';level='2'} -MaxEvents 1 |Format-List
+====================================================================
+
+
+TimeCreated  : 2018/12/18 12:10:00
+ProviderName : MR_MONITOR
+Id           : 345
+Message      : Controller ID:  0  Controller encountered a fatal error and was reset
+               Event ID:345.
+
+####windows log view##############
+
+
 #####get cpu memory disk#####
 ####get-cpu value
 
