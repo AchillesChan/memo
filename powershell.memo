@@ -2,6 +2,64 @@
 ######Start powershell.memo #######
 
 
+#####copy file from remote####
+function COPY-FILE
+{
+$userdata = import-csv "C:\Users\user-1\Desktop\vm-less.txt"
+$user="domain\user"
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$sessionOption = New-PsSessionOption –SkipCACheck -SkipCNCheck
+$creds = new-object -typename System.Management.Automation.PSCredential `
+        -argumentlist $user,$password
+
+foreach($item in $userdata.name){
+    $session = New-PSSession -ComputerName $item -Credential $creds -UseSSL -SessionOption $sessionOption
+    Copy-Item -FromSession $session -Path "d:\test2\" -Destination "d:\test2\"  -Recurse
+    }
+}
+
+COPY-FILE
+#####copy file from remote####
+
+
+####windows log view##############
+Get-WinEvent -FilterHashTable  @{LogName='System';ID='6008';level='2'}    power down
+
+Get-WinEvent -FilterHashTable  @{LogName='Application';ID='345';level='2'}  raid error
+
+
+
+
+limit date and time
+$StartTime=Get-Date -Year 2018 -Month 12 -Day 18 -Hour 08 -Minute 30
+$EndTime=Get-Date -Year 2018 -Month 12 -Day 18 -Hour 14 -Minute 30
+Get-WinEvent -FilterHashtable @{LogName='Application';ID='345';level='2';StartTime=$StartTime;EndTime=$EndTime}
+ 
+===========================
+  ProviderName:MR_MONITOR
+
+TimeCreated                     Id LevelDisplayName Message                                                           
+-----------                     -- ---------------- -------                                                           
+2018/12/18 12:10:00            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
+2018/12/18 11:48:42            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
+
+
+
+
+
+Get-WinEvent -FilterHashTable  @{LogName='Application';ID='345';level='2'} -MaxEvents 1 |Format-List
+====================================================================
+
+
+TimeCreated  : 2018/12/18 12:10:00
+ProviderName : MR_MONITOR
+Id           : 345
+Message      : Controller ID:  0  Controller encountered a fatal error and was reset
+               Event ID:345.
+
+####windows log view##############
+
+
 #####get cpu memory disk#####
 ####get-cpu value
 
@@ -707,7 +765,7 @@ Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
 
 $password = ConvertTo-SecureString "your-password-plain-text-here" -AsPlainText -Force
-$cred=new-object System.Management.Automation.PSCredential("wlyd\sfwmop-1",$password)
+$cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
 Enter-PSSession -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -Sk
 #####remote powershell auto complete password Credentials 
 
