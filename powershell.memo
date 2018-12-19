@@ -2,7 +2,24 @@
 ######Start powershell.memo #######
 
 
+#####copy file from remote####
+function COPY-FILE
+{
+$userdata = import-csv "C:\Users\user-1\Desktop\vm-less.txt"
+$user="domain\user"
+$Password=Read-host "Enter PASSWORD" -AsSecureString
+$sessionOption = New-PsSessionOption –SkipCACheck -SkipCNCheck
+$creds = new-object -typename System.Management.Automation.PSCredential `
+        -argumentlist $user,$password
 
+foreach($item in $userdata.name){
+    $session = New-PSSession -ComputerName $item -Credential $creds -UseSSL -SessionOption $sessionOption
+    Copy-Item -FromSession $session -Path "d:\test2\" -Destination "d:\test2\"  -Recurse
+    }
+}
+
+COPY-FILE
+#####copy file from remote####
 
 
 ####windows log view##############
@@ -748,7 +765,7 @@ Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
 
 $password = ConvertTo-SecureString "your-password-plain-text-here" -AsPlainText -Force
-$cred=new-object System.Management.Automation.PSCredential("wlyd\sfwmop-1",$password)
+$cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
 Enter-PSSession -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -Sk
 #####remote powershell auto complete password Credentials 
 
