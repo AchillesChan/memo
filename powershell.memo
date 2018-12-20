@@ -3,18 +3,34 @@
 
 
 #####copy file from remote####
+--10 pwd.txt
+0100000......................................................
+
+--15 C:\Users\vm.txt
+name
+TEST-01
+test-02
+
+--20 script
+
 function COPY-FILE
-{
-$userdata = import-csv "C:\Users\user-1\Desktop\vm-less.txt"
-$user="domain\user"
-$Password=Read-host "Enter PASSWORD" -AsSecureString
+{ 
+##run once generate securestring
+#read-host -assecurestring | convertfrom-securestring | out-file "C:\Users\pwd.txt"
+
+$pwdStringFile="C:\Users\pwd.txt" 
+$username="Domain\User"
+$password = cat $pwdStringFile | ConvertTo-SecureString
+
+$Credentials = New-Object System.Management.Automation.PSCredential `
+     -ArgumentList $username,(Get-Content $pwdStringFile | ConvertTo-SecureString)
+
+$userdata = import-csv "C:\Users\vm.txt"
 $sessionOption = New-PsSessionOption –SkipCACheck -SkipCNCheck
-$creds = new-object -typename System.Management.Automation.PSCredential `
-        -argumentlist $user,$password
 
 foreach($item in $userdata.name){
-    $session = New-PSSession -ComputerName $item -Credential $creds -UseSSL -SessionOption $sessionOption
-    Copy-Item -FromSession $session -Path "d:\test2\" -Destination "d:\test2\"  -Recurse
+    $session = New-PSSession -ComputerName $item -Credential $Credentials -UseSSL -SessionOption $sessionOption
+    Copy-Item -FromSession $session -Path "d:\test2\" -Destination "d:\"  -Recurse -Force
     }
 }
 
@@ -249,7 +265,7 @@ Port       : 3389
 
 ###export csv to arrays
 --10 code 
-$userdata= Import-CSV C:\Users\\Desktop\pa.csv
+$userdata= Import-CSV C:\Users\\pa.csv
 $userdata 
 
 ForEach($row in $userdata)
@@ -260,7 +276,7 @@ ForEach($row in $userdata)
 
 
 --20 result 
-PS C:\Users\> $userdata= Import-CSV C:\Users\\Desktop\pa.csv
+PS C:\Users\> $userdata= Import-CSV C:\Users\\pa.csv
 $userdata 
 
 VM  Description NumCpu Status
@@ -1159,7 +1175,7 @@ write-output "$op_src,$op_dst,$op_time,$op_log"
 
 结果如下
 
- PS C:\Users\someuser\Desktop> C:\Users\someuser\Desktop\bak-waas-iis.ps1
+ PS C:\Users\someuser\Desktop> C:\Users\someuser\bak-waas-iis.ps1
 d:\site,Z:\waasiisbak,20161130-1456,Z:\waasiisbak\rc-20161130-1456.log
 ++++++++++++++++++++++++++++++
 
@@ -1215,7 +1231,7 @@ For example in the above code the %{} block is called for every value in the arr
 Get-Content 5.txt |% {svn status $_} 2>&1 >6.txt
 
 #bat文件中调用powershell
-Powershell.exe -executionpolicy remotesigned -File C:\Users\SE\Desktop\ps.ps1
+Powershell.exe -executionpolicy remotesigned -File C:\Users\SE\ps.ps1
 
 #正则文件内替换
 Get-Content .\svn_log.txt | % {$_ -replace "^svn.*$","MMTV"}|Set-Content .\svn_log_done.txt
@@ -1299,7 +1315,7 @@ Unrestricted
 
 ###########batch update multiple proxyAddress#####
 #####loop operation
-Import-CsvC:\Users\someone\Desktop\user20171205.csv|
+Import-CsvC:\Users\someone\user20171205.csv|
 foreach{
 ##set SMTP
 $user=get-aduser $_.username -Properties mail,department,ProxyAddresses
@@ -1315,7 +1331,7 @@ get-aduser $_.username -Properties mail,department,ProxyAddresses
 
 
 ######batch update proxyAddress of AD user                               
-Import-Csv C:\Users\user\Desktop\usertxt.csv |
+Import-Csv C:\Users\user\usertxt.csv |
 foreach{
 $user=get-aduser $_.username -Properties mail,department,ProxyAddresses
 $user.ProxyAddresses = 'SMTP:' + $_.username + '@example.com'
