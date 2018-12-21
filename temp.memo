@@ -1,5 +1,20 @@
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
+python sftp scp script
+import paramiko
+ 
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+try:
+    ssh.connect('192.168.1.15', username='root', password='my_pwd', port=22)
+except paramiko.SSHException:
+    print ("Connection Error")
+sftp = ssh.open_sftp()
+sftp.chdir("/tmp/")
+sftp.put('scp.py','scp.py')
+ssh.close()
+
+
 https://stackoverflow.com/questions/2917485/can-i-get-a-dump-of-all-my-databases-except-one-using-mysqldump
 $MySQLPath = "."
 $Hostname = "localhost"
