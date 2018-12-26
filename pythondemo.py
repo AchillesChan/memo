@@ -4,6 +4,14 @@ http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy
 
 https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
 https://www.liaoxuefeng.com/ python教学
+
+###centos install 3.6 python####
+sudo yum install centos-release-scl
+sudo yum install rh-python36
+scl enable rh-python36 bash
+python --version
+###centos install 3.6 python####
+
 ###pylint
 --10 install
 pip install pylint || sudo zypper install pylint || \
