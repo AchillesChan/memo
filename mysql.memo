@@ -699,10 +699,13 @@ mysql5.7需要xtrabackup2.4
 需要--host --port --socket参数
 
 #####dependent install
-yum install libev
-yum install perl-devel
-yum install rsync
-yum install -y perl-Digest-MD5.x86_64
+yum install libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
+#yum install perl-devel
+#yum install rsync
+#yum install -y perl-Digest-MD5.x86_64
+wget ftp://rpmfind.net/linux/dag/redhat/el6/en/x86_64/dag/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
+rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
+#yum install -y perl-DBD-MySQL
 rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
 
 ###backup
@@ -718,7 +721,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 上面的tables-file需要接完整的路径
 
 ###restore
-0 innobackupex --apply-log --exports your-backup-full-path
+0 innobackupex --apply-log --exports your-backup-full-path ###do it on source 
 
 1 systemctl stop mysqld
 
