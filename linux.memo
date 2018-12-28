@@ -1150,7 +1150,7 @@ echo 'password' | sudo -kS ls
 　　将 HISTCONTROL 设置为 ignorespace，并在不想被记住的命令前面输入一个空格：
 
 　　# export HISTCONTROL=ignorespace  可以使用ansible处理，处理后下次登录到服务器就生效  
-ansible sfwm -m lineinfile -a "dest=/etc/profile line='HISTCONTROL=ignorespace'" \
+ansible Grp -m lineinfile -a "dest=/etc/profile line='HISTCONTROL=ignorespace'" \
 -f your-fork-number -u your-user --become --ask-pass --ask-sudo-pass
 
 ####set bash mode 设置bash模式

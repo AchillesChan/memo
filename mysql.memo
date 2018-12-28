@@ -166,7 +166,7 @@ http://superve.leanote.com/post/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%86%E9
 
 a)###
 mysql> desc t1;
-Current database: wlyc_log
+Current database: c_log
 
 +-------------+-------------+------+-----+-------------------+----------------+
 | Field       | Type        | Null | Key | Default           | Extra          |
@@ -416,7 +416,7 @@ Michael@linux-gzbl:~> azure vm endpoint create your-service-DB02L 3306 -n mysqlE
 
 
 ====powershell set=============
-PS C:\Users\wlyd-1> Get-AzureVM -ServiceName t-wlyd-it -Name ilb1 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
+PS C:\Users\1> Get-AzureVM -ServiceName t-it -Name ilb1 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
 
 OperationDescription OperationId                          OperationStatus
 -------------------- -----------                          ---------------
@@ -424,7 +424,7 @@ Update-AzureVM       441bca73-64d0-4192-9c7a-8b9f84fdb0e8 Succeeded
 
 
 
-PS C:\Users\wlyd-1> Get-AzureVM -ServiceName t-wlyd-it -Name ilb2 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
+PS C:\Users\1> Get-AzureVM -ServiceName t-it -Name ilb2 |Add-AzureEndpoint -Name TCP-3306-3306 -Protocol tcp -LocalPort 3306 -PublicPort 3306 -ProbePort 3306 -InternalLoadBalancerName dbilb -LBSetName lbs -ProbeProtocol tcp| Update-AzureVM
 OperationDescription OperationId                          OperationStatus
 -------------------- -----------                          ---------------
 Update-AzureVM       430d7187-c766-45c4-b57e-d39e6d844674 Succeeded
