@@ -772,6 +772,33 @@ shutdown mysql，copy back，chown ，start mysql，done
 备份结果才可以使用。
 ==============================================
 
+
+====verification 
+--10 from source
+mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only backup table structure
+
+--20 backup single database from source
+innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs .
+--25 prepare backup file,it's generate exp and cfg file when done                                                                                                              
+innobackupex --user=root --port=3306 -pPwd --apply-log --export --socket=/path/2/mysql.sock --databases=dbs /backup/path
+
+--30 5.6 -->5.7 format transfomation from destination
+
+CREATE TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
+or
+Alter TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
+
+--40 discard tablespace from destination
+ALTER TABLE tbls discard TABLESPACE;
+set FOREIGN_KEY_CHECKS=0;
+copy *.exp *.ibd to data directroy
+chown -R mysql.mysql data\dbs
+
+--50 import tablespace from destination
+
+ALTER TABLE tbls IMPORT TABLESPACE;
+set FOREIGN_KEY_CHECKS=1;
+
 ############xtrabackup mysql##################################
 
 
