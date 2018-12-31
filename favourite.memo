@@ -14,6 +14,11 @@ http://www.yinwang.org/blog-cn/2018/11/23/grammar
 https://xinqiu.gitbooks.io/linux-insides-cn/content/Booting/linux-bootstrap-1.html
 https://cameronlonsdale.com/2018/11/26/whats-in-a-docker-image/
 https://linux-mm.org/OOM_Killer
+http://dimitrik.free.fr/blog/archives/2009/09/mysql-performance-io-optimization-innodb.html
+https://www.percona.com/doc/percona-server/5.5/performance/innodb_doublewrite_path.html
+https://www.percona.com/blog/2006/08/04/innodb-double-write/
+https://blog.jcole.us/2014/04/16/the-basics-of-the-innodb-undo-logging-and-history-system/
+
 
 algorithm-visualizer
 http://algorithm-visualizer.org
