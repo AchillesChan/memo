@@ -1,5 +1,41 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+######swap on azure linux centos
+https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-machines/aog-virtual-machines-temporary-disk-instruction#%E4%B8%B4%E6%97%B6%E7%A3%81%E7%9B%98%E7%9A%84%E7%94%A8%E9%80%94
+
+
+Linux 虚拟机中，临时磁盘可用于配置 swap 分区（默认未配置）：
+cat /proc/swaps
+
+以CentOS为例，配置 swap 分区的方法如下：
+
+修改 /etc/waagent.conf 文件，按照下面两行修改参数：
+设置 ResourceDisk.EnableSwap=y
+设置 ResourceDisk.SwapSizeMB=5120（swap 分区的大小，以MB为单位）
+
+重启虚拟机 VMAgent 服务。
+    For Ubuntu: service walinuxagent start
+    For other distributions: service waagent start
+---PATT    需要花一些时间建立swap
+    #cat /proc/swaps验证
+    
+    查看建立进度
+    # du -sh /mnt/resource/swapfile 
+    4.0G    /mnt/resource/swapfile
+
+    #cat /proc/swaps验证完成后才会有数据作为这条命令的输出
+    # cat /proc/swaps 
+    Filename                                Type            Size    Used    Priority
+    /mnt/resource/swapfile                  file            4194300 0       -1
+
+此外，由于临时磁盘的性能要优于附加的数据磁盘，因此可以使用临时磁盘存放一些安装程序，临时的缓存文件，或者用于虚拟机之间临时拷贝文件等。
+
+
+
+######
+
+
+
 ####set fixed public for cloud service##
 
 --10 service must have least one vm 
