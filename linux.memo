@@ -1129,6 +1129,27 @@ To do this, just edit /etc/fstab and add "notime" as a mount option for the file
 /dev/rd/c0d0p3          /test                    ext3    noatime        1 2
 
 
+###before adjust
+##use noop or deadline io scheduler 
+# cat /sys/block/sda/queue/scheduler 
+noop [deadline] cfq 
+# cat /sys/block/sdc/queue/scheduler 
+noop [deadline] cfq 
+# cat /sys/block/sdd/queue/scheduler 
+noop [deadline] cfq 
+# cat /sys/block/sdd/queue/nr_requests 
+128
+
+DO NOT USE cfq scheduler 
+
+###After adjust
+# echo noop >/sys/block/sdc/queue/scheduler
+# cat /sys/block/sdc/queue/scheduler
+# [noop] deadline cfq 
+# echo 10000 >/sys/block/sdd/queue/nr_requests
+# echo 10000 >/sys/block/sdc/queue/nr_requests
+# echo 10000 >/sys/block/sda/queue/nr_requests
+
 ############server opt
 
 

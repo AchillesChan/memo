@@ -1,7 +1,17 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+###create zip
+$source = "d:\abc"
 
+$destination = "d:\abc-backup.zip"
+
+ If(Test-path $destination) {Remove-item $destination}
+
+Add-Type -assembly "system.io.compression.filesystem"
+
+[io.compression.zipfile]::CreateFromDirectory($Source, $destination) 
+###create zip
 #####copy file from remote####
 --10 pwd.txt
 0100000......................................................
