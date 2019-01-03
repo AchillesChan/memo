@@ -12,6 +12,42 @@ Add-Type -assembly "system.io.compression.filesystem"
 
 [io.compression.zipfile]::CreateFromDirectory($Source, $destination) 
 ###create zip
+####scp 
+# Set the credentials
+$Password = ConvertTo-SecureString 'Password1' -AsPlainText -Force
+$Credential = New-Object System.Management.Automation.PSCredential ('user', $Password)
+
+# Set local file path, SFTP path, and the backup location path which I assume is an SMB path
+$FilePath = "d:\file.sql"
+$SftpPath = '/home/user/'
+#$SmbPath = '\\filer01\Backup'
+
+# Set the IP of the SFTP server
+$SftpIp = '192.168.2.16'
+
+# Load the Posh-SSH module
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+install-module -Name Posh-SSH
+#import-Module "C:\Program Files (x86)\WindowsPowerShell\Modules\Posh-SSH\2.0.2\Posh-SSH.psm1"　
+#Import-Module "C:\Program Files (x86)\WindowsPowerShell\Modules\Posh-SSH"
+Set-ExecutionPolicy -ExecutionPolicy Restricted
+
+# Establish the SFTP connection
+$ThisSession = New-SFTPSession -ComputerName $SftpIp -Credential $Credential
+
+# Upload the file to the SFTP path
+Set-SFTPFile -SessionId ($ThisSession).SessionId -LocalFile $FilePath -RemotePath $SftpPath
+
+
+#Disconnect all SFTP Sessions
+Get-SFTPSession | % { Remove-SFTPSession -SessionId ($_.SessionId) }
+
+# Copy the file to the SMB location
+#Copy-Item -Path $FilePath -Destination $SftpPath
+
+####scp 
+
+
 #####copy file from remote####
 --10 pwd.txt
 0100000......................................................
