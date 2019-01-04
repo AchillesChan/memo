@@ -1,5 +1,41 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
+####int(n) storage size and display style
+https://stackoverflow.com/questions/5634104/what-is-the-size-of-column-of-int11-in-mysql-in-bytes
+
+!!!!An INT will always be 4 bytes no matter what length is specified.
+
+    TINYINT = 1 byte (8 bit)
+    SMALLINT = 2 bytes (16 bit)
+    MEDIUMINT = 3 bytes (24 bit)
+    INT = 4 bytes (32 bit)
+    BIGINT = 8 bytes (64 bit).
+
+!!!!The length just specifies how many characters to display when selecting data with the mysql command line client.
+
+... and the maximum value will be 2147483647 (Signed) or 4294967295 (Unsigned)
+
+
+
+    if the value has less digit than 'somenumber', ZEROFILL will prepend zeros.
+
+        INT(5) ZEROFILL with the stored value of 32 will show 00032
+        INT(5) with the stored value of 32 will show 32
+        INT with the stored value of 32 will show 32
+
+    if the value has more digit than 'somenumber', the stored value will be shown.
+
+        INT(3) ZEROFILL with the stored value of 250000 will show 250000
+        INT(3) with the stored value of 250000 will show 250000
+        INT with the stored value of 250000 will show 250000
+
+The similar applies to BIGINT, MEDIUMINT, SMALLINT, and TINYINT as well.
+
+!!!!The length does absolutely nothing unless you use ZEROFILL.
+
+####int(n) storage size and display style
+
+
 
 ###backup windows mysql with powershell exclude specfic files###
 $MySQLPath = "D:\mysql\bin"
