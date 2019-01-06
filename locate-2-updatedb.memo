@@ -22,5 +22,9 @@ PRUNENAMES=".git .hg .svn CVS .snapshots"  #####very import ,or many junk files
 ####on opensuse
 sudo updatedb
 locate /somepath somefile 
+
+or 
+sudo locate /path |grep "filename"
+
 ######End locate-2-updatedb.memo #######
 ######Endmemoof locate-2-updatedb.memo #######
