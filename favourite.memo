@@ -24,6 +24,13 @@ https://web.archive.org/web/20130729085738/http://inside.godaddy.com/learning-de
 https://www.vertabelo.com/blog/technical-articles/everything-you-need-to-know-about-mysql-partitions
 http://sqlfiddle.com/
 https://github.com/major/MySQLTuner-perl
+https://www.linode.com/docs/databases/mysql/how-to-optimize-mysql-performance-using-mysqltuner/
+https://www.percona.com/blog/2014/01/28/10-mysql-performance-tuning-settings-after-installation/
+https://www.percona.com/blog/2016/05/03/best-practices-for-configuring-optimal-mysql-memory-usage/
+https://modern-sql.com/use-case/pivot
+https://blog.webnersolutions.com/mysql-how-to-convert-row-values-into-column-names
+https://github.com/jarun/nnn#quickstart
+
 
 algorithm-visualizer
 http://algorithm-visualizer.org
