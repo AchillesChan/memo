@@ -3,7 +3,21 @@
 ####int(n) storage size and display style
 https://stackoverflow.com/questions/5634104/what-is-the-size-of-column-of-int11-in-mysql-in-bytes
 
+###select tips 
+--10 regexp
+mysql> select user from user where user REGEXP 'z.*x$';
++--------+
+| user   |
++--------+
+| zabbix |
+| zabbix |
+| zabbix |
++--------+
+3 rows in set (0.00 sec)
 
+
+
+###select tips
 ####special char
 mysql> create  table `test table` (id int,name char(10)); ###use ` as delimiter 
 Query OK, 0 rows affected (0.09 sec)
