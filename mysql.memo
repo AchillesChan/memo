@@ -3,6 +3,86 @@
 ####int(n) storage size and display style
 https://stackoverflow.com/questions/5634104/what-is-the-size-of-column-of-int11-in-mysql-in-bytes
 
+
+####special char
+mysql> create  table `test table` (id int,name char(10)); ###use ` as delimiter 
+Query OK, 0 rows affected (0.09 sec)
+mysql> \P /usr/bin/more
+PAGER set to '/usr/bin/more'
+mysql> help insert
+
+mysql> show tables;
++--------------------+
+| Tables_in_test dbs |
++--------------------+
+| test table         |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into `test table` values (1,'zhang'),(2,'wang');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from 'test table';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''test table'' at line 1
+mysql> select * from `test table`;
++------+-------+
+| id   | name  |
++------+-------+
+|    1 | zhang |
+|    2 | wang  |
++------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into `test table` values (3,`zhang'san`),(4,`wang' 'er`);
+ERROR 1054 (42S22): Unknown column 'zhang'san' in 'field list'
+mysql> insert into `test table` values (3,'zhang\'san'),(4,'wang' 'er');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from `test table`;
++------+-----------+
+| id   | name      |
++------+-----------+
+|    1 | zhang     |
+|    2 | wang      |
+|    3 | zhang'san |
+|    4 | wanger    |
++------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into `test table` values (5,'zhao\ si'); ##use ' and \ as esc char
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from `test table`;
+
++------+-----------+
+| id   | name      |
++------+-----------+
+|    1 | zhang     |
+|    2 | wang      |
+|    3 | zhang'san |
+|    4 | wanger    |
+|    5 | zhao si   |
++------+-----------+
+5 rows in set (0.00 sec)
+
+####run mysql command on shell
+--10
+echo "select user,host,password from user where user='db-name'"|mysql --skip-column-names -B -uroot -h127.0.0.1 -p mysql;
+Enter password: 
+db-name  127.0.0.1       *encrypted-password
+db-name  localhost       *encrypted-password
+
+--20
+mysql --skip-column-names -B -uroot -h127.0.0.1 -p -e "select user,host,password from user where user='db-name'" mysql
+Enter password: 
+db-name  127.0.0.1       *encrypted-password
+db-name  localhost       *encrypted-password
+
+--30 
+-B batch mode;--skip-column-names purge title
+
 !!!!An INT will always be 4 bytes no matter what length is specified.
 
     TINYINT = 1 byte (8 bit)
