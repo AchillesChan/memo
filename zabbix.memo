@@ -33,7 +33,12 @@ UserParameter=myOS.TCP_ESTABLISHED_COUNT,ss -tlnpa|/bin/grep ESTAB|wc -l
 UserParameter=myOS.TCP_LISTEN_COUNT,ss -tlnpa|/bin/grep LISTEN|wc -l
 UserParameter=myOS.TCP_TIMEWAIT_COUNT,ss -tlnpa|/bin/grep TIME-WAIT|wc -l
 UserParameter=myOS.FILE_DESCRIBE_COUNT,cat /proc/sys/fs/file-nr|awk '{print $1}'
-
+###get top 2 memory usage name and percent over 100 columns
+UserParameter=myOS.MEMORY_USAGE_PERCENT_TOP1,top -c -n 1 -b -o +%MEM|head -n 8|tail -n 1|awk '{print $10}'
+UserParameter=myOS.MEMORY_USAGE_NAME_TOP1,COLUMNS=1000 top -c -n 1 -b -o +%MEM|head -n 8|tail -n 1|awk '{print $13_$12}'|sed -e 's/\.//g' -e 's/BE_RMED_CHAR//g'
+UserParameter=myOS.MEMORY_USAGE_PERCENT_TOP2,top -c -n 1 -b -o +%MEM|head -n 9|tail -n 1|awk '{print $10}'
+UserParameter=myOS.MEMORY_USAGE_NAME_TOP2,COLUMNS=1000 top -c -n 1 -b -o +%MEM|head -n 9|tail -n 1|awk '{print $13_$12}'|sed -e 's/\.//g' -e 's/BE_RMED_CHAR//g'
+UserParameter=myOS.MEMORY_USAGE_NAME_TOP3,COLUMNS=1000 top -c -n 1 -b -o +%MEM|head -n 9|tail -n 1|awk '{print $13}'|sed -e 's/\.//g' -e 's/BE_RMED_CHAR//g' 
 20 
 $> service zabbix_agentd restart && ss -tlnp |grep 10050
 Restarting zabbix_agentd (via systemctl):                  [  OK  ]
