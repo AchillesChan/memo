@@ -3,6 +3,33 @@
 ####int(n) storage size and display style
 https://stackoverflow.com/questions/5634104/what-is-the-size-of-column-of-int11-in-mysql-in-bytes
 
+
+###compute innodb buffer hit rate
+The efficiency measure that determines how well a key cache is operating is its hit rate:
+the rate at which key requests are satisfied from the cache without reading keys from
+disk. If a key is in the cache, it’s a hit; if not, it’s a miss. The following expression computes
+the hit rate, where reads and requests indicate the number of disk reads and number
+of requests, respectively:
+1 - (reads / requests)
+To apply the expression to InnoDB or MyISAM, plug in the appropriate status variables:
+1 - (Innodb_buffer_pool_reads / Innodb_buffer_pool_read_requests)
+1 - (Key_reads / Key_read_requests)
+
+====below is clase
+
+USE INFORMATION_SCHEMA;
+
+SET @reads = (SELECT VARIABLE_VALUE FROM GLOBAL_STATUS
+WHERE VARIABLE_NAME = 'INNODB_BUFFER_POOL_READS');
+SET @requests = (SELECT VARIABLE_VALUE FROM GLOBAL_STATUS
+WHERE VARIABLE_NAME = 'INNODB_BUFFER_POOL_READ_REQUESTS');
+SET @hit_rate = TRUNCATE(IFNULL(1 - (@reads/@requests), 0), 4);
+SELECT 'InnoDB key cache hit rate' AS Message,
+@reads, @requests, @hit_rate;
+
+###compute innodb buffer hit rate
+
+
 ###select tips 
 --10 regexp
 mysql> select user from user where user REGEXP 'z.*x$';
