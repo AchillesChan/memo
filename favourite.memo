@@ -34,6 +34,16 @@ https://github.com/jarun/nnn#quickstart
 
 http://dasini.net/blog/2018/04/10/mysql-security-mysql-enterprise-transparent-data-encryption/
 https://mysqlserverteam.com/mysql-innodb-transparent-tablespace-encryption/
+https://www.techrepublic.com/blog/linux-and-open-source/10-mysql-variables-that-you-should-monitor/
+https://medium.com/@meghamohan/hard-link-and-symbolic-link-3cad74e5b5dc
+https://dzone.com/articles/top-performance-metrics-to-monitor-on-mysql-connec-1
+https://dev.mysql.com/doc/refman/5.6/en/innodb-best-practices.html
+https://www.eversql.com/choosing-the-best-indexes-for-mysql-query-optimization/
+http://mysql.rjweb.org/doc.php/index_cookbook_mysql
+http://technocation.org/files/doc/2017_05_MySQLindexes.pdf
+http://mysql.rjweb.org/slides/rots.pdf
+https://www.percona.com/doc/percona-server/LATEST/performance/threadpool.html
+
 
 algorithm-visualizer
 http://algorithm-visualizer.org
