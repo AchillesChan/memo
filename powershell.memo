@@ -1,6 +1,14 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+
+@echo off
+set host=%COMPUTERNAME%
+set backupdir="D:\backup"
+set op_time=%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%
+
+mysqldump -hlocalhost -uuser -ppwd --complete-insert  -f config >> %backupdir%\%host%-%op_time%_bak.sql
+
 ###create zip
 $source = "d:\abc"
 
@@ -8,9 +16,9 @@ $destination = "d:\abc-backup.zip"
 
  If(Test-path $destination) {Remove-item $destination}
 
-Add-Type -assembly "system.io.compression.filesystem"
+Add-Type -assembly "system.io.comprion.filesystem"
 
-[io.compression.zipfile]::CreateFromDirectory($Source, $destination) 
+[io.comprion.zipfile]::CreateFromDirectory($Source, $destination) 
 ###create zip
 ####scp 
 # Set the credentials
@@ -33,14 +41,14 @@ install-module -Name Posh-SSH
 Set-ExecutionPolicy -ExecutionPolicy Restricted
 
 # Establish the SFTP connection
-$ThisSession = New-SFTPSession -ComputerName $SftpIp -Credential $Credential
+$ThisSion = New-SFTPSion -ComputerName $SftpIp -Credential $Credential
 
 # Upload the file to the SFTP path
-Set-SFTPFile -SessionId ($ThisSession).SessionId -LocalFile $FilePath -RemotePath $SftpPath
+Set-SFTPFile -SionId ($ThisSion).SionId -LocalFile $FilePath -RemotePath $SftpPath
 
 
-#Disconnect all SFTP Sessions
-Get-SFTPSession | % { Remove-SFTPSession -SessionId ($_.SessionId) }
+#Disconnect all SFTP Sions
+Get-SFTPSion | % { Remove-SFTPSion -SionId ($_.SionId) }
 
 # Copy the file to the SMB location
 #Copy-Item -Path $FilePath -Destination $SftpPath
@@ -72,11 +80,11 @@ $Credentials = New-Object System.Management.Automation.PSCredential `
      -ArgumentList $username,(Get-Content $pwdStringFile | ConvertTo-SecureString)
 
 $userdata = import-csv "C:\Users\vm.txt"
-$sessionOption = New-PsSessionOption –SkipCACheck -SkipCNCheck
+$sionOption = New-PsSionOption –SkipCACheck -SkipCNCheck
 
 foreach($item in $userdata.name){
-    $session = New-PSSession -ComputerName $item -Credential $Credentials -UseSSL -SessionOption $sessionOption
-    Copy-Item -FromSession $session -Path "d:\test2\" -Destination "d:\"  -Recurse -Force
+    $sion = New-PSSion -ComputerName $item -Credential $Credentials -UseSSL -SionOption $sionOption
+    Copy-Item -FromSion $sion -Path "d:\test2\" -Destination "d:\"  -Recurse -Force
     }
 }
 
@@ -100,7 +108,7 @@ Get-WinEvent -FilterHashtable @{LogName='Application';ID='345';level='2';StartTi
 ===========================
   ProviderName:MR_MONITOR
 
-TimeCreated                     Id LevelDisplayName Message                                                           
+TimeCreated                     Id LevelDisplayName Mage                                                           
 -----------                     -- ---------------- -------                                                           
 2018/12/18 12:10:00            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
 2018/12/18 11:48:42            345 错误               Controller ID:  0  Controller encountered a fatal error and was...
@@ -116,7 +124,7 @@ Get-WinEvent -FilterHashTable  @{LogName='Application';ID='345';level='2'} -MaxE
 TimeCreated  : 2018/12/18 12:10:00
 ProviderName : MR_MONITOR
 Id           : 345
-Message      : Controller ID:  0  Controller encountered a fatal error and was reset
+Mage      : Controller ID:  0  Controller encountered a fatal error and was reset
                Event ID:345.
 
 ####windows log view##############
@@ -126,17 +134,17 @@ Message      : Controller ID:  0  Controller encountered a fatal error and was r
 ####get-cpu value
 
 $comp = "my-srv"
-Get-WmiObject win32_processor -ComputerName $comp | 
+Get-WmiObject win32_procor -ComputerName $comp | 
             Measure-Object -property LoadPercentage -Average | 
-            Select @{Name = "CPU Average %" ; Expression = {$_.Average}} | Format-Table
+            Select @{Name = "CPU Average %" ; Exprion = {$_.Average}} | Format-Table
 
 #Get memory usage
 Get-WmiObject -Class win32_operatingsystem -ComputerName $comp | 
-            Select @{Name = "Memory Usage %" ; Expression = {“{0:N2}” -f ((($_.TotalVisibleMemorySize - $_.FreePhysicalMemory)*100)/ $_.TotalVisibleMemorySize) }} | Format-Table
+            Select @{Name = "Memory Usage %" ; Exprion = {“{0:N2}” -f ((($_.TotalVisibleMemorySize - $_.FreePhysicalMemory)*100)/ $_.TotalVisibleMemorySize) }} | Format-Table
 
 
 #Get Disk usage            
-$diskspace = Get-PSDrive C | Select @{Expression={[math]::Round($_.Free/1GB,2)};Label="Free Space(GB)"} | Format-Table
+$diskspace = Get-PSDrive C | Select @{Exprion={[math]::Round($_.Free/1GB,2)};Label="Free Space(GB)"} | Format-Table
 
  (Write-Host -ForegroundColor Red $comp),$cpusage,$memusage,$diskspace 
 
@@ -167,7 +175,7 @@ ForEach($row in $vmList)
         if($row.MYSQL -EQ "Y"){
         $job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
          -ThrottleLimit 4 -AsJob -ComputerName $ip `
-         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+         -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)`
          -scriptblock {
                 param($id,$ip,$port)    ###define call powershell var                                             
                 $hn=hostname.exe  
@@ -186,8 +194,8 @@ ForEach($row in $vmList)
  client need add to AD? with 5986 port openning 
  operation user is remote Administrators with AD user privileges 
 ###10 copy file
-$TargetSession = New-PSSession -ComputerName your-srv -Port  5986  -Credential Domain\User -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
-Copy-Item  -ToSession $TargetSession -Path "f:\Script.ps1"  -Destination "C:\Script.ps1" 
+$TargetSion = New-PSSion -ComputerName your-srv -Port  5986  -Credential Domain\User -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
+Copy-Item  -ToSion $TargetSion -Path "f:\Script.ps1"  -Destination "C:\Script.ps1" 
 
 ###15 set login Credentials
 $Password=Read-host "Enter PASSWORD" -AsSecureString
@@ -196,7 +204,7 @@ $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
 ###20 winrm run on remote vm
 Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
          -ThrottleLimit 4 -AsJob -ComputerName your-srv `
-         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
+         -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)`
          -scriptblock {
               Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
@@ -218,7 +226,7 @@ Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
                 }     
 
 ###30 check
-Enter-PSSession  -ComputerName your-srv -Port  5986  -Credential  Domain\User
+Enter-PSSion  -ComputerName your-srv -Port  5986  -Credential  Domain\User
 
 
 #######winrm with powershell remote copy file run powershell script set schdule#####
@@ -352,11 +360,11 @@ VM2 was App VM
  Get-WUInstall -AcceptAll
 ####powershell operation wsus
 
-#####parallel process on remote windows server 
+#####parallel proc on remote windows server 
 $Password=Read-host "Enter PASSWORD" -AsSecureString
 $User="Domain\user"
 $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
-$job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL -ThrottleLimit 4 -AsJob -ComputerName (Get-Content e:\list.csv) -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+$job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL -ThrottleLimit 4 -AsJob -ComputerName (Get-Content e:\list.csv) -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
     Get-MpComputerStatus
 } 
@@ -432,12 +440,12 @@ ForEach
 
 The foreach statement runs a statement list once for each item in a collection.[5]
 
-$processes = Get-Process
-foreach($process in $processes)
+$proces = Get-Proc
+foreach($proc in $proces)
 {
-    if($process.PM / 1024 / 1024 -gt 100)
+    if($proc.PM / 1024 / 1024 -gt 100)
     {
-        Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+        Write-Output ('Proc ' + $proc.Name + ' is using more than 100 MB RAM.')
     }
 }
 
@@ -445,26 +453,26 @@ Continue
 
 The continue statement immediately returns script flow to the top of the innermost While, Do, For, or ForEach loop.[6]
 
-$processes = Get-Process
-foreach($process in $processes)
+$proces = Get-Proc
+foreach($proc in $proces)
 {
-    if($process.PM / 1024 / 1024 -le 100)
+    if($proc.PM / 1024 / 1024 -le 100)
     {
         continue
     }
-    Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+    Write-Output ('Proc ' + $proc.Name + ' is using more than 100 MB RAM.')
 }
 
 Break
 
 The break statement causes Windows PowerShell to immediately exit the innermost While, Do, For, or ForEach loop or Switch code block.[7]
 
-$processes = Get-Process
-foreach($process in $processes)
+$proces = Get-Proc
+foreach($proc in $proces)
 {
-    if($process.PM / 1024 / 1024 -gt 100)
+    if($proc.PM / 1024 / 1024 -gt 100)
     {
-        Write-Output ('Process ' + $process.Name + ' is using more than 100 MB RAM.')
+        Write-Output ('Proc ' + $proc.Name + ' is using more than 100 MB RAM.')
         break
     }
 }
@@ -482,7 +490,7 @@ Foreach-Object
 
 The ForEach-Object cmdlet runs a command list once for each item in a collection.[9] While the ForEach-Object cmdlet is often more convenient, the foreach statement and a coded loop usually offers better performance.
 
-Get-Process | ForEach-Object { if($_.PM / 1024 / 1024 -gt 100) {'Process ' + $_.Name + ' is using more than 100 MB RAM.'} }
+Get-Proc | ForEach-Object { if($_.PM / 1024 / 1024 -gt 100) {'Proc ' + $_.Name + ' is using more than 100 MB RAM.'} }
 
 Start-Sleep
 
@@ -509,7 +517,7 @@ Activities
     Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Rather than simply creating a 10 by 10 table, ask the user to enter the starting and ending values.
     Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Use a condition with (<variable> % 2) to test for odd or even values. Generate the multiplication table only for even values. For odd values, use the continue statement to continue the next iteration of the loop.
     Review MathsIsFun: 10x Printable Multiplication Table. Create a script that uses nested for loops to generate a multiplication table. Rather than simply creating a 10 by 10 table, ask the user to enter the starting and ending values. Use a break statement to terminate the loop if the count exceeds 10.
-    Create a script that retrieves a list of all services and then uses foreach to display the names of all running services. While this could also be done using Select-Object, there are times when processing objects is faster and easier using foreach.
+    Create a script that retrieves a list of all services and then uses foreach to display the names of all running services. While this could also be done using Select-Object, there are times when procing objects is faster and easier using foreach.
     Review Microsoft TechNet: Using the Start-Sleep Cmdlet. Write a script that uses an infinite loop to call the Get-Counter cmdlet every sixty seconds. Redirect the Get-Counter output and append it to a file. Run the script for a few minutes and then check the file contents to observe system utilization.
 
 
@@ -538,9 +546,9 @@ $Hostname=hostname.exe          #########get hostname
         Invoke-WebRequest -Uri $MysqlPackageUrl -OutFile $MysqlPackageZip
     }
 
-###get ip address to variables
+###get ip addr to variables
 $lanSection=192.168.1.0 
-$IP=Get-NetIPAddress|Where-Object{$_ -match $lanSection}|Select-Object IPAddress|findstr $lanSection|%{$_ -replace "$lanSection",""}
+$IP=Get-NetIPAddr|Where-Object{$_ -match $lanSection}|Select-Object IPAddr|findstr $lanSection|%{$_ -replace "$lanSection",""}
 $MysqlBin="d:\\Mysql\\bin"         ############define directory variables
 
 
@@ -553,7 +561,7 @@ mysql -e "alter user root@localhost identified by 'pwd'"  2>$NULL ###redirect er
 
 
 #####redirction null and exit code judge###
-Get-Service essj |Out-Null
+Get-Service j |Out-Null
 IF ($? -eq "True")
 {
  "OK"
@@ -565,9 +573,9 @@ ELSE
 #####redirction null and exit code judge###
 
 #######powershell set env variable permanent
-$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
+$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Sion Manager\Environment’ -Name PATH).path
 $newpath = “$oldpath;$MysqlBin”
-Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH -Value $newPath
+Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Sion Manager\Environment’ -Name PATH -Value $newPath
 #######powershell set env variable permanent
 
 ####powershell Install winrm
@@ -580,11 +588,11 @@ $ID=((Get-Content -tail 3 1.txt|select-string "CN=") -split  " +")[0]
 #$HN=((Get-Content -tail 3 1.txt|select-string "CN=") -split  " +")[1]|%{$_ -replace "CN=",""}
 #Write-Host $id
 #Write-Host $HN
-cmd /c "winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Port=""$port"" ;Hostname=""$hn"";CertificateThumbprint=""$id""}"
+cmd /c "winrm create winrm/config/Listener?Addr=*+Transport=HTTPS @{Port=""$port"" ;Hostname=""$hn"";CertificateThumbprint=""$id""}"
 
 ###get winrm service && remove winrm service
-cmd /c "winrm get winrm/config/Listener?Address=*+Transport=HTTPS"
-#cmd /c "winrm delete winrm/config/Listener?Address=*+Transport=HTTPS"   ###clean winrm setting
+cmd /c "winrm get winrm/config/Listener?Addr=*+Transport=HTTPS"
+#cmd /c "winrm delete winrm/config/Listener?Addr=*+Transport=HTTPS"   ###clean winrm setting
 ####powershell Install winrm
 
 
@@ -677,7 +685,7 @@ Write-Host 'BgInfo has run' -foregroundcolor $ForegroundColor1
 
 ## Close PowerShell windows upon completion
 
-stop-process -Id $PID 
+stop-proc -Id $PID 
 
 ##-------------------------------------------------------------------
 #######Automation install bginfo
@@ -689,13 +697,13 @@ gc log.txt | select -first 10 # head
 gc -TotalCount 10 log.txt     # also head
 gc log.txt | select -last 10  # tail
 gc -Tail 10 log.txt           # also tail (since PSv3), also much faster than above option
-gc log.txt | more             # or less if you have it installed
+gc log.txt | more             # or l if you have it installed
 gc log.txt | %{ $_ -replace '\d+', '($0)' }         # sed
 This works well enough for small files, larger ones (more than a few MiB) are probably a bit slow.
 
 The PowerShell Community Extensions include some cmdlets for specialised file stuff (e.g. Get-FileTail).
 
-https://stackoverflow.com/questions/9682024/how-to-do-what-head-tail-more-less-sed-do-in-powershell/41626586
+https://stackoverflow.com/questions/9682024/how-to-do-what-head-tail-more-l-sed-do-in-powershell/41626586
 ###head and tail####
 
 ####awk sed grep###
@@ -711,19 +719,19 @@ Get-Content C:\some-txt|%{$_ -replace "old","new"}
 ###replace var in file with value of variable 
 $file="C:\ip-mac.txt"
 $lanSection="192.168"
-$ip=Get-NetIPAddress|Where-Object{$_ -match $lanSection}
+$ip=Get-NetIPAddr|Where-Object{$_ -match $lanSection}
 (Get-Content $file)|%{$_ -replace "somestring",$ip}|Set-Content $file
 ####awk sed grep###
 
 
 ########port open and set continue
-$Ipaddress= Read-Host "Enter the IP address:"
-$Port= Read-host "Enter the port number to access:"
+$Ipaddr= Read-Host "Enter the IP addr:"
+$Port= Read-host "Enter the port number to acc:"
 $ManagementPort=5986
 $t = New-Object Net.Sockets.TcpClient
 $p="pwd-text"
 $user="domain\user"
-$t.Connect($Ipaddress,$Port)
+$t.Connect($Ipaddr,$Port)
 
 
     if($t.Connected)
@@ -732,7 +740,7 @@ $t.Connect($Ipaddress,$Port)
 
 $password = ConvertTo-SecureString $p  -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential($user,$password)
-Invoke-Command -ComputerName $Ipaddress -Port $ManagementPort  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+Invoke-Command -ComputerName $Ipaddr -Port $ManagementPort  -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
 }
     }
@@ -750,7 +758,7 @@ Invoke-Command -ComputerName $Ipaddress -Port $ManagementPort  -Credential  $cre
 --10 powershell script 
 $password = ConvertTo-SecureString "Mypassword" -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
-Invoke-Command -ComputerName  host-or-ip  -Port 5986  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+Invoke-Command -ComputerName  host-or-ip  -Port 5986  -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
     Set-NetFirewallRule -DisplayName "Mysql 3306 in" -Action Allow
     Get-NetFirewallRule -DisplayName "Mysql 3306 in"
@@ -778,7 +786,7 @@ Status                : 已从存储区成功分析规则。 (65536)
 EnforcementStatus     : NotApplicable
 PolicyStoreSource     : PersistentStore
 PolicyStoreSourceType : Local
-PSComputerName        : ip address Here 
+PSComputerName        : ip addr Here 
 
 --end
 
@@ -806,19 +814,19 @@ ls Cert:\LocalMachine\My\
 
 
 ###cmd root 
-winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{
+winrm create winrm/config/Listener?Addr=*+Transport=HTTPS @{
 Port="5986" ;Hostname="your-vm" ;CertificateThumbprint="7DE993538B7D7234EDFE5A592881D682487BA591"}
 
 
 ##POWERSHELL FIREWALL ADD REMOTE POWSHELL 5986 HTTPS PORT
-New-NetFirewallRule -DisplayName "Permit Remote powershell" -Direction Inbound -Action Allow -RemoteAddress 172.16.28.0/24 -Protocol TCP -LocalPort 5986
+New-NetFirewallRule -DisplayName "Permit Remote powershell" -Direction Inbound -Action Allow -RemoteAddr 172.16.28.0/24 -Protocol TCP -LocalPort 5986
 Set-NetFirewallRule -DisplayName "Permit Remote powershell" -Action block
 
 ###CHECK PORT STATUS
 Get-NetFirewallRule -DisplayName "Permit Remote powershell" | Get-NetFirewallPortFilter|select PROTOCOL,LOCALPORT,REMOTEPORT
 
 ####enter remote 
-Enter-PSSession -ComputerName 172.16.28.247 -Port 5986 -Credential domain\user  -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+Enter-PSSion -ComputerName 172.16.28.247 -Port 5986 -Credential domain\user  -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
 
 Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
@@ -828,7 +836,7 @@ Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
 $password = ConvertTo-SecureString "your-password-plain-text-here" -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
-Enter-PSSession -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -Sk
+Enter-PSSion -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -Sk
 #####remote powershell auto complete password Credentials 
 
 1. server level
@@ -906,7 +914,7 @@ OpeningPortal    1    Started    C:\Site\OpenningPortal         http *:80:
 Get-ChildItem -Path e:\path -Recurse -file|Get-ItemProperty -Name lastwritetime|ft pspath,lastwritetime
 
 
-Get-ADUser -Filter 'name -like "username"' -Properties CN,TITLE,proxyAddresses
+Get-ADUser -Filter 'name -like "username"' -Properties CN,TITLE,proxyAddres
 
 
 ###########remote powershell######
@@ -951,7 +959,7 @@ CEA9F345AE37D3D313F954F0C1B49FD1579AD7DA  CN=your-host-name
 4
 使用管理员打开CMD执行如下命令：
 ////注意主机名和证书指纹替换为生成的信息。
-c:\>winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{
+c:\>winrm create winrm/config/Listener?Addr=*+Transport=HTTPS @{
 Port="5986" ;Hostname="your-host-name" ;CertificateThumbprint="CEA9F345AE37D3D313F954F0C1B49FD1579AD7DA"}
 
 c:\>netstat -an|findstr "5986"
@@ -966,14 +974,14 @@ enable 5986 port on server and security group on nat map(omit...)
 6
 client connect
 在客户端您只需要使用命令链接就可以了：
-Enter-Pssession -ComputerName IP-or-dns -port 5986 -Credential your-user-name -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+Enter-Pssion -ComputerName IP-or-dns -port 5986 -Credential your-user-name -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
 
 
 7
 powershell copy file
-•	PS C:\Windows\system32> $TargetSession = New-PSSession -ComputerName SrvIP -Port  5986  -Credential UserName -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
-•	PS C:\Windows\system32> Copy-Item  -ToSession $TargetSession -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
-•	PS C:\Windows\system32> Enter-PSSession  -ComputerName SrvIP -Port  5986  -Credential  UserName
+•	PS C:\Windows\system32> $TargetSion = New-PSSion -ComputerName SrvIP -Port  5986  -Credential UserName -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
+•	PS C:\Windows\system32> Copy-Item  -ToSion $TargetSion -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
+•	PS C:\Windows\system32> Enter-PSSion  -ComputerName SrvIP -Port  5986  -Credential  UserName
 
 
 tips
@@ -986,7 +994,7 @@ Major  Minor  Build  Revision
 5      1      16299  98      
 
 20
- windows 8.1 only support Administrator use enter-pssession ???
+ windows 8.1 only support Administrator use enter-pssion ???
 ###########remote powershell######
 
 
@@ -1002,15 +1010,15 @@ $orgin_ip = "";
 
 function Send-ToEmail([string]$email){
 
-    $message = new-object Net.Mail.MailMessage;
-    $message.From = "your-send-title@a.com.cn";
-    $message.To.Add($email);
-    $message.Subject = "your-send-title@$ip";
-    $message.Body = "$ip";
+    $mage = new-object Net.Mail.MailMage;
+    $mage.From = "your-send-title@a.com.cn";
+    $mage.To.Add($email);
+    $mage.Subject = "your-send-title@$ip";
+    $mage.Body = "$ip";
  
     $smtp = new-object Net.Mail.SmtpClient("mail.com", "25");
     $smtp.Credentials = New-Object System.Net.NetworkCredential($Username, $Password);
-    $smtp.send($message);
+    $smtp.send($mage);
  }
 
  while(1)
@@ -1051,7 +1059,7 @@ while(1){
 
 ############get newest file in a folder
 $dir = "f:\"
-$latest = Get-ChildItem -Path $dir -Recurse -file | Sort-Object LastAccessTime -Descending| Select-Object -First 1
+$latest = Get-ChildItem -Path $dir -Recurse -file | Sort-Object LastAccTime -Descending| Select-Object -First 1
 $latest.name
 ############get newest file in a folder
 
@@ -1318,9 +1326,9 @@ test1 09/04/2016 13:59:24
 #redirection
 & myjob.bat 2>&1 >> C:\yLog.txt
 ~
- PowerShell CheatSheet – Regular Expressions
+ PowerShell CheatSheet – Regular Exprions
 Fab 09/10/2012 News
-Here is a regular expression list
+Here is a regular exprion list
 
 . matches any character except newline
 \ escape character
@@ -1359,32 +1367,32 @@ PS C:\WINDOWS\system32> Get-ExecutionPolicy
 Unrestricted
 
 
-###########batch update multiple proxyAddress#####
+###########batch update multiple proxyAddr#####
 #####loop operation
 Import-CsvC:\Users\someone\user20171205.csv|
 foreach{
 ##set SMTP
-$user=get-aduser $_.username -Properties mail,department,ProxyAddresses
-$user.ProxyAddresses = 'SMTP:' + $_.username + '@example.com'
+$user=get-aduser $_.username -Properties mail,department,ProxyAddres
+$user.ProxyAddres = 'SMTP:' + $_.username + '@example.com'
 set-aduser -instance $user
 ##SET multiple smtp
-get-aduser $_.username |Set-ADUser -add @{Proxyaddresses="smtp:" + $_.username + "@eg2.com" }
-##view user ProxyAddresses
-get-aduser $_.username -Properties mail,department,ProxyAddresses
+get-aduser $_.username |Set-ADUser -add @{Proxyaddres="smtp:" + $_.username + "@eg2.com" }
+##view user ProxyAddres
+get-aduser $_.username -Properties mail,department,ProxyAddres
 }
-###########batch update multiple proxyAddress#####
+###########batch update multiple proxyAddr#####
 
 
 
-######batch update proxyAddress of AD user                               
+######batch update proxyAddr of AD user                               
 Import-Csv C:\Users\user\usertxt.csv |
 foreach{
-$user=get-aduser $_.username -Properties mail,department,ProxyAddresses
-$user.ProxyAddresses = 'SMTP:' + $_.username + '@example.com'
+$user=get-aduser $_.username -Properties mail,department,ProxyAddres
+$user.ProxyAddres = 'SMTP:' + $_.username + '@example.com'
 set-aduser -instance $user
 }
 
-######batch update proxyAddress of AD user                               
+######batch update proxyAddr of AD user                               
 
 
 #######batch deploy linux Azure vm use csv
