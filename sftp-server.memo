@@ -1,13 +1,24 @@
 ######Startmemoof sftp-server.memo #######
 ######Start sftp-server.memo #######
+
 --05  user is remote-user,home is /home/remote-user
+# tree -ug /data/ |grep remote-user
+
+├── [root     root    ]  remote-user
+│   └── [remote-user       remote-group]  data
+│       └── [remote-user       remote-group]  wms2.0-server.txt
+
+#groupadd remote-group
+
+#useradd -M -g remote-group -d /home/remote-user
+
 # cat /etc/passwd|grep remote
 remote-user:x:1007:1007::/home/remote-user/:/sbin/nologin                                                                                      
 
 # grep Chroot /etc/ssh/sshd_config 
 Subsystem sftp internal-sftp
 Match group remote-group
-    ChrootDirectory /home/remote-user
+    ChrootDirectory /home/%u
     ForceCommand internal-sftp
     PasswordAuthentication yes
 
