@@ -584,17 +584,17 @@ $initPassword=$initPasswordLine -replace "^([\w\ ].*)(root@localhost: )(.*)",'$3
 mysql -e "alter user root@localhost identified by 'pwd'"  2>$NULL ###redirect error to null in powershell
 
 
-#####redirction null and exit code judge###
-Get-Service j |Out-Null
+#####redirction null and exit code return code test###
+Get-Service j |Out-Null   ####only apply to powershell native cmd,not another cmd ???
 IF ($? -eq "True")
-{
- "OK"
-}
-ELSE
-{
- "Wrong"
-}
-#####redirction null and exit code judge###
+		{
+		 "OK"
+		}
+		ELSE
+		{
+		 "Wrong"
+		}
+#####redirction null and exit code return code test###
 
 #######powershell set env variable permanent
 $oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Sion Manager\Environment’ -Name PATH).path
