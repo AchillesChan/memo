@@ -1,5 +1,17 @@
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
+ cp vmresult.txt.bak vmresult.txt
+sed -i 's/^$/abcd1234/g' vmresult.txt                                                                                                                                                     
+grep -E 'Message|PSComputer|TimeCreate|abcd1234' vmresult.txt >a.txt
+sed -i 's/TimeCreated          : //g' a.txt
+sed -i 's/Message              : //g' a.txt
+sed -i 's/PSComputerName       : //g' a.txt
+sed -i ':a;N;$!ba;s/\n/\|\|/g' a.txt
+sed -i 's/abcd1234/\n/g' a.txt
+
+
+
+
 https://www.percona.com/blog/2014/11/25/more-secure-local-passwords-in-mysql-5-6-and-up/
 `
 python sftp scp script
