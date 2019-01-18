@@ -1,0 +1,38 @@
+--10 orginal text
+Shell>$ head vmresult.txt.bak 
+Message              : Controller ID:  0  VD is now DEGRADED   VD  
+                           1
+                       Event ID:251.
+PSComputerName       : server01.domain.name
+RunspaceId           : 55bfcf86e
+Id                   : 251
+Version              : 
+Qualifiers           : 0
+......
+
+--20 script
+Shell>$ cat temp
+#!/bin/bash
+ 
+yes|cp vmresult.txt.bak vmresult.txt
+sed -i 's/^$/abcd1234/g' vmresult.txt 
+grep -E 'Message|PSComputer|TimeCreate|abcd1234' vmresult.txt >a.txt
+sed -i 's/TimeCreated          : //g' a.txt
+sed -i 's/Message              : //g' a.txt
+sed -i 's/PSComputerName       : //g' a.txt
+sed -i ':a;N;$!ba;s/\n/\|\|/g' a.txt                       ####replace newline with ||
+sed -i 's/abcd1234/\n/g' a.txt                             ####replace abcd1234 with newline
+sed -i 's/||$//g' a.txt                                    ####delete || in end of line
+sed -i '/^$/d' a.txt                                       ####delete empty line
+sed -i 's/^||//g' a.txt                                    ####delete || in head of line
+
+--30 run script
+Shell>$ sh -x temp
+
+--40 result
+Shell>$ head a.txt
+Controller ID:  0  VD is now DEGRADED   VD  ||server01.domain.name||5/3/2008 3:15:13 AM
+Controller ID:  0  VD is now DEGRADED   VD  ||server01.domain.name||5/3/2008 3:15:11 AM
+......
+
+--50 import a.txt to excel 
