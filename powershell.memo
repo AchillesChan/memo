@@ -1,6 +1,42 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+
+####ftp to server large file
+#https://stackoverflow.com/questions/39345335/powershell-read-file-in-chunks
+
+
+$ftp_addr = "ftp://server"
+$user = "ftpuser"
+$pass = "ftpuser@server"
+$bufSize = 64mb
+$file_to_ftp = "e:\filename.zip"
+
+# Initialize connection to FTP
+$ftp = [System.Net.FtpWebRequest]::Create("ftp://server/filename.zip")
+$ftp = [System.Net.FtpWebRequest]$ftp
+$ftp.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile
+$ftp.Credentials = new-object System.Net.NetworkCredential($user, $pass)
+
+$ftp.Timeout = -1              #infinite timeout
+$ftp.ReadWriteTimeout = -1     #infinite timeout
+
+$ftp.UseBinary = $true
+$ftp.UsePassive = $true
+
+$requestStream = $ftp.GetRequestStream()
+$fileStream = [System.IO.File]::OpenRead($file_to_ftp)
+$chunk = New-Object byte[] $bufSize
+
+while ( $bytesRead = $fileStream.Read($chunk, 0, $bufsize) ){
+    $requestStream.write($chunk, 0, $bytesRead)
+    $requestStream.Flush()
+}
+
+$FileStream.Close()
+$requestStream.Close()
+####ftp to server large file
+
 #####ftp to server
 # create the FtpWebRequest and configure it
 $ftp = [System.Net.FtpWebRequest]::Create("ftp://Servername/from.zip")
