@@ -75,7 +75,38 @@ server {
 <?php
 echo "0322-1434";
 ?>
-
+#####docker compose file example
+version: '2'
+services:
+    db:
+        image: mysql:5.7
+        container_name: mysqlg
+        environment:
+            MYSQL_ROOT_PASSWORD: iab
+        restart: always
+        volumes:
+            ###style is host_dir:container_dir
+            - './mysql/data:/var/lib/mysql:Z'
+            - './mysql/conf:/etc/mysql:Z'
+        ports:
+            ###style is host_dir:container_dir
+            - 3306:3306
+    
+    redis:
+        image: redis:4-alpine
+        container_name: redisg
+        restart: always
+        volumes:
+            - './redis/data:/data:Z'
+        ports:
+            - 6379:6379
+    registry:
+        image: registry:2
+        container_name: registry
+        restart: always
+        ports:
+            - 8000:8000            
+#####docker compose file example
 
 ###up and down,PATT option and command sequ,FUCK
 $ docker-compose -f mysql.yml up -d
