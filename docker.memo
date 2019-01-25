@@ -30,7 +30,7 @@ Environment=GOTRACEBACK=crash HTTP_PROXY=http://10.10.10.10:8080/ HTTPS_PROXY=ht
 # pwd
 /usr/local/lnmp
 # cat docker-compose.yml
-version: '2'
+version: '3'
 
 services:
     web:
