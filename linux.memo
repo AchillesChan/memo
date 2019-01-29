@@ -2,6 +2,18 @@
 ######Start linux.memo #######
 
 
+####tee stdin stdout stderr
+https://serverfault.com/questions/201061/capturing-stderr-and-stdout-to-file-using-tee
+
+$>cmd 2>&1 |tee some.log
+
+https://stackoverflow.com/questions/692000/how-do-i-write-stderr-to-a-file-while-using-tee-with-a-pipe
+$>command > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+>(...) (process substitution) creates a FIFO and lets tee listen on it. Then, it uses > (file redirection) to redirect the STDOUT of command to the FIFO that your first tee is listening on.
+
+####tee stdin stdout stderr
+
+
 ####parted fdisk big than 2TB disk##
 # parted -a opt /dev/sdb mkpart primary ext4 0% 100%
 Information: You may need to update /etc/fstab.

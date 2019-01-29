@@ -155,6 +155,8 @@ no-agent-forwarding,no-pty,no-port-forwarding ssh-rsa AAAAB3ZeENJrZ2RRb root@bac
 
 _________安装_______________
 $> yum install -y lua cmake lua-devel gcc gcc-c++ rsync
+--server end
+tar vzxf lsyncd-2.1.6.tar.gz
 cmake .
 make       
 make install
@@ -181,7 +183,7 @@ sync {
     rsync = {
         rsh ="/usr/bin/ssh -i /root/.ss h/your-ssh-rsa-privity-key -p your-port -l your-user-name",
         compress = true,
-        perms = ture,
+        perms = true,
         acls = true,
         xattrs = true,
         archive = true
@@ -234,6 +236,10 @@ Match user backup
         PermitTTY no
 
 ####如果有问题，tail log
+
+--error handle
+lsyncd error terminating since out of inotify watcheslsyncd error terminating since out of inotify watches
+$>/sbin/sysctl sysctl fs.inotify.max_user_watches=5000000
 
 ------备份目标服务器设置END-----------------------
 ############使用证书的成功的配置END############
