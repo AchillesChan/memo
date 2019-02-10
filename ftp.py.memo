@@ -22,7 +22,8 @@ def uploadFile(FILE):
         ftp.quit()
         time.sleep(1)
         return True
-    except:
+    except ftp.all_errors:
+        print "something wrong"
         time.sleep(2)
         return False
 while True:
