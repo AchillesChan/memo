@@ -19,6 +19,7 @@ def upload_file(filename):
     try:
         ftp = FTP('ip_or_dns_name')
         ftp.login(user='ftp', passwd='passwd')
+        ftp.voidcmd('NOOP')    ###prevent timeout
         ftp.storbinary('STOR '+filename, open(filename, 'rb'))
         ftp.quit()
         time.sleep(1)
