@@ -353,6 +353,8 @@ except:
 db.close()                     
 
 #####get full path and name ###########
+https://stackabuse.com/python-list-files-in-a-directory/
+
 ####--10 function
 # -*- coding:utf-8 -*-
 import os
@@ -366,6 +368,16 @@ def printfile(mypath):
                 shpfiles.append(os.path.join(dirpath, x))
     print shpfiles
 
+
+
+####--15 another function
+import os, fnmatch
+
+listOfFiles = os.listdir('.')  
+pattern = "*.py"  
+for entry in listOfFiles:  
+    if fnmatch.fnmatch(entry, pattern):
+            print (entry)
 
 ####--20 call 
 printfile('/home/user')
