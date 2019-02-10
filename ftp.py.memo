@@ -1,59 +1,48 @@
-# -*- coding:utf-8 -*-
-import os
-import time
+'''ftp upload script'''
+import os, fnmatch
+import time, ftplib
 from ftplib import FTP
-
 FAIL_COUNT = 0
 MAX_RETRY = 3
 FILE_ARRAY = [""]
-for root, dirs, files in os.walk("."):
-    for FILE in sorted(files):
+ROOT_DIR = '/home'
+
+LIST_OF_FILES = os.listdir(ROOT_DIR)
+PATTERN = "*.py"
+for FILE in LIST_OF_FILES:
+    if fnmatch.fnmatch(FILE, PATTERN):
         FILE_ARRAY.append(FILE)
 FILE_ARRAY.remove(FILE_ARRAY[0])
 
-def uploadFile(FILE):
-
+def upload_file(filename):
+    '''UPLOAD FUNCTION'''
     try:
-        
-        ftp = FTP()
-        ftp.connect('example.com',21)   ##21 is ftp-server port 
-        ftp.login(user='ftpuser', passwd='ftp-passwd')
-        ftp.storbinary('STOR '+FILE, open(FILE, 'rb'))
+        ftp = FTP('ip_or_dns_name')
+        ftp.login(user='ftp', passwd='passwd')
+        ftp.storbinary('STOR '+filename, open(filename, 'rb'))
         ftp.quit()
         time.sleep(1)
         return True
-    except ftp.all_errors:
-        print "something wrong"
+    except ftplib.all_errors:
+        print ftplib.all_errors
         time.sleep(2)
         return False
-while True:
-    UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
 
+while True:
+    UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
     if UPLOAD_STATUS:
-        print("Success update "+FILE_ARRAY[0])
+        print "Success update " + FILE_ARRAY[0]
         FILE_ARRAY.remove(FILE_ARRAY[0])
         if len(FILE_ARRAY) > 0:
-            FILE_ARRAY[0] = FILE_ARRAY[0]
-            UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
         else:
             break
     else:
         FAIL_COUNT = FAIL_COUNT+1
-        print("Error update "+FILE_ARRAY[0])
+        print "Error update " + FILE_ARRAY[0]
         if FAIL_COUNT < MAX_RETRY:
-                UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
-        else:   
-                FILE_ARRAY.remove(FILE_ARRAY[0])
-                FILE_ARRAY[0] = FILE_ARRAY[0]
-                FAIL_COUNT = 0
-                UPLOAD_STATUS = uploadFile(FILE_ARRAY[0])
-
-
-###running result
-# python ftp.py
-Success update +CONTENTS
-Success update .ftp.py.swp
-Success update .gitignore
-Success update .travis.yml
-Success update CHANGELOG.md
-
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
+        else:
+            FILE_ARRAY.remove(FILE_ARRAY[0])
+            FAIL_COUNT = 0
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
