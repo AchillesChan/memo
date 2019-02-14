@@ -17,7 +17,8 @@ FILE_ARRAY.remove(FILE_ARRAY[0])
 def upload_file(filename):
     '''UPLOAD FUNCTION'''
     try:
-        ftp = FTP('ip_or_dns_name')
+        ftp = FTP()
+        ftp.connect(host='ftp_srv_ip_or_domain', port=ftp_controll_port_default_21)
         ftp.login(user='ftp', passwd='passwd')
         ftp.voidcmd('NOOP')    ###prevent timeout
         ftp.storbinary('STOR '+filename, open(filename, 'rb'))
