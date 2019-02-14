@@ -1,0 +1,49 @@
+'''ftp upload script'''
+import os, fnmatch
+import time, ftplib
+from ftplib import FTP
+FAIL_COUNT = 0
+MAX_RETRY = 3
+FILE_ARRAY = [""]
+ROOT_DIR = '/home'
+
+LIST_OF_FILES = os.listdir(ROOT_DIR)
+PATTERN = "*.py"
+for FILE in LIST_OF_FILES:
+    if fnmatch.fnmatch(FILE, PATTERN):
+        FILE_ARRAY.append(FILE)
+FILE_ARRAY.remove(FILE_ARRAY[0])
+
+def upload_file(filename):
+    '''UPLOAD FUNCTION'''
+    try:
+        ftp = FTP('ip_or_dns_name')
+        ftp.login(user='ftp', passwd='passwd')
+        ftp.voidcmd('NOOP')    ###prevent timeout
+        ftp.storbinary('STOR '+filename, open(filename, 'rb'))
+        ftp.quit()
+        time.sleep(1)
+        return True
+    except ftplib.all_errors:
+        print ftplib.all_errors
+        time.sleep(2)
+        return False
+
+while True:
+    UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
+    if UPLOAD_STATUS:
+        print "Success update " + FILE_ARRAY[0]
+        FILE_ARRAY.remove(FILE_ARRAY[0])
+        if len(FILE_ARRAY) > 0:
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
+        else:
+            break
+    else:
+        FAIL_COUNT = FAIL_COUNT+1
+        print "Error update " + FILE_ARRAY[0]
+        if FAIL_COUNT < MAX_RETRY:
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
+        else:
+            FILE_ARRAY.remove(FILE_ARRAY[0])
+            FAIL_COUNT = 0
+            UPLOAD_STATUS = upload_file(FILE_ARRAY[0])
