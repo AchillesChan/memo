@@ -286,5 +286,33 @@ $ >sudo systemctl status mongod
    CGroup: /system.slice/mongod.service
            └─1061 /usr/bin/mongod -f /etc/mongod.conf
 
+
+##################backup mongod
+#!/bin/bash
+
+#define variables
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/mongodb/bin
+export PATH
+op_date=$(date +%Y%m%d-%H%M%S)
+bak_dst_path=/data/backup/mongo/
+lsync_path=/data/backup/lsync
+
+ls $bak_dst_path || mkdir -p $bak_dst_path
+ls $lsync_path || mkdir -p $lsync_path 
+#delete old date
+cd "$bak_dst_path"
+cd MongoOMS
+find . -not -name "*.tar.gz" -delete
+sleep 3s
+
+#backup current mongodb
+cd "$bak_dst_path"
+mongodump --db MongoOMS --out "$bak_dst_path"
+cd MongoOMS
+tar zcf waas-mongodb-"$op_date".tar.gz * --exclude "*.tar.gz"
+find . -not -name "*.tar.gz" -delete
+find . -mtime -2 |xargs -P 1 -n 1 -I {} cp --no-clobber {}  $lsync_path
+
+##################backup mongod
 ######End  mongod.memo #######
 ######Endmemoof mongod.memo #######
