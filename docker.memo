@@ -1,7 +1,21 @@
 ######Startmemoof docker.memo #######
 ######Start docker.memo #######
 
- 
+#####centos install docker  
+yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+yum install -y yum-utils   device-mapper-persistent-data   lvm2
+
+yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce docker-ce-cli containerd.io
+
+yum list docker-ce --showduplicates | sort -r
+yum install docker-ce.x86_64 docker-ce-cli.x86_64 
+yum install -y containerd.io
+systemctl enable docker
+systemctl start docker
+#####centos install docker
+
 ####kubernetes best practice####
 https://jimmysong.io/kubernetes-handbook/practice/
 ####kubernetes best practice####
