@@ -42,7 +42,7 @@ https://www.centos.bz/2018/01/mariadb%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE%E4%B8%
 https://juejin.im/entry/5baee8b25188256bab296b5e
 https://mariadb.com/kb/en/mariadb-maxscale-14/maxscale-configuration-usage-scenarios/
 MySQL Router，MariaDB出品的Maxscale，Percona的ProxySQL Arkproxy
-
+https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.13.md#downloads-for-v1131     k8s binary source download
 http://dasini.net/blog/2018/04/10/mysql-security-mysql-enterprise-transparent-data-encryption/
 https://mysqlserverteam.com/mysql-innodb-transparent-tablespace-encryption/
 https://www.techrepublic.com/blog/linux-and-open-source/10-mysql-variables-that-you-should-monitor/
