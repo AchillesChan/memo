@@ -102,14 +102,14 @@ install-module -Name Posh-SSH
 Set-ExecutionPolicy -ExecutionPolicy Restricted
 
 # Establish the SFTP connection
-$ThisSion = New-SFTPSion -ComputerName $SftpIp -Credential $Credential
+$ThisSession = New-SFTPSession -ComputerName $SftpIp -Credential $Credential
 
 # Upload the file to the SFTP path
-Set-SFTPFile -SionId ($ThisSion).SionId -LocalFile $FilePath -RemotePath $SftpPath
+Set-SFTPFile -SessionId ($ThisSession).SessionId -LocalFile $FilePath -RemotePath $SftpPath
 
 
-#Disconnect all SFTP Sions
-Get-SFTPSion | % { Remove-SFTPSion -SionId ($_.SionId) }
+#Disconnect all SFTP Sessions
+Get-SFTPSession | % { Remove-SFTPSession -SessionId ($_.SessionId) }
 
 # Copy the file to the SMB location
 #Copy-Item -Path $FilePath -Destination $SftpPath
@@ -141,11 +141,11 @@ $Credentials = New-Object System.Management.Automation.PSCredential `
      -ArgumentList $username,(Get-Content $pwdStringFile | ConvertTo-SecureString)
 
 $userdata = import-csv "C:\Users\vm.txt"
-$sionOption = New-PsSionOption –SkipCACheck -SkipCNCheck
+$sionOption = New-PsSessionOption –SkipCACheck -SkipCNCheck
 
 foreach($item in $userdata.name){
-    $sion = New-PSSion -ComputerName $item -Credential $Credentials -UseSSL -SionOption $sionOption
-    Copy-Item -FromSion $sion -Path "d:\test2\" -Destination "d:\"  -Recurse -Force
+    $sion = New-PSSession -ComputerName $item -Credential $Credentials -UseSSL -SessionOption $sionOption
+    Copy-Item -FromSession $sion -Path "d:\test2\" -Destination "d:\"  -Recurse -Force
     }
 }
 
@@ -236,7 +236,7 @@ ForEach($row in $vmList)
         if($row.MYSQL -EQ "Y"){
         $job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
          -ThrottleLimit 4 -AsJob -ComputerName $ip `
-         -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)`
+         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
          -scriptblock {
                 param($id,$ip,$port)    ###define call powershell var                                             
                 $hn=hostname.exe  
@@ -255,8 +255,8 @@ ForEach($row in $vmList)
  client need add to AD? with 5986 port openning 
  operation user is remote Administrators with AD user privileges 
 ###10 copy file
-$TargetSion = New-PSSion -ComputerName your-srv -Port  5986  -Credential Domain\User -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
-Copy-Item  -ToSion $TargetSion -Path "f:\Script.ps1"  -Destination "C:\Script.ps1" 
+$TargetSession = New-PSSession -ComputerName your-srv -Port  5986  -Credential Domain\User -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+Copy-Item  -ToSession $TargetSession -Path "f:\Script.ps1"  -Destination "C:\Script.ps1" 
 
 ###15 set login Credentials
 $Password=Read-host "Enter PASSWORD" -AsSecureString
@@ -265,7 +265,7 @@ $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
 ###20 winrm run on remote vm
 Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
          -ThrottleLimit 4 -AsJob -ComputerName your-srv `
-         -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)`
+         -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)`
          -scriptblock {
               Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
@@ -287,7 +287,7 @@ Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL `
                 }     
 
 ###30 check
-Enter-PSSion  -ComputerName your-srv -Port  5986  -Credential  Domain\User
+Enter-PSSession  -ComputerName your-srv -Port  5986  -Credential  Domain\User
 
 
 #######winrm with powershell remote copy file run powershell script set schdule#####
@@ -425,7 +425,7 @@ VM2 was App VM
 $Password=Read-host "Enter PASSWORD" -AsSecureString
 $User="Domain\user"
 $Cred=new-object System.Management.Automation.PSCredential($User,$Password)
-$job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL -ThrottleLimit 4 -AsJob -ComputerName (Get-Content e:\list.csv) -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+$job=Invoke-Command  -Port 5986  -Credential  $Cred -UseSSL -ThrottleLimit 4 -AsJob -ComputerName (Get-Content e:\list.csv) -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
     Get-MpComputerStatus
 } 
@@ -634,9 +634,9 @@ IF ($? -eq "True")
 #####redirction null and exit code return code test###
 
 #######powershell set env variable permanent
-$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Sion Manager\Environment’ -Name PATH).path
+$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
 $newpath = “$oldpath;$MysqlBin”
-Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Sion Manager\Environment’ -Name PATH -Value $newPath
+Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH -Value $newPath
 #######powershell set env variable permanent
 
 ####powershell Install winrm
@@ -801,7 +801,7 @@ $t.Connect($Ipaddr,$Port)
 
 $password = ConvertTo-SecureString $p  -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential($user,$password)
-Invoke-Command -ComputerName $Ipaddr -Port $ManagementPort  -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+Invoke-Command -ComputerName $Ipaddr -Port $ManagementPort  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
 }
     }
@@ -819,7 +819,7 @@ Invoke-Command -ComputerName $Ipaddr -Port $ManagementPort  -Credential  $cred -
 --10 powershell script 
 $password = ConvertTo-SecureString "Mypassword" -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
-Invoke-Command -ComputerName  host-or-ip  -Port 5986  -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck) -scriptblock {
+Invoke-Command -ComputerName  host-or-ip  -Port 5986  -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck) -scriptblock {
     hostname.exe
     Set-NetFirewallRule -DisplayName "Mysql 3306 in" -Action Allow
     Get-NetFirewallRule -DisplayName "Mysql 3306 in"
@@ -887,7 +887,7 @@ Set-NetFirewallRule -DisplayName "Permit Remote powershell" -Action block
 Get-NetFirewallRule -DisplayName "Permit Remote powershell" | Get-NetFirewallPortFilter|select PROTOCOL,LOCALPORT,REMOTEPORT
 
 ####enter remote 
-Enter-PSSion -ComputerName 172.16.28.247 -Port 5986 -Credential domain\user  -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
+Enter-PSSession -ComputerName 172.16.28.247 -Port 5986 -Credential domain\user  -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
 
 Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
@@ -897,7 +897,7 @@ Set-NetFirewallRule -DisplayName "Permit Mysql" -Action block
 
 $password = ConvertTo-SecureString "your-password-plain-text-here" -AsPlainText -Force
 $cred=new-object System.Management.Automation.PSCredential("domain\user",$password)
-Enter-PSSion -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SionOption (New-PSSionOption -SkipCACheck -Sk
+Enter-PSSession -ComputerName 172.16.2.100 -Port 5986 -Credential  $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -Sk
 #####remote powershell auto complete password Credentials 
 
 1. server level
@@ -1035,14 +1035,14 @@ enable 5986 port on server and security group on nat map(omit...)
 6
 client connect
 在客户端您只需要使用命令链接就可以了：
-Enter-Pssion -ComputerName IP-or-dns -port 5986 -Credential your-user-name -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
+Enter-PSSession -ComputerName IP-or-dns -port 5986 -Credential your-user-name -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
 
 
 7
 powershell copy file
-•	PS C:\Windows\system32> $TargetSion = New-PSSion -ComputerName SrvIP -Port  5986  -Credential UserName -UseSSL -SionOption (New-PSSionOption -SkipCACheck -SkipCNCheck)
-•	PS C:\Windows\system32> Copy-Item  -ToSion $TargetSion -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
-•	PS C:\Windows\system32> Enter-PSSion  -ComputerName SrvIP -Port  5986  -Credential  UserName
+•	PS C:\Windows\system32> $TargetSession = New-PSSession -ComputerName SrvIP -Port  5986  -Credential UserName -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+•	PS C:\Windows\system32> Copy-Item  -ToSession $TargetSession -Path "C:\temp\localfile.txt"  -Destination "C:\azurevm\"  -Recurse
+•	PS C:\Windows\system32> Enter-PSSession  -ComputerName SrvIP -Port  5986  -Credential  UserName
 
 
 tips
