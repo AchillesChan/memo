@@ -1,0 +1,97 @@
+$>yum remove samba* -y
+$>yum install samba* -y 
+
+$>mkdir -p /samba/anonymous_share
+$>chmod -R 0777 /samba/anonymous_share
+
+
+$>vim /etc/samba/smb.conf
+        ## Add the following lines under [global] section ##
+        unix charset = UTF-8
+        dos charset = CP932
+
+        ## Change the to windows default workgroup ##
+        workgroup = WORKGROUP
+
+        ## Uncomment and set the IP Range ##
+        hosts allow = 127. 192.168.1.
+
+        ## Uncomment ##
+        max protocol = SMB2
+
+        ## Uncomment, and change the value of 'Security' to 'user' ## 
+        security = user
+
+        ## Add the following line ##
+        map to guest = Bad User
+         
+        ## Add the following lines at the bottom ##
+        [Anonymous share]
+        path = /data/share
+        read only = yes
+        browsable = yes
+        guest ok = yes
+        guest only = yes
+
+
+
+
+$>testparm
+
+        Load smb config files from /etc/samba/smb.conf
+        rlimit_max: increasing rlimit_max (1024) to minimum Windows limit (16384)
+        Processing section "[homes]"
+        Processing section "[printers]"
+        Processing section "[Anonymous share]"
+        Loaded services file OK.
+        WARNING: You have some share names that are longer than 12 characters.
+        These may not be accessible to some older clients.\\192.168.200.161\data
+        (Eg. Windows9x, WindowsMe, and smbclient prior to Samba 3.0.)
+        Server role: ROLE_STANDALONE
+        Press enter to see a dump of your service definitions
+
+        [global]
+        dos charset = CP932
+        netbios name = UNIXMEN SAMBA SERVER
+        server string = Samba Server Version %v
+        map to guest = Bad User
+        log file = /var/log/samba/log.%m
+        max log size = 50
+        server max protocol = SMB2
+        idmap config * : backend = tdb
+        hosts allow = 127., 192.168.1.
+        cups options = raw
+
+        [homes]
+        comment = Home Directories
+        read only = No
+        browseable = No
+
+        [printers]
+        comment = All Printers
+        path = /var/spool/samba
+        printable = Yes
+        print ok = Yes
+        browseable = No
+
+        [Anonymous share]
+        path = /samba/anonymous_share
+        read only = No
+        create mask = 0777
+        directory mask = 0777
+        guest only = Yes
+        guest ok = Yes
+
+
+$>systemctl restart smb
+$>systemctl restart nmb
+
+$>firewall-cmd --permanent --add-port=137/tcp
+$>firewall-cmd --permanent --add-port=138/tcp
+$>firewall-cmd --permanent --add-port=139/tcp
+$>firewall-cmd --permanent --add-port=445/tcp
+$>firewall-cmd --permanent --add-port=901/tcp
+
+$>vim /etc/crontab
+
+@reboot  root chcon -t samba_share_t /samba/anonymous_share/
