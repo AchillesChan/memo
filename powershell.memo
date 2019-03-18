@@ -2,6 +2,8 @@
 ######Start powershell.memo #######
 
 
+get-aduser -filter * -properties passwordlastset, passwordneverexpires |ft Name, passwordlastset, Passwordneverexpires
+
 ####ftp to server large file
 #https://stackoverflow.com/questions/39345335/powershell-read-file-in-chunks
 
