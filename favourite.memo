@@ -104,6 +104,7 @@ rttps://docs.gitlab.com/omnibus/docker/README.html
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
 
 http://mingxinglai.com/cn/2014/03/copy-file-in-linux/  Linux下常用的文件传输方式介绍与比较
+https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
 http://learnvimscriptthehardway.stevelosh.com/ vim tuitor very beautiful
 
 <<<<<<< HEAD
