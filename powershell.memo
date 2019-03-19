@@ -44,24 +44,10 @@ The RPC server is unavailable
 
 The solution to this connection failure was to configure a firewall group policy.
 
-Launch the Group Policy Editor – Gpedit
-Computer Configuration
-– Windows Settings
-— Security Settings
 — Windows Firewall Advanced Security
 —- Inbound Rules
 —- Predefined radio button
 —- Choose Remote Event Log Management (Drop down list),right click -->enable
-—- Click Next
-
-—- Accept the defaults and click 'Next'
-—- Choose Allow the connection and click 'Finish'
-The ticks should turn green and you will see the screenshot below.
-
-
-
-
-
 
 ####ftp to server large file
 #https://stackoverflow.com/questions/39345335/powershell-read-file-in-chunks
