@@ -9,8 +9,28 @@ name                                                        passwordlastset
 
 
 
-
 get-aduser -filter * -properties passwordlastset, passwordneverexpires |ft Name, passwordlastset, Passwordneverexpires
+
+
+
+
+
+#####get password change info of AD
+#
+(Get-ADComputer -SearchBase ‘OU=Domain Controllers,DC=example,DC=com’ -Filter *).Name | foreach {
+Get-WinEvent -ComputerName $_ -FilterHashtable @{LogName="Security";ID=4724 }| Foreach {
+$event = [xml]$_.ToXml()
+		if($event)
+						{
+						$Time = Get-Date $_.TimeCreated -UFormat "%Y-%d-%m %H:%M:%S"
+						$AdmUser = $event.Event.EventData.Data[4]."#text"
+						$User = $event.Event.EventData.Data[0]."#text"
+						$dc = $event.Event.System.computer
+						write-host “Admin ” $AdmUser “ resets password to ” $User “ on ” $dc “ “ $Time
+						}
+		}
+}
+
 
 ####ftp to server large file
 #https://stackoverflow.com/questions/39345335/powershell-read-file-in-chunks
