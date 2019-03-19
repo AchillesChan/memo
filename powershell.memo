@@ -1,6 +1,14 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+PS C:\> Get-ADUser -Identity zhangsan -Properties passwordlastset, passwordneverexpires|ft name,passwordlastset
+
+name                                                        passwordlastset
+----                                                        ---------------
+张三                                                      2016/3/6 12:11:57
+
+
+
 
 get-aduser -filter * -properties passwordlastset, passwordneverexpires |ft Name, passwordlastset, Passwordneverexpires
 
