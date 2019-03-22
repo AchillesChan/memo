@@ -1,6 +1,16 @@
 ######Startmemoof powershell.memo #######
 ######Start powershell.memo #######
 
+####winrm remote restart rdp 
+Enter-Pssession -ComputerName srv-name.ad.com -port 5986 -Credential ad\adminuser -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+[srv-name.ad.com]: PS C:\Users\adminuser\Documents> Stop-Service TermService -Force
+
+[srv-name.ad.com]: PS C:\Users\adminuser\Documents> Start-Service TermService 
+
+####winrm remote restart rdp 
+
+
+
 PS C:\> Get-ADUser -Identity zhangsan -Properties passwordlastset, passwordneverexpires|ft name,passwordlastset
 
 name                                                        passwordlastset
