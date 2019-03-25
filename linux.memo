@@ -2,6 +2,18 @@
 ######Start linux.memo #######
 
 
+###shell cmd on file with dash-start 
+[root]# touch -- --example-of-dash-start
+[root]# ll --example-of-dash-start
+ls: unrecognized option '--example-of-dash-start'
+Try 'ls --help' for more information.
+[root]# ll -- --example-of-dash-start
+-rw-r--r-- 1 root root 0 Mar 25 15:58 --example-of-dash-start
+[root]# rm -fv -- '--example-of-dash-start'
+removed ‘--example-of-dash-start’
+[root]# ls
+###shell cmd on file with dash-start 
+
 ####tee stdin stdout stderr
 https://serverfault.com/questions/201061/capturing-stderr-and-stdout-to-file-using-tee
 

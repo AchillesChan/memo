@@ -1,5 +1,26 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
+###disable binlog####
+[mysqld]
+skip-log-bin
+
+###disable binlog####
+
+
+
+#####view binlog status
+mysql> select @@log_bin;
++-----------+
+| @@log_bin |
++-----------+
+|         0 |
++-----------+
+1 row in set (0.00 sec)
+
+
+mysql> show master status;
+
+#####view binlog status
 ####int(n) storage size and display style
 https://stackoverflow.com/questions/5634104/what-is-the-size-of-column-of-int11-in-mysql-in-bytes
 
