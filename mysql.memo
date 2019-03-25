@@ -995,7 +995,7 @@ Alter TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
 --40 discard tablespace from destination
 ALTER TABLE tbls discard TABLESPACE;
 set FOREIGN_KEY_CHECKS=0;
-copy *.exp *.ibd to data directroy
+copy *.exp(not need) *.ibd to data directroy
 chown -R mysql.mysql data\dbs
 
 --50 import tablespace from destination
