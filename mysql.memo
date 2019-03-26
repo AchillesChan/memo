@@ -3,7 +3,15 @@
 ###disable binlog####
 [mysqld]
 skip-log-bin
+###must comment those
+#binlog_format = MIXED
+#gtid-mode = on
+#enforce-gtid-consistency = true
+#log-bin=mysql-bin
 
+or
+
+mysql> SET sql_log_bin=off;
 ###disable binlog####
 
 
