@@ -1,6 +1,17 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+###visudo
+User_Alias     OPERATORS = jia
+Runas_Alias    OP = root
+Host_Alias     OFNET = 192.168.1.0/24,192.168.2.3 #####target host
+Cmnd_Alias     OPCMD = /bin/systemctl restart vsftpd,\
+/bin/systemctl restart firewalld,\
+!/bin/systemctl restart sshd
+
+OPERATORS OFNET = (OP) OPCMD
+
+###visudo
 
 ###shell cmd on file with dash-start 
 [root]# touch -- --example-of-dash-start
