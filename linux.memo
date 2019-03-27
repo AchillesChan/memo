@@ -10,7 +10,7 @@ Cmnd_Alias     OPCMD = /bin/systemctl restart vsftpd,\
 !/bin/systemctl restart sshd
 
 OPERATORS OFNET = (OP) OPCMD
-
+#Who      Where = AsWho DoWhat
 ###visudo
 
 ###shell cmd on file with dash-start 
