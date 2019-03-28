@@ -1,6 +1,12 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+###per ip port traffic monitor batch mode
+##-t batch mode 
+##-s delay time
+iftop -f "dst port 22" -f "src host 192.168.2.3" -t -s 1800 >log.txt &
+###per ip port traffic monitor 
+
 ###visudo
 User_Alias     OPERATORS = jia
 Runas_Alias    OP = root
