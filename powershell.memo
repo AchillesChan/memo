@@ -17,7 +17,8 @@ name                                                        passwordlastset
 ----                                                        ---------------
 张三                                                      2016/3/6 12:11:57
 
-
+###get all Properties 
+get-aduser -Identity user -properties * 
 
 get-aduser -filter * -properties passwordlastset, passwordneverexpires |ft Name, passwordlastset, Passwordneverexpires
 
