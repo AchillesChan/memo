@@ -1,6 +1,17 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
 
+####partition
+alter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;
+
+
+partition by hash(clock DIV (60*60*24)) partitions 3;
+alter table history remove partitioning;
+
+SELECT UNIX_TIMESTAMP(STR_TO_DATE('Apr 15 2012 12:00AM', '%M %d %Y %h:%i%p'))
+select from_unixtime(1552003200);
+####partition
+
 ######How to know relations between tables#####
 SELECT 
   `TABLE_SCHEMA`,                          -- Foreign key schema
