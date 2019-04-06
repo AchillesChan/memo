@@ -2519,10 +2519,36 @@ OR
 # service nscd reload
 
 7 目录hard link
-cat /etc/fstab |grep bind
+#cat /etc/fstab |grep bind
 /dst                     /boot/src              none    bind            0 0
+
+# ll /boot/src/
+total 0
+
 # mount |grep src
 /dev/mapper/centos-root on /boot/src type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+
+# df -h
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   29G   18G   11G  64% /
+/dev/sda1                494M  170M  325M  35% /boot
+
+#mount -a
+
+# mount|grep src
+/dev/mapper/centos-root on /boot/src type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+
+#cp File23-0218.tar.gz /boot/src
+
+# ll /boot/src/  ###src have files,but save to /dst persistently
+
+total 90080
+-rwxr--r--. 1 root root 30743190 Apr  6 08:02 File23-0218.tar.gz
+
+# ll /dst
+total 90080
+-rwxr--r--. 1 root root 30743190 Apr  6 08:02 File23-0218.tar.gz
+
 
 ##bind /boot/src dir to /dst dir,file write in /boot/src to /dst,not use /boot/src's partition
 ##https://backdrift.org/how-to-use-bind-mounts-in-linux
