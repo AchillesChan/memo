@@ -2519,6 +2519,14 @@ OR
 # service nscd reload
 
 7 目录hard link
+cat /etc/fstab |grep bind
+/dst                     /boot/src              none    bind            0 0
+# mount |grep src
+/dev/mapper/centos-root on /boot/src type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+
+##bind /boot/src dir to /dst dir,file write in /boot/src to /dst,not use /boot/src's partition
+##https://backdrift.org/how-to-use-bind-mounts-in-linux
+
 
 shel $ mount --bind /home /tmp
 shel $ ls -lid /home /tmp

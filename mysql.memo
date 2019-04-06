@@ -789,7 +789,9 @@ http://superve.leanote.com/cate/study
 ###############mycli##########
 http://www.jianshu.com/p/841e5477d3c0
 https://www.tuicool.com/articles/ZnANBvq
-
+0. install 
+sudo yum install pip 
+sudo pip install mycli
 tips:
 1. Map mysql-server to localhost
 ## L represent map remote end to LOCAL 
@@ -809,7 +811,7 @@ $> mycli -h127.0.0.1 -P23306 -uroot -pPassowd
 Version: 1.8.1
 Chat: https://gitter.im/dbcli/mycli
 Mail: https://groups.google.com/forum/#!forum/mycli-users
-Home: http://mycli.net
+Home: http://mycli.ne
 Thanks to the contributor - Anonymous
 mysql root@127.0.0.1:(none)> show DATABASES;
 +--------------------+
