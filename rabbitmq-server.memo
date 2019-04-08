@@ -59,7 +59,14 @@ http://127.0.0.1:15672
 
 ###setup database path
 vim /etc/rabbitmq/rabbitmq-env.conf
+RABBITMQ_LOG_BASE=/data/rabbitmq/logs
 RABBITMQ_MNESIA_BASE=/data/rabbitmq/mnesia
+
+###create dir
+mkdir -p /data/rabbitmq
+mkdir -p /data/rabbitmq/logs
+chown -R rabbitmq.rabbitmq /data/rabbitmq
+
 
 ###display env variables
 head -n 30 /var/log/rabbitmq/rabbit\@SRV.log
@@ -74,8 +81,8 @@ node           : rabbit@SRV
 home dir       : /var/lib/rabbitmq
 config file(s) : /etc/rabbitmq/rabbitmq.config (not found)
 cookie hash    : dCdDhLfuuCxBvWG8iw2Now==
-log            : /var/log/rabbitmq/rabbit@SRV.log
-sasl log       : /var/log/rabbitmq/rabbit@SRV-sasl.log
+log            : /data/rabbitmq/logs/rabbitmq/rabbit@SRV.log
+sasl log       : /data/rabbitmq/logs/rabbitmq/rabbit@SRV-sasl.log
 database dir   : /data/rabbitmq/mnesia/rabbit@SRV   ####This changed by rabbitmq-env.conf
 
 
