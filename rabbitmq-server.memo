@@ -56,6 +56,29 @@ ssh -NCfqL 15672:localhost:15672 user@rabbit-server
 http://127.0.0.1:15672
 
 
+
+###setup database path
+vim /etc/rabbitmq/rabbitmq-env.conf
+RABBITMQ_MNESIA_BASE=/data/rabbitmq/mnesia
+
+###display env variables
+head -n 30 /var/log/rabbitmq/rabbit\@SRV.log
+
+=INFO REPORT==== 8-Apr-2019::19:44:54 ===
+Starting RabbitMQ 3.6.6 on Erlang 18.3
+Copyright (C) 2007-2016 Pivotal Software, Inc.
+Licensed under the MPL.  See http://www.rabbitmq.com/
+
+=INFO REPORT==== 8-Apr-2019::19:44:54 ===
+node           : rabbit@SRV
+home dir       : /var/lib/rabbitmq
+config file(s) : /etc/rabbitmq/rabbitmq.config (not found)
+cookie hash    : dCdDhLfuuCxBvWG8iw2Now==
+log            : /var/log/rabbitmq/rabbit@SRV.log
+sasl log       : /var/log/rabbitmq/rabbit@SRV-sasl.log
+database dir   : /data/rabbitmq/mnesia/rabbit@SRV   ####This changed by rabbitmq-env.conf
+
+
 参考：(注意参考资料中的中文字符和命令正确性，查看官网更高效)
 
 https://www.rabbitmq.com/management.html
