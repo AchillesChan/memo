@@ -1,6 +1,9 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+echo "My mail body text" >MyText
+mail -s "My-subject" rcpt@domain.com <MyText.txt
+
 ###per ip port traffic monitor batch mode
 ##-t batch mode 
 ##-s delay time
