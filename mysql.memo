@@ -1,5 +1,6 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
+innodb_force_recovery=6 
 
 ####partition
 alter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;

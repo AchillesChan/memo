@@ -1,5 +1,40 @@
 ######Startmemoof vsftpd.memo #######
 ######Start vsftpd.memo #######
+####LAN with pasv config  other with default setting
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=NO
+xferlog_std_format=YES
+ascii_upload_enable=YES
+ascii_download_enable=YES
+chroot_local_user=YES
+listen_port=21   ###custom port
+listen=YES
+listen_ipv6=NO
+allow_writeable_chroot=YES
+tcp_wrappers=YES
+use_localtime=YES
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+use_localtime=YES
+pasv_enable=YES
+#pasv_address=public_ip  ###custom ip
+pasv_min_port=10000  ###custom min_port need firewall pass
+pasv_max_port=10100  ###custom max_port need firewall pass
+port_enable=YES
+xferlog_enable=YES
+xferlog_file=/var/log/xferlog
+#pasv_promiscuous=YES                     #####访问出现425 bad ip connection 需要添加这行
+vsftpd_log_file=/var/log/vsftpd.log
+
+
+
+
 ########vsftpd.conf
 anonymous_enable=NO
 local_enable=YES
