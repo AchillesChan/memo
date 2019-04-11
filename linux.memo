@@ -32,6 +32,11 @@ Foo  pts/0        2019-04-11 02:57 (200.156)
 --100 jumpserver with ssh tunnel
 
 client $>ssh -v -N -L 3306:28.233:3306 Foo@200.156
+
+or slient by 
+client $>ssh -i ~/.ssh/private-key -NCfq -L 3306:28.233:3306 Foo@200.156 ###no below output
+
+
 OpenSSH_7.2p2, OpenSSL 1.0.2j-fips  26 Sep 2016
 debug1: Reading configuration data /home/Michael/.ssh/config
 debug1: Reading configuration data /etc/ssh/ssh_config
