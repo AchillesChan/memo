@@ -1,19 +1,52 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+####Jumpserver
+--00 network top
+client-->jumpserver-->dest-server
+28.200-->200.156------>28.233
+
+--10 client .ssh/config 
+client$: cat ~/.ssh/config
+
+Host                  jumpserver
+Hostname              200.156
+User                  Foo
+IdentityFile          ~/.ssh/private-key-file
+
+Host                  dest-server 
+Hostname              28.233
+User                  Foo
+Port                  22  
+ProxyCommand          ssh -q -W %h:%p jumpserver
+
+--30 test && resuslt
+client$> ssh -i private-key-file dest-server
+Enter passphrase for key 'private-key-file': 
+dest-server$ who      ####source is jump-server 
+Foo  pts/0        2019-04-11 02:57 (200.156)
+
+####Jumpserver
+
+####send mail 
 echo "My mail body text" >MyText
 mail -s "My-subject" rcpt@domain.com <MyText.txt
+
+####send mail 
+
+
+
 
 ###per ip port traffic monitor batch mode
 ##-t batch mode 
 ##-s delay time
-iftop -f "dst port 22" -f "src host 192.168.2.3" -t -s 1800 >log.txt &
+iftop -f "dst port 22" -f "src host 10.0.2.3" -t -s 1800 >log.txt &
 ###per ip port traffic monitor 
 
 ###visudo
 User_Alias     OPERATORS = jia
 Runas_Alias    OP = root
-Host_Alias     OFNET = 192.168.1.0/24,192.168.2.3 #####target host
+Host_Alias     OFNET = 10.0.1.0/24,10.0.2.3 #####target host
 Cmnd_Alias     OPCMD = /bin/systemctl restart vsftpd,\
 /bin/systemctl restart firewalld,\
 !/bin/systemctl restart sshd
@@ -463,7 +496,7 @@ sshd    34721 Michael    3u  IPv4 12014314      0t0  TCP Srv:22->client:59426 (E
 sshd    52535    root    3u  IPv4 14630580      0t0  TCP *:ssh (LISTEN)
 sshd    52535    root    4u  IPv6 14630582      0t0  TCP *:ssh (LISTEN)
 
-$> lsof -i @client-ip-address(i.e 192.168.1.3)
+$> lsof -i @client-ip-address(i.e 10.0.1.3)
 COMMAND   PID    USER   FD   TYPE   DEVICE SIZE/OFF NODE NAME
 sshd    34686    root    3u  IPv4 12012985      0t0  TCP Srv:22->client:59416 (ESTABLISHED)
 sshd    34691    root    3u  IPv4 12014314      0t0  TCP Srv:22->client:59426 (ESTABLISHED)
@@ -971,7 +1004,7 @@ Option 1, include the below in /etc/sysconfig/network-scripts/route-eth0 file: �
 
 GATEWAY0=172.16.0.11
 NETMASK0=255.255.255.0
-ADDRESS0=192.168.1.0
+ADDRESS0=10.0.1.0
 
 GATEWAY1=172.16.0.12
 NETMASK1=255.255.255.0
@@ -979,7 +1012,7 @@ ADDRESS1=10.20.30.0
 
 下面这个更简单
 Option 2, include the below in /etc/sysconfig/network-scripts/route-eth0 file: –
-192.168.1.0/24 via 172.16.0.11 dev eth0
+10.0.1.0/24 via 172.16.0.11 dev eth0
 10.20.30.0/24 via 172.16.0.12 dev eth0
 
 ####route persist
@@ -1022,7 +1055,7 @@ Port                  6001
 IdentityFile          ~/privity-key
 
 Host                  prefix2-hostname2
-Hostname              192.168.2.16
+Hostname              10.0.2.16
 User                  username  
 IdentityFile          ~/privity-key-2
 
@@ -1229,10 +1262,10 @@ set -o emacs
 201
 3
 11
-#> cat ip.txt |xargs -t -P 1 -n 1 -i  ping -c 1 192.168.1.{}
+#> cat ip.txt |xargs -t -P 1 -n 1 -i  ping -c 1 10.0.1.{}
 
-PING 192.168.1.1 (192.168.1.1)
-PING 192.168.1.201 (192.168.1.201)
+PING 10.0.1.1 (10.0.1.1)
+PING 10.0.1.201 (10.0.1.201)
 。。。。。。
 ########xargs 替换参数位置End######
 
@@ -1786,10 +1819,10 @@ $>cat detectServiceStatus.sh
 
 #!/bin/bash
 ########变量值定义为ip，端口，服务描述,用于此后调用时候方便分离
-cdbak01ssh="172.16.10.156 22 bak01ssh"
-cdbak01db="172.16.10.156 3306 bak01Mysql"
-cdbak01web="172.16.10.156 80 bak01Nginx"
-cdbak01web2="172.16.10.156 8030 bak01Tomcat156-8080"
+jumpserverssh="172.16.10.156 22 bak01ssh"
+jumpserverdb="172.16.10.156 3306 bak01Mysql"
+jumpserverweb="172.16.10.156 80 bak01Nginx"
+jumpserverweb2="172.16.10.156 8030 bak01Tomcat156-8080"
 cddc01rdp="172.16.10.13 3389 cdDC01RDP13-3389"
 log_file="sb.txt"
 op_date=$(date +%Y%m%d-%H%M)
@@ -1797,11 +1830,11 @@ op_date=$(date +%Y%m%d-%H%M)
 #######nc要使用 nc-1.84-24.el6.x86_64.rpm这个版本，CentOS7 yum自动安装的
 #######对Windows的端口兼容性不好，坑货Windows
 
-for managedService in "$cdbak01ssh" "$cdbak01db" "$cdbak01web" "$cdbak01web2" "$cddc01rdp"
+for managedService in "$jumpserverssh" "$jumpserverdb" "$jumpserverweb" "$jumpserverweb2" "$cddc01rdp"
 do
 
 ####使用eval来逐层的剥离变量名字，得到实际的值
-####$managedServic-->$cdbak01ssh-->"172.16.10.156 22 bak01ssh" 。。。。。。
+####$managedServic-->$jumpserverssh-->"172.16.10.156 22 bak01ssh" 。。。。。。
 
 host=$(eval eval echo "$managedService" |awk '{print $1}')
 #echo host=$host
@@ -2161,7 +2194,7 @@ alias scs='screen -S'
 ====start===================
 #!/bin/bash
 #Filename: fast_ping.sh
-# Change base address 192.168.0 according to your network.
+# Change base address 10.0.0 according to your network.
 for ip in 10.0.0.{1..255} ;
 do   (ping $ip -c2 &> /dev/null ;
 if [ $? -eq 0 ];
@@ -2225,8 +2258,8 @@ N250-mail
 AUTH PLAIN AHh0ODMzYQBtaW1haW1hOSk=
 535 Error: authentication failed
 
-#tcpdump -nNxXi eth0 -s 0 proto TCP and host 192.168.1.0 -w mail.txt
-#tcpdump -nNxXi eth0 -s 0 proto TCP and host 192.168.1.5 -w mail.txt   
+#tcpdump -nNxXi eth0 -s 0 proto TCP and host 10.0.1.0 -w mail.txt
+#tcpdump -nNxXi eth0 -s 0 proto TCP and host 10.0.1.5 -w mail.txt   
 #VIM 空格高亮黄色  显示所有隐藏的字符
 set nohls取消搜索的高亮关键字。
 
@@ -2290,7 +2323,7 @@ rsync -avz -e ssh remoteuser@remoteHost:/remotefiles /localDir
 ++++++++end++++++++++++++
 
 rsync +inotify
-Server 源端 192.168.1.91
+Server 源端 10.0.1.91
 > sudo yum install inotify-tools
 [leo@linux-vps~]$ vim inotify-example
 while true$>run indefinitely
@@ -2300,7 +2333,7 @@ inotifywait -r -e modify,attrib,close_write,move,create,delete \
 done
 $>cat backup-script
 #!/bin/bash
-rsync -avz /source/dir 192.168.1.92::website --delete
+rsync -avz /source/dir 10.0.1.92::website --delete
 [root@www ~]# yum -y install rsync
 
 Backup目的端
@@ -2330,7 +2363,7 @@ Starting xinetd:[ OK ]
 # destination directory
 path = /home/backup
 # Hosts you allow to copy (specify source Host)
-hosts allow = 192.168.1.91
+hosts allow = 10.0.1.91
 hosts deny = *
 list = true
 uid = root
@@ -2508,8 +2541,8 @@ $ cat local2 >>/dev/null 2>&1  #也可以使用>>/dev/null &>
 5 GREP 或 or 操作
 $ netstat -np|grep -E 'PID|mysql'
 Proto Recv-Q Send-Q Local Address Foreign Address State PID/Program name
-tcp 0 0 192.168.1.104:38635 192.168.1.104:3306 ESTABLISHED 3420/mysql
-tcp 0 0 192.168.1.104:3306 192.168.1.104:38635 ESTABLISHED 2342/mysqld
+tcp 0 0 10.0.1.104:38635 10.0.1.104:3306 ESTABLISHED 3420/mysql
+tcp 0 0 10.0.1.104:3306 10.0.1.104:38635 ESTABLISHED 2342/mysqld
 Proto RefCnt Flags Type State I-Node PID/Program name Path
 
 6 HowTo: Flush nscd dns cache
@@ -2567,9 +2600,9 @@ shel $ ls -lid /home /tmp
 256 drwxrwxrwt 1 root root 12656 6月 6 18:03 /tmp
 
 8 nc探测主机开放的端口（同时nc是一个简单的网络通信程序，man中有例子）
-shel $ nc -vz 192.168.1.1 80
-Connection to 192.168.1.1 80 port [tcp/http] succeeded!
-shel $ nc -vuz 192.168.1.1 53
+shel $ nc -vz 10.0.1.1 80
+Connection to 10.0.1.1 80 port [tcp/http] succeeded!
+shel $ nc -vuz 10.0.1.1 53
 
 $ cat ep
 Iraq fight
@@ -2828,8 +2861,8 @@ TYPE=Ethernet
 UUID=0179cbdb-4c64-4ecb-a9ff-d331baf1a178
 ONBOOT=yes
 NM_CONTROLLED=yes
-IPADDR=192.168.1.2
-GATEWAY=192.168.1.1
+IPADDR=10.0.1.2
+GATEWAY=10.0.1.1
 PREFIX=24
 NETMASK=255.255.255.0
 DNS=61.139.2.69
@@ -2874,29 +2907,29 @@ realm = www
 23 LVS 配置 Server
 [root@localhost ~]# cat dr.sh
 service iptables stop
-ifconfig eth0:0 192.168.1.10 broadcast 192.168.1.10 netmask 255.255.255.255 up
-route add -host 192.168.1.10 dev eth0:0
+ifconfig eth0:0 10.0.1.10 broadcast 10.0.1.10 netmask 255.255.255.255 up
+route add -host 10.0.1.10 dev eth0:0
 ipvsadm -C
-ipvsadm -A -t 192.168.1.10:80 -s rr
-ipvsadm -agt 192.168.1.10:80 -r 192.168.1.11:80
-ipvsadm -agt 192.168.1.10:80 -r 192.168.1.12:80
+ipvsadm -A -t 10.0.1.10:80 -s rr
+ipvsadm -agt 10.0.1.10:80 -r 10.0.1.11:80
+ipvsadm -agt 10.0.1.10:80 -r 10.0.1.12:80
 
 [root@localhost ~]# cat tunl.sh
 service iptables stop
-ifconfig tunl0 192.168.1.10 netmask 255.255.255.255 up
-route add -host 192.168.1.10 dev tunl0
+ifconfig tunl0 10.0.1.10 netmask 255.255.255.255 up
+route add -host 10.0.1.10 dev tunl0
 ipvsadm -C
-ipvsadm -A -t 192.168.1.10:80 -s rr
-ipvsadm -a -t 192.168.1.10:80 -r 192.168.1.11:80 -i
-ipvsadm -a -t 192.168.1.10:80 -r 192.168.1.12:80 -i
+ipvsadm -A -t 10.0.1.10:80 -s rr
+ipvsadm -a -t 10.0.1.10:80 -r 10.0.1.11:80 -i
+ipvsadm -a -t 10.0.1.10:80 -r 10.0.1.12:80 -i
 
 CLIENT
 anaconda-ks.cfg dr.sh install.log install.log.syslog start.sh
 [root@localhost ~]# cat dr.sh
 service httpd start
 service iptables stop
-ifconfig lo:0 192.168.1.10 broadcast 192.168.1.10 netmask 255.255.255.255 up
-route add -host 192.168.1.10 dev lo:0
+ifconfig lo:0 10.0.1.10 broadcast 10.0.1.10 netmask 255.255.255.255 up
+route add -host 10.0.1.10 dev lo:0
 echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
 echo 1 > /proc/sys/net/ipv4/conf/lo/arp_ignore
 echo 1 > /proc/sys/net/ipv4/conf/all/arp_announce
@@ -2905,8 +2938,8 @@ echo 2 > /proc/sys/net/ipv4/conf/lo/arp_announce
 [root@localhost ~]# cat start.sh
 service httpd start
 service iptables stop
-ifconfig tunl0 192.168.1.10 netmask 255.255.255.255 up
-route add -host 192.168.1.10 dev tunl0
+ifconfig tunl0 10.0.1.10 netmask 255.255.255.255 up
+route add -host 10.0.1.10 dev tunl0
 echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
 echo 1 > /proc/sys/net/ipv4/conf/tunl0/arp_ignore
 echo 1 > /proc/sys/net/ipv4/conf/all/arp_announce
@@ -2922,7 +2955,7 @@ gid = root
 use chroot = no
 read only = no
 write only = no
-host allow =192.168.1.0/255.255.255.0
+host allow =10.0.1.0/255.255.255.0
 max connection = 3
 pid file = /var/run/syncd.pid
 log file = /var/log/rsyncd.log
@@ -2940,10 +2973,10 @@ start
 
 客户端
 list
-$>rsync -avzP root@192.168.1.2::shares
+$>rsync -avzP root@10.0.1.2::shares
 
 sync
-$>rsync -v ./* root@192.168.1.2::shares
+$>rsync -v ./* root@10.0.1.2::shares
 
 26
 tar.bz 安装时注意./configure 后面的参数，有时候错了不会有提示，但会失败;用 ./configure --help|grep 查找需要的参数，仔细核对输入，注意大小写，横线，单字的拼写;libdir 和includedir的值一定要正确，如果使用yum等自动安装找不到include和lib，使用tar源码手动安装
