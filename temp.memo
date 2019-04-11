@@ -1,5 +1,31 @@
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
+
+
+Transdata=$(grep MB temp |awk '{print $2}'|sed  's/MB//g')
+GB=$(grep GB temp |awk '{print $2}'|sed  's/GB//g')
+TB=$(grep TB temp |awk '{print $2}'|sed  's/TB//g')
+#GB=$(grep GB temp|wc -l)
+#TB=$(grep TB temp|wc -l)
+#echo "$Transdata"
+if [ "$Transdata" -gt 100 ] || [ "$GB" -gt 0 ] || [ "$TB" -gt 0 ] 
+ 
+        then
+         echo "bigger than 100                                                                                                       
+        fi
+ 
+#if grep TB temp >& /dev/null
+#        then
+#            echo "TBbig"
+#        fi
+#if grep GB temp >& /dev/null
+#        then
+#            echo "big"
+#        fi
+~                                                                                                                                    
+~                            
+
+
  cp vmresult.txt.bak vmresult.txt
 sed -i 's/^$/abcd1234/g' vmresult.txt                                                                                                                                                     
 grep -E 'Message|PSComputer|TimeCreate|abcd1234' vmresult.txt >a.txt
