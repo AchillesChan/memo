@@ -1819,10 +1819,10 @@ $>cat detectServiceStatus.sh
 
 #!/bin/bash
 ########变量值定义为ip，端口，服务描述,用于此后调用时候方便分离
-jumpserverssh="172.16.10.156 22 bak01ssh"
-jumpserverdb="172.16.10.156 3306 bak01Mysql"
-jumpserverweb="172.16.10.156 80 bak01Nginx"
-jumpserverweb2="172.16.10.156 8030 bak01Tomcat156-8080"
+Srv-ssh="172.16.10.156 22 bak01ssh"
+Srv-db="172.16.10.156 3306 bak01Mysql"
+Srv-web="172.16.10.156 80 bak01Nginx"
+Srv-web2="172.16.10.156 8030 bak01Tomcat156-8080"
 cddc01rdp="172.16.10.13 3389 cdDC01RDP13-3389"
 log_file="sb.txt"
 op_date=$(date +%Y%m%d-%H%M)
@@ -1830,7 +1830,7 @@ op_date=$(date +%Y%m%d-%H%M)
 #######nc要使用 nc-1.84-24.el6.x86_64.rpm这个版本，CentOS7 yum自动安装的
 #######对Windows的端口兼容性不好，坑货Windows
 
-for managedService in "$jumpserverssh" "$jumpserverdb" "$jumpserverweb" "$jumpserverweb2" "$cddc01rdp"
+for managedService in "$Srv-ssh" "$Srv-db" "$Srv-web" "$Srv-web2" "$cddc01rdp"
 do
 
 ####使用eval来逐层的剥离变量名字，得到实际的值
