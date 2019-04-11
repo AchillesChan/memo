@@ -26,6 +26,57 @@ Enter passphrase for key 'private-key-file':
 dest-server$ who      ####source is jump-server 
 Foo  pts/0        2019-04-11 02:57 (200.156)
 
+
+
+
+--100 jumpserver with ssh tunnel
+
+client $>ssh -v -N -L 3306:28.233:3306 Foo@200.156
+OpenSSH_7.2p2, OpenSSL 1.0.2j-fips  26 Sep 2016
+debug1: Reading configuration data /home/Michael/.ssh/config
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 25: Applying options for *
+debug1: auto-mux: Trying existing master
+debug1: Requesting forwarding of local forward LOCALHOST:3306 -> 28.233:3306
+debug1: mux_client_request_session: master session id: 7
+
+
+--110 test 
+$> mysql -uroot -h127.0.0.1
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 6
+Server version: 5.5.60-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> \s
+--------------
+mysql  Ver 15.1 Distrib 10.0.32-MariaDB, for Linux (x86_64) using readline 5.1
+
+Connection id:          6
+Current database:
+Current user:           root@200.156                       #########jumpserver ip 
+SSL:                    Not in use
+Current pager:          less
+Using outfile:          ''
+Using delimiter:        ;
+Server:                 MariaDB
+Server version:         5.5.60-MariaDB MariaDB Server
+Protocol version:       10
+Connection:             127.0.0.1 via TCP/IP               ######localhost 3306
+Server characterset:    latin1
+Db     characterset:    latin1
+Client characterset:    utf8
+Conn.  characterset:    utf8
+TCP port:               3306
+Uptime:                 10 min 44 sec
+
+Threads: 2  Questions: 46  Slow queries: 0  Opens: 15  Flush tables: 2  Open tables: 41  Queries per second avg: 0.071
+--------------
+
+
 ####Jumpserver
 
 ####send mail 

@@ -2,8 +2,12 @@
 ######Start mysql.memo #######
 innodb_force_recovery=6 
 
+
+#####install mariadb on Centos7
+$>sudo yum install mariadb-server && systemctl start mariadb
+
 ####partition
-alter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;
+lter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;
 
 
 partition by hash(clock DIV (60*60*24)) partitions 3;
