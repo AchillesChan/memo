@@ -10,9 +10,9 @@
 #iftop -f "dst port 22" -f "src host 10.0.2.3" -t -s 1800 >log.txt &
 LOG_NAME=traffic_log_$(hostname)_$(date +%Y%m%d-%H%M).txt
 iftop -t -s 360 > "$LOG_NAME"                                                                                                                                                             
-MiB=$(grep Cumulative $LOG_NAME |grep MB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
-GiB=$(grep Cumulative $LOG_NAME |grep GB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
-TiB=$(grep Cumulative $LOG_NAME |grep TB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
+MiB=$(grep Cumulative $LOG_NAME |grep MB|awk '{print $3}'|sed  's/\..*//g')
+GiB=$(grep Cumulative $LOG_NAME |grep GB|awk '{print $3}'|sed  's/\..*//g')
+TiB=$(grep Cumulative $LOG_NAME |grep TB|awk '{print $3}'|sed  's/\..*//g')
 
 if [[ "$MiB" -gt 0 ||  "$GiB" -gt 0  ||  "$TiB" -gt 0 ]]
 then
