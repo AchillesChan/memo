@@ -1,6 +1,55 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
 
+
+
+#####iftop over traffic send mail
+--10 script
+#!/bin/bash
+
+#iftop -f "dst port 22" -f "src host 10.0.2.3" -t -s 1800 >log.txt &
+LOG_NAME=traffic_log_$(hostname)_$(date +%Y%m%d-%H%M).txt
+iftop -t -s 360 > "$LOG_NAME"                                                                                                                                                             
+
+ 
+MiB=$(grep Cumulative $LOG_NAME |grep MB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
+GiB=$(grep Cumulative $LOG_NAME |grep GB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
+TiB=$(grep Cumulative $LOG_NAME |grep TB|awk '{print $3}'|sed  's/\..*//g'|wc -l)
+
+if [[ "$MiB" -gt 0 ||  "$GiB" -gt 0  ||  "$TiB" -gt 0 ]]
+then
+    echo "bigger than 100"
+    mail -s "$(hostname)_$(date) Traffic overload" user@domain.com < "$LOG_NAME" 
+fi
+
+--20 traffic log
+Listening on eth0
+   # Host name (port/service if enabled)            last 2s   last 10s   last 40s cumulative
+--------------------------------------------------------------------------------------------
+   1 APP-01                         =>      199Kb      201Kb      194Kb     1.53MB
+     192.168.1.45                             <=     89.3Kb     32.1.b     41.1.b      334KB
+   2 APP-01                         =>     7.09Kb     4.25Kb     4.25Kb     21.3KB
+     40.73.81.68                              <=     14.2Kb     8.55Kb     8.55Kb     42.7KB
+   3 APP-01                         =>     2.57Kb     1.77Kb     1.60Kb     8.00KB
+     18.3.12.16                            <=     10.0Kb     6.03Kb     6.03Kb     30.1KB
+   4 APP-01                         =>         0b     1.65Kb       422b     2.06KB
+     220.194.237.1.                           <=         0b     1.18Kb       303b     1.1.KB
+   5 APP-01                         =>         0b       590b     2.58Kb     12.9KB
+     192.168.1.4                              <=         0b       537b     2.69Kb     13.1.B
+   6 APP-01                         =>         0b         0b     3.16Kb     30.2KB
+     3.20.11.22  <=         0b         0b       807b     9.66KB
+--------------------------------------------------------------------------------------------
+Total send rate:                                      209Kb      209Kb      206Kb
+Total receive rate:                                   114Kb     48.7Kb     59.7Kb
+Total send and receive rate:                          322Kb      258Kb      266Kb
+--------------------------------------------------------------------------------------------
+Peak rate (sent/received/total):                      553Kb      169Kb      614Kb
+Cumulative (sent/received/total):                    1.67MB      536KB     2.20MB
+============================================================================================
+
+#####iftop over traffic send mail
+
+
 =====vim command in bash script==========
 --10
 $> cat dummy.out
