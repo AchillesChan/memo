@@ -1,6 +1,36 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+
+####Jump to next white space
+
+    Use f and then space. See :help f and :help t for that.//6f space jump 6 words 
+    Alternatively use /[[:space:]] or /\s if you want to also match tab.
+    otherwise El will do it (capital e and lowercase L).
+
+Following a suggested edit that was rejected, here is how to do it backwards (jump to previous space):
+
+    Use F and then space. See :help F and :help T for that. //7F space return 6 words 
+    Alternatively use ?[[:space:]] or ?\s if you want to also match tab.
+    otherwise Bh will do it (capital b and lowercase h).
+
+
+
+
+####GREAT##### f+L jump next L of this line,3f+L jump the third L
+####GREAT##### F+L jump last L of this line,3F+L jump the last third L
+
+On the same line :
+
+f Space will work.
+Generally, f+<char> allows you to jump on the next character on the same line.
+
+See :help f for more information.
+
+
+####Jump to next white space
+
 ####Jumpserver
 --00 network top
 client-->jumpserver-->dest-server
