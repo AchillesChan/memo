@@ -18,8 +18,8 @@ Following a suggested edit that was rejected, here is how to do it backwards (ju
 
 
 
-####GREAT##### f+L jump next L of this line,3f+L jump the third L
-####GREAT##### F+L jump last L of this line,3F+L jump the last third L
+####GREAT##### f+L jump next L of this line,3f+L or fL;;; jump the third L
+####GREAT##### F+L jump last L of this line,3F+L or FL;;; jump the last third L
 
 On the same line :
 
