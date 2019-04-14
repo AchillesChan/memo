@@ -2,6 +2,22 @@
 ######Start linux.memo #######
 
 
+###bash in vi editor mode
+--05 view current mode
+$ set -o |grep em
+emacs           on ####on is emacs,off is you define
+
+--10 set ~/.bashrc or .bash_profile
+set -o vi
+--20 relogin
+
+--30 input command ,press ESC,press 0
+
+--40 now you entered vi mode,use vim command
+
+--50 restore
+clean set -o vi in ~/.bashrc or .bash_profile
+###bash in vi editor mode
 
 ####Jump to next white space
 
@@ -34,18 +50,18 @@ See :help f for more information.
 ####Jumpserver
 --00 network top
 client-->jumpserver-->dest-server
-28.200-->200.156------>28.233
+client-end-->jump-srv------>Real-srv
 
 --10 client .ssh/config 
 client$: cat ~/.ssh/config
 
 Host                  jumpserver
-Hostname              200.156
+Hostname              jump-srv
 User                  Foo
 IdentityFile          ~/.ssh/private-key-file
 
 Host                  dest-server 
-Hostname              28.233
+Hostname              Real-srv
 User                  Foo
 Port                  22  
 ProxyCommand          ssh -q -W %h:%p jumpserver
@@ -54,17 +70,19 @@ ProxyCommand          ssh -q -W %h:%p jumpserver
 client$> ssh -i private-key-file dest-server
 Enter passphrase for key 'private-key-file': 
 dest-server$ who      ####source is jump-server 
-Foo  pts/0        2019-04-11 02:57 (200.156)
+Foo  pts/0        2019-04-11 02:57 (jump-srv)
 
 
 
 
 --100 jumpserver with ssh tunnel
 
-client $>ssh -v -N -L 3306:28.233:3306 Foo@200.156
-
+client $>ssh -v -N -L 3306:Real-srv:3306 Foo@jump-srv
+####Real-srv can be server's LAN IP,so can connect to A NAT back server 
+#######by ssh tunnel with another jumpserver(Have Internet access) with LAN IP same
+#as Real-srv.#####
 or slient by 
-client $>ssh -i ~/.ssh/private-key -NCfq -L 3306:28.233:3306 Foo@200.156 ###no below output
+client $>ssh -i ~/.ssh/private-key -NCfq -L 3306:Real-srv:3306 Foo@jump-srv ###no below output
 
 
 OpenSSH_7.2p2, OpenSSL 1.0.2j-fips  26 Sep 2016
@@ -72,7 +90,7 @@ debug1: Reading configuration data /home/Michael/.ssh/config
 debug1: Reading configuration data /etc/ssh/ssh_config
 debug1: /etc/ssh/ssh_config line 25: Applying options for *
 debug1: auto-mux: Trying existing master
-debug1: Requesting forwarding of local forward LOCALHOST:3306 -> 28.233:3306
+debug1: Requesting forwarding of local forward LOCALHOST:3306 -> Real-srv:3306
 debug1: mux_client_request_session: master session id: 7
 
 
@@ -92,7 +110,7 @@ mysql  Ver 15.1 Distrib 10.0.32-MariaDB, for Linux (x86_64) using readline 5.1
 
 Connection id:          6
 Current database:
-Current user:           root@200.156                       #########jumpserver ip 
+Current user:           root@jump-srv                       #########jumpserver ip 
 SSL:                    Not in use
 Current pager:          less
 Using outfile:          ''
