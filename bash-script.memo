@@ -2,6 +2,27 @@
 ######Start bash-script.memo #######
 
 
+###condition and or with command online
+#!/bin/bash
+ls wlyd/scwldyd &>/dev/null
+opa=$?
+#echo "$opa"
+ls wlyd/sfwm &>/dev/null
+opb=$?
+#echo "$opb"
+#if [ "$opa" = 0 -o "$opb" = 0 ]
+
+if ping 192.168.1.169 -c 1 &>/dev/null || ping 192.168.1.159 -c 1 &>/dev/null 
+if ping 192.168.1.169 -c 1 &>/dev/null && ping 192.168.1.159 -c 1 &>/dev/null 
+####but if command is curl && MUST USE -a |||||WHY?
+###if ! curl -IL 192.168.169:80 |grep 200 -a curl 192.168.1.11 |grep 404
+then
+        echo "OK"
+else
+        echo "Not"
+fi
+
+###condition and or with command online
 
 #####iftop over traffic send mail
 --10 script
