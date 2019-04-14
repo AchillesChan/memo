@@ -17,6 +17,13 @@ set -o vi
 
 --50 restore
 clean set -o vi in ~/.bashrc or .bash_profile
+
+
+--60 enter edit mode
+press ESC,press 0,You can use vim editor now
+
+--70 error
+https://davidhamann.de/2018/01/28/using-vi-commands-in-your-bash-shell/
 ###bash in vi editor mode
 
 ####Jump to next white space
