@@ -1,0 +1,41 @@
+https://www.linuxtechi.com/install-kvm-hypervisor-on-centos-7-and-rhel-7/
+https://www.cyberciti.biz/faq/how-to-install-kvm-on-centos-7-rhel-7-headless-server/
+
+
+root@linuxtechi ~]# grep -E '(vmx|svm)' /proc/cpuinfo
+We should get the word either vmx or svm in the output, otherwise CPU doesn’t support virtualization.
+
+[root@linuxtechi ~]# yum install qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer bridge-utils
+
+[root@linuxtechi ~]# systemctl start libvirtd
+[root@linuxtechi ~]# systemctl enable libvirtd
+
+[root@linuxtechi ~]# lsmod | grep kvm
+kvm_intel             162153  0
+kvm                   525409  1 kvm_intel
+
+[root@linuxtechi ~]# cd /etc/sysconfig/network-scripts/
+[root@linuxtechi network-scripts]# cp ifcfg-eno49 ifcfg-br0
+[root@linuxtechi network-scripts]#
+
+ [root@localhost network-scripts]#cat ifcfg-br0    ####br0 config from local NIC change to br0
+TYPE="Bridge"
+BOOTPROTO="static"
+DEFROUTE="yes"
+#NAME="eno49"                         MUST COMMENT
+#UUID="db526.......6466552e9"         MUST COMMENT
+DEVICE="br0"          
+ONBOOT="yes"
+IPADDR="192.168.1.253"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.1.1"
+DNS1=1.19.2.9
+####DO NOT HAVE ANOTHER CONFIG,IF ADD,MAY BE RESTART NETWORK FAIL
+
+[root@localhost network-scripts]# cat ifcfg-eno49    #####local NIC cfg
+TYPE=Ethernet
+BOOTPROTO=static
+DEVICE=eno49
+ONBOOT=yes
+BRIDGE=br0
+

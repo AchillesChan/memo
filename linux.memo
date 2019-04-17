@@ -191,7 +191,13 @@ $>command > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
 
 
 ####parted fdisk big than 2TB disk##
+
+# yum install -y parted
+
 # parted -a opt /dev/sdb mkpart primary ext4 0% 100%
+or
+# parted -a opt /dev/sda mkpart primary ext4 1MB 100%
+
 Information: You may need to update /etc/fstab.
 
 # lsblk
@@ -201,6 +207,19 @@ sda             8:0    0 111.8G  0 disk
 ├─sda2          8:2    0     1G  0 part /boot
 sdb             8:16   0   7.3T  0 disk
 └─sdb1          8:17   0   7.3T  0 part
+
+#####waring############
+(parted) print
+Model: ATA ST8000NM0055-1RM (scsi)
+Disk /dev/sda: 8002GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name  Flags
+ 1      1049kB  8002GB  8002GB  fat16              ####File system is fat16 before mkfs.ext4
+
+#####waring############
 
 # mkfs.ext4 /dev/sdb1
 mke2fs 1.42.9 (28-Dec-2013)
@@ -214,7 +233,8 @@ Block size=4096 (log=2)
 /dev/sdb1: UUID="some-uuid" TYPE="ext4" PARTLABEL="primary" PARTUUID="other-id"
 
 []#vim /etc/fstab
-.... UUID=....
+UUID="uuid here"   /data   ext4            0 0
+
 ####parted fdisk big than 2TB disk##
 
 ###forget reset centos7 password
@@ -227,7 +247,7 @@ Block size=4096 (log=2)
 4 – Now press Control+x to start on single user mode.
 5 – Now access the system with this command.
 chroot /sysroot
-6 – Reset the password.
+6 – /deiiReset the password.
 passwd root
 7 – Update selinux information
 touch /.autorelabel
