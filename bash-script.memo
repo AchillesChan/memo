@@ -2,6 +2,49 @@
 ######Start bash-script.memo #######
 
 
+##### detect-web-status.sh output to /tmp/web-status.log
+# cat detect-web-status.sh
+#!/bin/bash
+set -u
+RESULT_OLD=${result_old:=""}
+RESULT_NEW=${result_new:=""}
+
+while(true)
+do
+        RESULT_NEW=$(parallel -a /etc/custom-scripts/websites -j 4 -k \
+        'curl -sL --connect-timeout 8 \
+        -w "%{url_effective} %{http_code}\n"  \
+        {} -o  /dev/null')
+
+                
+        awk 'FNR==NR{
+        temp[$1]=$2
+            }
+
+        FNR!=NR{
+        if(temp[$1]!=$2 && temp[$1]!="")
+             {
+                    print "FATAL ERROR:",$1,"status changed FROM",$2,"TO",temp[$1],strftime("%H:%M-%m%d-%Y", systime()) >> "/tmp/web-status.log"
+             }
+        }' <(echo -e "$RESULT_NEW") <(echo -e "$RESULT_OLD")               
+
+
+        if [[ "$RESULT_NEW" != "$RESULT_OLD" ]]
+        then
+            RESULT_OLD="$RESULT_NEW"
+        fi
+
+        sleep 180s
+done
+
+
+
+# cat /etc/custom-scripts/websites
+#mall-test-portal80.example.com
+backupserver:8530
+192.168.21.5:443
+##### detect-web-status.sh
+
 ###condition and or with command online
 #!/bin/bash
 ls wlyd/scwldyd &>/dev/null
