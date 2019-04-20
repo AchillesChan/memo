@@ -59,12 +59,13 @@ http://127.0.0.1:15672
 
 ###setup database path
 vim /etc/rabbitmq/rabbitmq-env.conf
+RABBITMQ_BASE=/data/rabbitmq
 RABBITMQ_LOG_BASE=/data/rabbitmq/logs
 RABBITMQ_MNESIA_BASE=/data/rabbitmq/mnesia
 
 ###create dir
 mkdir -p /data/rabbitmq
-mkdir -p /data/rabbitmq/log
+mkdir -p /data/rabbitmq/logs
 mkdir -p /data/rabbitmq/mnesia
 chown -R rabbitmq.rabbitmq /data/rabbitmq
 
