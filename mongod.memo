@@ -312,7 +312,7 @@ cd MongoOMS
 tar zcf waas-mongodb-"$op_date".tar.gz * --exclude "*.tar.gz"
 find . -not -name "*.tar.gz" -delete
 find . -mtime -2 |xargs -P 1 -n 1 -I {} cp --no-clobber {}  $lsync_path
-
+find "$lsync_path" -mtime +5 |xargs -I {} rm -f {}
 ##################backup mongod
 ######End  mongod.memo #######
 ######Endmemoof mongod.memo #######

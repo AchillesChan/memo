@@ -1,6 +1,34 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+###count ip access 
+https://stackoverflow.com/questions/18682308/sort-uniq-ip-address-in-from-apache-log
+
+cat access.log | awk '{print $1}' | sort -n | uniq -c | sort -nr | head -20
+
+
+29877 93.xxx.xxx.xxx
+  17538 80.xxx.xxx.xxx
+   5895 198.xxx.xxx.xxx
+   3042 37.xxx.xxx.xxx
+   2956 208.xxx.xxx.xxx
+   2613 94.xxx.xxx.xxx
+   2572 89.xxx.xxx.xxx
+   2268 94.xxx.xxx.xxx
+   1896 89.xxx.xxx.xxx
+   1584 46.xxx.xxx.xxx
+   1402 208.xxx.xxx.xxx
+   1273 93.xxx.xxx.xxx
+   1054 208.xxx.xxx.xxx
+    860 162.xxx.xxx.xxx
+    830 208.xxx.xxx.xxx
+    606 162.xxx.xxx.xxx
+    545 94.xxx.xxx.xxx
+    480 37.xxx.xxx.xxx
+    446 162.xxx.xxx.xxx
+    398 162.xxx.xxx.xxx
+
+###count ip access 
 
 ###bash in vi editor mode
 --05 view current mode

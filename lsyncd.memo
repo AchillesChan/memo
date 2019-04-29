@@ -245,6 +245,9 @@ $>/sbin/sysctl sysctl fs.inotify.max_user_watches=5000000
 ############使用证书的成功的配置END############
 
 
+rsync with ssh key
+[root@/etc/]# rsync -Pav --ignore-existing -e "ssh -i /bakuser_key" ./* bakuser@dest-server:/data/backup
+
 
 
 

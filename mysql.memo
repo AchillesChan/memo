@@ -1029,7 +1029,7 @@ mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only
 --20 backup single database from source
 innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs --no-timestamp ./dest/path
 or 
-innobackupex --user=root --password=pwd --databases=dt1 /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1
+innoackupex --user=root --password=pwd --databases=dt1 /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1
 --25 prepare backup file,it's generate exp and cfg file when done                                                                                                              
 innobackupex --user=root --port=3306 -pPwd --apply-log --export --socket=/path/2/mysql.sock --databases=dbs /backup/path
 
@@ -3114,7 +3114,7 @@ if ! tar zcPf "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"*.sql
 then
             echo "WRONG $0 ON $operationVM" >>$scriptErrorLog
 fi
-
+find "$lsyncPath" -mtime +5 |xargs -I {} rm -f {}
 
 ######End mysql.memo #######
 ######Endmemoof mysql.memo #######
