@@ -1,0 +1,3 @@
+awk -f replace-vpn-nd-nginx-ssh-tunnel-with-awk.awk config-key-value-vpn-pair config-template-vpn
+awk -f replace-vpn-nd-nginx-ssh-tunnel-with-awk.awk config-ssh-key-bar config-ssh-templete|sed "s/ hhhh //g"|sed 's/ahhhh/ /g'|sed 's/hhhh//g'
+taiyuan is the last
