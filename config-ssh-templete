@@ -1,0 +1,40 @@
+####10 nginx config
+upstream ahhhh %nginx-upstream hhhh {
+        server ahhhh %remote-lan-ip hhhh : hhhh %remote-lan-port hhhh ;
+}
+server {
+    listen 80;
+    server_name ahhhh %nginx-domain-name hhhh ;
+    location ~ / {
+        return 301 https:// hhhh %nginx-domain-name hhhh $request_uri;
+    }    
+}
+server {
+    listen 443; 
+    ssl on;
+    server_name  ahhhh %nginx-domain-name hhhh ;
+        ssl_certificate /etc/ssl/your-domain.crt;
+        #ssl_certificate /etc/ssl/cert.pem;
+        ssl_certificate_key /etc/ssl/your-domain.key;
+        ssl_dhparam /etc/ssl/dhparams.pem;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout  10m; 
+        ssl_ciphers ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:AES256-GCM-SHA384:DES-CBC3-SHA;
+        ssl_prefer_server_ciphers on;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+        add_header X-Frame-Options ALLOW;
+    location / {
+        proxy_pass http:// hhhh %nginx-upstream hhhh ;
+        proxy_set_header Host $host;
+        proxy_set_header X-FORWARDED-FOR $remote_addr;
+        proxy_set_header X-Real-IP $remote_addr;
+    }    
+}
+###20 ssh config
+ssh -R hhhh  %remote-lan-port hhhh : hhhh %local-lan-ip hhhh : hhhh %local-lan-port -p  hhhh %ssh-port -N -q -f -C -i  hhhh %ssh-key  hhhh %ssh-user hhhh @ hhhh %remote-wan-ip                          ###https:// hhhh %nginx-domain-name hhhh 
+###30 ssh crontab
+if ! curl -sIL https:// hhhh %nginx-domain-name hhhh |grep "Bad Gateway" -a curl -sIL ahhhh %local-lan-ip hhhh : hhhh %local-lan-port |grep \" hhhh %local-normal-return-code \"
+then
+    ssh -R ahhhh %remote-lan-port hhhh : hhhh %local-lan-ip hhhh : hhhh %local-lan-port -p ahhhh %ssh-port -N -q -f -C -i ahhhh %ssh-key ahhhh %ssh-user hhhh @ hhhh %remote-wan-ip
+fi

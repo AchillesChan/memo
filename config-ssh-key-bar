@@ -1,0 +1,11 @@
+%local-lan-ip 192.168.200.15
+%local-lan-port 3380
+%remote-lan-port 23380
+%remote-lan-ip 172.16.1.13
+%remote-wan-ip abc.example.com
+%ssh-port 22
+%ssh-user zhangsang
+%local-normal-return-code "404 Not Found"
+%ssh-key "/root/etc/.ssh/abc.key"
+%nginx-upstream foo-back-srv-grp
+%nginx-domain-name foo-23380-example.com

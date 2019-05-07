@@ -1,0 +1,135 @@
+acl number %hub-vpn-acl-number 
+ rule 10 permit ip source %hub-lan-section %hub-lan-wildcode destination %spoke-lan-section %spoke-lan-wildcode
+ rule 20 permit ip source %hub-lan-section2 %hub-lan-wildcode destination %spoke-lan-section %spoke-lan-wildcode
+ rule 30 permit ip source %hub-lan-section3 %hub-lan-wildcode destination %spoke-lan-section %spoke-lan-wildcode
+ rule 40 permit ip source %hub-lan-section4 %hub-lan-wildcode destination %spoke-lan-section %spoke-lan-wildcode
+#
+ike proposal %hub-vpn-acl-number 
+ encryption-algorithm aes-cbc 128
+#
+ike peer %hub-router-name-phase1-ike
+ proposal %hub-vpn-acl-number 
+ pre-shared-key %hub-vpn-key
+ remote-address %spoke-public-ip
+ local-address %hub-public-ip
+ nat traversal
+#
+ipsec transform-set %hub-router-name-phase2-ipsec
+ encapsulation-mode tunnel
+ transform esp
+ esp authentication-algorithm sha1 
+ esp encryption-algorithm aes-cbc-128
+#
+ipsec policy %hub-policy-number %hub-vpn-acl-number isakmp
+ connection-name %hub-policy-connection-name
+ security acl %hub-vpn-acl-number 
+ ike-peer %hub-router-name-phase1-ike 
+ transform-set %hub-router-name-phase2-ipsec
+ sa duration traffic-based 1843200
+ sa duration time-based 3600 
+#
+interface %hub-public-interface                                                      
+ip address %hub-public-ip %hub-public-ip-mask
+nat outbound %hub-nat-acl-number
+nat static enable
+ipsec apply policy %hub-policy-number
+#
+ ip route-static %spoke-lan-section %spoke-lan-mask %hub-public-interface %hub-public-gateway
+#
+=====spoke section=========
+#
+interface GigabitEthernet0/0
+ nat static enable
+ nat outbound %spoke-nat-acl-number
+ ipsec apply policy %spoke-policy
+#
+acl advanced %spoke-nat-acl-number                                                        
+ rule 10 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section %hub-lan-wildcode
+ rule 13 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section2 %hub-lan-wildcode
+ rule 16 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section3 %hub-lan-wildcode
+ rule 19 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section4 %hub-lan-wildcode
+ rule 20 permit ip source %spoke-lan-section %spoke-lan-wildcode
+#
+acl advanced %spoke-vpn-acl-number 
+ rule 10 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section %hub-lan-wildcode
+ rule 20 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section2 %hub-lan-wildcode
+ rule 30 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section3 %hub-lan-wildcode
+ rule 40 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section4 %hub-lan-wildcode
+#
+ipsec policy %spoke-policy 1 isakmp
+ transform-set %spoke-router-name-phase2-ipsec 
+ security acl %spoke-vpn-acl-number 
+ remote-address %hub-public-ip
+ ike-profile %spoke-router-name-profile1
+ sa duration time-based 3600
+ sa duration traffic-based 1843200
+#
+ike profile %spoke-router-name-profile1                                                            
+ keychain %spoke-router-name-phase1-ike
+ local-identity address %spoke-public-ip
+ match remote identity address %hub-public-ip %hub-mask
+#
+ike proposal %spoke-vpn-acl-number                                                           
+ encryption-algorithm aes-cbc-128
+#
+ike keychain %spoke-router-name-phase1-ike                                                     
+ pre-shared-key address %hub-public-ip %spoke-public-ip-host-mask key simple %hub-preshare-key
+#
+ipsec transform-set %spoke-router-name-phase2-ipsec
+ esp encryption-algorithm aes-cbc-128
+ esp authentication-algorithm sha1
+#
+ ip route-static %hub-lan-section %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section2 %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section3 %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section4 %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+===========center router=======
+ ip route-static %spoke-lan-section %spoke-lan-mask 192.168.28.252 
+===============spoke v5
+#
+interface GigabitEthernet0/0
+ipsec no-nat-process enable 
+nat outbound %spoke-nat-acl-number
+ ipsec  policy %spoke-policy
+#
+acl number %spoke-nat-acl-number                                                            
+ rule 10 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section %hub-lan-wildcode
+ rule 13 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section2 %hub-lan-wildcode
+ rule 16 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section3 %hub-lan-wildcode
+ rule 19 deny ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section4 %hub-lan-wildcode
+ rule 20 permit ip source %spoke-lan-section %spoke-lan-wildcode
+#
+acl number %spoke-vpn-acl-number 
+ rule 10 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section %hub-lan-wildcode
+ rule 20 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section2 %hub-lan-wildcode
+ rule 30 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section3 %hub-lan-wildcode
+ rule 40 permit ip source %spoke-lan-section %spoke-lan-wildcode destination %hub-lan-section4 %hub-lan-wildcode
+#
+ike proposal %spoke-vpn-acl-number
+ encryption-algorithm aes-cbc 128
+#               
+ike peer %spoke-router-name-phase1-ike
+ proposal %spoke-vpn-acl-number  
+ pre-shared-key simple %hub-preshare-key 
+ remote-address %hub-public-ip
+ local-address %spoke-public-ip
+ nat traversal  
+#               
+ipsec transform-set %spoke-router-name-phase2-ipsec
+ encapsulation-mode tunnel
+ transform esp  
+ esp authentication-algorithm sha1
+ esp encryption-algorithm aes-cbc-128
+#               
+ipsec policy tocenter 1 isakmp
+ connection-name %spoke-policy 
+ security acl %spoke-vpn-acl-number 
+ ike-peer %spoke-router-name-phase1-ike 
+ transform-set %spoke-router-name-phase2-ipsec
+ sa duration traffic-based 1843200
+ sa duration time-based 3600
+#               
+ ip route-static %hub-lan-section %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section2 %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section3 %hub-lan-mask %spoke-public-interface %spoke-public-gateway
+ ip route-static %hub-lan-section4 %hub-lan-mask %spoke-public-interface %spoke-public-gateway

@@ -1,0 +1,3 @@
+awk -f replace-vpn.awk config-key-value-paire config-template-all
+awk -f replace-vpn.awk config-ssh-key-bar config-ssh-templete|sed "s/ hhhh //g"|sed 's/ahhhh/ /g'|sed 's/hhhh//g'
+taiyuan is the last
