@@ -1,6 +1,31 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+####How do I scp a filename with spaces?
+Spaces in directories or filenames are the natural enemy of a Linux system but can of course be escaped with due diligence. There are 3 possibilities that you could try:
+
+    scp [remote username]@192.168.1.X:"'/media/remote_username/photos 4/file.jpg'" .
+    scp [remote username]@192.168.1.X:"/media/remote_username/photos\ 4/file.jpg" .
+    scp [remote username]@192.168.1.X:/media/remote_username/photos\\\ 4/file.jpg .
+
+All should work but some are syntactically easier to understand than others...
+#####
+
+
+
+###How can I use xargs to copy files that have spaces and quotes in their names?
+https://stackoverflow.com/questions/143171/how-can-i-use-xargs-to-copy-files-that-have-spaces-and-quotes-in-their-names?rq=1
+
+You can combine all of that into a single find command:
+
+find . -iname "*foobar*" -exec cp -- "{}" ~/foo/bar \;
+
+This will handle filenames and directories with spaces in them. You can use -name to get case-sensitive results.
+
+Note: The -- flag passed to cp prevents it from processing files starting with - as options.
+###How can I use xargs to copy files that have spaces and quotes in their names?
+
+
 ###count ip access 
 https://stackoverflow.com/questions/18682308/sort-uniq-ip-address-in-from-apache-log
 

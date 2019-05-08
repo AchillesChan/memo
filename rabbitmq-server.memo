@@ -1,7 +1,8 @@
 ######Startmemoof rabbitmq-server.memo #######
 ######Start rabbitmq-server.memo #######
 install rabbitmq on centos centOs6.7/7.3
-
+##set 05
+disable selinux ########fuck
 ##step 10
 rpm -ivh erlang-18.3-1.el6.x86_64.rpm
 
@@ -62,6 +63,7 @@ vim /etc/rabbitmq/rabbitmq-env.conf
 RABBITMQ_BASE=/data/rabbitmq
 RABBITMQ_LOG_BASE=/data/rabbitmq/logs
 RABBITMQ_MNESIA_BASE=/data/rabbitmq/mnesia
+NODENAME=rabbit@localhost
 
 ###create dir
 mkdir -p /data/rabbitmq
