@@ -964,7 +964,61 @@ NQA entry (admin admin, tag AutoPingGateway) test results:
     Failures due to other errors: 0
 
 
+#####PBR POLICY BASED ROUTE
+--05 req
+LanIP to specfict InternetIp route from WanIP,Other from another Wan interface(not listed here)
 
+--10 cfg acl
+<H3C>disp acl 3003
+Advanced IPv4 ACL 3003, 8 rules,
+ACL's step is 5
+ rule 10 permit ip source 192.168.LanIP 0 destination InternetIP.15.4 0
+ rule 20 permit ip source 192.168.LanIP 0 destination InternetIP.4.2 0.0.0.31
+ rule 30 permit ip source 192.168.LanIP 0 destination InternetIP.4.4 0.0.0.31
+ rule 40 permit ip source 192.168.LanIP 0 destination InternetIP.4.6 0.0.0.31
+ rule 50 permit ip source 192.168.LanIP 0 destination InternetIP.62.2 0.0.0.31
+ rule 60 permit ip source 192.168.LanIP 0 destination InternetIP.62.4 0.0.0.31
+ rule 70 permit ip source 192.168.LanIP 0 destination InternetIP.62.6 0.0.0.15
+ rule 200 deny ip
+
+
+--20 cfg pbr
+<H3C>disp ip policy-based-route policy abc
+Policy name: abc
+  node 10 permit:
+    if-match acl 3003
+    apply next-hop WanIP.1              ####Apply take effect
+    apply default-next-hop WanIP.1  ###
+
+--30 cfg Wan interface
+<H3C>disp Wan Interface
+ interface GigabitEthernet0/16
+ port link-mode route
+ ip address WanIP.100 255.255.255.128
+#### default-nexthop ip WanIP.1        #####not need，and not need config static route
+ nat outbound
+
+
+
+--40 debug
+
+<H3C>debugging ip policy-based-route
+<H3C>terminal debugging
+The current terminal is enabled to display debugging logs.
+<H3C>ter
+<H3C>terminal mon
+<H3C>terminal monitor
+The current terminal is enabled to display logs.
+<H3C>*Jan  9 21:17:19:254 2011 H3C PBR4/7/PBR Forward Info: Policy: abc, Node: 10, match succeeded.
+
+*Jan  9 21:17:19:254 2011 H3C PBR4/7/PBR Forward Info: apply next-hop WanIP.1.
+
+*Jan  9 21:17:20:684 2011 H3C PBR4/7/PBR Forward Info: Policy: abc, Node: 10, match succeeded.
+
+*Jan  9 21:17:20:684 2011 H3C PBR4/7/PBR Forward Info: apply next-hop WanIP.1.
+
+*Jan  9 21:17:20:684 2011 H3C PBR4/7/PBR Forward Info: Policy: abc, Node: 10, match succeeded.
+#####PBR POLICY BASED ROUTE
 
 
 
