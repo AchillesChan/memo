@@ -13,9 +13,9 @@ server {
     listen 443; 
     ssl on;
     server_name  ahhhh %nginx-domain-name hhhh ;
-        ssl_certificate /etc/ssl/your-domain.crt;
+        ssl_certificate /etc/ssl/50yc.crt;
         #ssl_certificate /etc/ssl/cert.pem;
-        ssl_certificate_key /etc/ssl/your-domain.key;
+        ssl_certificate_key /etc/ssl/50yc.key;
         ssl_dhparam /etc/ssl/dhparams.pem;
         ssl_session_cache shared:SSL:10m;
         ssl_session_timeout  10m; 
@@ -32,7 +32,7 @@ server {
     }    
 }
 ###20 ssh config
-ssh -R hhhh  %remote-lan-port hhhh : hhhh %local-lan-ip hhhh : hhhh %local-lan-port -p  hhhh %ssh-port -N -q -f -C -i  hhhh %ssh-key  hhhh %ssh-user hhhh @ hhhh %remote-wan-ip                          ###https:// hhhh %nginx-domain-name hhhh 
+ssh -R ahhhh  %remote-lan-port hhhh : hhhh %local-lan-ip hhhh : hhhh %local-lan-port -p  ahhhh %ssh-port -N -q -f -C -i  ahhhh %ssh-key  ahhhh %ssh-user hhhh @ hhhh %remote-wan-ip                          ###https:// hhhh %nginx-domain-name hhhh 
 ###30 ssh crontab
 if ! curl -sIL https:// hhhh %nginx-domain-name hhhh |grep "Bad Gateway" -a curl -sIL ahhhh %local-lan-ip hhhh : hhhh %local-lan-port |grep \" hhhh %local-normal-return-code \"
 then
