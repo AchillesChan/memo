@@ -310,6 +310,10 @@ Number  Start   End     Size    File system  Name      Flags
 (parted) quit                       ############input
 Information: You may need to update /etc/fstab.
 
+
+[root@localhost ~] blkid               #######input  for check                         
+/dev/sda1: PARTLABEL="data" PARTUUID="47......686e"
+
 [root@localhost ~]# mkfs.ext4 /dev/sda1 ############input
 mke2fs 1.42.9 (28-Dec-2013)
 Filesystem label=
