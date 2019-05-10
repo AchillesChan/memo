@@ -1,7 +1,9 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
-
+####PATT
+ANSIBLE SERVER PATH /PATH/2/ANSIBLE MUST OWNER BY current operation user(NOT root)
+anible must first manual add ssh key in user .ssh/know_host???
 ##ad-hoc example 
 
 ansible HostGrp -m raw -a "getenforce" -u User --ask-pass --sudo --ask-sudo-pass
