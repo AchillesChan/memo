@@ -3116,5 +3116,58 @@ then
 fi
 find "$lsyncPath" -mtime +5 |xargs -I {} rm -f {}
 
+
+
+
+#####backup with docker mysql####
+#!/bin/bash
+export PATH=/usr/local/mysql/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+optDate=$(date +%Y%m%d-%H%M)
+bakPath="/data/backup/mysql/"
+scriptErrorLog="/var/log/scriptErrorLog"
+operationVM=$(hostname)
+bakPwd=passwordHere
+bakUser="root"
+#bakHost="127.0.0.1"
+lsyncPath="/data/backup/lsyncd/mysql"
+Container="mysql-container"
+
+ls /data/backup/lsyncd/mysql || mkdir /data/backup/lsyncd/mysql
+ls /data/backup/mysql/ || mkdir /data/backup/mysql/
+
+####0 delete old sql files
+rm -f "$lsyncPath"/*.sql
+rm -f "$bakPath"*.sql
+echo "exec on $optDate" >$scriptErrorLog
+####1 get dbs need backup
+dboption='exec mysql -e "show databases;" -p"$MYSQL_ROOT_PASSWORD"'
+docker exec "$Container" sh -c "$dboption"
+if ! dbs=$(docker exec "$Container" sh -c "$dboption" \
+            |grep -Ev 'test|Database|information_schema|performance_schema|sys')
+
+then
+            echo "WRONG $0 ON getmysqldb $operationVM" >>$scriptErrorLog
+fi
+echo $dbs
+#####2 bakup dbs in seperately files
+for db in $dbs;do
+      dumpoption="exec  mysqldump   --databases $db  --hex-blob --triggers --routines  -p\$MYSQL_ROOT_PASSWORD"
+      if !  docker exec "$Container" sh -c "$dumpoption">"$bakPath""$db"-"$optDate".sql
+      then
+            echo "WRONG $0 ON mysqldump $db $operationVM" >>$scriptErrorLog
+      fi
+done
+
+#####3 tar file and transfer to lsync path
+if tar zcPf "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"*.sql
+then
+#            rm -f "$bakPath"*.sql
+#            mv "$lsyncPath"/"$operationVM"-"$optDate".tar.gz "$bakPath"
+             echo "Ok"
+else
+            echo "WRONG $0 ON package mysql $operationVM" >>$scriptErrorLog
+
+#####backup with docker mysql####
+
 ######End mysql.memo #######
 ######Endmemoof mysql.memo #######
