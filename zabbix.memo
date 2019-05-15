@@ -1,6 +1,10 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+
+###error failed to accept an incoming connection: connection from "172.17.0.4"  docker maybe pop this error
+add 172.17.0.4 to zabbix_agentd.conf Server and ServerActive field
+
 ###import dashboard json url####
 import json then save as something-copy dashbard name on dashbard setting;
 import the same json  with different datasource,

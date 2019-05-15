@@ -319,7 +319,7 @@ mysql> flush privileges;
 Query OK, 0 rows affected (0.00 sec)
 
 --30 
-$>pkill mysqld
+$>pkill mysqld /mysqladmin -uroot -p shutdown ###enter password modified
 $>systemctl start mysqld 
 #####reset mysql 5.7 password######
 
