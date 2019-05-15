@@ -1080,6 +1080,26 @@ set FOREIGN_KEY_CHECKS=1;
 
 ############xtrabackup mysql##################################
 
+####only copy db file to another server problem 
+--10 result
+mysql> select * from t3;
+ERROR 1146 (42S02): Table 't3.t3' doesn't exist
+mysql> show tables;
++--------------+
+| Tables_in_t3 |
++--------------+
+| t3           |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from t3;
+ERROR 1146 (42S02): Table 't3.t3' doesn't exist
+
+
+--20 must import tables space 
+
+
+####only copy db file to another server problem 
 
 
 #####忘记root密码Linux 5.7.16#####
