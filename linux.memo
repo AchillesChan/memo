@@ -1960,7 +1960,7 @@ fi
 host=$(echo "$managedServiceItem"|awk '{print $1}')
 port=$(echo "$managedServiceItem"|awk '{print $2}')
 name=$(echo "$managedServiceItem"|awk '{print $3}')
-if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
+if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null   #####nc 6.40/7.50 not need -w parameter
 
 #https://stackoverflow.com/questions/19955260/what-is-dev-null-in-bash
 #Redirecting /dev/null to stdin will give an immediate EOF to any read call from that process. This is typically useful to detach a process from a tty (such a process is called a daemon). For example, when starting a background process remotely over ssh, you must redirect stdin to prevent the process waiting for local input.
@@ -1970,6 +1970,7 @@ if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null
 
 #if [ $? != 0 ];then
         echo -n "WRONG $name ">>"$logFile"
+        mail -s "FWJ $HOST $PORT NOT OPEN" mail_user@example.com </dev/null  ####need only standard smtp mail server
 fi)&
 done <"$managedServiceFile"
 wait
