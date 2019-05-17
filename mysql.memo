@@ -1,6 +1,25 @@
 ######Startmemoof mysql.memo #######
 ######Start mysql.memo #######
 innodb_force_recovery=6 
+
+#######mysql replication error alter mail
+#!/bin/bash
+HOST=$(hostname)                                                                                                                                              
+OPDATE=$(date "+ %Y-%m%d-%H%M")
+if /bin/docker exec  mysql-slave mysql -uroot -pPassword -e 'show slave status\G' |grep Slave_SQL_Running |grep -i no 
+then
+        mail -s "$HOST $OPDATE sql replication error "  mail_user@example.com< /dev/null
+        echo "one"
+fi
+
+if /bin/docker exec  mysql-slave mysql -uroot -pPassword -e 'show slave status\G' |grep Slave_IO_Running |grep -i no 
+then
+        mail -s "$HOST $OPDATE io replication error "  mail_user@example.com< /dev/null
+        echo "two"
+fi
+#######mysql replication error alter mail
+
+
 ####crash-safe
 https://hackmongo.com/post/crash-safe-mysql-replication-a-visual-guide/
 Presuming,
