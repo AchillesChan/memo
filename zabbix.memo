@@ -35,7 +35,7 @@ services:
       - MYSQL_PASSWORD=${DB_USER_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3306"                 #######NOT LIST ON HOST,USE internal-container-commucation(ICC),REMOVE THIS ON USE
     networks:
       - zbx_subnet
 
@@ -83,7 +83,7 @@ services:
 
 networks:
   zbx_subnet:
-    driver: bridge
+    #driver: bridge
 
 
 --30 startup
