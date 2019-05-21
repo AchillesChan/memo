@@ -1,6 +1,118 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+###docker-composer
+--10 define variables 
+# cat .env 
+OS=alpine
+VERSION=3.0.15
+DB_NAME=zabbix
+DB_USER=zabbix
+DB_USER_PASSWORD=zabbix
+DB_ROOT_PASSWORD=zabbix
+HTTP_PORT=8080
+TIME_ZONE=Asia/Tokyo
+
+
+# 0 - basic information about starting and stopping of Zabbix processes;
+# 1 - critical information
+# 2 - error information
+# 3 - warnings
+# 4 - for debugging (produces lots of information)
+# 5 - extended debugging (produces even more information)
+LOG_LEVEL=3
+
+
+--20 set docker-compose.yml 
+version: "3"
+services:
+  zabbix_db:
+    container_name: zabbix_db
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - zbx_subnet
+
+  zabbix_server:
+    container_name: zabbix_server
+    image: zabbix/zabbix-server-mysql:${OS}-${VERSION}
+    environment:
+      - DB_SERVER_HOST=zabbix_db
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - ZBX_DEBUGLEVEL=${LOG_LEVEL}
+    ports:
+      - "10051:10051"
+    networks:
+      - zbx_subnet
+
+  zabbix_web:
+    image: zabbix/zabbix-web-apache-mysql:${OS}-${VERSION}
+    container_name: zabbix_web
+    environment:
+      - ZBX_SERVER_HOST=zabbix_server
+      - DB_SERVER_HOST=zabbix_db
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - PHP_TZ=${TIME_ZONE}
+    ports:
+      - ${HTTP_PORT}:80
+    networks:
+      - zbx_subnet
+
+  zabbix_agent:
+    image: zabbix/zabbix-agent:${OS}-${VERSION}
+    privileged: true
+    container_name: zabbix_agent
+    environment:
+      - ZBX_SERVER_HOST=zabbix_server
+    ports:
+      - "10050:10050"
+    networks:
+      - zbx_subnet
+
+networks:
+  zbx_subnet:
+    driver: bridge
+
+
+--30 startup
+docker-compose -f docker-compose.yml up -d
+
+--40 debug
+####nc is installed on host only,instead of docker contailer
+##zabbix_db resolved to 192.168.32.3,zabbix_web resolved to 192.168.32.5
+# docker exec -it zabbix_server nc -vz zabbix_db:3306
+zabbix_db:3306 (192.168.32.3:3306) open
+
+# docker exec -it zabbix_server nc -vz zabbix_web:80
+zabbix_web:80 (192.168.32.5:80) open
+
+# docker logs -f zabbix_agent
+.................
+** Updating '/etc/zabbix/zabbix_agentd.conf' parameter "LoadModulePath": '/var/lib/zabbix/modules/'... added
+** Updating '/etc/zabbix/zabbix_agentd.conf' parameter "TLSConnect": ''... removed
+** Updating '/etc/zabbix/zabbix_agentd.conf' parameter "TLSAccept": ''... removed
+.................     
+	 1:20190521:081539.956 TLS support:           YES
+     1:20190521:081539.956 **************************
+     1:20190521:081539.956 using configuration file: /etc/zabbix/zabbix_agentd.conf
+     1:20190521:081539.956 agent #0 started [main process]
+    54:20190521:081539.956 agent #1 started [collector]
+
+.................
+###docker-composer
+
 
 ###error failed to accept an incoming connection: connection from "172.17.0.4"  docker maybe pop this error
 add 172.17.0.4 to zabbix_agentd.conf Server and ServerActive field
