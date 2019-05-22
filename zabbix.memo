@@ -34,6 +34,9 @@ services:
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_USER_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - "/home/adan/mysql/:/var/lib/mysql"
+    restart: always
     ports:
       - "3306"                 #######NOT LIST ON HOST,USE internal-container-commucation(ICC),REMOVE THIS ON USE
     networks:
@@ -53,6 +56,8 @@ services:
       - "10051:10051"
     networks:
       - zbx_subnet
+    depends_on:
+      - zabbix_db
 
   zabbix_web:
     image: zabbix/zabbix-web-apache-mysql:${OS}-${VERSION}
