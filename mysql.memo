@@ -2,6 +2,50 @@
 ######Start mysql.memo #######
 innodb_force_recovery=6 
 
+###########docker-compose
+# cat docker-compose.yml 
+version: '3.3'
+services:
+  db:
+    image: mysql:5.6.42
+    restart: always
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3366:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+
+# cat mysql/conf.d/my.cnf 
+[mysqld]
+user = mysql
+server-id = 100
+symbolic-links=0
+event_scheduler=ON
+log-bin = mysql-bin
+binlog_format=MIXED
+relay-log = relay-bin
+gtid-mode = on
+enforce-gtid-consistency = true
+log-slave-updates = true
+character-set-server=utf8
+collation-server=utf8_general_ci
+lower_case_table_names = 1
+max_connect_errors = 1000
+max_connections = 1000
+skip-name-resolve = 1
+innodb_buffer_pool_size = 64MB 
+#innodb_buffer_pool_size=32MB
+log_bin_trust_function_creators=1
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+
+###########docker-compose
+
+
 #######mysql replication error alter mail
 #!/bin/bash
 HOST=$(hostname)                                                                                                                                              

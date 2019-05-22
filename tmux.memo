@@ -22,6 +22,22 @@ vm: 1 windows (created Wed May 22 11:36:30 2019) [143x35]
 #attach session
 tmux attach
 
+#resize pane
+// This assumes that you've hit ctrl + b and : to get to the command prompt
+:resize-pane -L
+
+:resize-pane -D (Resizes the current pane down)
+:resize-pane -U (Resizes the current pane upward)
+:resize-pane -L (Resizes the current pane left)
+:resize-pane -R (Resizes the current pane right)
+:resize-pane -D 10 (Resizes the current pane down by 10 cells)
+:resize-pane -U 10 (Resizes the current pane upward by 10 cells)
+:resize-pane -L 10 (Resizes the current pane left by 10 cells)
+:resize-pane -R 10 (Resizes the current pane right by 10 cells)
+
+OR
+ctrl+b Esc+up /down/left/right
+
 # zoom pane <-> window
 #http://tmux.svn.sourceforge.net/viewvc/tmux/trunk/examples/tmux-zoom.sh
 bind ^z run "tmux-zoom"
