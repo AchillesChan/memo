@@ -1121,7 +1121,7 @@ mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only
 --20 backup single database from source
 innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs --no-timestamp ./dest/path
 or 
-innoackupex --user=root --password=pwd --databases=dt1 /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1
+innobackupex --user=root --password=pwd --databases=dt1 /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1
 --25 prepare backup file,it's generate exp and cfg file when done                                                                                                              
 innobackupex --user=root --port=3306 -pPwd --apply-log --export --socket=/path/2/mysql.sock --databases=dbs /backup/path
 
@@ -1165,6 +1165,12 @@ ERROR 1146 (42S02): Table 't3.t3' doesn't exist
 
 ####only copy db file to another server problem 
 
+#####xtrabackup mysql on docker 
+docker pull perconalab/percona-xtrabackup
+
+docker run --network=docker_default --rm -it -v /docker/mysql/data/:/var/lib/mysql -v /path/2/HOST/BAK:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=CONTAINER_IP --user=root --password=MYSQL_ROOT_PASSWORD
+
+#####xtrabackup mysql on docker 
 
 #####忘记root密码Linux 5.7.16#####
 

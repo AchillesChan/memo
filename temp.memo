@@ -1,6 +1,6 @@
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
-
+:x
 
 Transdata=$(grep MB temp |awk '{print $2}'|sed  's/MB//g')
 GB=$(grep GB temp |awk '{print $2}'|sed  's/GB//g')
