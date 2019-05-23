@@ -2,6 +2,76 @@
 ######Start mysql.memo #######
 innodb_force_recovery=6 
 
+####docker master slave replication
+--10 reference
+https://blog.pythian.com/backing-mysql-instance-physically-docker/
+https://www.percona.com/doc/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html
+--100 master
+--110
+master # cat docker-compose.yml 
+version: '3.3'
+services:
+  db:
+    image: mysql:5.6.42
+    restart: always
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3366:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+
+--120
+master # docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /tmp/md:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=172.27.0.2 --user=root --port 3306 --password=rootpassword
+--130
+master # docker run --rm -it -v /docker/mysql/data/:/var/lib/mysql   perconalab/percona-xtrabackup --backup --host=172.27.02 --user=root --port 3336 --password=rootpassword
+--140 
+master # firewall-cmd add-port 3366/tcp --perm
+master #firewall-cmd reload
+
+master # cat xtrabackup_binlog_info
+mysql-bin.000002 1232 c777888a-b6df-11e2-a604-080027635ef5:1-4   ####NEED VERF
+
+--150 
+  master>  grant all privileges on *.* to 'root'@'destination' identified by 'Pwd'
+    or 
+   master>  SET PASSWORD FOR 'root'@'%.example.org' = PASSWORD('auth_string');
+
+
+
+--200 slave
+--205 slave#>stop docker slave
+--210 
+    scp data file to mysql slave data dir
+
+--220 
+slave# chown -Rv  systemd-bus-proxy.systemd-bus-proxy *
+--225 
+slave# start docker mysql
+--230 
+slave>stop slave
+slave>SET GLOBAL gtid_purged="c777888a-b6df-11e2-a604-080027635ef5:1-4";   ####from cat xtrabackup_binlog_info
+slave>change master to master_host='maser_ip',master_user='root',master_port=3366,master_password='rootpassword',master_auto_position=1;
+slave>start slave
+
+
+--300 verify
+
+--nc /paping 
+nc -vz master-ip master-port(slave op)
+mysql -uroot -h master-ip -p (slave op)
+show slave status\G(slave op)
+
+insert some on master read on slave
+
+
+####docker master slave replication
+
 ###########docker-compose
 # cat docker-compose.yml 
 version: '3.3'
