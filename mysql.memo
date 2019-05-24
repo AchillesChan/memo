@@ -29,7 +29,7 @@ services:
 --120
 master # docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=172.27.0.2 --user=root --port 3306 --password=rootpassword
 --130
-master # docker run --rm -it -v /docker/mysql/data/:/var/lib/mysql   perconalab/percona-xtrabackup --backup --host=172.27.02 --user=root --port 3336 --password=rootpassword
+master # docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /tmp/md:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --prepare --host=172.27.0.2 --user=root --port 3306 --password=rootpassword 
 --140 
 master # firewall-cmd add-port 3366/tcp --perm
 master #firewall-cmd reload
