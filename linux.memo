@@ -1,6 +1,16 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+####linux ssh change port selinux 
+$> semanage port -a -t ssh_port_t -p tcp 60001
+ssh_port_t                     tcp      60001, 22  
+https://www.rootusers.com/use-selinux-port-labeling-to-allow-services-to-use-non-standard-ports/
+survive after reboot?/
+
+$> semanage port -l |grep ssh
+
+####linux ssh change port selinux 
+
 ####install netflix vector
 https://www.redhat.com/en/blog/getting-started-using-performance-co-pilot-and-vector-browser-based-metric-visualizations
 yum install pcp-webapp-vector pcp-webapi -y
@@ -1760,8 +1770,8 @@ azure centos 6.X成功
 
 ########selinux排除故障#####
 #安装文件
-$yum install setroubleshooot setools
-
+$yum -y install setroubleshooot setools
+$yum -y install  yum -y install setroubleshoot-server ###centos 7.5 on azure ?
 #分析得到的结果
 $sealert -a /var/log/audit/audit.log
 
@@ -2758,6 +2768,11 @@ ssh自动输入密码 StrictHostKeyChecking=no 不要求输入yes
 sshpass -p "PASS" ssh -o StrictHostKeyChecking=no USER@host:[port]
 没有sshpass就yum
 sshpass -p You_Pwd ssh-copy-id -i Your_Pub_key user@host    ##互信设置
+####selinux allow ssh with rsa key (azure centos 7.5)
+allow this access for now by executing:
+# ausearch -c 'sshd' --raw | audit2allow -M my-sshd
+# semodule -i my-sshd.pp
+
 
 find正则类型 posix-awk, posix-basic, posix-egrep and posix-extended
 #命令执行方法，-regex区分大小写，-iregex不区分大小写
