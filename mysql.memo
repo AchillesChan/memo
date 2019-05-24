@@ -27,7 +27,7 @@ services:
       - ./mysql/data:/var/lib/mysql
 
 --120
-master # docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /tmp/md:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=172.27.0.2 --user=root --port 3306 --password=rootpassword
+master # docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=172.27.0.2 --user=root --port 3306 --password=rootpassword
 --130
 master # docker run --rm -it -v /docker/mysql/data/:/var/lib/mysql   perconalab/percona-xtrabackup --backup --host=172.27.02 --user=root --port 3336 --password=rootpassword
 --140 
@@ -1240,6 +1240,10 @@ docker pull perconalab/percona-xtrabackup
 
 docker run --network=docker_default --rm -it -v /docker/mysql/data/:/var/lib/mysql -v /path/2/HOST/BAK:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=CONTAINER_IP --user=root --password=MYSQL_ROOT_PASSWORD
 
+###/docker/mysql/data is mysql host datadir
+docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=remote-mysql-srv --user=root --port 3366 --password=rootpassword
+
+docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --prepare --host=remote-mysql-srv --user=root --port 3366 --password=rootpassword
 #####xtrabackup mysql on docker 
 
 #####忘记root密码Linux 5.7.16#####
