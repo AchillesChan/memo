@@ -155,10 +155,11 @@ User                  Foo
 IdentityFile          ~/.ssh/private-key-file
 
 Host                  dest-server 
-Hostname              Real-srv
-User                  Foo
+Hostname              Real-srv    ####LAN IP of Real-srv,may need public-key file
+User                  Foo         #### on ~/.ssh/authorized_keys,WAN ssh denied for management.
 Port                  22  
 ProxyCommand          ssh -q -W %h:%p jumpserver
+IdentityFile          ~/.ssh/private-key-file
 
 --30 test && resuslt
 client$> ssh -i private-key-file dest-server
