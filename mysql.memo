@@ -1160,6 +1160,14 @@ mysql5.7需要xtrabackup2.4
 需要process权限
 需要--host --port --socket参数
 
+###repo install
+#
+wget https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+rpm -ivh percona-release-latest.noarch.rpm
+yum search percona-xtrabackup
+yum install percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
+
+
 #####dependent install
 yum install libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
 #yum install perl-devel
