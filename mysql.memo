@@ -1,4 +1,12 @@
 ######Startmemoof mysql.memo #######
+
+##slave replication my.cnf config
+replicate-ignore-db = mysql
+replicate-ignore-db = information_schema
+replicate-ignore-db = performance_schema
+replicate-ignore-db = test
+slave-skip-errors = 1054,1062
+##slave replication my.cnf config
 ######Start mysql.memo #######
 innodb_force_recovery=6 
 ###mysql 5.6 install sys schema
