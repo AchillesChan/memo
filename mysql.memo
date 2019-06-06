@@ -1169,7 +1169,12 @@ mysql5.7需要xtrabackup2.4
 需要--host --port --socket参数
 
 ###repo install
-#
+
+wget ftp://ftp.pbone.net/mirror/apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
+
+rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
+
+
 wget https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 rpm -ivh percona-release-latest.noarch.rpm
 yum search percona-xtrabackup
@@ -1186,6 +1191,49 @@ rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
 #yum install -y perl-DBD-MySQL
 wget https://repo.percona.com/centos/7/os/x86_64/percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
 rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
+
+####xtrabackup with compress stream
+--10 install extract package
+yum install -y qpress
+
+--20 backup (on source end)
+$>ulimit -n 81920  ####release system files limit 
+$>time xtrabackup --backup --user=root --host=localhost --password=mysql-password
+ --compress --stream=xbstream --database=db1,db2 --target-dir=./|ssh -i /path/2/key ssh-user@dest-srv "xbstream -x -C /path/2/dest"
+
+--30 extract (on dest end)
+$>yum install -y qpress
+
+$cd /path/2/dest     ###rm may following -fv if you sure it(do not need confirm per files#########
+$ for bf in `find . -iname "*\.qp"`; do qpress -d $bf $(dirname $bf) && rm  $bf; done
+or
+$ innobackupex --decompress /path/2/dest  ###failed
+
+--40 prepare 
+$ innobackupex --apply-log /path/2/dest
+
+--50 service mysqld stop and cp 2 mysql datadir and give correct owner and permission(dest end)
+--60 confirm those exist in my.cnf
+    gtid-mode = on
+    enforce-gtid-consistency = true
+    log-slave-updates = true
+    log-bin=mysql-bin
+        replicate-ignore-db = mysql                      ###as need
+        replicate-ignore-db = information_schema
+        replicate-ignore-db = performance_schema
+        replicate-ignore-db = test
+        slave-skip-errors = 1054,1062
+
+--60 service start mysqld (slave end)
+
+slave>stop slave
+slave>SET GLOBAL gtid_purged="c777888a-b6df-11e2-a604-080027635ef5:1-4";   ####from cat xtrabackup_binlog_info                                                              
+slave>change master to master_host='maser_ip',master_user='root',master_port=3366,master_password='rootpassword',master_auto_position=1;
+slave>start slave
+
+
+
+####xtrabackup with compress stream
 
 ###backup
 1 full backup 
