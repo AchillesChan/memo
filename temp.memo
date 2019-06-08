@@ -1,12 +1,25 @@
+
+
+
 ######Startmemoof temp.memo #######
 ######Start temp.memo #######
 :x
+https://dba.stackexchange.com/questions/210092/mysql-backup-of-remote-server-in-local-machine-using-percona-xtrabackup
+
+The solution was provided to me in the percona forum:
+
+    I did this and it worked:
+
+    ssh diwakar@192.168.0.154 "xtrabackup --user=root --password=root
+      --backup --stream=xbstream --databases="uniquedb" --target-dir=./" >
+      backup.xbstream 2>backup.log
+
+This creates the backup of database named uniquedb from 192.168.0.154 to 192.168.0.109 (this is my local machine for now).
+
+
 
 Transdata=$(grep MB temp |awk '{print $2}'|sed  's/MB//g')
-GB=$(grep GB temp |awk '{print $2}'|sed  's/GB//g')
-TB=$(grep TB temp |awk '{print $2}'|sed  's/TB//g')
-#GB=$(grep GB temp|wc -l)
-#TB=$(grep TB temp|wc -l)
+=$(grep B temp|wc -l)
 #echo "$Transdata"
 if [ "$Transdata" -gt 100 ] || [ "$GB" -gt 0 ] || [ "$TB" -gt 0 ] 
  
