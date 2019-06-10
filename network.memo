@@ -983,6 +983,11 @@ ACL's step is 5
 
 
 --20 cfg pbr
+
+#policy-based-route abc permit node 10
+ if-match acl 3003
+ apply next-hop WanIP.1
+
 <H3C>disp ip policy-based-route policy abc
 Policy name: abc
   node 10 permit:
