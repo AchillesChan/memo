@@ -1386,6 +1386,31 @@ alter user 'root'@'localhost' identified by 'your-temp-password';
 
 9 shell>$ systemctl start mysqld 
 
+
+
+or 
+
+10 systemctl stop mysqld
+
+20 $>/path/2/mysqld --user=mysql --skip-grant-tables --skip-networking
+
+30 mysql>SET authentication_string = PASSWORD('newPass') where user='root';
+
+40 mysql>flush privileges;
+
+50 mysql>exit;
+
+60 $>systemctl or pkill mysqld 
+
+70 $>systemctl restart mysqld
+
+80 $>mysql -uroot -pnewPass
+
+90 mysql>alter user 'root'@'localhost' identified by 'your-new-password';
+
+100 mysql>flush privileges;
+
+110 mysql>exit;
 #####忘记root密码Linux 5.7.16#####
 
 
