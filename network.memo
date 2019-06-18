@@ -1003,15 +1003,31 @@ Policy name: abc
 #### default-nexthop ip WanIP.1        #####not need，and not need config static route
  nat outbound
 
+--35 another pbr
 
+policy-based-route abc permit node 20
+ if-match acl 3030
+ apply next-hop LAN.ANOTHER_GW_IP
+
+[R1]disp acl 3030
+Advanced IPv4 ACL 3030, 1 rule,
+ACL's step is 5
+ rule 10 permit tcp source LAN.253 0 source-port eq www (644 times matched)
+
+
+[R1]disp ip int brief
+*down: administratively down
+(s): spoofing  (l): loopback
+Interface                Physical Protocol IP Address      Description
+.............
+Vlan1                    up       up       LAN.LOCAL_IP  --
+.............
 
 --40 debug
 
 <H3C>debugging ip policy-based-route
 <H3C>terminal debugging
 The current terminal is enabled to display debugging logs.
-<H3C>ter
-<H3C>terminal mon
 <H3C>terminal monitor
 The current terminal is enabled to display logs.
 <H3C>*Jan  9 21:17:19:254 2011 H3C PBR4/7/PBR Forward Info: Policy: abc, Node: 10, match succeeded.
