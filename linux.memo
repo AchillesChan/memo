@@ -1,6 +1,29 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+####centos proxy settings
+System-wide proxy settings - add the following lines to your /etc/environment file:
+# vi /etc/environment
+ 
+http_proxy="http://proxysrv:8080/"
+https_proxy="https://proxysrv:8080/"
+ftp_proxy="ftp://proxysrv:8080/"
+no_proxy=".mylan.local,.domain1.com,host1,host2"
+
+To apply these settings without restarting the machine run the following commands on the bash shell:
+	
+export http_proxy="http://proxysrv:8080/"
+export https_proxy="https://proxysrv:8080/"
+export ftp_proxy="ftp://proxysrv:8080/"
+export no_proxy=".mylan.local,.domain1.com,host1,host2"
+
+You also need to configure yum:
+# vi /etc/yum.conf
+ 
+proxy=http://proxysrv:8080/
+
+####centos proxy settings
+
 ####linux ssh change port selinux 
 $> semanage port -a -t ssh_port_t -p tcp 60001
 ssh_port_t                     tcp      60001, 22  

@@ -1,6 +1,7 @@
 ######Startmemoof favourite.memo #######
 ######Start favourite.memo #######
 
+<<<<<<< HEAD
 
 https://blog.51cto.com/wzlinux/2322616https://blog.51cto.com/wzlinux/2322616
 https://blog.51cto.com/wzlinux/2322345
@@ -8,6 +9,26 @@ https://blog.51cto.com/wzlinux/2321767
 https://www.cnblogs.com/Erik_Xu/p/8783789.html
 https://dogedoge.com
 https://www.howtoing.com/centos-kubernetes-docker-cluster
+=======
+https://github.com/HikoQiu/kubeadm-install-k8s#42-%E5%AE%89%E8%A3%85-master-m01
+https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/05.%E9%83%A8%E7%BD%B2flannel%E7%BD%91%E7%BB%9C.md
+
+https://github.com/kubernetes/dashboard/wiki/Installation
+https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
+https://xuxinkun.github.io/2019/06/11/cn-registry/
+https://tecadmin.net/install-and-configure-haproxy-on-centos/
+https://github.com/xuxinkun/littleTools#azk8spull
+https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md
+https://kubernetes.feisky.xyz/
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
+https://github.com/HikoQiu/kubeadm-install-k8s
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#before-you-begin
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/
+https://github.com/kubernetes-retired/contrib/tree/master/ansible
+http://mirror.azure.cn/
+
+
+>>>>>>> 54e6ba094df9ec957288a7a03be9d997c16f18f2
 
 https://blog.pythian.com/best-practice-setting-mysql-replication-filters/
 https://www.percona.com/blog/2007/11/07/filtered-mysql-replication/

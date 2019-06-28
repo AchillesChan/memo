@@ -7,3 +7,26 @@
 https://www.rootusers.com/how-to-install-microsoft-security-essentials-in-windows-server-2012-r2/
 
 ####Windows server 2012 r2 install mse####
+
+
+
+#############dirty cow##############
+10 verf
+wget https://access.redhat.com/sites/default/files/rh-cve-2016-5195_1.sh
+bash rh-cve-2016-5195_1.sh            ##########run as non-root user
+
+20 update
+## RHEL/CentOS 7 64-Bit ##
+# wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# rpm -ivh epel-release-latest-7.noarch.rpm
+
+## RHEL/CentOS 6 32-Bit ##
+# wget http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+# rpm -ivh epel-release-6-8.noarch.rpm
+
+## RHEL/CentOS 6 64-Bit ##
+# wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+# rpm -ivh epel-release-6-8.noarch.rpm
+
+sudo yum update kernel -y
+#############dirty cow##############
