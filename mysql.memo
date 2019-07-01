@@ -1201,6 +1201,10 @@ $>ulimit -n 81920  ####release system files limit
 $>time xtrabackup --backup --user=root --host=localhost --password=mysql-password
  --compress --stream=xbstream --database=db1,db2 --target-dir=./|ssh -i /path/2/key ssh-user@dest-srv "xbstream -x -C /path/2/dest"
 
+--example:
+time xtrabackup --backup --user=root --host=127.0.0.1 --password=pwd \
+ --compress --stream=xbstream --databases=zabbix --innodb-buffer-pool-size=64M --target-dir=/mnt/resource | ssh -i /root/.ssh/mysql_rsa zhang@192.168.8.2 "xbstream -x -C /mnt/resource/zhang"
+
 --30 extract (on dest end)
 $>yum install -y qpress
 
