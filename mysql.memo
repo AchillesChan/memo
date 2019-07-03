@@ -1230,6 +1230,19 @@ $ innobackupex --apply-log /path/2/dest
 
 --60 service start mysqld (slave end)
 
+
+--70 tar nc without sshtunnel
+## On the destination host:
+$ nc -l 9999 | cat - > /data/backups/backup.tar
+$ firewall-cmd --add-port 9999/tcp --perm
+$ firewall-cmd --reload
+## On the source host:
+$ innobackupex --stream=tar ./ | nc desthost 9999
+
+time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
+ --compress --stream=tar --databases-exclude=mysql,information_schema,performance_schema,sys,test  \ 
+ --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999    
+
 slave>stop slave
 slave>SET GLOBAL gtid_purged="c777888a-b6df-11e2-a604-080027635ef5:1-4";   ####from cat xtrabackup_binlog_info                                                              
 slave>change master to master_host='maser_ip',master_user='root',master_port=3366,master_password='rootpassword',master_auto_position=1;
