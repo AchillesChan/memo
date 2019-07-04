@@ -582,7 +582,7 @@ mysql> show variables like '%profil%';
 mysql>select * from t1 where create_time <'2017-09-24';
 
 
-mysql> show profiles;
+mysql> show profile;
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
 | Query_ID | Duration   | Query                                                                                                                     |
 +----------+------------+---------------------------------------------------------------------------------------------------------------------------+
@@ -1196,7 +1196,7 @@ rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
 --10 install extract package
 yum install -y qpress
 
---20 backup (on source end)
+--20 backup (on source master end)
 $>ulimit -n 81920  ####release system files limit 
 $>time xtrabackup --backup --user=root --host=localhost --password=mysql-password
  --compress --stream=xbstream --database=db1,db2 --target-dir=./|ssh -i /path/2/key ssh-user@dest-srv "xbstream -x -C /path/2/dest"
@@ -1228,33 +1228,43 @@ $ innobackupex --apply-log /path/2/dest
         replicate-ignore-db = test
         slave-skip-errors = 1054,1062
 
-mysql> change master to master_host='master_ip',master_user='root',master_port=3306,master_password='pwd',master_auto_position=1;
-mysql> CHANGE REPLICATION FILTER REPLICATE_IGNORE_DB = (mysql,sys,information_schema,performance_schema); 
+ 
 
 --60 service start mysqld (slave end)
 
 
 --70 tar nc without sshtunnel
-## On the destination host:
+## On the destination slave host:
 $ nc -l 9999 | cat - > /data/backups/backup.tar 
 ## or### nc -l 9999 |xbstream -x -C /data/backup/
 
 $ firewall-cmd --add-port 9999/tcp --perm
 $ firewall-cmd --reload
-## On the source host:
-$ innobackupex --stream=tar ./ | nc desthost 9999
 
-time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
+
+## On the source master host:
+
+$ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
  --compress --stream=xbstream --databases-exclude=mysql,information_schema,performance_schema,sys,test  \ 
  --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999    
 
+
+###verfy 5.7
+#
+slave$ innobackupex --apply-log /path/2/dest
+
+slave> drop datbase need-rep-dbs;
+slave$ cp /path/2/dest /mysql/data
 slave>stop slave
-slave>SET GLOBAL gtid_purged="c777888a-b6df-11e2-a604-080027635ef5:1-4";   ####from cat xtrabackup_binlog_info                                                              
-slave>change master to master_host='maser_ip',master_user='root',master_port=3366,master_password='rootpassword',master_auto_position=1;
-slave>start slave
+$systemctl stop mysqld
+slave$ chown -Rv /mysql/data
+$systemctl start mysqld
+slave mysql> reset master;
 
-
-
+slave mysql>SET GLOBAL gtid_purged="c777888a-b6df-11e2-a604-080027635ef5:1-4";   ####from cat xtrabackup_binlog_info
+slave mysql> change master to master_host='master_ip',master_user='root',master_port=3306,master_password='pwd',master_auto_position=1;
+slave mysql> CHANGE REPLICATION FILTER REPLICATE_IGNORE_DB = (mysql,sys,information_schema,performance_schema);
+slave slave> start slave;
 ####xtrabackup with compress stream
 
 ###backup
