@@ -1,0 +1,26 @@
+###basic install
+yum update -y && sudo reboot
+yum update -y && sudo reboot
+yum install java-1.8.0-openjdk.x86_64
+java -version
+vi /etc/profile
+###ADD last line
+export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
+export JRE_HOME=/usr/lib/jvm/jre
+
+source /etc/profile
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/2.3.0/kafka_2.12-2.3.0.tgz 
+tar -xvf kafka_2.12-2.3.0.tgz 
+mv kafka_2.12-2.3.0 /usr/local/
+cd /usr/local/
+mv kafka_2.12-2.3.0/ kafka
+cd kafka/
+bin/zookeeper-server-start.sh -daemon config/zookeeper.properties 
+vim bin/kafka-server-start.sh 
+bin/kafka-server-start.sh config/server.properties &
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test 
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+ss -tlnp
+firewall-cmd --add-port 2181/tcp --perm
+
+###basic install
