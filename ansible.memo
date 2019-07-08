@@ -6,6 +6,15 @@ ANSIBLE SERVER PATH /PATH/2/ANSIBLE MUST OWNER BY current operation user(NOT roo
 anible must first manual add ssh key in user .ssh/know_host???
 ##ad-hoc example 
 
+### new style
+ansible hostGrp -m raw -a "hostname" -u user --become --ask-pass --ask-become-pass
+SSH password: 
+BECOME password[defaults to SSH password]: 
+host01 | CHANGED | rc=0 >>
+
+host01
+Shared connection to 192.168.1.8 closed.
+
 ansible HostGrp -m raw -a "getenforce" -u User --ask-pass --sudo --ask-sudo-pass
 ansible HostGrp -m raw -a "grep -i disable /etc/selinux/config" -u User --ask-pass --sudo --ask-sudo-pass
 ansible HostGrp -m raw -a "grep SELINUX /etc/selinux/config" -u User --ask-pass --sudo --ask-sudo-pass
