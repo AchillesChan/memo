@@ -1,5 +1,52 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+####file transfer with nc
+https://nmap.org/ncat/guide/ncat-file-transfer.html 
+These examples show how to transfer inputfile on host1 to outputfile on host2. Here no port number was specified so Ncat will use its default port of 31337. To use a different port just list it on the command line.
+
+Transfer a file, receiver listens
+
+    host2$ ncat -l > outputfile
+    host1$ ncat --send-only host2 < inputfile
+Transfer a file, sender listens
+
+    host1$ ncat -l --send-only < inputfile
+    host2$ ncat host1 > outputfile
+
+ Note the order of the commands. The listener must be started first, regardless of the direction of transfer, or else the client will not have anything to connect to.
+
+The above technique works fine for sending a single file. One way to send multiple files is to bundle them up with tar or zip and send the archive file. But there's an even easier way. Just pipe the output of tar directly into Ncat on the sending side, and pipe Ncat's output into tar on the receiving side. This is especially useful when the sending computer doesn't have enough free disk space to hold the archive file. Here's how to transfer <files> using the “receiver listens” method, though of course the “sender listens” method works just as well.
+
+Transfer a bundle of files
+
+    host2$ ncat -l | tar xzv
+    host1$ tar czv <files> | ncat --send-only host2
+
+Not only tar files but any stream of bytes can be transferred in this way. Here is an example of transferring an entire disk image from host1 to host2. Naturally, the disk should be unmounted or mounted read-only.
+
+Transfer a disk image
+
+    host2$ ncat -l > host1-hda.image
+    host1$ ncat --send-only host2 < /dev/hda
+
+Disk images are typically large files that take a long time to transfer. You can compress the image on the fly while sending and decompress it on the other end. Whether this makes an improvement depends on the speed of the network and the compression program.
+
+Transfer a disk image with compression
+
+    host2$ ncat -l | bzip2 -d > host1-hda.image
+    host1$ cat /dev/hda | bzip2 | ncat --send-only host2
+
+Transfer a file through an intermediary
+
+    host3$ ncat -l --broker
+    host2$ ncat host3 > outputfile
+    host1$ ncat --send-only host3 < inputfile
+
+Note that it's important for host2 (the receiving host) to connect to the broker before host1 (the sending host) does. The broker does not buffer received data to send to hosts that connect later. After the file is transferred, it is necessary to forcibly disconnect the Ncat on host2 with ctrl+C. The broker never disconnects any of its clients. 
+
+
+
+####file transfer with nc
 
 ####centos proxy settings
 System-wide proxy settings - add the following lines to your /etc/environment file:
