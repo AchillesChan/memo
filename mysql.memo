@@ -1426,7 +1426,7 @@ or
 
 20 $>/path/2/mysqld --user=mysql --skip-grant-tables --skip-networking
 
-30 mysql>SET authentication_string = PASSWORD('newPass') where user='root';
+30 mysql>update mysql.user SET authentication_string = PASSWORD('newPass') where user='root';
 
 40 mysql>flush privileges;
 
