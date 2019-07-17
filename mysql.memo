@@ -1242,7 +1242,8 @@ rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
 ulimit -n 81920
 
 $ nc -l 9999 | cat - > /data/backups/backup.tar 
-## or### nc -l 9999 |xbstream -x -C /data/backup/
+$ nc -l 9999 |xbstream -x -C /data/backup/   ###use xbstream
+$ nc -l 9999 | tar -ivxf - ####NOT NEED EXTRACT,high speed networking recommand
 
 $ firewall-cmd --add-port 9999/tcp --perm
 $ firewall-cmd --reload
@@ -1258,8 +1259,11 @@ ulimit -n 81920
 
 $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
  --compress --stream=xbstream --databases-exclude=mysql,information_schema,performance_schema,sys,test  \ 
- --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999    
+ --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999   ####use xbstream 
 
+$ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
+  --stream=tar --databases-exclude=mysql,information_schema,performance_schema,sys,test  \ 
+ --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999   ###not need extract with tar,,high speed networking recommand
 
 --error handle
 --Too many open files
