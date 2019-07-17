@@ -1261,6 +1261,17 @@ $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --p
  --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999    
 
 
+--error handle
+--Too many open files
+$sudo ulimit -n 20480 >/dev/null 2>&1
+
+--File size limit exceeded vim /etc/security/limit.conf,relogin take effect
+*                hard    fsize           5000000
+*                hard    nofile          100000
+*                hard    data            10000000
+
+
+-- view result ulimit -a 
 ###verfy 5.7
 #
 slave$ innobackupex --apply-log /path/2/dest
