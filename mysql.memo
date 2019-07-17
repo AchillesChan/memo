@@ -1182,13 +1182,9 @@ yum install percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
 
 
 #####dependent install
-yum install libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
-#yum install perl-devel
-#yum install rsync
-#yum install -y perl-Digest-MD5.x86_64
+yum install -y libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
 wget ftp://rpmfind.net/linux/dag/redhat/el6/en/x86_64/dag/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
 rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
-#yum install -y perl-DBD-MySQL
 wget https://repo.percona.com/centos/7/os/x86_64/percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
 rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
 
@@ -1234,7 +1230,17 @@ $ innobackupex --apply-log /path/2/dest
 
 
 --70 tar nc without sshtunnel
+
+
 ## On the destination slave host:
+yum install -y nc libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
+wget ftp://rpmfind.net/linux/dag/redhat/el6/en/x86_64/dag/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
+rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
+wget https://repo.percona.com/centos/7/os/x86_64/percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
+rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
+
+ulimit -n 81920
+
 $ nc -l 9999 | cat - > /data/backups/backup.tar 
 ## or### nc -l 9999 |xbstream -x -C /data/backup/
 
@@ -1243,6 +1249,12 @@ $ firewall-cmd --reload
 
 
 ## On the source master host:
+yum install -y nc libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
+wget ftp://rpmfind.net/linux/dag/redhat/el6/en/x86_64/dag/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
+rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm
+wget https://repo.percona.com/centos/7/os/x86_64/percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm
+rpm -ivh percona-xtrabackup-24-2.4.7-2.el7.x86_64.rpm 
+ulimit -n 81920
 
 $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
  --compress --stream=xbstream --databases-exclude=mysql,information_schema,performance_schema,sys,test  \ 

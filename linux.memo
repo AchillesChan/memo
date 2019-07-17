@@ -618,6 +618,8 @@ bash -c echo  > ./s1.sh
 bash -c echo  > ./s2.sh 
 bash -c echo  > ./s3.sh 
 
+or 
+find . -type d -name "*log*" | xargs -I {} sh -c "echo {}; ls -la {} | tail -2"
 
 
 https://serverfault.com/questions/722287/why-use-bash-c-in-supervisor-instead-of-calling-script-directly
