@@ -1207,7 +1207,8 @@ $>yum install -y qpress
 $cd /path/2/dest     ###rm may following -fv if you sure it(do not need confirm per files#########
 $ for bf in `find . -iname "*\.qp"`; do qpress -d $bf $(dirname $bf) && rm  $bf; done
 or
-$ innobackupex --decompress /path/2/dest  ###failed
+$ innobackupex --decompress /path/2/dest  ###need qpress installed
+$ for bf in `find . -iname "*\.qp"`; do rm -fv $bf; done 
 
 --40 prepare 
 $ innobackupex --apply-log /path/2/dest
