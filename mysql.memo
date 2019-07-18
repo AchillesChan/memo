@@ -1269,7 +1269,7 @@ $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --p
                                                           ####high speed networking recommand
 
     xtrabackup --backup --tables="^DB1[.]time.*$|^DB3[.]tri.*$" --user=root --password=pwd --target-dir=./
-    backup DB1 start at time and DB3 start at tri tables
+##    backup DB1 start at time tables and DB3 start at tri tables with regex style
 
 --error handle
 --Too many open files
