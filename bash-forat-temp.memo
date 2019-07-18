@@ -1,7 +1,8 @@
 #!/bin/bash
 #########define area################
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/usr/local/mysq/bin
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin
 export PATH
+set -u
 
 ---var need modify
 VAR1="192.168.1.13"  ####as need ,comment
