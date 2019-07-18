@@ -19,8 +19,8 @@ The above technique works fine for sending a single file. One way to send multip
 
 Transfer a bundle of files
 
-    host2$ ncat -l | tar xzv
-    host1$ tar czv <files> | ncat --send-only host2
+    host2$ ncat -l | tar xzv                           ###dest host
+    host1$ tar czv <files> | ncat --send-only host2    ###source host,it can be tar czv dir-name
 
 Not only tar files but any stream of bytes can be transferred in this way. Here is an example of transferring an entire disk image from host1 to host2. Naturally, the disk should be unmounted or mounted read-only.
 
