@@ -1,0 +1,34 @@
+#!/bin/bash
+#########define area################
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/usr/local/mysq/bin
+export PATH
+
+---var need modify
+VAR1="192.168.1.13"  ####as need ,comment
+
+#########define area################
+
+
+#########function area##################
+FUN1(){
+echo "---------start ${FUNCNAME[0]} Fuction-----------"
+
+STATE CLAUSE HERE ####NEED MOD 
+
+echo "---------end   ${FUNCNAME[0]} Fuction-----------"
+}
+
+FUN2(){
+echo "---------start ${FUNCNAME[0]} Fuction-----------"
+
+STATE CLAUSE HERE ####NEED MOD 
+
+echo "---------end   ${FUNCNAME[0]} Fuction-----------"
+}
+#########function area##################
+
+###########main area########
+FUN1  ###AS NEED,COMMENTS IF NOT NEED
+FUN2  ###AS NEED,COMMENTS IF NOT NEED
+
+############main area############
