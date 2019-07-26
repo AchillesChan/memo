@@ -1419,12 +1419,12 @@ ERROR 1146 (42S02): Table 't3.t3' doesn't exist
 #####xtrabackup mysql on docker 
 docker pull perconalab/percona-xtrabackup
 
-docker run --network=docker_default --rm -it -v /docker/mysql/data/:/var/lib/mysql -v /path/2/HOST/BAK:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=CONTAINER_IP --user=root --password=MYSQL_ROOT_PASSWORD
+docker run --network=docker_default --rm -it -v /docker/2/host/mysql/data/path:/var/lib/mysql/2docker/path -v /path/2/HOST/BAK:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=CONTAINER_IP --user=root --password=MYSQL_ROOT_PASSWORD
 
 ###/docker/mysql/data is mysql host datadir
-docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=remote-mysql-srv --user=root --port 3366 --password=rootpassword
+docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --backup --host=remote-mysql-srv --user=root --port 3306 --password=rootpassword
 
-docker run --rm -it --network=docker_default -v /docker/mysql/data/:/var/lib/mysql -v /path/2/local:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --prepare --host=remote-mysql-srv --user=root --port 3366 --password=rootpassword
+docker run --rm -it --network=docker_default -v /docker/2/mysql/host/path/:/var/lib/mysql/2/docker/path -v /path/2/host/xtrabackup/path:/xtrabackup_backupfiles/ perconalab/percona-xtrabackup --prepare --host=remote-mysql-srv --user=root --port 3306 --password=rootpassword
 #####xtrabackup mysql on docker 
 
 #####忘记root密码Linux 5.7.16#####
