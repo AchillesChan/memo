@@ -1415,6 +1415,16 @@ ERROR 1146 (42S02): Table 't3.t3' doesn't exist
 
 
 ####only copy db file to another server problem 
+###########docker xtrabackup 8.0############
+--10 get Docker file
+--20 get entrypoint.sh
+--30 chmod 750 entrypoint.sh
+--40 docker build -t "xtrabackup:8"
+--50 docker run --network=docker_default --rm -it -v /docker/2/host/mysql/data/path:/var/lib/mysql/2docker/path -v /path/2/HOST/BAK:/xtrabackup_backupfiles/ xtrabackup/8   --backup --host=CONTAINER_IP --user=root --password=MYSQL_ROOT_PASSWORD
+--60 docker run --rm -it --network=docker_default -v /docker/2/mysql/host/path/:/var/lib/mysql/2/docker/path -v /path/2/host/xtrabackup/path:/xtrabackup_backupfiles/ xtrabackup --prepare --host=Container_IP --user=root --port 3306 --password=rootpassword
+###########docker xtrabackup 8.0############
+
+
 
 #####xtrabackup mysql on docker 
 docker pull perconalab/percona-xtrabackup
