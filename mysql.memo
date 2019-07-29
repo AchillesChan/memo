@@ -1416,6 +1416,10 @@ ERROR 1146 (42S02): Table 't3.t3' doesn't exist
 
 ####only copy db file to another server problem 
 ###########docker xtrabackup 8.0############
+
+https://github.com/martin-helmich/docker-xtrabackup/blob/master/entrypoint.sh
+https://github.com/martin-helmich/docker-xtrabackup/blob/master/Dockerfile
+
 --10 get Docker file
 --20 get entrypoint.sh
 --30 chmod 750 entrypoint.sh
