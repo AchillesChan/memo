@@ -69,7 +69,7 @@ add_header X-Content-Type-Options nosniff;
 }
 
 --50 wild domain name
-$./certbot-auto certonly --manual --preferred-challenges=dns --emai examples@a.com --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.example.com
+$./certbot-auto certonly --manual --preferred-challenges=dns --email examples@a.com --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.example.com
 
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Plugins selected: Authenticator manual, Installer None
