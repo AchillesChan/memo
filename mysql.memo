@@ -1232,7 +1232,6 @@ $ innobackupex --apply-log /path/2/dest
 
 --70 tar nc without sshtunnel
 
-
 ## On the destination slave host:
 $ yum install -y nc libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
 $ wget ftp://rpmfind.net/linux/dag/redhat/el6/en/x86_64/dag/RPMS/libev-4.15-1.el6.rf.x86_64.rpm
@@ -1246,10 +1245,6 @@ $ firewall-cmd --add-port 9999/tcp --perm && firewall-cmd --reload && firewall-c
 $ nc -l 9999 | cat - > /data/backups/backup.tar 
 $ nc -l 9999 |xbstream -x -C /data/backup/   ###use xbstream
 $ nc -l 9999 | tar -ivxf - ####NOT NEED EXTRACT,high speed networking recommand
-
-$ firewall-cmd --add-port 9999/tcp --perm
-$ firewall-cmd --reload
-
 
 ## On the source master host:
 yum install -y nc libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
@@ -1266,7 +1261,6 @@ $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --p
 $ time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --password=pwd \                                                                        
   --stream=tar --databases-exclude="mysql information_schema performance_schema sys test"  \ 
  --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999   ###not need extract with tar,lower iops need on resource,
-                      
                                                           ####high speed networking recommand
 
     xtrabackup --backup --tables="^DB1[.]time.*$|^DB3[.]tri.*$" --user=root --password=pwd --target-dir=./
