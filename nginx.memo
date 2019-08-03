@@ -68,6 +68,36 @@ add_header X-Content-Type-Options nosniff;
 ................
 }
 
+--50 wild domain name
+$./certbot-auto certonly --manual --preferred-challenges=dns --email examples@a.com --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.example.com
+
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator manual, Installer None
+Obtaining a new certificate
+Performing the following challenges:
+dns-01 challenge for example.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+NOTE: The IP of this machine will be publicly logged as having requested this
+certificate. If you're running certbot in manual mode on a machine that is not
+your server, please ensure you're okay with that.
+
+Are you OK with your IP being logged?
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: y
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name
+_acme-challenge.example.com with the following value:
+
+9FtZ3snK1Xef1PPvDX2_H8wdzeBl_x_utnBYfbDXRdA
+
+Before continuing, verify the record is deployed.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Press Enter to Continue
+Waiting for verification...
+
+
 ######Let’s Encrypt/Certbot CA  
 
 
@@ -93,9 +123,9 @@ https://www.digrouz.com/mediawiki/index.php/HOWTO_fix_the_trailing_slash_problem
 $>sudo yum install httpd-tools -y
 
 --20 create auth file and user 
-$>sudo htpasswd -c -d /usr/local/nginx/conf/auth_file zhang
+$>sudo htpasswd -c -d /usr/local/nginx/conf/auth_file example
 --30 update user 
-$>sudo htpasswd htpasswd /usr/local/nginx/conf/auth_file zhang
+$>sudo htpasswd htpasswd /usr/local/nginx/conf/auth_file example
 --40 nginx conf 
 $>sudo vim /usr/local/nginx/conf/nginx.conf
 
