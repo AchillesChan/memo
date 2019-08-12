@@ -3,6 +3,8 @@
 
 
 ###too many open files
+
+
 #vim /etc/security/limits.conf
 
 
@@ -75,6 +77,10 @@ Max nice priority         0                    0
 Max realtime priority     0                    0                    
 Max realtime timeout      unlimited            unlimited            us        
 
+handle selinux
+#sealert -a /var/log/audit/audit.log
+#ausearch -c 'nginx' --raw | audit2allow -M my-nginx
+#semodule -i my-nginx.pp
 ######Let’s Encrypt/Certbot CA 
 https://letsencrypt.org/docs/
 https://github.com/certbot/certbot
