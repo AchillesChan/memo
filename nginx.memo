@@ -1,6 +1,80 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
 
+
+###too many open files
+#vim /etc/security/limits.conf
+
+
+*                soft    nofile          81920
+*                hard    nofile          81920
+
+
+#vim /etc/sysctl.conf
+fs.file-max = 100000
+
+#sysctl -p
+
+#vim /usr/local/nginx/conf/nginx.conf
+..............
+worker_rlimit_nofile 65536;  ###add this
+
+...........
+
+events {
+    worker_connections  32768; ###change to this
+}
+
+#nginx -s reload
+
+#reboot                ####think over
+
+https://www.cyberciti.biz/tips/linux-procfs-file-descriptors.html
+
+
+# sysctl -a|grep file
+fs.file-nr = 2112       0       100000
+fs.file-max = 100000
+# ulimit -Sn
+81920
+# ulimit -Hn
+81920
+
+
+# ps -ef|grep nginx
+root       1976      1  0 14:24 ?        00:00:00 nginx: master process /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+root       4672   2782  0 14:49 pts/1    00:00:00 tail -f /usr/local/nginx/logs/error.log
+nobody     6906   1976  7 15:03 ?        00:01:55 nginx: worker process                                          
+nobody     6907   1976  0 15:03 ?        00:00:00 nginx: cache manager process
+
+# cd /proc/6906/fd
+[ fd]# ls |wc -l
+358
+[ fd]# cd /proc/6907/fd
+[ fd]# ls |wc -l
+12
+[ fd]# sysctl fs.file-nr
+fs.file-nr = 2176       0       100000
+
+cat /proc/6906/limits 
+Limit                     Soft Limit           Hard Limit           Units     
+Max cpu time              unlimited            unlimited            seconds   
+Max file size             unlimited            unlimited            bytes     
+Max data size             unlimited            unlimited            bytes     
+Max stack size            10485760             unlimited            bytes     
+Max core file size        0                    unlimited            bytes     
+Max resident set          unlimited            unlimited            bytes     
+Max processes             6062                 6062                 processes 
+Max open files            65536                65536                files     
+Max locked memory         65536                65536                bytes     
+Max address space         unlimited            unlimited            bytes     
+Max file locks            unlimited            unlimited            locks     
+Max pending signals       6062                 6062                 signals   
+Max msgqueue size         819200               819200               bytes     
+Max nice priority         0                    0                    
+Max realtime priority     0                    0                    
+Max realtime timeout      unlimited            unlimited            us        
+
 ######Let’s Encrypt/Certbot CA 
 https://letsencrypt.org/docs/
 https://github.com/certbot/certbot
