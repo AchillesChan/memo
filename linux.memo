@@ -6,8 +6,8 @@ These examples show how to transfer inputfile on host1 to outputfile on host2. H
 
 Transfer a file, receiver listens
 
-    host2$ ncat -l > outputfile
-    host1$ ncat --send-only host2 < inputfile
+    host2$ ncat -l > outputfile                    ###MUST ncat NOT nc ???
+    host1$ ncat --send-only host2 < inputfile      ###MUST ncat NOT nc ??
 Transfer a file, sender listens
 
     host1$ ncat -l --send-only < inputfile

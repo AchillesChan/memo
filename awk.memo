@@ -1,6 +1,18 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+###nginx findo out most access ip 
+awk '{
+Ip[$1]++;
+}
+END{
+for (var in Ip)
+print var, "access", Ip[var]," times"
+}
+' nginxlog|sort -k 3 -n
+
+###nginx findo out most access ip 
+
 ####Using Shell Variables in Programs 
 https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
 
