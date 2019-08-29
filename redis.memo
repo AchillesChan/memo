@@ -66,7 +66,7 @@ redis-cli
 OK
  >get name
  "david"
-
+ >keys *    ###get all keys
 12: on boot 
 Centos 6:
 echo "/path/2/redis-server /path/2/redis-conf" >>/etc/rc.local
@@ -140,6 +140,54 @@ cp $DIR/appendonly.aof /data/backup/redis/appendonly.$(hostname).$(date +%Y_%m%d
 ####backup redis
 
 
+
+
+----------grafana Prometheus安装 
+wget https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.linux-amd64.tar.gz
+
+tar -zxvf prometheus-2.1.0.linux-amd64.tar.gz -C  /opt/prometheus --strip-components=1
+cd /opt/Prometheus
+vim /opt/prometheus/prometheus.yml
+
+- job_name: 'redis_exporter'
+   -targets: ['lan-ip:9122']
+./prometheus --config.file=prometheus.yml
+启动
+#./prometheus --config.file=prometheus.yml
+访问地址localhost:9090
+
+
+
+
+---------Grafana安装
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.6.3-1.x86_64.rpm
+
+sudo yum localinstall grafana-4.6.3-1.x86_64.rpm
+/usr/sbin/grafana-server --config=/etc/grafana/grafana.ini --homepath "/usr/share/grafana"
+访问地址localhost:3000 admin:admin
+http://server:3000 
+user：admin
+pass：admin
+
+DATA SOURCE-->TYPE "PROMETHEUS" -->URL "HTTP://LOCALHOST:9090" -->ACCESS "PROXY"-->SAVE & TEST -->OK
+
+
+-----------Prometheus 和 Grafana 对接
+wget https://github.com/oliver006/redis_exporter/releases/download/v0.15.0/redis_exporter-v0.15.0.linux-amd64.tar.gz
+# tar -zxvf redis_exporter-v0.15.0.linux-amd64.tar.gz  /opt/prometheus_exporters --strip-components=1
+#wget https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.linux-amd64.tar.gz
+#tar -zxvf node_exporter-0.15.2.linux-amd64.tar.gz /opt/prometheus_exporters --strip-components=1
+启动
+#cd  /opt/prometheus_exporters
+#./node_exporter & 
+#./redis_exporter -redis.addr LAN-IP:6379,LAN-IP2:6379  -web.listen-address 0.0.0.0:9122 & ###MONITOR IP AND IP1 SERVER(2 VMS)
+
+
+
+
+-----------导入Redis监控json模板
+wget  https://grafana.com/api/dashboards/763/revisions/1/download
+GRAFANA-WEB-->DASHBOARDS-->NEW-->IMPORT-->upload .json file-->prom "prometheus"-->import
 
 ###error handle####
 ######End redis.memo #######
