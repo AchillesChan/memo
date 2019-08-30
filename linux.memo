@@ -83,11 +83,16 @@ $> semanage port -l |grep ssh
 
 ####install netflix vector
 https://www.redhat.com/en/blog/getting-started-using-performance-co-pilot-and-vector-browser-based-metric-visualizations
-yum install pcp-webapp-vector pcp-webapi -y
-systemctl start pmcd pmwebd
-systemctl enable pmcd pmwebd
+#yum install pcp-webapp-vector pcp-webapi -y
+#systemctl start pmcd pmwebd
+#systemctl enable pmcd pmwebd
 
-[lberk@toium ~]$ pcp
+# firewall-cmd --add-port 44323/tcp --perm
+success
+# firewall-cmd --reload
+success
+
+$ pcp
 Performance Co-Pilot configuration on toium:
 
 platform: Linux toium 3.10.0-327.el7.x86_64 #1 SMP Thu Oct 29 17:29:29 EDT 2015 x86_64

@@ -2,6 +2,15 @@
 ######Start Linux-Kernel-Tuning-and-Hardening.memo #######
 https://github.com/minhdanh/Linux-Kernel-Tuning-and-Hardening/blob/master/kernel_hardening_tuning.sh
 
+
+sysctl vm.swappiness                             ####view vm.swappiness metric,can read on /proc/sys/vm/swappiness too
+
+echo 10 > /proc/sys/vm/swappiness                ####set swappiness metric
+
+sysctl -w vm.swappiness=10                      ####start swap while used 90% memory 
+sysctl -w vm.dirty_background_ratio=5      		####backupground flush to disk while 5% dirty pages
+sysctl -w vm.dirty_ratio=40                     ####block write and force flush to disk while 40% dirty pages
+
 #!/bin/sh
 #
 #### Fine tuning network parameters for better perfomance
