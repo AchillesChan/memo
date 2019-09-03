@@ -124,5 +124,13 @@ Author: root <root@your-name.localdomain>
 Date:   Fri Aug 4 17:48:58 2017 +0800
 
 5th
+
+
+###error handle
+Could not open a connection to your authentication agent
+
+eval `ssh-agent`
+ssh-add ~/.ssh/rsa
+ssh-add -l 
 ######End git.memo #######
 ######Endmemoof git.memo #######
