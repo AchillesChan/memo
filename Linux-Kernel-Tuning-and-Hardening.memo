@@ -11,6 +11,24 @@ sysctl -w vm.swappiness=10                      ####start swap while used 90% me
 sysctl -w vm.dirty_background_ratio=5      		####backupground flush to disk while 5% dirty pages
 sysctl -w vm.dirty_ratio=40                     ####block write and force flush to disk while 40% dirty pages
 
+
+or
+echo vm.swappiness=10>/etc/sysctl.conf
+echo vm.dirty_background_ratio=5>/etc/sysctl.conf
+echo vm.dirty_ratio=40>/etc/sysctl.conf
+
+sysctl -p 
+this survive for reboot
+
+
+
+
+
+
+
+
+
+
 #!/bin/sh
 #
 #### Fine tuning network parameters for better perfomance
