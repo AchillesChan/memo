@@ -1,5 +1,10 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+
+%s#Hostname\(\s\+\)\(\w\+.*$\)#Hostname\ \U\2#g   ###replace back reference to upper
+
+
+:\(^.*$\):\1\1:c                              ###repeat whole line
 #####install vim8 
 git clone https://github.com/vim/vim.git
 cd vim/src
