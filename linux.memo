@@ -184,6 +184,14 @@ clean set -o vi in ~/.bashrc or .bash_profile
 --60 enter edit mode
 press ESC,press 0,You can use vim editor now
 
+More complex edits
+
+If the implemented commands are not enough to edit your one-liner, you can always request a fully-fledged vim and open the command in a temp file.
+
+To do that, #####press v### while in normal mode. This will open your default editor with a temp file. Write-quit to execute the edited command in the shell.
+
+In case this doesn’t work for you, you might want to check your setting for ######$VISUAL or add this to your .bash_profile: export VISUAL="vim"####
+
 --70 error
 https://davidhamann.de/2018/01/28/using-vi-commands-in-your-bash-shell/
 ###bash in vi editor mode
