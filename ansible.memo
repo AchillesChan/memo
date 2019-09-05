@@ -1,6 +1,11 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
+generate password hash
+python3 -c 'import crypt; print(crypt.crypt("test", crypt.mksalt(crypt.METHOD_SHA512)))'
+https://serverfault.com/questions/330069/how-to-create-an-sha-512-hashed-password-for-shadow/330072#comment910286_330072
+
+
 ####PATT
 ANSIBLE SERVER PATH /PATH/2/ANSIBLE MUST OWNER BY current operation user(NOT root)
 anible must first manual add ssh key in user .ssh/know_host???
