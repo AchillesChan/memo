@@ -1,6 +1,36 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+
+shell~:> cat form.letter 
+Host $1,Hostname $2,User Achilles,Port $3,IdentityFile ~/.ssh/ssh-privity-key
+
+shell~:> cat replace.cmd 
+BEGIN {FS = "|"
+                   while (getline <"form.letter")
+                   line[++n] = $0
+   }
+ NR<1{next}{for (i = 1; i <= n; i++) {
+                   s = line[i]       
+                   for (j = NF; j >= 1; j--) 
+                              gsub("\\$"j, $j, s)
+                   print s
+           }
+    print ""
+   }
+
+shell~:> cat replace.value 
+cd-51-vm|192.168.10.51|22
+cd-52-vm|192.168.10.52|22
+cd-53-vm|192.168.10.53|22
+cd-54-vm|192.168.10.54|22
+cd-55-vm|192.168.10.55|22
+shell~:> cat auto-config-vpn-readme 
+
+awk -f replace.cmd replace.value |sed  's/,/\n/g'     #####generate ssh config file,refer to form.letter
+
+#####
+
 ###nginx findo out most access ip 
 awk '{
 Ip[$1]++;
