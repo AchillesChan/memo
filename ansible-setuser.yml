@@ -1,0 +1,43 @@
+- name: Linux Create User and Upload User Public keys
+  hosts: current
+  #remote_user: xxxx
+  #sudo: yes
+  #password hash create by:python3 -c 'import crypt; print(crypt.crypt("my-password", crypt.mksalt(crypt.METHOD_SHA512)))'
+  gather_facts: no
+  vars:
+      user_1: Michael 
+  tasks:
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+ 
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+ 
+    - name: Create user {{ user_1 }}
+      user:
+        name: "{{ user_1 }}"
+        shell: /bin/bash
+        password: '$6$iJPnFsIaM8QwWmxK$mROKluMIZbzq/2xlwsRwNQw/nQqnawntZCzxXvyl.jzewtAp9dqaJkkBCcNBlpLMg966K7ogCUZ.R/4y.mVZI.'
+        groups: wheel
+        createhome: yes
+        home: /home/{{ user_1 }}
+        state: present
+ 
+    - name: create key directory
+      action: file path=/home/{{ user_1 }}/.ssh/ state=directory  owner={{ user_1 }} group={{ user_1 }} mode=0700
+ 
+    - name: create key file
+      action: file path=/home/{{ user_1 }}/.ssh/authorized_keys state=touch  owner={{ user_1 }} group={{ user_1 }} mode=0600
+        
+    - name: Set authorized key took from file
+      authorized_key:
+        user: "{{ user_1 }}"
+        state: present
+        key: "{{ lookup('file', '/path/2/local/pub/file') }}"
+
