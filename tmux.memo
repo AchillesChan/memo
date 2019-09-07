@@ -64,6 +64,18 @@ scroll                         Prex + [ or Prex + PageUP //input 'q' exit scroll
 
 
 
+###vim copy style
+https://sanctum.geek.nz/arabesque/vi-mode-in-tmux/
+http://cenalulu.github.io/linux/professional-tmux-skills/
+https://github.com/gpakosz/.tmux
+配置完了vi-mode以后，我们就可以通过以下方式进行选择复制黏贴：
 
+    CTRL+b + [的方式进入选择模式。
+    然后点击v键进入vi-mode选择模式。
+    VIM的移动命令进行选择。也可以使用CTRL+b + :list-keys -t vi-copy查看快捷键列表
+    选择完毕后用y复制到tmux剪贴板。或者ESC退出选择
+    最后通过CTRL+b然后]复制到光标所在位置。
+
+###vim copy style
 ######End tmux.memo #######
 ######Endmemoof tmux.memo #######
