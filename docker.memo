@@ -1,6 +1,15 @@
 ######Startmemoof docker.memo #######
 ######Start docker.memo #######
 
+###view resource usage
+docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+
+###view docker file
+docker history some-image
+
+###safety shutdown container
+docker kill --signal=TERM contailer && docker logs -f contailer (esp db-server)
+
 #####centos install docker  
 yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
