@@ -2,6 +2,7 @@
 
 
 ###MySQL – How to convert all Database Tables and Columns to a specific Collation
+https://serverfault.com/questions/65043/alter-charset-and-collation-in-all-columns-in-all-tables-in-mysql
 https://www.ryadel.com/en/mysql-convert-database-tables-specific-collation-character-set-charset/
 Convert the Collation of a Database
 ALTER DATABASE DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;
