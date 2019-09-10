@@ -1,5 +1,23 @@
 ######Startmemoof mysql.memo #######
 
+
+###MySQL – How to convert all Database Tables and Columns to a specific Collation
+https://www.ryadel.com/en/mysql-convert-database-tables-specific-collation-character-set-charset/
+Convert the Collation of a Database
+ALTER DATABASE DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+Convert the Collation of all Tables
+SELECT CONCAT("ALTER TABLE ", TABLE_SCHEMA, '.', TABLE_NAME,' COLLATE utf8_general_ci;')
+FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DBNAME' AND TABLE_TYPE = 'BASE TABLE';
+
+Convert the Collation of Table Columns
+SELECT CONCAT('ALTER TABLE `', TABLE_NAME,'` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;') AS    mySQL
+FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA= "DBNAME" AND TABLE_TYPE="BASE TABLE"
+
+May need
+SET foreign_key_checks = 0;
+###MySQL – How to convert all Database Tables and Columns to a specific Collation
+
 ###mysqldump exclude some table
 https://stackoverflow.com/questions/425158/skip-certain-tables-with-mysqldump
 
