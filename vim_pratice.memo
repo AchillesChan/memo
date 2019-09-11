@@ -2,9 +2,11 @@
 ######Start vim.memo #######
 
 %s#Hostname\(\s\+\)\(\w\+.*$\)#Hostname\ \U\2#g   ###replace back reference to upper
-:%s:\n: :g                                    ###replace newline with space
-:%s:\(^.*$\):\1\1:c                              ###repeat whole line
-:%s: :\r:g                                  ###replace space with newline
+:%s:\n: :g                    ###replace newline with space,\n is null char,hex is 0x00
+:%s:\(^.*$\):\1\1:c                              ###repeat whole line  
+:%s: :\r:g                   ###replace space with newline,\r is newline(return),hex is 0x0a
+    \r matches <CR>
+    \n matches an end-of-line - When matching in a string instead of buffer text a literal newline character is matched.
 #####install vim8 
 git clone https://github.com/vim/vim.git
 cd vim/src
