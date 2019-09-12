@@ -1,5 +1,17 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
+##custom invertory
+$ ansible cdvm -i ansible-cd-host -m ping
+
+$ cat ansible-cd-host
+[cdvm]
+cd-212-k8s-m1-user    ansible_ssh_host=192.168.1.212    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
+cd-161-nfs    ansible_ssh_host=192.168.1.161    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
+cd-213-k8s-m2-user    ansible_ssh_host=192.168.1.213    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
+
+##custom invertory
+
+
 
 generate password hash
 python3 -c 'import crypt; print(crypt.crypt("test", crypt.mksalt(crypt.METHOD_SHA512)))'
