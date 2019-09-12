@@ -1,5 +1,17 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+
+###azure cli
+                1如何切换订阅:
+                    az account set –subscription  yoursubID
+
+                2  列出网卡信息:
+                    az network nic list 
+
+                3 启用加速网络:
+                    az network nic update --name myNic --resource-group myResourceGroup --accelerated-networking true
+###azure cli
+
 ######swap on azure linux centos
 https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-machines/aog-virtual-machines-temporary-disk-instruction#%E4%B8%B4%E6%97%B6%E7%A3%81%E7%9B%98%E7%9A%84%E7%94%A8%E9%80%94
 
