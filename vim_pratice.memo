@@ -1,5 +1,22 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+Remove unwanted empty lines
+
+:g/^\s*$/d
+:v/\S/d
+
+In the second command, v operates on lines that do not match, and \S matches anything that is not a whitespace, and d deletes the flagged lines (all lines that have no characters, or that have only whitespace characters).
+
+You may want to condense multiple blank lines into a single blank line. The following will delete all trailing whitespace from each line, then replace three or more consecutive line endings with two line endings (a single blank line): 
+
+%s/\s\+$//e
+:%s/\n\{3,}/\r\r/e
+
+The e substitute flag means that no error is displayed if the pattern is not found. In the second command, \n in the search pattern finds newline, while \r in the replacement inserts a newline.
+
+Another solution is to join consecutive lines found between non-blank lines. 
+
+:v/\S/,/\S/-j
 
 %s#Hostname\(\s\+\)\(\w\+.*$\)#Hostname\ \U\2#g   ###replace back reference to upper
 :%s:\n: :g                    ###replace newline with space,\n is null char,hex is 0x00
@@ -7,6 +24,7 @@
 :%s: :\r:g                   ###replace space with newline,\r is newline(return),hex is 0x0a
     \r matches <CR>
     \n matches an end-of-line - When matching in a string instead of buffer text a literal newline character is matched.
+
 #####install vim8 
 git clone https://github.com/vim/vim.git
 cd vim/src
@@ -23,11 +41,6 @@ c cd ~/.vim/bundle/YouCompleteMe\
 d .vimrc something later of this m\emo
 e copy .ycm_extra_conf.py to ~ or Y\ouCompleteMe ?
 
-
-
-
-
-
 http://harttle.com/2015/07/18/vim-cpp.html
 http://harttle.com/2013/11/08/vim-config.html
 http://harttle.com/2015/11/04/vim-ide.html
@@ -41,7 +54,6 @@ http://www.cnblogs.com/xbf9xbf/p/4860484.html 【vim环境配置】详细实录
 http://www.cnblogs.com/xbf9xbf/p/4876306.html  【vim环境配置】在centos6.4上配置vim的一些零碎记录
 http://www.voidcn.com/article/p-utrxbluz-bcx.html vim 插件 youcompleteme full install
 https://github.com/yangyangwithgnu/use_vim_as_ide 所需即所获：像 IDE 一样使用 vim
-
 
 set nocompatible              " required
 filetype off                  " required
