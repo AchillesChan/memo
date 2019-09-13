@@ -1,5 +1,10 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+
+
+https://www.cyberciti.biz/faq/linux-port-redirection-with-iptables/
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
+http://www.ttlsa.com/linux/iptables-port-redirect/
 ####file transfer with nc
 https://nmap.org/ncat/guide/ncat-file-transfer.html 
 These examples show how to transfer inputfile on host1 to outputfile on host2. Here no port number was specified so Ncat will use its default port of 31337. To use a different port just list it on the command line.
