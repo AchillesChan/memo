@@ -1,0 +1,4 @@
+fast copy & paste
+1 clipboard-->right client-->config -->general-->check Ignore selection??
+2 sudo zypper install fcitx
+3 start-->fcitx config-->addon config-->clipboard-->Trigger key...-->use Ctrl+;
