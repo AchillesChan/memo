@@ -2855,6 +2855,35 @@ iptables -t nat -I PREROUTING -i eth0 -p tcp \
 --dport 88 -j REDIRECT --to-ports 3306
 [root@lnmp ~]# mysql -uroot -P 88 -p #注意端口是88
 
+
+CentOS7 
+  #>   firewall-cmd --permanent --add-forward-port=port=3000:proto=tcp:toport=22
+  #>   firewall-cmd --remove-service=ssh --perm    ####?
+  #>   firewall-cmd --reload
+
+  #>    firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3
+  sources: 
+  services: dhcpv6-client  ####no ssh here
+  ports:                   ####no 3000 here
+  protocols: 
+  masquerade: no
+  forward-ports: port=3000:proto=tcp:toport=22:toaddr=    ###forward port here
+  sourceports: 
+  icmp-blocks: 
+  rich rules: 
+
+# ss -tlnp|grep ssh    ####only port 22 listening
+LISTEN     0      128          *:22                       *:*                   users:(("sshd",pid=1445,fd=3))
+LISTEN     0      128         :::22                      :::*                   users:(("sshd",pid=1445,fd=4))
+
+#client ssh root@server -p 3000 
+
+
+
 ssh自动输入密码 StrictHostKeyChecking=no 不要求输入yes
 sshpass -p "PASS" ssh -o StrictHostKeyChecking=no USER@host:[port]
 没有sshpass就yum
