@@ -75,7 +75,7 @@ https://github.com/gpakosz/.tmux
     VIM的移动命令进行选择。也可以使用CTRL+b + :list-keys -t vi-copy查看快捷键列表
     选择完毕后用y复制到tmux剪贴板。或者ESC退出选择
     最后通过CTRL+b然后]复制到光标所在位置。
-
+    Ctrl+b + = choose clipboard item
 ###vim copy style
 ######End tmux.memo #######
 ######Endmemoof tmux.memo #######
