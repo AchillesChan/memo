@@ -2,6 +2,14 @@
 ######Start nginx.memo #######
 
 
+
+###jump / to some dir
+name self.com;
+location / {
+	return 301 http://self.com/to/path;
+}
+###jump / to some dir
+
 ###too many open files
 
 
