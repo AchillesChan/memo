@@ -61,7 +61,7 @@ create sesseion                tmux
 link to named session          tmux a -t session-name
 create session                 tmux new-session -s session-name
 scroll                         Prex + [ or Prex + PageUP //input 'q' exit scroll 
-
+jump cursor                    Prex + [ + ESC + UP DOWN LEFT RIGHT
 
 
 ###vim copy style
@@ -71,9 +71,9 @@ https://github.com/gpakosz/.tmux
 配置完了vi-mode以后，我们就可以通过以下方式进行选择复制黏贴：
 
     CTRL+b + [的方式进入选择模式。
-    然后点击v键进入vi-mode选择模式。
+    然后点击v(OR SPACE)键进入vi-mode选择模式。
     VIM的移动命令进行选择。也可以使用CTRL+b + :list-keys -t vi-copy查看快捷键列表
-    选择完毕后用y复制到tmux剪贴板。或者ESC退出选择
+    选择完毕后用y(OR ENTER)复制到tmux剪贴板。或者ESC退出选择
     最后通过CTRL+b然后]复制到光标所在位置。
     Ctrl+b + = choose clipboard item
 ###vim copy style
