@@ -1,0 +1,65 @@
+tomcat server.xml
+
+<Connector port="8081" 
+           maxThreads="150" 
+           minSpareThreads="25" 
+           connectionTimeout="20000" 
+           enableLookups="false" 
+           maxHttpHeaderSize="8192" 
+           protocol="HTTP/1.1" 
+           useBodyEncodingForURI="true" 
+           redirectPort="8443" 
+           acceptCount="100" 
+           disableUploadTimeout="true" 
+           bindOnInit="false" 
+###below is important                     
+           proxyName="jira.doublesharp.com"  
+           proxyPort="443" 
+           scheme="https" 
+           secure="true"/>
+ 
+
+
+
+nginx cfg
+
+upstream jira_back-server {
+    server 172.16.1.15:8080;
+}
+server {
+    server_name jira.example.com;
+        listen 80;
+    location / {
+        return 302 https://jira.example.com;
+    }
+
+}
+server {
+    server_name jira.example.com;
+    listen 443;
+    ssl on;
+    proxy_redirect  off;
+    proxy_buffering off;
+
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        host    $host;
+    proxy_set_header        X-Forwarded-Server      $host;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+            proxy_redirect          http:// https://;
+    client_max_body_size    1G;
+
+    ssl_certificate "/etc/letsencrypt/archive/example.com/fullchain1.pem";
+    ssl_certificate_key "/etc/letsencrypt/archive/example.com/privkey1.pem";
+    ssl_session_timeout  10m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    location = / {
+        return 301 https://jira.example.com/secure/Dashboard.jspa;
+    }
+    location / {
+        proxy_pass http://jira_back-server;
+    }
+}
+
+
