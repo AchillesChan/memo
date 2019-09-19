@@ -1,6 +1,16 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+#cut get last field or excpet last field
+https://unix.stackexchange.com/questions/217628/cut-string-on-last-delimiter
+$echo "a.b.bat" | rev | cut -d"." -f1  |rev
+bat
+
+$ echo "a.b.bat" | rev | cut -d"." -f2-  |rev
+a.bt get last field or excpet last field
+
+#cut get last field or excpet last field
+
 
 https://www.cyberciti.biz/faq/linux-port-redirection-with-iptables/
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
