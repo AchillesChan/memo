@@ -1,8 +1,9 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 http://www.codecodex.com/wiki/Generate_a_random_password_or_random_string
+https://stackoverflow.com/questions/2793812/generate-a-random-filename-in-unix-shell
 https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell$ < /dev/urandom tr -dc "[:alnum:]" | head -c1000 > file.txt
-$ cat /dev/urandom | base64 | head -c8
+$ cat /dev/urandom | base64 | head -c8 ##/dev/random is better ??
 $ </dev/urandom tr -dc A-Za-z0-9_ | head -c8
 
 https://appuals.com/set-bash-variables-random-numbers/
