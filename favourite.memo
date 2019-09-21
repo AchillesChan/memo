@@ -2,6 +2,8 @@
 ######Start favourite.memo #######
 从Find“-exec”调用时,Pipelined Sed对Bash命令替换中找到的文件名不起作用
 https://codeday.me/bug/20190815/1660163.html
+https://unix.stackexchange.com/questions/401384/pipelined-sed-does-not-work-on-found-filename-inside-bash-command-substitution-w
+
 touch sample.txt
 find . -maxdepth 1 -type f -name '*.txt' \
     -exec sh -c 'printf "%s " "$1"; printf "%s %s %s\n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
