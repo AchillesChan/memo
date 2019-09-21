@@ -1,5 +1,11 @@
 ######Startmemoof favourite.memo #######
 ######Start favourite.memo #######
+从Find“-exec”调用时,Pipelined Sed对Bash命令替换中找到的文件名不起作用
+https://codeday.me/bug/20190815/1660163.html
+touch sample.txt
+find . -maxdepth 1 -type f -name '*.txt' \
+    -exec sh -c 'printf "%s " "$1"; printf "%s %s %s\n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
+
 https://kkc.github.io/2017/12/18/Network-Performance-Tuning/
 https://docs.microsoft.com/en-us/previous-versions/azure/virtual-machines/linux/classic/optimize-mysql
 https://docs.microsoft.com/en-us/azure/virtual-machines/linux/optimization
