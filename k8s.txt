@@ -269,8 +269,6 @@ nginx-deployment-6dd86d77d-fb9bp   0/1     ContainerCreating   0          101s
 nginx-deployment-6dd86d77d-lzc56   1/1     Running             0          101s
 nginx-deployment-6dd86d77d-p7pd8   1/1     Running             0          101s
 
-
-
 [root@master ~]# cat nginx-service.yaml
 apiVersion: v1
 kind: Service
@@ -290,7 +288,5 @@ service/nginx-service created
 [root@master ~]# kubectl get service/nginx-service
 NAME            TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx-service   NodePort   10.99.114.248   <none>        88:31345/TCP   14s
-
-
 
 访问地址格式为 MasterIP:NodePort, NodePort 为kubectl get service/nginx-servic 后 88:31345/TCP中 31345这个端口；本次为http://192.168.33.10:31345/

@@ -1,5 +1,56 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+https://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-when-using-bash
+
+
+There are two easy and safe rules which work not only in sh but also bash.
+1. Put the whole string in single quotes
+
+This works for all chars except single quote itself. To escape the single quote, close the quoting before it, insert the single quote, and re-open the quoting.
+
+'I'\''m a s@fe $tring which ends in newline
+'
+
+sed command: sed -e "s/'/'\\\\''/g; 1s/^/'/; \$s/\$/'/"
+2. Escape every char with a backslash
+
+This works for all characters except newline. For newline characters use single or double quotes. Empty strings must still be handled - replace with ""
+
+\I\'\m\ \a\ \s\@\f\e\ \$\t\r\i\n\g\ \w\h\i\c\h\ \e\n\d\s\ \i\n\ \n\e\w\l\i\n\e"
+"
+
+sed command: sed -e 's/./\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/'.
+2b. More readable version of 2
+
+There's an easy safe set of characters, like [a-zA-Z0-9,._+:@%/-], which can be left unescaped to keep it more readable
+
+I\'m\ a\ s@fe\ \$tring\ which\ ends\ in\ newline"
+"
+
+sed command: LC_ALL=C sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/'.
+
+Note that in a sed program, one can't know whether the last line of input ends with a newline byte (except when it's empty). That's why both above sed commands assume it does not. You can add a quoted newline manually.
+
+Note that shell variables are only defined for text in the POSIX sense. Processing binary data is not defined. For the implementations that matter, binary works with the exception of NUL bytes (because variables are implemented with C strings, and meant to be used as C strings, namely program arguments), but you should switch to a "binary" locale such as latin1.
+
+(You can easily validate the rules by reading the POSIX spec for sh. For bash, check the reference manual linked by @AustinPhillips)
+
+
+
+
+ Check whether a remote server port is open on Linux 
+$ echo > /dev/tcp/192.168.56.160/443 && echo "Port is open"
+bash: connect: Connection refused
+bash: /dev/tcp/192.168.56.160/443: Connection refused
+
+echo > /dev/tcp/[host]/[port] && echo "Port is open"
+echo > /dev/udp/[host]/[port] && echo "Port is open"
+
+https://unix.stackexchange.com/questions/401384/pipelined-sed-does-not-work-on-found-filename-inside-bash-command-substitution-w
+touch sample.txt
+find . -maxdepth 1 -type f -name '*.txt' \
+    -exec sh -c 'printf "%s " "$1"; printf "%s %s %s\n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
+
 
 #cut get last field or excpet last field
 https://unix.stackexchange.com/questions/217628/cut-string-on-last-delimiter
