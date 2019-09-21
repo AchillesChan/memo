@@ -1,5 +1,13 @@
 ######Startmemoof favourite.memo #######
 ######Start favourite.memo #######
+https://www.tldp.org/LDP/abs/html/commandsub.html
+http://www.compciv.org/topics/bash/variables-and-substitution/
+https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html
+https://www.redpill-linpro.com/sysadvent/2015/12/12/bash-process-substitution.html
+https://mywiki.wooledge.org/ProcessSubstitution
+http://tldp.org/LDP/abs/html/gotchas.html#BADREAD0
+https://mywiki.wooledge.org/ProcessSubstitution
+
 从Find“-exec”调用时,Pipelined Sed对Bash命令替换中找到的文件名不起作用
 https://codeday.me/bug/20190815/1660163.html
 https://unix.stackexchange.com/questions/401384/pipelined-sed-does-not-work-on-found-filename-inside-bash-command-substitution-w
