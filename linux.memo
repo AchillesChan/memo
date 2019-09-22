@@ -268,7 +268,7 @@ All should work but some are syntactically easier to understand than others...
 s=$(( $RANDOM % 10 ))  ##generate random number for sleep 
 r=$(( $RANDOM % 10 ))  ##generate random number for sleep 
 echo 'random='"$r"
-find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$s'.'$r';cp -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/SH/g")' \;
+find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$s'.'$r';cp -v "$1" $(printf "%s\n" "$1" | sed "s/txt/TXT/g")' \;
 
 $  touch a.txt
 $  ls a.TXT
