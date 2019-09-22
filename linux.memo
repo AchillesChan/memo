@@ -265,9 +265,10 @@ All should work but some are syntactically easier to understand than others...
 ###How can I use xargs to copy files that have spaces and quotes in their names?
 #############tested############
 #!/bin/bash
+s=$(( $RANDOM % 10 ))  ##generate random number for sleep 
 r=$(( $RANDOM % 10 ))  ##generate random number for sleep 
 echo 'random='"$r"
-find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$r';cp -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/SH/g")' \;
+find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$s'.'$r';cp -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/SH/g")' \;
 
 $  touch a.txt
 $  ls a.TXT
