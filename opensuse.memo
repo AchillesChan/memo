@@ -2,3 +2,30 @@ fast copy & paste
 1 clipboard-->right client-->config -->general-->check Ignore selection?? uncheck Ignore and check sync ...
 2 sudo zypper install fcitx
 3 start-->fcitx config-->addon config-->clipboard-->Trigger key...-->use Ctrl+;
+4 install google chrome https://www.linuxbabe.com/desktop-linux/how-to-install-google-chrome-on-opensuse-leap-42-1
+Open up a terminal and add Google Chrome repository using the following command. ar stands for add repository.
+
+$ sudo zypper ar http://dl.google.com/linux/chrome/rpm/stable/x86_64 Google-Chrome
+
+output:
+
+Adding repository 'Google-Chrome' ..............................................................................................................[done]
+Repository 'Google-Chrome' successfully added
+Enabled     : Yes                                                
+Autorefresh : No                                                 
+GPG Check   : Yes                                                
+URI         : http://dl.google.com/linux/chrome/rpm/stable/x86_64
+
+Now refresh repository. ref is short for refresh.
+
+$ sudo zypper ref
+
+In order to verify the integrity of packages downloaded from Google Chrome repository, we need to download and import Google’s public signing key using the commands below.
+
+$ wget https://dl.google.com/linux/linux_signing_key.pub
+
+$ sudo rpm --import linux_signing_key.pub  ###optional
+
+Now we can install Google Chrome using the following command. in stands for install.
+
+$ sudo zypper in google-chrome-stable
