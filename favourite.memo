@@ -7,6 +7,8 @@ https://www.redpill-linpro.com/sysadvent/2015/12/12/bash-process-substitution.ht
 https://mywiki.wooledge.org/ProcessSubstitution
 http://tldp.org/LDP/abs/html/gotchas.html#BADREAD0
 https://mywiki.wooledge.org/ProcessSubstitution
+https://mywiki.wooledge.org/BashGuide/SpecialCharacters
+https://mezzantrop.wordpress.com/2016/08/16/grouping-commands-in-the-bourne-shell-sh/
 
 从Find“-exec”调用时,Pipelined Sed对Bash命令替换中找到的文件名不起作用
 https://codeday.me/bug/20190815/1660163.html

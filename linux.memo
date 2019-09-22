@@ -263,6 +263,21 @@ All should work but some are syntactically easier to understand than others...
 
 
 ###How can I use xargs to copy files that have spaces and quotes in their names?
+#############tested############
+#!/bin/bash
+r=$(( $RANDOM % 10 ))  ##generate random number for sleep 
+echo 'random='"$r"
+find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$r';cp -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/SH/g")' \;
+
+$  touch a.txt
+$  ls a.TXT
+ls: cannot access 'a.TXT': No such file or directory
+$  find . -maxdepth 1 -type f -name '*.txt' |xargs  -t -p sh -c 'sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g")' \;
+sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g") ; ./a.txt ?...y
+'./a.txt' -> './a.TXT'
+$  ls a.TXT
+a.TXT
+#############tested############
 https://stackoverflow.com/questions/143171/how-can-i-use-xargs-to-copy-files-that-have-spaces-and-quotes-in-their-names?rq=1
 
 You can combine all of that into a single find command:
