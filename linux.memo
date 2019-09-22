@@ -120,10 +120,6 @@ bash: /dev/tcp/192.168.56.160/443: Connection refused
 echo > /dev/tcp/[host]/[port] && echo "Port is open"
 echo > /dev/udp/[host]/[port] && echo "Port is open"
 
-https://unix.stackexchange.com/questions/401384/pipelined-sed-does-not-work-on-found-filename-inside-bash-command-substitution-w
-touch sample.txt
-find . -maxdepth 1 -type f -name '*.txt' \
-    -exec sh -c 'printf "%s " "$1";sleep 5s;printf "%s %s %s\n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
 
 
 #cut get last field or excpet last field
@@ -263,6 +259,13 @@ All should work but some are syntactically easier to understand than others...
 
 
 ###How can I use xargs to copy files that have spaces and quotes in their names?
+
+
+
+https://unix.stackexchange.com/questions/401384/pipelined-sed-does-not-work-on-found-filename-inside-bash-command-substitution-w
+touch sample.txt
+find . -maxdepth 1 -type f -name '*.txt' \
+    -exec sh -c 'printf "%s " "$1";sleep 5s;printf "%s \n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
 #############tested############
 #!/bin/bash
 s=$(( $RANDOM % 10 ))  ##generate random number for sleep 
@@ -270,9 +273,12 @@ r=$(( $RANDOM % 10 ))  ##generate random number for sleep
 echo 'random='"$r"
 find . -maxdepth 1 -type f -name '*.txt' |xargs  -t  sh -c 'sleep '$s'.'$r';cp -v "$1" $(printf "%s\n" "$1" | sed "s/txt/TXT/g")' \;
 
+
+
 $  touch a.txt
 $  ls a.TXT
 ls: cannot access 'a.TXT': No such file or directory
+
 $  find . -maxdepth 1 -type f -name '*.txt' |xargs  -t -p sh -c 'sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g")' \;
 sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g") ; ./a.txt ?...y
 './a.txt' -> './a.TXT'
