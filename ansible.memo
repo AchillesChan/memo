@@ -1,10 +1,10 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 ##custom invertory
-$ ansible cdvm -i ansible-cd-host -m ping
+$ ansible vm_grp -i ansible-cd-host -m ping
 
 $ cat ansible-cd-host
-[cdvm]
+[vm_grp]
 cd-212-k8s-m1-user    ansible_ssh_host=192.168.1.212    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
 cd-161-nfs    ansible_ssh_host=192.168.1.161    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
 cd-213-k8s-m2-user    ansible_ssh_host=192.168.1.213    ansible_ssh_user=User    ansible_ssh_key=~/.ssh/rsa_privity_Key
@@ -31,6 +31,19 @@ host01 | CHANGED | rc=0 >>
 
 host01
 Shared connection to 192.168.1.8 closed.
+
+###delete some line
+$ ansible -i ansible-host vm_grp -o -m lineinfile -a "dest=/tmp/crontab regexp='^29(.*)21(.*)$' state=absent"  -uroot --key=~/.ssh/ssh_key                                                              
+vm_host_1 | SUCCESS => {"backup": "", "changed": true, "failed": false, "found": 3, "msg": "3 line(s) removed"}
+
+####add only one line  -o output only one line 
+$ ansible -i ansible-host vm_grp -o -m lineinfile -a "dest=/tmp/crontab line=abc" -uroot --key=~/.ssh/ssh_key
+vm_host_1 | SUCCESS => {"backup": "", "changed": true, "failed": false, "msg": "line added"}
+
+###test which hosts will excute
+$ ansible -i ansible-host vm_grp --list-hosts 
+  hosts (1):
+    vm_host_1
 
 ansible HostGrp -m raw -a "getenforce" -u User --ask-pass --sudo --ask-sudo-pass
 ansible HostGrp -m raw -a "grep -i disable /etc/selinux/config" -u User --ask-pass --sudo --ask-sudo-pass
@@ -125,7 +138,7 @@ cat /tmp.com.sh
         expect eof"
   export HISTIGNORE="";
 
-~> ansible db -a "/bin/sh /tmp.com.sh Alice com-2358" -u Michael \
+$ ansible db -a "/bin/sh /tmp.com.sh Alice com-2358" -u Michael \
 --key-file=.ssh/rsa_private_keys --sudo -K
 SUDO password:
 192.168.20.10 | SUCCESS | rc=0 >>
@@ -295,8 +308,8 @@ ln -s /usr/local/screen/v.4.3.1/src/screen /usr/bin/screen
 Shell> ansible-playbook web.yml --syntax-check
 
 playbook web.yml
-Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/logcdbak --sudo -K
-Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/logcdbak --sudo --ask-sudo-pass
+Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/ssh_key --sudo -K
+Shell> ansible-playbook web.yml -u Michael --key-file=.ssh/ssh_key --sudo --ask-sudo-pass
 Shell> ansible-playbook web.yml -u Michael --ask-pass  --sudo --ask-sudo-pass
 
 SUDO password:(输入目标机器的sudo密码）

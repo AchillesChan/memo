@@ -4,7 +4,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin
 export PATH
 set -u
 
----var need modify
+##---var need modify
 VAR1="192.168.1.13"  ####as need ,comment
 
 #########define area################
@@ -12,19 +12,23 @@ VAR1="192.168.1.13"  ####as need ,comment
 
 #########function area##################
 FUN1(){
+echo ""
 echo "---------start ${FUNCNAME[0]} Fuction-----------"
 
-STATE CLAUSE HERE ####NEED MOD 
+##STATE CLAUSE HERE ####NEED MOD 
 
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
+echo ""
 }
 
 FUN2(){
+echo ""
 echo "---------start ${FUNCNAME[0]} Fuction-----------"
 
-STATE CLAUSE HERE ####NEED MOD 
+##STATE CLAUSE HERE ####NEED MOD 
 
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
+echo ""
 }
 #########function area##################
 

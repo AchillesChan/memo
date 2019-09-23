@@ -3,9 +3,9 @@
 
 ###azure cli
                 docker pull mcr.microsoft.com/azure-cli
+                docker run -it mcr.microsoft.com/azure-cli
 
                 az cloud set -n AzureChinaCloud
-
                 1如何切换订阅:
                     az account set –-subscription  "yoursubID(UUID)"
 
