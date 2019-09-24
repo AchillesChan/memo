@@ -1,5 +1,55 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
+
+####ad-hoc with yml###
+$cat hoc.yml
+---
+- name: ad-hoc
+  hosts: cdvm 
+  gather_facts: no   #####skip disable gather facts
+  tasks:
+    - name: lineinfile replace 
+      lineinfile:
+        dest: "/tmp/crontab"
+        regexp: ^SO
+        #regexp: ^\\\$B.*$
+        backrefs: yes
+        #line: "SOS "
+        line: \${
+      tags: subst        ####very important
+
+    - name: task 2
+      shell: echo task 2
+      tags: t2
+
+    - name: task 3
+      shell: echo task 3
+      tags: t3
+
+$cat cd-ansible-host
+[cdvm]
+cd-212    ansible_ssh_host=192.168.2.212    ansible_ssh_user=root    ansible_ssh_key=~/.ssh/key
+
+$ ansible-playbook -i ~/cd-ansible-host hoc.yml --tags "subst"
+
+> ansible-playbook -i ~/cd-ansible-host hoc.yml --tags "subst"
+
+PLAY [ad-hoc] **************************************************************************************************************************************************************
+
+TASK [lineinfile replace] **************************************************************************************************************************************************
+changed: [cd-212]
+
+PLAY RECAP *****************************************************************************************************************************************************************
+cd-212             : ok=1    changed=1    unreachable=0    failed=0 
+
+####ad-hoc with yml###
+
+
+
+
+
+
+
 ##custom invertory
 $ ansible vm_grp -i ansible-cd-host -m ping
 
