@@ -30,6 +30,7 @@ $cat cd-ansible-host
 [cdvm]
 cd-212    ansible_ssh_host=192.168.2.212    ansible_ssh_user=root    ansible_ssh_key=~/.ssh/key
 
+$ ansible-playbook -i ~/cd-ansible-host hoc.yml --tags t1,subst
 $ ansible-playbook -i ~/cd-ansible-host hoc.yml --tags "subst"
 
 > ansible-playbook -i ~/cd-ansible-host hoc.yml --tags "subst"
