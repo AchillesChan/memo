@@ -36,6 +36,10 @@ $cat hoc.yml
       raw: sed -i 's/^35.*4.*sia$/kk/g' /tmp/crontab
       tags: t4
 
+    - name: t5
+      raw: sed -i 's/^55.*$/\x27\[$\.\*i\~\^/g' /tmp/crontab   ####relace start with 55 to '[$.*i~^,!!!single quote is \x27!!!
+      tags: t5
+
 $cat cd-ansible-host
 [cdvm]
 cd-212    ansible_ssh_host=192.168.2.212    ansible_ssh_user=root    ansible_ssh_key=~/.ssh/key
