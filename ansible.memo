@@ -37,7 +37,9 @@ $cat hoc.yml
       tags: t4
 
     - name: t5
-      raw: sed -i 's/^55.*$/\x27\[$\.\*\~\^/g' /tmp/crontab   ####relace start with 55 to '[$.*~^,!!!single quote is \x27!!!
+      raw: sed -i 's/^SHEL.*$/\\\/\x27'1'{}[]<>?|+=/g' /tmp/crontab  ###only char ' \ and / MUST escaped  
+      raw: sed -i 's/^#.*$/\\"\x27'1'[$.*~^/g' /tmp/crontab   ####relace start # line  to \"1[$.*~^   !!!single quote is \x27!!!
+ 
       tags: t5
 
 $cat cd-ansible-host
