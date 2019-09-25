@@ -1,6 +1,11 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
+###edit ymal vim set
+:set tabstop=2 shiftwidth=2 expandtab
+automatic replace tab to 2 space
+###edit ymal vim set
+
 ####ad-hoc with yml###
 $cat hoc.yml
 ---
@@ -22,9 +27,14 @@ $cat hoc.yml
       shell: echo task 2
       tags: t2
 
-    - name: task 3
-      shell: echo task 3
+    - name: task 3   ###only last raw take effective on task 3
+      raw: sed -i 's/^Ak.*A$/A10/g' /tmp/crontab
+      raw: sed -i 's/^Zb.*28/A11/g' /tmp/crontab
       tags: t3
+
+    - name: t4
+      raw: sed -i 's/^35.*4.*sia$/kk/g' /tmp/crontab
+      tags: t4
 
 $cat cd-ansible-host
 [cdvm]
