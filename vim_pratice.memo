@@ -1,5 +1,12 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+
+https://stackoverflow.com/questions/28421864/how-do-i-remove-first-5-characters-in-each-line-in-a-text-file-using-vi?rq=1
+How do I remove first 5 characters in each line in a text file using vi?
+
+:%s/^.\{0,5\}// should do the trick. It also handles cases where there are less than 5 characters.
+
+
 Remove unwanted empty lines
 
 :g/^\s*$/d
