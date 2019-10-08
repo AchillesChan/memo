@@ -1,5 +1,9 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+
+Remove first N letter:
+%s/^.\{0,3\}//g
+
 Remove unwanted empty lines
 
 :g/^\s*$/d
