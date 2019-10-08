@@ -846,6 +846,10 @@ https://github.com/CISOfy/lynis
 
 ######
 #tar some file find filter pick up 
+==tested
+find ./ -maxdepth 1 -type f -name "*.txt"|xargs -p -t tar vzcf txt.tar.gz
+==tested
+
 --10 xargs process 
 find ./ -mtime -77 -type f -print0 |xargs -0 -P 1 -n 1 -I {} tar vzcf a.tar.gz {}
 
