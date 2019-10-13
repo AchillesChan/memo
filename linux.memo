@@ -287,10 +287,10 @@ a.TXT
 #############tested############
 
 #generate multiple var command
-> cat curr                  ###PATT 6 field,first is placeholder
-placeholder    aws-redis    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22583    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key
-placeholder    aws-db01    ansible_ssh_host=12.3.36.141    ansible_ssh_port=22581    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key
-placeholder    aws-db02    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22582    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key
+> cat curr                  ###PATT 7 field,first is placeholder
+placeholder    aws-redis    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22583    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
+placeholder    aws-db01    ansible_ssh_host=12.3.36.141    ansible_ssh_port=22581    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
+placeholder    aws-db02    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22582    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
 > awk '{printf $0}' curr|xargs  -P 1 -n 5 sh -c 'echo az --var1 $(printf "%s\n" $1) --var2 $(printf "%s\n" $3)'\;    ##-n $x is field number sub 1,count from 0
 az --var1 aws-redis --var2 ansible_ssh_port=22583
 az --var1 aws-db01 --var2 ansible_ssh_port=22581
