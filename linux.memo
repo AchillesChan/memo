@@ -284,20 +284,31 @@ sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g") ; ./a.
 './a.txt' -> './a.TXT'
 $  ls a.TXT
 a.TXT
+
 #############tested############
 
 #generate multiple var command
-> cat curr                  ###PATT 7 field,first is placeholder
-placeholder    aws-redis    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22583    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
-placeholder    aws-db01    ansible_ssh_host=12.3.36.141    ansible_ssh_port=22581    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
-placeholder    aws-db02    ansible_ssh_host=12.3.244.141    ansible_ssh_port=22582    ansible_ssh_user=user        ansible_ssh_key=~/.ssh/key    placeholder
-> awk '{printf $0}' curr|xargs  -P 1 -n 5 sh -c 'echo az --var1 $(printf "%s\n" $1) --var2 $(printf "%s\n" $3)'\;    ##-n $x is field number sub 1,count from 0
-az --var1 aws-redis --var2 ansible_ssh_port=22583
-az --var1 aws-db01 --var2 ansible_ssh_port=22581
-az --var1 aws-db02 --var2 ansible_ssh_port=22582
-az --var1 --var2  ###why this? 
 
+> cat curr
+aws-redis   12.3.24.11    user        key
+aws-db01    12.3.36.12    user        key
+aws-db02    12.3.53.13    user        key
+
+> awk '{print $0}' curr|xargs   -n 4   sh -c 'echo az --host $1 --name $1 --ip $2 --key $4' _
+az --host aws-redis --name aws-redis --ip 12.3.24.11 --key key
+az --host aws-db01 --name aws-db01 --ip 12.3.36.12 --key key
+az --host aws-db02 --name aws-db02 --ip 12.3.53.13 --key key
+
+> cat curr|xargs   -n 4   sh -c 'echo az --host $1 --name $1 --ip $2 --key $4' _
+az --host aws-redis --name aws-redis --ip 12.3.24.11 --key key
+az --host aws-db01 --name aws-db01 --ip 12.3.36.12 --key key
+az --host aws-db02 --name aws-db02 --ip 12.3.53.13 --key key
+
+https://stackoverflow.com/questions/41043163/xargs-sh-c-skipping-the-first-argument
+https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-the-shell-from-xargs.html#Invoking-the-shell-from-xargs
 #generate multiple var command
+
+
 
 https://stackoverflow.com/questions/143171/how-can-i-use-xargs-to-copy-files-that-have-spaces-and-quotes-in-their-names?rq=1
 
