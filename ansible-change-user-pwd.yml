@@ -1,0 +1,10 @@
+- hosts: all
+  user: root
+  vars:
+    # created with:
+    # python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
+    password: $6$fugtPlHn/SA37A/A$2LVDJ6CDo9twn74rfbDIQMRibtuuH4g43jjyME8fuXT59o39mSWTXiNhs7PhzRRX72TTPYVg0gxFBYEGWOagG1 
+
+  tasks:
+    - user: name=root password={{password}}
+

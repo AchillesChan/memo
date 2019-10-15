@@ -6,6 +6,7 @@
                 docker run -it mcr.microsoft.com/azure-cli
 
                 az cloud set -n AzureChinaCloud
+                az login
                 1如何切换订阅:
                     az account set –-subscription  "yoursubID(UUID)"
 
@@ -14,6 +15,16 @@
 
                 3 启用加速网络:
                     az network nic update --name myNic --resource-group myResourceGroup --accelerated-networking true
+4 create vm 
+az vm create --name $vmname --resource-group $rgname --accelerated-networking false --admin-password $$$pwd$$$ --admin-username $user --vnet-name $vnet --subnet $subnet --image $image(for-example-OpenLogic:CentOS-LVM:7-LVM:7.5.20180629) --nsg-rule SSH_OR_RDP --location chinaeast2 --size $SIZE-Standard_e2_v3 --private-ip-address $LANIP(FIXED) --public-ip-address-dns-name $lowercase-dns --data-disk-sizes-gb 128
+
+5 list all centos images
+az vm image list -f CentOS --all 
+
+6 add nsg rule to nsg
+az network nsg rule create --name allow-zabbix-server-10051 --nsg-name $1 --priority 100 --resource-group $RG --access Allow --description allow-zabbix-server-10051 --source-address-prefixes a.b.c.d/32 --destination-port-ranges 10050
+
+
 ###azure cli
 
 ######swap on azure linux centos
