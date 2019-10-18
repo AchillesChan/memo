@@ -4,12 +4,18 @@
 ====================================================
 ====================================================
 ####snmp with zabbix#####
+10 net device set
+ snmp-agent
+ snmp-agent community read public
+ snmp-agent sys-info version all
+
+20 linux snmp query
 snmpwalk -v 2c -c communicate_string 172.16.0.1 1.3.6.1.2.1.1.5.0(network device name oid)
 snmpwalk -v 2c -c communicate_string $ip $oid    ($oid can from any layer,dot . is the root layer) 
 $oid need manufacture offer
 
 
-add to zabbix
+30 add to zabbix
 
 configuration-->hosts-->host-->fill name-->group select network device-->snmp interface-->fill ip 
 or dns -->port 161-->update-->templates-->link to nothing or custom-->Macros-->Host macros-->
@@ -22,6 +28,8 @@ configration-->discovery->ip range->checks SNMPv2 agent "1.3.6.1.2.1.1.5.0"-->ed
 
 configuration-->actions-->create discoery action-->action-->new condtion-->check equals last step chechk name
 -->update-->operations-->add-host,enable host,etc-->update
+
+PATT:NEED WAIT 1 HOUR DISCOVERY,CRY.... NOT ATTEMPT MODIFY LESS DISCOVERY INTERVAL PERMIOD
 
 ####snmp with zabbix#####
 
