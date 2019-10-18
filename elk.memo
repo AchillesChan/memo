@@ -1,0 +1,112 @@
+###nginx load metric####
+10 nginx vm
+$>wget https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.1-x86_64.rpm
+$>rpm -ivh etricbeat-7.3.1-x86_64.rpm
+
+$>vim /etc/metricbeat.yml
+output.elasticsearch:
+  hosts: ["<es_url>"]
+  username: "elastic"
+  password: "<password>"
+setup.kibana:
+  host: "<kibana_url>"
+
+$ metricbeat modules enable nginx
+
+
+$>vim /etc/metricbeat/modules.d/nginx.yml
+# Module: nginx
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/7.3/metricbeat-module-nginx.html
+
+- module: nginx
+  #metricsets:
+  #  - stubstatus
+  period: 10s
+
+  # Nginx hosts
+  hosts: ["http://127.0.0.1"]
+
+  # Path to server status. Default server-status
+  #server_status_path: "server-status"
+  server_status_path: "basic_status"
+
+  #username: "user"
+  #password: "secret"
+
+$>vim nginx.conf
+        location = /basic_status {                                                                                                                                                                             
+                    stub_status;
+        }   
+
+$>nginx -s reload
+
+$>metricbeat setup
+
+$>systemctl start metricbeat
+
+$>systemctl status metricbeat -l
+
+20 view on kinaba
+http://192.168.2.8:5601-->home/add data/nginx metrics-->right down-->nginx metrics dashboard
+###nginx load metric####
+
+
+
+###########winlog event ###########
+05 > windows 10 18362 version
+10 >windows install
+
+PS C:\Windows\system32> Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+
+PS C:\Windows\system32> d:
+
+PS D:\> dir
+
+
+    目录: D:\
+
+
+Mode                LastWriteTime         Length Name                                                                                                                   
+----                -------------         ------ ----                                                                                                                   
+d-----       2019/10/18     15:06                winlogbeat                                                                                                             
+-a----       2019/10/18     14:23       16084730 winlogbeat.zip                                                                                                         
+
+
+
+PS D:\> cd .\winlogbeat
+
+PS D:\winlogbeat> .\install-service-winlogbeat.ps1
+
+Status   Name               DisplayName                           
+------   ----               -----------                           
+Stopped  winlogbeat         winlogbeat                            
+
+d:\>vim winlogbeat.yml
+output.elasticsearch:
+
+hosts: ["192.168.2.8:9200"]
+  # Optional protocol and basic auth credentials.
+  protocol: "http"
+  username: "elastic"
+  password: "changeme"
+
+setup.kibana:
+  host: "host: 192.168.2.8:5601"
+
+
+PS D:\winlogbeat> Start-Service winlogbeat
+
+
+
+PS D:\winlogbeat> Get-Service winlogbeat
+
+Status   Name               DisplayName                           
+------   ----               -----------                           
+Running  winlogbeat         winlogbeat 
+
+
+===================
+20> portal view
+http://192.168.2.88:5601/app/siem#
+
+###########winlog event ###########
