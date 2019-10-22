@@ -1,0 +1,118 @@
+10 uri
+https://www.golinuxcloud.com/configure-openldap-with-tls-certificates/
+https://www.itzgeek.com/how-tos/linux/centos-how-tos/step-step-openldap-server-configuration-centos-7-rhel-7.html/2
+https://www.itzgeek.com/how-tos/linux/centos-how-tos/configure-openldap-with-ssl-on-centos-7-rhel-7.html
+
+20 server
+cat /etc/hosts
+192.168.1.237 server.itzgeek.local server
+192.168.1.238 client.itzgeek.local client
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+$>yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel
+$>systemctl start slapd
+$>systemctl enable slapd
+
+$>netstat -antup | grep -i 389
+
+
+$>slappasswd -h {SSHA} -s ldppassword
+{SSHA}Y1ovpWVwIymca0jKtYgQXPi2u6VNn1rx
+$>vi /etc/openldap/slapd.d/db.ldif
+
+$>ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/db.ldif 
+ 
+$>   vi /etc/openldap/slapd.d/monitor.ldif
+  $>ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+
+$>cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+$>chown ldap:ldap /var/lib/ldap/*
+
+
+$>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+$>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+$>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+
+$>ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+$>ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f raj.ldif
+
+$>ldappasswd -s password123 -W -D "cn=ldapadm,dc=itzgeek,dc=local" -x "uid=raj,ou=People,dc=itzgeek,dc=local"
+
+To delete an entry from LDAP (Optional).
+$>ldapdelete -W -D "cn=ldapadm,dc=itzgeek,dc=local" "uid=raj,ou=People,dc=itzgeek,dc=local"
+
+$>firewall-cmd --permanent --add-service=ldap
+$>firewall-cmd --reload
+
+$>vi /etc/rsyslog.conf
+local4.* /var/log/ldap.log
+$>systemctl restart rsyslog
+
+
+===ssl config on server 
+$> openssl req -new -x509 -nodes -out /etc/openldap/certs/itzgeekldap.crt -keyout /etc/openldap/certs/itzgeekldap.key -days 1460
+$> chown -R ldap:ldap /etc/openldap/certs/itzgeek*
+$> ll /etc/openldap/certs/itzgeek*
+$> vi certs.ldif
+$> ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
+$> cat certs.ldif 
+$> ll /etc/openldap/certs/itzgeek*
+$> ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
+$> slaptest -u
+$> cd  /etc/openldap/certs/
+$> openssl genrsa -out itzgeekrootCA.key 2048
+$> openssl req -x509 -new -nodes -key itzgeekrootCA.key -sha256 -days 1024 -out itzgeekrootCA.pem
+$> openssl genrsa -out itzgeekldap.key 2048
+$> openssl req -new -key itzgeekldap.key -out itzgeekldap.csr
+$> openssl x509 -req -in itzgeekldap.csr -CA itzgeekrootCA.pem -CAkey itzgeekrootCA.key -CAcreateserial -out itzgeekldap.crt -days 1460 -sha256
+$> chown -R ldap:ldap /etc/openldap/certs/itzgeek*
+$> ll /etc/openldap/certs/itzgeek*
+$> ll /etc/openldap/certs/itzgeekldap.key
+$> ll /etc/openldap/certs/itzgeekldap.crt /etc/openldap/certs/itzgeekrootCA.pem
+$> ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
+$> cat certs.ldif 
+$> slaptest -u
+$> vi tls.ldif
+$> ldapmodify -Y EXTERNAL -H ldapi:// -f tls.ldif 
+$> vi catsl.ldif
+$> ldapmodify -Y EXTERNAL -H ldapi:// -f catsl.ldif 
+$> slapcat -b "cn=config" | egrep "olcTLSCertificateFile|olcTLSCertificateKeyFile|olcTLSCACertificateFile"
+$> vi /etc/sysconfig/slapd
+$> vi /etc/openldap/ldap.conf 
+$> ll /etc/openldap/certs/
+$> systemctl restart slapd
+$> ldapsearch -x -ZZ
+$> systemctl restart slapd
+$> ss -tlnp
+$> firewall-cmd --add-service=ldaps --perm
+$> firewall-cmd --reload
+$> ss -tlnp
+$> getent passwd raj
+$> history
+$> ss -tlnp
+$> yum -y install tcpdump
+$> tcpdump -nNxX -s 0 proto TCP and port 636 -w openldap.txt
+
+
+=====client with ssl
+$>vi /etc/hosts
+$>vi /etc/resolv.conf
+$>yum install -y openldap-clients nss-pam-ldapd
+$>authconfig --enableldap --enableldapauth --ldapserver=192.168.1.237 --ldapbasedn="dc=itzgeek,dc=local"
+$>authconfig --enableldap --enableldapauth --ldapserver=192.168.1.237 --ldapbasedn="dc=itzgeek,dc=local" --enablemkhomedir --update
+$>systemctl restart  nslcd
+$>getent passwd raj
+$>history
+$>authconfig --enableldap --enableldapauth --ldapserver=ldaps://server.itzgeek.local --ldapbasedn="dc=itzgeek,dc=local" --enablemkhomedir --disableldaptls --update
+$>vi /etc/nslcd.conf
+$>grep allow /etc/nslcd.conf
+$>cd /etc/openldap/cacerts/
+$>scp -pr root@192.168.1.237:/etc/openldap/certs/itzgeekrootCA.pem /etc/openldap/cacerts
+$>/etc/pki/tls/misc/c_hash /etc/openldap/cacerts/itzgeekrootCA.pem
+$>ln -s itzgeekrootCA.pem 6faeca4d.0
+$>systemctl restart nslcd
+$>getent passwd raj
+$>yum -y install tcpdump
+$>tcpdump -nNxX -s 0 proto TCP and port 636 -w openldap.log
+$>strings openldap.log 
