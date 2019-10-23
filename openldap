@@ -5,8 +5,8 @@ https://www.itzgeek.com/how-tos/linux/centos-how-tos/configure-openldap-with-ssl
 
 20 server
 cat /etc/hosts
-192.168.1.237 server.itzgeek.local server
-192.168.1.238 client.itzgeek.local client
+192.168.1.10 server.itzgeek.local server
+192.168.1.20 client.itzgeek.local client
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
@@ -15,29 +15,119 @@ $>systemctl start slapd
 $>systemctl enable slapd
 
 $>netstat -antup | grep -i 389
+LISTEN     0      128          *:389                      *:*                   users:(("slapd",pid=2727,fd=8))
+LISTEN     0      128         :::389                     :::*                   users:(("slapd",pid=2727,fd=9))
 
 
 $>slappasswd -h {SSHA} -s ldppassword
 {SSHA}Y1ovpWVwIymca0jKtYgQXPi2u6VNn1rx
+
 $>vi /etc/openldap/slapd.d/db.ldif
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=itzgeek,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=itzgeek,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SSHA}Y1ovpWVwIymca0jKtYgQXPi2u6VNn1rx
 
 $>ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/db.ldif 
- 
-$>   vi /etc/openldap/slapd.d/monitor.ldif
-  $>ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+modifying entry "olcDatabase={2}hdb,cn=config"
 
+modifying entry "olcDatabase={2}hdb,cn=config"
+
+modifying entry "olcDatabase={2}hdb,cn=config" 
+
+$>vi /etc/openldap/slapd.d/monitor.ldif
+dn: olcDatabase={1}monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=itzgeek,dc=local" read by * none
+
+$>ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+modifying entry "olcDatabase={1}monitor,cn=config"
 $>cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
 $>chown ldap:ldap /var/lib/ldap/*
 
 
 $>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+
 $>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
 $>ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 $>ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+$vi /etc/openldap/slapd.d/raj.ldif 
+dn: uid=raj,ou=People,dc=itzgeek,dc=local
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: raj
+uid: raj
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/raj
+loginShell: /bin/bash
+gecos: Raj [Admin (at) ITzGeek]
+userPassword: {crypt}x
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7
+
 $>ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f raj.ldif
+Enter LDAP Password: 
+adding new entry "uid=raj,ou=People,dc=itzgeek,dc=local"
 
 $>ldappasswd -s password123 -W -D "cn=ldapadm,dc=itzgeek,dc=local" -x "uid=raj,ou=People,dc=itzgeek,dc=local"
+ 
+$>ldapsearch -x cn=raj -b dc=itzgeek,dc=local
+# extended LDIF
+#
+# LDAPv3
+# base <dc=itzgeek,dc=local> with scope subtree
+# filter: cn=raj
+# requesting: ALL
+#
+
+# raj, People, itzgeek.local
+dn: uid=raj,ou=People,dc=itzgeek,dc=local
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: raj
+uid: raj
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/raj
+loginShell: /bin/bash
+gecos: Raj [Admin (at) ITzGeek]
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7
+userPassword:: e1NTSEF9MkE2eUhIS0pJQVRnMHBCdkpVWjR5Q3JvTkJLTzdBTWY=
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 2
+# numEntries: 1
 
 To delete an entry from LDAP (Optional).
 $>ldapdelete -W -D "cn=ldapadm,dc=itzgeek,dc=local" "uid=raj,ou=People,dc=itzgeek,dc=local"
@@ -51,6 +141,7 @@ $>systemctl restart rsyslog
 
 
 ===ssl config on server 
+###ssl op MUST SET common name as same as server.itzgeek.local
 $> openssl req -new -x509 -nodes -out /etc/openldap/certs/itzgeekldap.crt -keyout /etc/openldap/certs/itzgeekldap.key -days 1460
 $> chown -R ldap:ldap /etc/openldap/certs/itzgeek*
 $> ll /etc/openldap/certs/itzgeek*
@@ -61,46 +152,88 @@ $> openssl req -x509 -new -nodes -key itzgeekrootCA.key -sha256 -days 1024 -out 
 $> openssl genrsa -out itzgeekldap.key 2048
 $> openssl req -new -key itzgeekldap.key -out itzgeekldap.csr
 $> openssl x509 -req -in itzgeekldap.csr -CA itzgeekrootCA.pem -CAkey itzgeekrootCA.key -CAcreateserial -out itzgeekldap.crt -days 1460 -sha256
+
+
+
 $> chown -R ldap:ldap /etc/openldap/certs/itzgeek*
-$> vi tls.ldif
+$> vi /etc/openldap/certs/tls.ldif
+dn: cn=config
+changetype: modify
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/itzgeekldap.crt
+-
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/openldap/certs/itzgeekldap.key
 $> ldapmodify -Y EXTERNAL -H ldapi:// -f tls.ldif 
-$> vi catsl.ldif
+
+$> vi /etc/openldap/certs/catsl.ldif
+dn: cn=config
+changetype: modify
+replace: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/openldap/certs/itzgeekrootCA.pem
 $> ldapmodify -Y EXTERNAL -H ldapi:// -f catsl.ldif 
+
 $> slapcat -b "cn=config" | egrep "olcTLSCertificateFile|olcTLSCertificateKeyFile|olcTLSCACertificateFile"
+olcTLSCertificateFile: /etc/openldap/certs/itzgeekldap.crt
+olcTLSCertificateKeyFile: /etc/openldap/certs/itzgeekldap.key
+olcTLSCACertificateFile: /etc/openldap/certs/itzgeekrootCA.pem
+
 $> vi /etc/sysconfig/slapd
+SLAPD_URLS="ldapi:///  ldaps:///"
+
 $> vi /etc/openldap/ldap.conf 
-$> systemctl restart slapd
+TLS_CACERTDIR   /etc/openldap/certs  ####certs dir 
+TLS_REQCERT never                    ####fuck why never here
+
+$> systemctl restart slapd(port 636 is LISTENING)
+
 $> ldapsearch -x -ZZ
-$> systemctl restart slapd
-$> ss -tlnp
+# extended LDIF
+#
+# LDAPv3
+# base <> (default) with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# search result
+search: 3
+result: 32 No such object
+
+# numResponses: 1
+
 $> firewall-cmd --add-service=ldaps --perm
 $> firewall-cmd --reload
-$> ss -tlnp
 $> getent passwd raj
-$> history
-$> ss -tlnp
 $> yum -y install tcpdump
-$> tcpdump -nNxX -s 0 proto TCP and port 636 -w openldap.txt
+$> tcpdump -nNxX -s 0 proto TCP and port 636 -w openldap.txt    ###openldap open with string MUST ENCRYPTED CHARE
 
 
 =====client with ssl
 $>vi /etc/hosts
-$>vi /etc/resolv.conf
+192.168.1.10 server.itzgeek.local server                                                                                                                    
+192.168.1.20 client.itzgeek.local client
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
 $>yum install -y openldap-clients nss-pam-ldapd
-$>authconfig --enableldap --enableldapauth --ldapserver=192.168.1.237 --ldapbasedn="dc=itzgeek,dc=local"
-$>authconfig --enableldap --enableldapauth --ldapserver=192.168.1.237 --ldapbasedn="dc=itzgeek,dc=local" --enablemkhomedir --update
+$>authconfig --enableldap --enableldapauth --ldapserver=192.168.1.10 --ldapbasedn="dc=itzgeek,dc=local" --enablemkhomedir --update
 $>systemctl restart  nslcd
 $>getent passwd raj
-$>history
 $>authconfig --enableldap --enableldapauth --ldapserver=ldaps://server.itzgeek.local --ldapbasedn="dc=itzgeek,dc=local" --enablemkhomedir --disableldaptls --update
 $>vi /etc/nslcd.conf
-$>grep allow /etc/nslcd.conf
+tls_reqcert allow
+
 $>cd /etc/openldap/cacerts/
-$>scp -pr root@192.168.1.237:/etc/openldap/certs/itzgeekrootCA.pem /etc/openldap/cacerts
+$>scp -pr root@192.168.1.10:/etc/openldap/certs/itzgeekrootCA.pem /etc/openldap/cacerts  ###cp CA to localhost
 $>/etc/pki/tls/misc/c_hash /etc/openldap/cacerts/itzgeekrootCA.pem
+6faeca4d.0 /etc/openldap/cacerts/itzgeekrootCA.pem          ####generate code 6fa something
 $>ln -s itzgeekrootCA.pem 6faeca4d.0
 $>systemctl restart nslcd
 $>getent passwd raj
+raj:x:9999:100:Raj [Admin (at) ITzGeek]:/home/raj:/bin/bash  ###OR ON SERVER ???
+
 $>yum -y install tcpdump
 $>tcpdump -nNxX -s 0 proto TCP and port 636 -w openldap.log
-$>strings openldap.log 
+$>strings openldap.log  ###encrypt char is right .or is wrong
+ 
