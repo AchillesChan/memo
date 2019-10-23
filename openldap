@@ -2,7 +2,7 @@
 https://www.golinuxcloud.com/configure-openldap-with-tls-certificates/
 https://www.itzgeek.com/how-tos/linux/centos-how-tos/step-step-openldap-server-configuration-centos-7-rhel-7.html/2
 https://www.itzgeek.com/how-tos/linux/centos-how-tos/configure-openldap-with-ssl-on-centos-7-rhel-7.html
-
+https://segmentfault.com/a/1190000014683418
 20 server
 cat /etc/hosts
 192.168.1.10 server.itzgeek.local server
