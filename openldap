@@ -259,7 +259,6 @@ a=]@V
 ~e^,
 WM6[R
 ......
-server$>strings openldap.log  ###encrypt char is right .or is wrong
 
 
 
@@ -333,4 +332,4 @@ pwd:ldppassword
 20 create user use created group
 30 copy add user:
 Must change:cn/homeDir/password/uidNumber/user name/password hash use ssha
-UPDAE hash password with password 
+UPDAE hash password with ssha
