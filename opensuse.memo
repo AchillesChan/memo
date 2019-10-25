@@ -1,3 +1,35 @@
+===============
+install Packman vlc
+openSUSE Tumbleweed:
+
+sudo zypper ar -cfp 90 -n Packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+sudo zypper ref
+sudo zypper in vlc vlc-codecs
+sudo zypper dup --from packman --allow-vendor-change
+
+openSUSE Leap 15.0:
+
+sudo zypper ar -cfp 90 -n Packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_15.0/ packman
+sudo zypper ref
+sudo zypper in vlc vlc-codecs
+sudo zypper dup --from packman --allow-vendor-change
+
+openSUSE Leap 42.3:
+
+sudo zypper ar -cfp 90 -n Packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_42.3/ packman
+sudo zypper ref
+sudo zypper in vlc vlc-codecs
+sudo zypper dup --from packman --allow-vendor-change
+=========================
+
+
+
+install krdc keychain git locate
+$>sudo zypper in -y git krdc keychain mlocate
+
+
+
+======================
 fast copy & paste
 1 clipboard-->right client-->config -->general-->check Ignore selection?? uncheck Ignore and check sync ...
 2 sudo zypper install fcitx
