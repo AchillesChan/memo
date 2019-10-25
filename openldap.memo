@@ -333,3 +333,10 @@ pwd:ldppassword
 30 copy add user:
 Must change:cn/homeDir/password/uidNumber/user name/password hash use ssha
 UPDAE hash password with ssha
+
+========better gui client tool
+LDAP Account Manager 6.9
+default profile user:lam password lam
+
+TOP-RIGHT-->LAM config-->server-->account types-->active account types-->users -->ldap suffix:ou=People,dc=itzgeek,dc=local
+TOP-RIGHT-->LAM config-->server-->account types-->active account types-->Groups -->LDAP suffix:ou=Group,dc=itzgeek,dc=local-->save
