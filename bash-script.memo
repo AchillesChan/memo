@@ -1,6 +1,45 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
 
+###auto restart ssh tunnel
+$ cat auto-restart-ssh-cfg 
+#   $1                     $2         $3              $4           $5   $6         $6       $7       $8      $9
+example-9001.domain.cn,Bad Gateway,172.16.1.15:9001,404 Not Found,NCfqR,30010,/home/User1/.ssh//key,19980,user@tunnel.com
+example-9003.domain.cn,Bad Gateway,172.16.1.15:9003,404 Not Found,NCfqR,30020,/home/User1/.ssh//key,19980,user@tunnel.com
+
+$ cat auto-restart-ssh-tunnel.sh
+#!/bin/bash
+CFG_FILE=/etc/custom-scripts/auto-restart-ssh-cfg
+while IFS= read -r ITEM
+do(
+  if echo "$ITEM"|grep '#' &>/dev/null
+  then
+     continue
+  fi
+
+  REMOTE_URL=$(echo "$ITEM"|awk -F ',' '{print $1}')
+  REMOTE_CODE=$(echo "$ITEM"|awk -F ',' '{print $2}')
+  LOCAL_URL=$(echo "$ITEM"|awk -F ',' '{print $3}')
+  LOCAL_CODE=$(echo "$ITEM"|awk -F ',' '{print $4}')
+  TUNNEL_FLAG=$(echo "$ITEM"|awk -F ',' '{print $5}')
+  TUNNEL_PORT=$(echo "$ITEM"|awk -F ',' '{print $6}')
+  KEY_FILE=$(echo "$ITEM"|awk -F ',' '{print $7}')
+  SSH_PORT=$(echo "$ITEM"|awk -F ',' '{print $8}')
+  SSH_HOST=$(echo "$ITEM"|awk -F ',' '{print $9}')
+     
+  if curl -sIL "$REMOTE_URL"|grep "$REMOTE_CODE"
+  then
+    if curl -sI  "$LOCAL_URL"|grep "$LOCAL_CODE"
+    then
+      ssh -"$TUNNEL_FLAG" "$TUNNEL_PORT":"$LOCAL_URL" -i "$KEY_FILE" -p "$SSH_PORT" "$SSH_HOST"
+    fi
+  fi
+  )&
+done <"$CFG_FILE"
+wait
+
+###auto restart ssh tunnel
+
 
 ##### detect-web-status.sh output to /tmp/web-status.log
 # cat detect-web-status.sh
