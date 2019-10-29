@@ -1069,9 +1069,16 @@ http://superve.leanote.com/cate/study
 ###############mycli##########
 http://www.jianshu.com/p/841e5477d3c0
 https://www.tuicool.com/articles/ZnANBvq
-0. install 
-sudo yum install pip 
-sudo pip install mycli
+
+0. install
+yum install -y epel* 
+yum install -y python-pip
+
+while true; do pip install --upgrade pip --timeout 20  && break; done
+while true; do pip install mycli --timeout 30  && break; done
+
+
+
 tips:
 1. Map mysql-server to localhost
 ## L represent map remote end to LOCAL 
