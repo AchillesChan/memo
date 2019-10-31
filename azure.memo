@@ -8,7 +8,7 @@
                 az cloud set -n AzureChinaCloud
                 az login
                 1如何切换订阅:
-                    az account set –-subscription  "yoursubID(UUID)"
+                    az account set --subscription  "yoursubID(UUID)"
 
                 2  列出网卡信息:
                     az network nic list 
