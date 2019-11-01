@@ -1035,6 +1035,11 @@ Policy name: abc
 #### default-nexthop ip WanIP.1        #####not need，and not need config static route
  nat outbound
 
+--33 interface Vlan-interfaceX   ####LAN INTERFACE
+ ip address x.x.x.x 255.255.255.0
+ ip policy-based-route abc
+
+
 --35 another pbr
 
 policy-based-route abc permit node 20
