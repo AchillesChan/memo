@@ -1,5 +1,57 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+########vim zero-width assertion
+https://jbodah.github.io/blog/2016/11/01/positivenegative-lookaheadlookbehind-vim/
+
+For example, say I have a document: hello foo, welcome to foobar and I only wanted to match the second “foo” which is followed by “bar”. I could use positive lookahead (i.e. “match me ‘foo’ where the next expression is ‘bar’, but don’t include ‘bar’ in the match”).
+
+vim however doesn’t implement PCRE. Instead vim’s lookaround expressions affect the previous capture group, so first we’d need to capture “bar” then apply the lookahead modifier to it:
+
+/foo\(bar\)\@=/
+All of the looakaround expressions work in a similar way: capture, then apply the appropriate lookaround modifier.
+
+(Note that vim treats parenthesis literals differently than PCRE. Where PCRE always treats them as special characters unless escaped, vim always treats them as literals unless escaped.)
+
+For reference:
+
+Positive lookahead: \@=
+Negative lookahead: \@!
+Positive lookbehind: \@<=
+Negative lookbehind: \@<!
+
+########vim zero-width assertion
+
+
+"Zoom" anchors
+In addition to @jecxjo's answer, there are many situations where you can use the zero-width anchors \zs and \ze instead of positive lookaround. These anchors define the start (\zs) and the end (\ze) of the match within the full pattern.
+Examples
+foo\zsbar will match bar preceded by foo (foo not part of the match)
+foo\zebar will match foo followed by bar (bar not part of the match)
+myFunction(\zs.*\ze) will match the parameters in a function call (for demonstration purposes, I'm not focusing on greedy vs non-greedy matching)
+Putting it to use
+These become most useful when using the :substitute command. For example, say I wanted to replace the parameters in a function call to myFunction() with foo:
+
+:%s/myFunction(\zs.*\ze)/foo/
+This will leave myFunction( and ) intact, and you don't have to worry about capturing them in your pattern or repeating them in your replacement.
+
+You could do this using the lookaround feature of Vim's regex, but it's quite clunky:
+
+:%s/\(myFunction(\)\@<=.*\()\)\@=/foo/
+(I find this syntax causes me to forget what I was trying to do in the first place.)
+
+You still need lookaround sometimes
+There are still situations where you need lookaround. Using \zs and \ze are great for simple situations where you have something before followed by text to match followed by something after. But if it's more complex than that, you'll probably have to stick to the heavier lookaround syntax.
+
+Fun fact
+Though they're considerably uglier, Vim's lookarounds are more powerful than those in PCRE! They support variable-length negative lookbehind, meaning you can assert that some pattern whose length is not predetermined is not before your match.
+
+PCRE doesn't support this, as it's fairly computationally expensive. That's not a huge concern in Vim, since the most common use cases of regex tend to involve interactive searching where the computation time is nearly imperceptible to the user. You'd probably notice it if it were used for syntax highlighting, though.
+
+Relevant Help Topics
+:help \zs
+:help \ze
+:help perl-patterns
+
 
 <<<<<<< HEAD
 Remove first N letter:
