@@ -20,6 +20,18 @@ ssh -p2222 USERNAME@127.0.0.1
 https://www.techrepublic.com/article/how-to-use-port-forwarding-in-virtualbox/
 
 
+
+===global natnetwork settings
+
+virtual box->tools->preferences->network->add(plus sign)-->select added natnetwork(double click)->port forwarding->
+add rule(plus sign)->Name - SSH-to-vm01
+Protocol - TCP
+Host IP - leave blank
+Host Port - 2222
+Guest IP - 10.0.2.15(VM LAN IP)
+Guest Port - 22
+
+
 ##virtualbox port forward
 
 http://www.codecodex.com/wiki/Generate_a_random_password_or_random_string
