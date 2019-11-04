@@ -1,5 +1,27 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+
+##virtualbox port forward
+Creating the rule
+Open VirtualBox and select the VM you want to alter. Click Settings and then click on the Network tab. In the Network window expand the Advanced section and click Port Forwarding 
+In the Port Forwarding Rules window, click the + button and fill out the new rule as such:
+
+Name - SSH
+Protocol - TCP
+Host IP - leave blank
+Host Port - 2222
+Guest IP - leave blank
+Guest Port - 22
+
+
+ssh -p2222 USERNAME@127.0.0.1
+
+
+https://www.techrepublic.com/article/how-to-use-port-forwarding-in-virtualbox/
+
+
+##virtualbox port forward
+
 http://www.codecodex.com/wiki/Generate_a_random_password_or_random_string
 https://stackoverflow.com/questions/2793812/generate-a-random-filename-in-unix-shell
 https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell$ < /dev/urandom tr -dc "[:alnum:]" | head -c1000 > file.txt
