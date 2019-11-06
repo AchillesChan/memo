@@ -1,7 +1,143 @@
 #######install with ali ############
 https://yq.aliyun.com/articles/702158
 
---10 master
+--5 master
+
+
+systemctl stop firewalld && systemctl disable firewalld
+setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
+swapoff -a && sed -i "s/\/dev\/mapper\/centos-swap/\#\/dev\/mapper\/centos-swap/g" /etc/fstab
+vim /etc/sysctl.d/k8s.conf
+modprobe br_netfilter
+sysctl -p /etc/sysctl.d/k8s.conf
+cat > /etc/sysconfig/modules/ipvs.modules <<EOFmodprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4
+EOF
+
+cat <<EOF >
+ /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+
+chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum -y install wget
+wget -O /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum makecache fast
+yum install -y docker-ce
+systemctl start docker
+systemctl enable docker
+systemctl status kubectl
+systemctl enable kubectl
+
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+systemctl start kubelet
+systemctl enable --now kubelet
+
+mkdir /etc/docker
+# Setup daemon.
+cat > /etc/docker/daemon.json <<EOF
+{
+"exec-opts": ["native.cgroupdriver=systemd"],
+"log-driver": "json-file",
+"log-opts": {
+"max-size": "100m"
+},
+"storage-driver": "overlay2",
+"storage-opts": [
+"overlay2.override_kernel_check=true"
+]
+}
+{
+“registry-mirrors”: [“https://registry.docker-cn.com“]
+}
+EOF
+cat <<EOF > kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.16.2
+controlPlaneEndpoint: "172.16.8.73:6443"
+imageRepository: "registry.aliyuncs.com/google_containers"
+networking:
+podSubnet: "10.244.0.0/16"
+ ## 后面的网络准备使用 flannel,所以必须设置为此网段
+apiServer:
+certSANs:
+- "k8s.50yc.cn"
+EOF
+#由于gcr.io 镜像不能访问,使用阿里云的镜像,但是使用阿里的也有问题,建议使用azure的镜像。
+
+
+
+
+cat <<EOF > kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.16.2
+controlPlaneEndpoint: "172.16.8.73:6443"
+imageRepository: "registry.aliyuncs.com/google_containers"
+networking:
+podSubnet: "10.244.0.0/16"
+ ## 后面的网络准备使用 flannel,所以必须设置为此网段
+apiServer:
+certSANs:
+- "k8s.50yc.cn"
+
+cat <<EOF > kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.16.2
+controlPlaneEndpoint: "172.16.8.73:6443"
+imageRepository: "registry.aliyuncs.com/google_containers"
+networking:
+podSubnet: "10.244.0.0/16"
+ ## 后面的网络准备使用 flannel,所以必须设置为此网段
+apiServer:
+certSANs:
+- "k8s.50yc.cn"
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.33.10:6443 --token 6ftxi9.gov5rsp9syw1fect \
+    --discovery-token-ca-cert-hash sha256:e474c065e6c7c69c12ec37b24cedb5745f941231c532032921553766789a4a5e
+
+
+
+maser$>    mkdir -p $HOME/.kube
+maser$>    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+maser$>    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+
+--10 master another way
 # hostnamectl set-hostname master
 
 
@@ -368,6 +504,27 @@ enabled=1
 gpgcheck=0
 repo_gpgcheck=0
 gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+
+## Create /etc/docker directory.
+mkdir /etc/docker
+# Setup daemon.
+cat > /etc/docker/daemon.json <<EOF
+{
+"exec-opts": ["native.cgroupdriver=systemd"],
+"log-driver": "json-file",
+"log-opts": {
+"max-size": "100m"
+},
+"storage-driver": "overlay2",
+"storage-opts": [
+"overlay2.override_kernel_check=true"
+]
+}
+{
+“registry-mirrors”: [“https://registry.docker-cn.com“]
+}
 EOF
 
 yum makecache fast

@@ -10,7 +10,7 @@
 
 #groupadd remote-group
 
-#useradd -M -g remote-group -d /home/remote-user
+#useradd -M -g remote-group -s /sbin/nologin -d /home/remote-user  remote-user
 
 # cat /etc/passwd|grep remote
 remote-user:x:1007:1007::/home/remote-user/:/sbin/nologin                                                                                      
@@ -21,6 +21,10 @@ Match group remote-group
     ChrootDirectory /home/%u
     ForceCommand internal-sftp
     PasswordAuthentication yes
+
+# systemctl restart sshd
+# passwd remote-user
+
 
 # ll /home
 total 8
