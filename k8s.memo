@@ -79,7 +79,7 @@ podSubnet: "10.244.0.0/16"
  ## 后面的网络准备使用 flannel,所以必须设置为此网段
 apiServer:
 certSANs:
-- "k8s.50yc.cn"
+- "k8s.example.com"
 EOF
 #由于gcr.io 镜像不能访问,使用阿里云的镜像,但是使用阿里的也有问题,建议使用azure的镜像。
 
@@ -97,20 +97,12 @@ podSubnet: "10.244.0.0/16"
  ## 后面的网络准备使用 flannel,所以必须设置为此网段
 apiServer:
 certSANs:
-- "k8s.50yc.cn"
+- "k8s.example.com"
 
-cat <<EOF > kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-kubernetesVersion: v1.16.2
-controlPlaneEndpoint: "172.16.8.73:6443"
-imageRepository: "registry.aliyuncs.com/google_containers"
-networking:
-podSubnet: "10.244.0.0/16"
- ## 后面的网络准备使用 flannel,所以必须设置为此网段
-apiServer:
-certSANs:
-- "k8s.50yc.cn"
+master $> kubeadm init --config=kubeadm-config.yaml --upload-certs
+
+
+
 
 Your Kubernetes control-plane has initialized successfully!
 
@@ -129,7 +121,11 @@ Then you can join any number of worker nodes by running the following on each as
 kubeadm join 192.168.33.10:6443 --token 6ftxi9.gov5rsp9syw1fect \
     --discovery-token-ca-cert-hash sha256:e474c065e6c7c69c12ec37b24cedb5745f941231c532032921553766789a4a5e
 
+# kubectl get pods -A
+# The connection to the server localhost:8080 was refused - did you specify the right host or port?
+master$>    export KUBECONFIG=/etc/kubernetes/admin.conf
 
+or
 
 maser$>    mkdir -p $HOME/.kube
 maser$>    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -576,4 +572,24 @@ node$>    kubeadm join 192.168.33.10:6443 --token 6ftxi9.gov5rsp9syw1fect \
 This node has joined the cluster:
 node$>   
 
+
+
+
+40 helm
+master> tar vzxf helm-v2.16.0-linux-amd64.tar.gz
+master> cd linux-amd64 && cp helm /bin && cp tiller /bin
+
+master> helm init --upgrade --tiller-image registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.16.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+
+master> kubectl create serviceaccount --namespace kube-system tiller
+
+master> kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+
+master> kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+
+master> kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount
+
+master> kubectl -n kube-system get pods|grep tiller
+
+master> helm version
 
