@@ -731,3 +731,7 @@ kubectl describe pod mewing-flee-nginx-ingress-controller-7db757cf94-fq2m6 -n de
 
 kubectl logs kindly-goat-nginx-ingress-controller-bf99b859-ng4cz -n default
 
+docker images
+docker tag quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
+docker tag quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1 quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
+
