@@ -1,4 +1,17 @@
 #######install with ali ############
+==================docker images ver
+# docker images
+REPOSITORY                                                             TAG                 IMAGE ID            CREATED             SIZE
+registry.aliyuncs.com/google_containers/kube-proxy                     v1.16.2             8454cbe08dc9        3 weeks ago         86.1MB
+registry.aliyuncs.com/google_containers/kube-apiserver                 v1.16.2             c2c9a0406787        3 weeks ago         217MB
+registry.aliyuncs.com/google_containers/kube-controller-manager        v1.16.2             6e4bffa46d70        3 weeks ago         163MB
+registry.aliyuncs.com/google_containers/kube-scheduler                 v1.16.2             ebac1ae204a2        3 weeks ago         87.3MB
+quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller   0.26.1              29024c9c6e70        6 weeks ago         483MB
+quay.io/kubernetes-ingress-controller/nginx-ingress-controller         0.26.1              29024c9c6e70        6 weeks ago         483MB
+registry.aliyuncs.com/google_containers/etcd    
+
+
+
 ###GFW
 https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#limitations-of-current-aks-private-preview-on-azure-china
 
