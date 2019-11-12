@@ -1,5 +1,6 @@
 #######install with ali ############
-
+###GFW
+https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#limitations-of-current-aks-private-preview-on-azure-china
 
 
 =========================
@@ -719,4 +720,14 @@ master>  nc -vz 10.96.0.1 443
 Ncat: Version 7.50 ( https://nmap.org/ncat )
 Ncat: Connected to 10.96.0.1:443.
 Ncat: 0 bytes sent, 0 bytes received in 0.01 seconds.
+
+=====nginx-ingress
+master> helm install stable/nginx-ingress --set defaultBackend.image.repository=gcr.azk8s.cn/google_containers/defaultbackend --set defaultBackend.image.tag=1.4
+
+GFW DBG
+kubectl get pods -A -o wide|grep defa
+
+kubectl describe pod mewing-flee-nginx-ingress-controller-7db757cf94-fq2m6 -n default
+
+kubectl logs kindly-goat-nginx-ingress-controller-bf99b859-ng4cz -n default
 
