@@ -1,4 +1,45 @@
 #######install with ali ############
+
+
+
+=========================
+useful cmd
+echo y|kubeadm reset && rm -rfv $HOME/.kube/config && ip link delete flannel.1                                                                 
+kubeadm init --config=kubeadm-config.yaml --upload-certs
+
+kubectl describe pod coredns-58cc8c89f4-jjrz8 -n kube-system
+
+kubeadm init --image-repository=gcr.azk8s.cn/google_containers --pod-network-cidr=10.244.0.0/16 --upload-certs
+
+kubectl apply -f kube-flannel.yaml
+
+kubectl get pods -A -o wide
+
+kubectl get nodes -A
+
+kubectl logs -f etcd-k8s-m1  -n kube-system
+
+
+kubectl get svc -o yaml
+
+
+# ip a ####flannel.1 and cni0 MUST EXIST ON kubelet nodes and master
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
+    link/ether 02:42:82:cb:d3:29 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+4: flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UNKNOWN group default
+    link/ether 2a:ce:5f:d4:1e:91 brd ff:ff:ff:ff:ff:ff
+    inet 10.244.0.0/32 scope global flannel.1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::28ce:5fff:fed4:1e91/64 scope link
+       valid_lft forever preferred_lft forever
+5: cni0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
+    link/ether da:4c:87:d2:0e:bb brd ff:ff:ff:ff:ff:ff
+    inet 10.244.0.1/24 scope global cni0
+       valid_lft forever preferred_lft forever
+
+=========================
 https://yq.aliyun.com/articles/702158
 
 --5 master
@@ -7,10 +48,9 @@ https://yq.aliyun.com/articles/702158
 systemctl stop firewalld && systemctl disable firewalld
 setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
 swapoff -a && sed -i "s/\/dev\/mapper\/centos-swap/\#\/dev\/mapper\/centos-swap/g" /etc/fstab
-vim /etc/sysctl.d/k8s.conf
-modprobe br_netfilter
-sysctl -p /etc/sysctl.d/k8s.conf
-cat > /etc/sysconfig/modules/ipvs.modules <<EOFmodprobe -- ip_vs
+
+cat > /etc/sysconfig/modules/ipvs.modules <<EOF
+modprobe -- ip_vs
 modprobe -- ip_vs_rr
 modprobe -- ip_vs_wrr
 modprobe -- ip_vs_sh
@@ -32,8 +72,6 @@ yum makecache fast
 yum install -y docker-ce
 systemctl start docker
 systemctl enable docker
-systemctl status kubectl
-systemctl enable kubectl
 
 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -49,55 +87,43 @@ EOF
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 systemctl start kubelet
 systemctl enable --now kubelet
+systemctl status kubelet
+
 
 mkdir /etc/docker
 # Setup daemon.
 cat > /etc/docker/daemon.json <<EOF
 {
-"exec-opts": ["native.cgroupdriver=systemd"],
-"log-driver": "json-file",
-"log-opts": {
-"max-size": "100m"
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
 },
-"storage-driver": "overlay2",
-"storage-opts": [
-"overlay2.override_kernel_check=true"
-]
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
 }
 {
-“registry-mirrors”: [“https://registry.docker-cn.com“]
+  “registry-mirrors”: [“https://registry.docker-cn.com“]
 }
 EOF
-cat <<EOF > kubeadm-config.yaml
+
+master $> cat kubeadm-config.yaml 
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 kubernetesVersion: v1.16.2
-controlPlaneEndpoint: "172.16.8.73:6443"
+controlPlaneEndpoint: "10.0.2.22:6443"
 imageRepository: "registry.aliyuncs.com/google_containers"
 networking:
-podSubnet: "10.244.0.0/16"
- ## 后面的网络准备使用 flannel,所以必须设置为此网段
+  podSubnet: "10.249.0.0/16"
 apiServer:
-certSANs:
-- "k8s.example.com"
-EOF
-#由于gcr.io 镜像不能访问,使用阿里云的镜像,但是使用阿里的也有问题,建议使用azure的镜像。
+  certSANs:
+  - "k8s249.example.cn"
 
 
 
 
-cat <<EOF > kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-kubernetesVersion: v1.16.2
-controlPlaneEndpoint: "172.16.8.73:6443"
-imageRepository: "registry.aliyuncs.com/google_containers"
-networking:
-podSubnet: "10.244.0.0/16"
- ## 后面的网络准备使用 flannel,所以必须设置为此网段
-apiServer:
-certSANs:
-- "k8s.example.com"
 
 master $> kubeadm init --config=kubeadm-config.yaml --upload-certs
 
@@ -578,18 +604,104 @@ node$>
 40 helm
 master> tar vzxf helm-v2.16.0-linux-amd64.tar.gz
 master> cd linux-amd64 && cp helm /bin && cp tiller /bin
-
-master> helm init --upgrade --tiller-image registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.16.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
-
 master> kubectl create serviceaccount --namespace kube-system tiller
 
 master> kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+
+
+master> helm init --upgrade --tiller-image registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.16.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 master> kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 
 master> kubectl get deploy --namespace kube-system   tiller-deploy  --output yaml|grep  serviceAccount
 
 master> kubectl -n kube-system get pods|grep tiller
+master> helm repo add stable  http://mirror.azure.cn/kubernetes/charts
 
-master> helm version
+[root@k8s-m1 ~]# helm version                                                                                                                                                                
+Client: &version.Version{SemVer:"v2.16.0", GitCommit:"e13bc94621d4ef666270cfbe734aaabf342a49bb", GitTreeState:"clean"}                                                                       
+Server: &version.Version{SemVer:"v2.16.0", GitCommit:"e13bc94621d4ef666270cfbe734aaabf342a49bb", GitTreeState:"clean"}                                                                       
+[root@k8s-m1 ~]# helm list                                                                                                                                                                   
+NAME            REVISION        UPDATED                         STATUS          CHART           APP VERSION     NAMESPACE                                                                    
+singed-peacock  1               Tue Nov 12 03:43:17 2019        DEPLOYED        mysql-1.4.0     5.7.27          default                                                                      
+[root@k8s-m1 ~]# helm search mysql                                                                                                                                                           
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                                                                                          
+stable/mysql                            1.4.0           5.7.27          Fast, reliable, scalable, and easy to use open-source rel...                                                         
+stable/mariadb                          7.0.1           10.3.20         Fast, reliable, scalable, and easy to use open-source rel...                                                         
+[root@k8s-m1 ~]# helm install stable/mysql                                                                                                                                                   
+NAME:   bald-chimp                                                                                                                                                                           
+LAST DEPLOYED: Tue Nov 12 03:45:16 2019                                                                                                                                                      
+NAMESPACE: default                                                                                                                                                                           
+STATUS: DEPLOYED                                                                                                                                                                             
+RESOURCES:                                                                                                                                                                                   
+==> v1/ConfigMap                                                                                                                                                                             
+NAME                   AGE                                                                                                                                                                   
+bald-chimp-mysql-test  0s                                                                                                                                                                    
+==> v1/Deployment                                                                                                                                                                            
+NAME              AGE                                                                                                                                                                        
+bald-chimp-mysql  0s                                                                                                                                                                         
+==> v1/PersistentVolumeClaim                                                                                                                                                                 
+NAME              AGE                                                                                                                                                                        
+bald-chimp-mysql  0s                                                                                                                                                                         
+==> v1/Pod(related)                                                                                                                                                                          
+NAME                               AGE                                                                                                                                                       
+bald-chimp-mysql-6657c87fbc-994t5  0s    
+                                                                                                                                                                                                                                     [3/4651]
+==> v1/PersistentVolumeClaim
+NAME              AGE
+bald-chimp-mysql  0s
+
+==> v1/Pod(related)
+NAME                               AGE
+bald-chimp-mysql-6657c87fbc-994t5  0s
+
+==> v1/Secret
+NAME              AGE
+bald-chimp-mysql  0s
+
+==> v1/Service
+NAME              AGE
+bald-chimp-mysql  0s
+
+
+NOTES:
+MySQL can be accessed via port 3306 on the following DNS name from within your cluster:
+bald-chimp-mysql.default.svc.cluster.local
+
+To get your root password run:
+
+    MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default bald-chimp-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)                                                                                        
+
+To connect to your database:
+
+1. Run an Ubuntu pod that you can use as a client:
+
+    kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
+
+2. Install the mysql client:
+
+    $ apt-get update && apt-get install mysql-client -y
+
+3. Connect using the mysql cli, then provide your password:
+    $ mysql -h bald-chimp-mysql -p
+
+To connect to your database directly from outside the K8s cluster:
+    MYSQL_HOST=127.0.0.1
+    MYSQL_PORT=3306
+
+    # Execute the following command to route the connection:
+    kubectl port-forward svc/bald-chimp-mysql 3306
+
+    mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
+
+
+[root@k8s-m1 ~]# kubectl get svc
+NAME                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+bald-chimp-mysql       ClusterIP   10.99.0.194      <none>        3306/TCP   11s
+kubernetes             ClusterIP   10.96.0.1        <none>        443/TCP    20m
+singed-peacock-mysql   ClusterIP   10.101.253.119   <none>        3306/TCP   2m10s
+[root@k8s-m1 ~]# nc -vz 10.96.0.1 443
+Ncat: Version 7.50 ( https://nmap.org/ncat )
+Ncat: Connected to 10.96.0.1:443.
+Ncat: 0 bytes sent, 0 bytes received in 0.01 seconds.
 
