@@ -11,7 +11,7 @@ kubectl describe pod coredns-58cc8c89f4-jjrz8 -n kube-system
 
 kubeadm init --image-repository=gcr.azk8s.cn/google_containers --pod-network-cidr=10.244.0.0/16 --upload-certs
 
-kubectl apply -f kube-flannel.yaml
+kubectl apply -f kube-flannel.yaml  ######only run on first master
 
 kubectl get pods -A -o wide
 
@@ -380,7 +380,7 @@ maser$>    chmod +x processFlannelImage.sh
 maser$>    ./processFlannelImage.sh
 
 
-maser$>    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+maser$>    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml  ######only run on first master
 podsecuritypolicy.extensions/psp.flannel.unprivileged created
 clusterrole.rbac.authorization.k8s.io/flannel created
 clusterrolebinding.rbac.authorization.k8s.io/flannel created
