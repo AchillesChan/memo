@@ -650,12 +650,12 @@ NAME    URL
 stable  http://mirror.azure.cn/kubernetes/charts
 local   http://127.0.0.1:8879/charts           
 
+master>  helm list                                                                                                                                                                   
+####nothing  here is correct###
+
 master>  helm version                                                                                                                                                                
 Client: &version.Version{SemVer:"v2.16.0", GitCommit:"e13bc94621d4ef666270cfbe734aaabf342a49bb", GitTreeState:"clean"}                                                                       
 Server: &version.Version{SemVer:"v2.16.0", GitCommit:"e13bc94621d4ef666270cfbe734aaabf342a49bb", GitTreeState:"clean"}                                                                       
-master>  helm list                                                                                                                                                                   
-NAME            REVISION        UPDATED                         STATUS          CHART           APP VERSION     NAMESPACE                                                                    
-singed-peacock  1               Tue Nov 12 03:43:17 2019        DEPLOYED        mysql-1.4.0     5.7.27          default                                                                      
 master>  helm search mysql                                                                                                                                                           
 NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                                                                                          
 stable/mysql                            1.4.0           5.7.27          Fast, reliable, scalable, and easy to use open-source rel...                                                         
@@ -695,7 +695,6 @@ bald-chimp-mysql  0s
 NAME              AGE
 bald-chimp-mysql  0s
 
-
 NOTES:
 MySQL can be accessed via port 3306 on the following DNS name from within your cluster:
 bald-chimp-mysql.default.svc.cluster.local
@@ -727,11 +726,16 @@ To connect to your database directly from outside the K8s cluster:
     mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
 
 
+master>  helm list        ####Installed chart appear                                                                                                                                                           
+NAME            REVISION        UPDATED                         STATUS          CHART           APP VERSION     NAMESPACE                                                                    
+singed-peacock  1               Tue Nov 12 03:43:17 2019        DEPLOYED        mysql-1.4.0     5.7.27          default                                                                      
+
 master>  kubectl get svc
 NAME                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 bald-chimp-mysql       ClusterIP   10.99.0.194      <none>        3306/TCP   11s
 kubernetes             ClusterIP   10.96.0.1        <none>        443/TCP    20m
 singed-peacock-mysql   ClusterIP   10.101.253.119   <none>        3306/TCP   2m10s
+
 master>  nc -vz 10.96.0.1 443
 Ncat: Version 7.50 ( https://nmap.org/ncat )
 Ncat: Connected to 10.96.0.1:443.
@@ -748,6 +752,5 @@ kubectl describe pod mewing-flee-nginx-ingress-controller-7db757cf94-fq2m6 -n de
 kubectl logs kindly-goat-nginx-ingress-controller-bf99b859-ng4cz -n default
 
 docker images
-docker tag quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
 docker tag quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1 quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
 
