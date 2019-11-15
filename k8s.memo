@@ -619,6 +619,8 @@ node$>
 
 
 40 helm
+https://www.hi-linux.com/posts/21466.html
+
 master> tar vzxf helm-v2.16.0-linux-amd64.tar.gz
 master> cd linux-amd64 && cp helm /bin && cp tiller /bin
 master> kubectl create serviceaccount --namespace kube-system tiller
