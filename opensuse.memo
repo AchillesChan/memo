@@ -63,3 +63,9 @@ $ sudo rpm --import linux_signing_key.pub  ###optional
 Now we can install Google Chrome using the following command. in stands for install.
 
 $ sudo zypper in google-chrome-stable
+
+
+#########add show desktop and lock screen
+right task bar-->pannel option-->widgets-->search desktop-->double click show desktop
+yast-->desktop behavior-->screen locking-->set timeout -->set shortcut(default is ctrl+alt+L) 
+
