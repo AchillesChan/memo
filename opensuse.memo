@@ -69,3 +69,5 @@ $ sudo zypper in google-chrome-stable
 right task bar-->pannel option-->widgets-->search desktop-->double click show desktop
 yast-->desktop behavior-->screen locking-->set timeout -->set shortcut(default is ctrl+alt+L) 
 
+#########reenable window grid(Ctrl + F8)
+start-->configure desktop -->display and monitor-->compositor-->correct opengl error-->rendering backend select opengl 3.1 -->apply

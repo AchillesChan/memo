@@ -1,5 +1,5 @@
-####copy to /home/user/.vimrc
-###url from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+"####copy to /home/user/.vimrc
+"###url from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

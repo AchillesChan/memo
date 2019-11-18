@@ -1,4 +1,39 @@
+
+####basic license
+https://www.elastic.co/guide/en/elasticsearch/reference/current/start-basic.html
+POST /_license/start_basic
+####basic license
+
+###elk docker-compose
+https://github.com/deviantony/docker-elk
+###elk docker-compose
+
+####linux rpm system log###
+$curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.1-x86_64.rpm
+$sudo rpm -vi filebeat-7.4.1-x86_64.rpm
+
+$vim /etc/filebeat/filebeat.yml
+
+output.elasticsearch:
+  hosts: ["<es_url>"]
+  username: "elastic"
+  password: "<password>"
+setup.kibana:
+  host: "<kibana_url>"
+
+
+
+$filebeat modules enable system
+
+
+$sudo filebeat setup
+$sudo service filebeat start
+
+####linux rpm system log###
+
+
 ###nginx load metric####
+
 10 nginx vm
 $>wget https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.1-x86_64.rpm
 $>rpm -ivh etricbeat-7.3.1-x86_64.rpm
