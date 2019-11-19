@@ -113,6 +113,7 @@ PS D:\> cd .\winlogbeat
 PS D:\winlogbeat> .\install-service-winlogbeat.ps1
 ##url        https://www.elastic.co/guide/en/beats/winlogbeat/current/elasticsearch-output.html
 #secure      https://www.elastic.co/guide/en/beats/winlogbeat/current/securing-communication-elasticsearch.html
+#https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication
 Status   Name               DisplayName                           
 ------   ----               -----------                           
 Stopped  winlogbeat         winlogbeat                            
