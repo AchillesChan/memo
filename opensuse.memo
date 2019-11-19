@@ -71,3 +71,6 @@ yast-->desktop behavior-->screen locking-->set timeout -->set shortcut(default i
 
 #########reenable window grid(Ctrl + F8)
 start-->configure desktop -->display and monitor-->compositor-->correct opengl error-->rendering backend select opengl 3.1 -->apply
+
+####enable screenshot shortcuts (print screen)
+start-->configure desktop -->shortcuts-->Global Shortcuts-->KDE Daemon-->start Screenshot Tooll-->custom-->set print key-->apply

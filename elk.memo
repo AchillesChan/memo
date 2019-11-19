@@ -111,7 +111,8 @@ d-----       2019/10/18     15:06                winlogbeat
 PS D:\> cd .\winlogbeat
 
 PS D:\winlogbeat> .\install-service-winlogbeat.ps1
-
+##url        https://www.elastic.co/guide/en/beats/winlogbeat/current/elasticsearch-output.html
+#secure      https://www.elastic.co/guide/en/beats/winlogbeat/current/securing-communication-elasticsearch.html
 Status   Name               DisplayName                           
 ------   ----               -----------                           
 Stopped  winlogbeat         winlogbeat                            
@@ -119,15 +120,25 @@ Stopped  winlogbeat         winlogbeat
 d:\>vim winlogbeat.yml
 output.elasticsearch:
 
-hosts: ["192.168.2.8:9200"]
-  # Optional protocol and basic auth credentials.
-  protocol: "http"
-  username: "elastic"
-  password: "changeme"
-
-setup.kibana:
-  host: "host: 192.168.2.8:5601"
-
+winlogbeat.event_logs:
+    - name: Application
+      provider:
+          - Application Error
+          - Application Hang
+          - Windows Error Reporting
+          - EMET
+    - name: Security
+      level: critical, error, warning
+      event_id: 4624, 4625, 4700-4800, -4735
+    - name: System
+      ignore_older: 168h
+    - name: Microsoft-Windows-Windows Defender/Operational
+      include_xml: true
+output.elasticsearch:
+    hosts: "elk-srv-ip-or-DNS"         ###port is 9200,not present here
+    protocol: "https"                  ###https default port is 9200,interactive with nginx need PATT
+    username: "elastic"
+    password: "changeme"
 
 PS D:\winlogbeat> Start-Service winlogbeat
 
@@ -144,4 +155,86 @@ Running  winlogbeat         winlogbeat
 20> portal view
 http://192.168.2.88:5601/app/siem#
 
+
+
+####with nginx
+https://www.netways.de/blog/2017/09/14/secure-elasticsearch-and-kibana-with-an-nginx-http-proxy/
+https://sysadmins.co.za/secure-your-elasticsearch-cluster-with-basic-auth-using-nginx-and-ssl-from-letsencrypt/
+
+# cat elasticsearch50yccn.conf
+upstream elasticsearch {
+    server 192.168.2.8:9200;
+    keepalive 15;
+}
+
+server {
+  listen 80;
+  server_name elasticsearch.example.com
+  return 301 https://elasticsearch.example.com:9200$request_uri;
+}
+
+server {
+  listen 9200 ssl;                         ### LISTEN 9200 ####
+  server_name elasticsearch.example.com
+  ssl_session_timeout  10m;
+  ssl_ciphers HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+
+  ssl_certificate /etc/letsencrypt/archive/example.com/fullchain1.pem;
+  ssl_certificate_key /etc/letsencrypt/archive/example.com/privkey1.pem;
+
+  #auth_basic "server auth";
+  #auth_basic_user_file /etc/nginx/passwords;
+
+  location ^~ /.well-known/acme-challenge/ {
+    auth_basic off;
+  }
+
+  location / {
+
+    # deny node shutdown api
+    if ($request_filename ~ "_shutdown") {
+      return 403;
+      break;
+    }
+
+    proxy_pass http://elasticsearch;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "Keep-Alive";
+    proxy_set_header Proxy-Connection "Keep-Alive";
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+  }
+
+  location = / {
+    proxy_pass http://elasticsearch;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "Keep-Alive";
+    proxy_set_header Proxy-Connection "Keep-Alive";
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    auth_basic "off";
+  }
+
+  location ~* ^(/_cluster/health|/_cat/health) {
+    proxy_pass http://elasticsearch;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "Keep-Alive";
+    proxy_set_header Proxy-Connection "Keep-Alive";
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    auth_basic "off";
+  }
+}
+
+####with nginx
 ###########winlog event ###########
