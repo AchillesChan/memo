@@ -455,9 +455,18 @@ See :help f for more information.
 ####Jump to next white space
 
 ####Jumpserver
---00 network top
+--05 network top
 client-->jumpserver-->dest-server
 client-end-->jump-srv------>Real-srv
+
+--08 jump security
+yum provides /usr/sbin/semanage
+yum whatprovides /usr/sbin/semanage
+yum install policycoreutils-python
+
+semanage port -a -t ssh_port_t 2200 -p tcp
+firewall-cmd --add-port 2200/tcp --perm
+firewall-cmd --reload
 
 --10 client .ssh/config 
 client$: cat ~/.ssh/config
