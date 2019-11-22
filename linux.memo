@@ -468,6 +468,17 @@ semanage port -a -t ssh_port_t 2200 -p tcp
 firewall-cmd --add-port 2200/tcp --perm
 firewall-cmd --reload
 
+###permit specfic ip access specfic port
+firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4"
+    source address="1.2.3.4/32"
+      port protocol="tcp" port="4567" accept'
+
+firewall-cmd --reload
+
+!!!DO NOT OPEN 4567 ON --add-port list ANY MORE
+
+
 --10 client .ssh/config 
 client$: cat ~/.ssh/config
 
