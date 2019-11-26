@@ -1,3 +1,6 @@
+#url http://minimum-viable-automation.com/ansible/managing-users-accounts-ansible/
+#url http://minimum-viable-automation.com/ansible/use-ansible-create-user-accounts-setup-ssh-keys/
+#
 #- name: Linux Create User and Upload User Public keys
 #hosts: test 
   #remote_user: xxxx
