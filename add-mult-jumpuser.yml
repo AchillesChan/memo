@@ -1,0 +1,28 @@
+#- name: Linux Create User and Upload User Public keys
+#hosts: test 
+  #remote_user: xxxx
+  #password hash create by:python3 -c 'import crypt; print(crypt.crypt("my-password", crypt.mksalt(crypt.METHOD_SHA512)))'
+#  gather_facts: no
+---
+- hosts: "test"
+  vars:
+    users:
+    - "paul"
+    - "tanya"
+  tasks:
+  - name: Make sure we have a 'jumpgrp' group
+    group:
+      name: jumpgrp 
+      state: present
+ 
+  - name: Create user accounts
+    user:
+      name: "{{ item }}"
+      groups: jumpgrp
+    with_items: "{{ users }}"
+ 
+  - name: "Add authorized keys"
+    authorized_key:
+      user: "{{ item }}"
+      key: "{{ lookup('file', '/path/2/dir/'+ item + '_id_rsa.pub') }}"
+    with_items: "{{ users }}"

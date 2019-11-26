@@ -729,7 +729,8 @@ To connect to your database directly from outside the K8s cluster:
     mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
 
 
-master>  helm list        ####Installed chart appear                                                                                                                                                           
+master>  helm list        ####Installed chart appear ,if get dial up timeout error,check kubeadmin.yaml and flannel.yaml network subnet set is identical?
+###if not ,stop docker kubelet and ip link delete cni0 and ip link delete flannel.1 then restart docker kubelet(on first master node?)
 NAME            REVISION        UPDATED                         STATUS          CHART           APP VERSION     NAMESPACE                                                                    
 singed-peacock  1               Tue Nov 12 03:43:17 2019        DEPLOYED        mysql-1.4.0     5.7.27          default                                                                      
 
