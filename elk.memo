@@ -94,15 +94,27 @@ $curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.1
 $sudo rpm -vi filebeat-7.4.1-x86_64.rpm
 
 $vim /etc/filebeat/filebeat.yml
-
-output.elasticsearch:
-  hosts: ["<es_url>"]
-  username: "elastic"
-  password: "<password>"
+# cat /etc/filebeat/filebeat.yml 
+filebeat.inputs:
+- type: log
+  enabled: false
+  paths:
+    - /var/log/*.log
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+setup.template.settings:
+  index.number_of_shards: 1
 setup.kibana:
-  host: "<kibana_url>"
-
-
+  host: "example.com:5601"
+output.elasticsearch:
+  hosts: ["elasticsearch.example.com:9200"]
+  protocol: "https"
+  username: "elastic"
+  password: "password_here"
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
 
 $filebeat modules enable system
 

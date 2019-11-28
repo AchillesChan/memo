@@ -4,6 +4,8 @@
 ====================================================
 ====================================================
 ####snmp with zabbix#####
+05 need zabbix 4.x version
+
 10 net device set
  snmp-agent
  snmp-agent community read public
