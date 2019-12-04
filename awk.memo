@@ -2,6 +2,12 @@
 ######Start awk.memo #######
 
 
+###merge mulitline to one
+#awk '{if(NR%3!=0)ORS=" ";else ORS="\n"}1' 5.txt
+1 2 3
+a b c
+#
+
 shell~:> cat form.letter 
 Host $1,Hostname $2,User Achilles,Port $3,IdentityFile ~/.ssh/ssh-privity-key
 

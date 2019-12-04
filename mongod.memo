@@ -286,6 +286,20 @@ $ >sudo systemctl status mongod
    CGroup: /system.slice/mongod.service
            └─1061 /usr/bin/mongod -f /etc/mongod.conf
 
+####backup all mongodb
+#!/bin/bash
+
+dbs=$(/usr/local/mongodb/bin/mongo --eval "db.getMongo().getDBNames()" | grep '"' | tr -d '",' )
+   for db in $dbs; do
+       #col=$(/usr/local/mongodb/bin/mongo  $db --host 127.0.0.1 --quiet --eval "db.getCollectionNames()" | tr -d ',"[]')
+       #for collection in $col; do
+       #  /usr/local/mongodb/bin/mongodump --host 127.0.0.1 -q '{_id: {$gt: 10}}' -d $db -c $collection --out dump
+         /usr/local/mongodb/bin/mongodump --host 127.0.0.1 -q '{_id: {$gt: 10}}' -d $db  --out /path/2/dump/dir
+      #done
+   done
+
+####backup all mongodb
+
 
 ##################backup mongod
 #!/bin/bash

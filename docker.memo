@@ -202,6 +202,9 @@ your-php-script
 
 
 ####How To Install and Use Docker Compose on CentOS 7#######
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-centos-7    How To Install and Use Docker Compose on CentOS 7 
 1 install Docker
 2.0 install docker-compose
@@ -280,8 +283,8 @@ default.htm index.html lb.html Test.html
 
 ###########创建私有HUB             //here 172.31.11.144 is Host IP Address###########
 docker run -dp 5000:5000 registry  #创建服务器
-docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu #标记待上传image
-docker push 172.31.11.144:5000/your-name/ubuntu #上传image
+docker tag 3620872edb5e 172.31.11.144:5000/your-name/ubuntu:1.2.3 #标记待上传image
+docker push 172.31.11.144:5000/your-name/ubuntu:1.2.3 #上传image
 
 # docker push 172.31.11.144:5000/michael/my-private-image
 The push refers to a repository [172.31.11.144:5000/michael/my-private-image]
