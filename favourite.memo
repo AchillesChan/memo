@@ -2,7 +2,8 @@
 ######Start favourite.memo #######
 https://en.wikibooks.org/wiki/OpenSSH%2FCookbook%2FProxies_and_Jump_Hosts
 https://unix.stackexchange.com/questions/433923/ssh-port-forwarding-via-jump-host-ssh-config-files-and-only-ssh-targethost
-
+https://blog.scottlowe.org/2015/12/11/using-ssh-multiplexing/
+https://tonybai.com/2019/12/08/k8s-deployment-troubleshooting/     k8s故障排除指南
 https://github.com/jamiehannaford/what-happens-when-k8s
 https://zhuanlan.zhihu.com/p/27460083
 https://www.hi-linux.com/posts/30305.html

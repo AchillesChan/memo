@@ -2,6 +2,7 @@
 ######Start docker.memo #######
 
 #########mv /var/lib/docker to other path
+systemctl stop docker
 
 # cat /etc/docker/daemon.json 
 { 

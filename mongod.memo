@@ -287,8 +287,8 @@ $ >sudo systemctl status mongod
            └─1061 /usr/bin/mongod -f /etc/mongod.conf
 
 ####backup all mongodb
+https://stackoverflow.com/questions/43543583/multiple-databases-and-collections-mongodump
 #!/bin/bash
-
 dbs=$(/usr/local/mongodb/bin/mongo --eval "db.getMongo().getDBNames()" | grep '"' | tr -d '",' )
    for db in $dbs; do
        #col=$(/usr/local/mongodb/bin/mongo  $db --host 127.0.0.1 --quiet --eval "db.getCollectionNames()" | tr -d ',"[]')
@@ -298,8 +298,13 @@ dbs=$(/usr/local/mongodb/bin/mongo --eval "db.getMongo().getDBNames()" | grep '"
       #done
    done
 
+
+
 ####backup all mongodb
 
+###restore all mongodb
+ /usr/local/mongodb/bin/mongorestore /path/2/dump/dir
+###restore all mongodb
 
 ##################backup mongod
 #!/bin/bash

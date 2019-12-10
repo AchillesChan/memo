@@ -1,6 +1,50 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
+###ansible jump server bastion###
+$cat config
+ Host *                                                                                                                                                                                                                                                                        
+ ForwardAgent          no 
+ ControlMaster         auto
+ ControlPath           /tmp/ssh_mux_%h_%p_%r
+ 
+ Host my-bastion-vm
+ Hostname 192.168.1.10
+ User                  Michael
+ Port                  56789
+ IdentityFile          ~/.ssh/key1
+ ProxyCommand none
+ 
+ Host az-fwj-app-p01
+ Hostname myAPP-P01.example.com
+ User Achilles
+ ProxyCommand    ssh  -W %h:%p my-bastion-vm
+ Port 22
+ IdentityFile ~/.ssh/kye2
+ ControlPath ~/.ssh/ansible-%r@%h:%p
+ 
+ Host az-fwj-app-p02
+ Hostname myAPP-P02.example.com
+ User Achilles
+ ProxyCommand    ssh -W %h:%p my-bastion-vm
+ Port 22
+ IdentityFile ~/.ssh/kye2
+
+$cat /etc/ansible/ansible.cfg
+ssh_args = -C -o ControlMaster=auto -o ControlPersist=600s -F /home/Michael/config
+control_path = ~/.ssh/ansible-%%r@%%h:%%p
+
+
+cat $cat ~/ansible/ansible-fwj-host
+[az-fwj]
+my-bastion-vm       ansible_ssh_host=192.168.1.10 ansible_ssh_user=Michael    ansible_ssh_port=22 ansible_ssh_key=~/.ssh/key1
+az-fwj-app-p01    ansible_ssh_host=myAPP-P01.example.com    ansible_ssh_user=Achilles    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+az-fwj-app-p02    ansible_ssh_host=myAPP-P02.example.com    ansible_ssh_user=Achilles    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+az-fwj-app-p03    ansible_ssh_host=myAPP-P03.example.com    ansible_ssh_user=Achilles    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+az-fwj-bak-p01    ansible_ssh_host=myBAK-P01.example.com    ansible_ssh_user=Achilles    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+
+###ansible jump server bastion###
+
 ###edit ymal vim set
 :set tabstop=2 shiftwidth=2 expandtab
 automatic replace tab to 2 space
