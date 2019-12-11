@@ -131,6 +131,20 @@ grafana.yousite.com/dashboard/import
 This can use different dashboard with different datasource with same json???
 ###import dashboard json url####
 
+#####install grafana zabbix plugin
+$> grafana-cli plugins install alexanderzobnin-zabbix-app
+
+installing alexanderzobnin-zabbix-app @ 3.10.4
+from: https://grafana.com/api/plugins/alexanderzobnin-zabbix-app/versions/3.10.4/download
+into: /var/lib/grafana/plugins
+
+✔ Installed alexanderzobnin-zabbix-app successfully 
+
+Restart grafana after installing plugins . <service grafana-server restart>
+
+
+#####install grafana zabbix plugin
+
 ####import and export json grafana####
 
 Exporting a dashboard
@@ -141,6 +155,24 @@ The export feature is accessed in the share window which you open by clicking th
 Importing a dashboard
 To import a dashboard open dashboard search and then hit the import button.Click "+" sign on upper left-->import-->upload .json File 
 ####import and export json grafana####
+
+####update grafana####
+yum install –downloadonly –downloaddir=./ urw-fonts
+rpm -ivh grafana-6.5.1-1.x86_64.rpm 
+/bin/systemctl daemon-reload
+mv -v /home/etcgrafana/ /etc/grafana  ##restore /etc/grafana
+chown -R root.grafana /etc/grafana -v
+systemctl start grafana-server
+mv -v /vargrafana/ /var/lib/grafana   ##restore /var/lib/grafana
+chown grafana.grafana /var/lib/grafana
+systemctl status grafana-server.service
+systemctl restart grafana-server.service
+firewall-cmd --add-port 3000/tcp --perm
+firewall-cmd --reload
+
+
+####PATT NOT RESTORE
+####update grafana####
 
 ###add custom item###
 05

@@ -31,7 +31,7 @@ $>sudo zypper in -y git krdc keychain mlocate
 
 ======================
 fast copy & paste
-1 clipboard-->right client-->config -->general-->check Ignore selection?? uncheck Ignore and check sync ...
+1 clipboard-->right client-->config -->general-->uncheck Ignore selection,check all other
 2 sudo zypper install fcitx
 3 start-->fcitx config-->addon config-->clipboard-->Trigger key...-->use Ctrl+;
 4 install google chrome 

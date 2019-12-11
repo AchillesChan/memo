@@ -2,33 +2,34 @@
 ######Start ansible.memo #######
 
 ###ansible jump server bastion###
-$cat config
- Host *                                                                                                                                                                                                                                                                        
- ForwardAgent          no 
- ControlMaster         auto
- ControlPath           /tmp/ssh_mux_%h_%p_%r
+$cat /path/2/ansible/4/ssh/config
+Host *
+ForwardAgent          no 
+ControlMaster         auto
+ControlPath           /tmp/ssh_mux_%h_%p_%r
  
- Host my-bastion-vm
- Hostname 192.168.1.10
- User                  Michael
- Port                  56789
- IdentityFile          ~/.ssh/key1
- ProxyCommand none
- 
- Host az-my-app-p01
- Hostname myAPP-P01.example.com
- User root
- ProxyCommand    ssh  -W %h:%p my-bastion-vm
- Port 22
- IdentityFile ~/.ssh/kye2
- ControlPath ~/.ssh/ansible-%r@%h:%p
- 
- Host az-my-app-p02
- Hostname myAPP-P02.example.com
- User root
- ProxyCommand    ssh -W %h:%p my-bastion-vm
- Port 22
- IdentityFile ~/.ssh/kye2
+Host my-bastion-vm
+Hostname 192.168.1.10
+User                  Michael
+Port                  56789
+IdentityFile          ~/.ssh/key1
+ProxyCommand none
+
+Host az-my-app-p01
+Hostname myAPP-P01.example.com
+User root
+ProxyCommand    ssh  -W %h:%p my-bastion-vm
+Port 22
+IdentityFile ~/.ssh/kye2
+ControlPath ~/.ssh/ansible-%r@%h:%p
+
+Host az-my-app-p02
+Hostname myAPP-P02.example.com
+User root
+ProxyCommand    ssh -W %h:%p my-bastion-vm
+Port 22
+IdentityFile ~/.ssh/kye2
+
 
 $cat /etc/ansible/ansible.cfg
 ssh_args = -C -o ControlMaster=auto -o ControlPersist=600s -F /home/Michael/config
