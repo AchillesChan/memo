@@ -563,7 +563,8 @@ Threads: 2  Questions: 46  Slow queries: 0  Opens: 15  Flush tables: 2  Open tab
 ####send mail 
 echo "My mail body text" >MyText
 mail -s "My-subject" rcpt@domain.com <MyText.txt
-
+mail -s "$HOST $OPDATE io replication error "  mail_user@domain.com< /dev/null
+ls log.txt  && mail -s "$(hostname) success ls" mail_user@abc.com </dev/null || mail -s "fail on $(hostname) $(date) on cmd" mail_user@abc.com </dev/null
 ####send mail 
 
 

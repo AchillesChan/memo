@@ -86,6 +86,43 @@ cat /proc/swaps
 
 Select-AzureSubscription -SubscriptionName "your-scubscription"
 
+
 ####set fixed public for cloud service##
+
+
+####create non-managed disk vm####
+--resource group
+az group create --name  YOUR_PROJ-rg01 --location chinaeast2
+
+--storage account
+az storage account create  --resource-group  YOUR_PROJ-rg01 --location chinaeast2 --name beYOUR_PROJlrsstorage --sku Standard_LRS 
+
+--nsg
+az network nsg create --resource-group YOUR_PROJ-rg01 --name YOUR_PROJ-WEB-P01-nsg --location chinaeast2
+
+--public ip
+az network public-ip create --resource-group YOUR_PROJ-rg01 --name YOUR_PROJ-WEB-P01-pip --allocation-method Dynamic --location chinaeast2 --dns-name lowcase-name-dns
+
+--nic
+az network nic create  --resource-group YOUR_PROJ-rg01 --name  YOUR_PROJ-WEB-P01-nic1 --vnet-name B-E-YOUR_PROJ-vnet01 --subnet WEB --network-security-group YOUR_PROJ-WEB-P01-nsg  --location chinaeast2 --public-ip-address YOUR_PROJ-WEB-P01-pip --private-ip-address 192.168.6.x
+
+--vm
+az vm create --resource-group YOUR_PROJ-rg01 --name YOUR_PROJ-WEB-P01 --image OpenLogic:CentOS:7.6:7.6.20190808 --location chinaeast2 --size standard_E2_v3 --admin-username ssh-user --admin-password pwd_HERE  --authentication-type password --nics YOUR_PROJ-WEB-P01-nic1 --boot-diagnostics-storage beYOUR_PROJlrsstorage --availability-set   YOUR_PROJ-web-as01 --os-disk-name YOUR_PROJ-WEB-P01-os-disk01 --storage-account beYOUR_PROJlrsstorage
+--use-unmanaged-disk
+
+--open ssh port
+ az vm open-port --resource-group YOUR_PROJ-rg01 --name  YOUR_PROJ-WEB-P01 --port 22
+
+--add data disk
+az vm unmanaged-disk attach --name YOUR_PROJ-WEB-P01-disk01 --new --resource-group YOUR_PROJ-rg01 --vm-name YOUR_PROJ-WEB-P01 --size-gb 1023
+
+--add bastion server jump server nsg
+az network nsg rule update -g YOUR_PROJ-rg01 --nsg-name YOUR_PROJ-Rabbit-S01-nsg --name open-port-22 --source-address-prefixes 192.168.0.0/16 m.n.o.p/32 a.b.c.d/32 z.b.x.p/32
+
+--add zbx-server-nsg
+    az network nsg rule create -g YOUR_PROJ-rg01 --nsg-name YOUR_PROJ-Mysql-S01-nsg --name zbx-10051-permit --source-address-prefixes   z.b.x.p/32 --access Allow --description  allow-zbx --destination-port-ranges 10050 --priority 1000
+####create non-managed disk vm####
+
+
 ######End azure.memo #######
 ######Endmemoof azure.memo #######

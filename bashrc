@@ -947,10 +947,14 @@ echo \$T \`"
 #  Otherwise, the value of PCT variable is assigned only once,
 #+ when the variable is exported/read from .bash_profile,
 #+ and it will not change afterwards even if the user ID changes.
+if [[ $EUID -ne 0 ]];then
+    PS1='\[\e[34m\]\n\w    \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
+else
+    PS1='\[\e[31m\]\n\w    \u\n\[\e[31m\][\h ]\$\[\e[0m\] '
+fi
 
-
-PS1="\n$GREEN[\w] \n$DARKGRAY($PCT\t$DARKGRAY)-($PCT\u$DARKGRAY)-($PCT\!
-$DARKGRAY)$YELLOW-> $NC"
+    #PS1="\n$GREEN[\w] \n$DARKGRAY($PCT\t$DARKGRAY)-($PCT\u$DARKGRAY)-($PCT\!
+#$DARKGRAY)$YELLOW-> $NC"
 
 #  Escape a variables whose value changes:
 #        if [[ \$EUID -eq 0 ]],
@@ -970,10 +974,10 @@ $DARKGRAY)$YELLOW-> $NC"
 
 #  Variables PCT and PS1 can be merged into a new PS1 variable:
 
-PS1="\`if [[ \$EUID -eq 0 ]]; then PCT='$LIGHTRED';
-else PCT='$LIGHTBLUE'; fi; 
-echo '\n$GREEN[\w] \n$DARKGRAY('\$PCT'\t$DARKGRAY)-\
-('\$PCT'\u$DARKGRAY)-('\$PCT'\!$DARKGRAY)$YELLOW-> $NC'\`"
+#PS1="\`if [[ \$EUID -eq 0 ]]; then PCT='$LIGHTRED';
+#else PCT='$LIGHTBLUE'; fi; 
+#echo '\n$GREEN[\w] \n$DARKGRAY('\$PCT'\t$DARKGRAY)-\
+#('\$PCT'\u$DARKGRAY)-('\$PCT'\!$DARKGRAY)$YELLOW-> $NC'\`"
 
 # The trick is to use strong quoting for parts of old PS1 variable.
 
