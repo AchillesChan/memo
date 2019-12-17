@@ -1,23 +1,6 @@
 ######Startmemoof docker.memo #######
 ######Start docker.memo #######
 
-#########mv /var/lib/docker to other path
-systemctl stop docker
-
-# cat /etc/docker/daemon.json 
-{ 
-   "graph": "/data/docker" 
-}
-
-
-#mv /var/lib/docker/* /data/docker/
-
-#systemctl restart docker
-
-#########mv /var/lib/docker to other path
-
-
-
 
 ###view resource usage
 docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
@@ -47,6 +30,23 @@ yum install -y containerd.io
 systemctl enable docker
 systemctl start docker
 #####centos install docker
+
+#########mv /var/lib/docker to other path
+$> systemctl stop docker
+
+# cat /etc/docker/daemon.json 
+{ 
+   "graph": "/data/docker" 
+}
+
+
+$> mv /var/lib/docker/* /data/docker/
+
+$> systemctl restart docker
+
+#########mv /var/lib/docker to other path
+
+
 
 ####kubernetes best practice####
 https://jimmysong.io/kubernetes-handbook/practice/

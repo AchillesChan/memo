@@ -1,6 +1,13 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+###add/remove all open port
+ss -tlnp|awk '{print $4}'|grep -v -i local|sed -e 's/^.*://g'|sort|uniq|grep -v 22|grep -v 25|xargs -t -I {} -n 1 firewall-cmd --add-port {}/tcp --perm 2>&1 |tee 1.txt
+firewall-cmd --reload
+
+ss -tlnp|awk '{print $4}'|grep -v -i local|sed -e 's/^.*://g'|sort|uniq|grep -v 22|grep -v 25|xargs -t -I {} -n 1 firewall-cmd --remove-port {}/tcp --perm 2>&1 |tee 1.txt
+firewall-cmd --reload
 ###disable ipv6
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 sysctl -w net.ipv6.conf.all.disable_ipv6=1

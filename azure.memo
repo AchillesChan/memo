@@ -3,7 +3,7 @@
 
 ###azure cli
                 docker pull mcr.microsoft.com/azure-cli
-                docker run -it mcr.microsoft.com/azure-cli
+                docker run -v ~:/tmp -it mcr.microsoft.com/azure-cli   ###map /tmp in container to my home path
 
                 az cloud set -n AzureChinaCloud
                 az login
@@ -22,7 +22,7 @@ az vm create --name $vmname --resource-group $rgname --accelerated-networking fa
 az vm image list -f CentOS --all 
 
 6 add nsg rule to nsg
-az network nsg rule create --name allow-zabbix-server-10051 --nsg-name $1 --priority 100 --resource-group $RG --access Allow --description allow-zabbix-server-10051 --source-address-prefixes a.b.c.d/32 --destination-port-ranges 10050
+az network nsg rule create --name allow-zabbix-server-10051 --nsg-name $1 --priority 100 --resource-group $RG --access Allow --description allow-zabbix-server-10051 --source-address-prefixes a.b.c.d/32 --destination-port-ranges 10050  
 
 7 add acl rule on asm vm
 
@@ -30,7 +30,7 @@ $cat azure-asm-vm-list.txt
 linux-host1
 linux-host2
 
-$cat azure-asm-vm-list.txt |xargs  -n 1 -t sh -c 'azure vm endpoint show "${15}" SSH' _  ####var exceed 10 denote,here is the 15th var
+$cat azure-asm-vm-list.txt |xargs  -n 1 -t sh -c 'azure vm endpoint show "${15}" SSH' _ 2>&1 |tee /tmp/my_log  ####var exceed 10 denote,here is the 15th var,and log info
 
 $>azure-asm-vm-list.txt |xargs -n 1 sh -c 'echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 10 --action permit --remote-subnet 10.0.0.0/8 --description PermitLAN10;echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 20 --action permit --remote-subnet 172.16.0.0/12 --description PermitLAN172;echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 30 --action permit --remote-subnet 192.168.0.0/16 --description PermitLAN192;echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 40 --action permit --remote-subnet 11.22.20.3/32 --description PermitWANCD30;echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 50 --action permit --remote-subnet 18.2.9.58/32 --description PermitWANCD58;echo azure vm endpoint acl-rule create --vm-name "$1" --endpoint-name SSH --order 60 --action deny --remote-subnet 0.0.0.0/0 --description DenyAny' _ >azure-asm-vm-ssh-endpoint
 
