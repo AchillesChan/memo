@@ -1,6 +1,32 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+###nmap check TCP/UDP PORT STATUS
+
+$ nmap -sU 10.0.1.134 -p 161   ###UDP
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-12-17 17:10 CST
+Nmap scan report for 10.0.1.134
+Host is up (0.042s latency).
+PORT    STATE SERVICE
+161/udp open  snmp
+
+Nmap done: 1 IP address (1 host up) scanned in 0.18 seconds
+
+$ nmap -sT 10.0.1.135 -p 22  ###TCP
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-12-17 17:10 CST
+Nmap scan report for 10.0.1.135
+Host is up (0.042s latency).
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
+
+
+sudo nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" mail_user@abc.com < ./1.txt
+
+###nmap check TCP/UDP PORT STATUS
 
 ###add/remove all open port
 ss -tlnp|awk '{print $4}'|grep -v -i local|sed -e 's/^.*://g'|sort|uniq|grep -v 22|grep -v 25|xargs -t -I {} -n 1 firewall-cmd --add-port {}/tcp --perm 2>&1 |tee 1.txt
