@@ -1,6 +1,13 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+###ntp operation
+yum -y install ntpdate
+$ ntpdate  ntp.gwadar.cn
+18 Dec 18:05:38 ntpdate[26064]: adjust time server 118.190.21.209 offset 0.033432 sec
+
+###ntp operation
+
 ###nmap check TCP/UDP PORT STATUS
 
 $ nmap -sU 10.0.1.134 -p 161   ###UDP
@@ -23,9 +30,11 @@ PORT   STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
 
+$ yum install mailx -y
 
-sudo nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" mail_user@abc.com < ./1.txt
+$ nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" mail_user@abc.com < ./1.txt
 
+$ docker exec conatainer /path/2/file.txt  2>&1|tee log.txt ; mail -s "$(hostname) $(date)" mail_user@abc.com <log.txt
 ###nmap check TCP/UDP PORT STATUS
 
 ###add/remove all open port
