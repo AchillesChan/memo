@@ -41,6 +41,18 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     volumes:
       - "/home/adan/mysql/:/var/lib/mysql"
+     
+      ####!!!!!!set up char set ,method 1 or 2 ,comment other!!!!!!
+      - "/home/mycustom.cnf:/etc/mysql/conf.d/custom.cnf"   ####method 1  
+      
+      #cat /home/mycustom.cnf                               #####method 1 file
+      #[mysqld]
+      #character-set-server=utf8mb4
+      #collation-server=utf8mb4_general_ci
+      #skip-character-set-client-handshake
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_general_ci']  ####method 2
+      ####!!!!!!set up char set ,method 1 or 2 ,comment other!!!!!!
+    
     restart: always
     ports:
       - "3306"                 #######NOT LIST ON HOST,USE internal-container-commucation(ICC),REMOVE THIS ON USE

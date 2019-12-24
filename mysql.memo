@@ -1,5 +1,10 @@
 ######Startmemoof mysql.memo #######
 
+####
+"Host '::1' or 127.0.0.1 is not allowed to connect to this MySQL server 
+
+I've comment "skip_name_resolve" in my.ini and everything is back to work.
+####
 
 ###MySQL – How to convert all Database Tables and Columns to a specific Collation
 https://serverfault.com/questions/65043/alter-charset-and-collation-in-all-columns-in-all-tables-in-mysql
@@ -19,6 +24,9 @@ FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA= "DBNAME" AND TABLE_TYPE="BASE
 
 May need
 SET foreign_key_checks = 0;
+
+mysqldump 5.7 can export from latin and import to utf8 ,not need transform.
+
 ###MySQL – How to convert all Database Tables and Columns to a specific Collation
 
 ###mysqldump exclude some table
