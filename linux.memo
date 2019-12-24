@@ -547,6 +547,19 @@ Foo  pts/0        2019-04-11 02:57 (jump-srv)
 
 --100 jumpserver with ssh tunnel
 
+$ ssh -A -t -p JMPort -i ~/jumpkey -L 13580:localhost:61183  jump@jump-srv \
+ssh -A -t -p RealSrvPort -i srvkey real-srv-user@real-srv -L 61183:localhost:80
+
+Warning: Identity file /home/.ssh/srvkey not accessible: No such file or directory.
+Last login: Tue Dec 24 11:41:06 2019 from ......
+!!!PATT  -L 13580:localhost:61183 is Client on port 13580 NOT USE real-srv port 80
+!!! -L 61183:localhost:80 61183 is jump listen port MUST same as first tunnel 61183, 80 is real-srv need tunnel port
+!!! NOT USE NCfqL
+
+https://blog.remibergsma.com/2013/05/28/creating-a-multi-hop-ssh-tunnel-by-chaining-ssh-commands-and-using-a-jump-host/
+
+
+
 client $>ssh -v -N -L 3306:Real-srv:3306 Foo@jump-srv
 ####Real-srv can be server's LAN IP,so can connect to A NAT back server 
 #######by ssh tunnel with another jumpserver(Have Internet access) with LAN IP same

@@ -109,7 +109,8 @@ fi
 #####iftop over traffic send mail
 --10 script
 #!/bin/bash
-
+#iftop -N -f 'not port 9200' -t -s 7190 > "$LOG_NAME"  
+# iftop -nN -F 192.168.2.8/32
 #iftop -f "dst port 22" -f "src host 10.0.2.3" -t -s 1800 >log.txt &
 LOG_NAME=traffic_log_$(hostname)_$(date +%Y%m%d-%H%M).txt
 iftop -t -s 360 > "$LOG_NAME"                                                                                                                                                             

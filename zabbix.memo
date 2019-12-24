@@ -1,6 +1,11 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+#####reset Admin password forget######
+mysql> update zabbix.users set passwd=md5('passw0rd') where alias='Admin';
+
+#####reset Admin password forget######
+
 ###docker-composer
 --10 define variables 
 # cat .env 
