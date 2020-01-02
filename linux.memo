@@ -790,7 +790,7 @@ lost+found
 4 – Now press Control+x to start on single user mode.
 5 – Now access the system with this command.
 chroot /sysroot
-6 – /deiiReset the password.
+6 – Reset the password.
 passwd root
 7 – Update selinux information
 touch /.autorelabel
