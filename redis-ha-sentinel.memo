@@ -1,0 +1,358 @@
+[master]
+10.0.2.11
+# cat c6.conf        ###master redis.conf
+bind 10.0.2.11  
+protected-mode yes
+requirepass "password"  ####key1
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize yes
+supervised no
+pidfile "/var/run/redis_6379.pid"
+loglevel notice
+logfile "/data/redis/6379/logs/redis.log"
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename "dump.rdb"
+dir "/data/redis/6379/data"
+masterauth "password"             #####key2
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+appendonly no
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+lua-time-limit 5000
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes
+
+
+# cat cs.conf 
+port 6000
+sentinel monitor yourmaster 10.0.2.11 6379 2   ###key 3
+sentinel down-after-milliseconds yourmaster 5000  
+sentinel failover-timeout yourmaster 10000
+protected-mode no                              ###key 4
+sentinel auth-pass yourmaster password         ###key 5
+
+[root@master redis]# chown -R redis. /etc/redis/
+[root@master redis]# chown -R redis. /data/redis/6379
+#su - redis -c 'redis-server /etc/redis/
+#su - redis -c 'redis-server /etc/redis/cs.conf --sentinel' &
+
+
+[slave1]
+10.0.2.12
+
+[root@redis2 redis]# cat c6.conf
+bind 10.0.2.12
+protected-mode yes
+requirepass "password"
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize yes
+supervised no
+pidfile "/var/run/redis_6379.pid"
+loglevel notice
+logfile "/data/redis/6379/logs/redis.log"
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename "dump.rdb"
+dir "/data/redis/6379/data"
+masterauth "password"
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+appendonly no
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+lua-time-limit 5000
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes
+slaveof 10.0.2.11 6379                 ###slave key1
+
+# cat cs.conf 
+port 6000
+sentinel monitor yourmaster 10.0.2.11 6379 2   ####slave key2
+sentinel down-after-milliseconds yourmaster 5000
+sentinel failover-timeout yourmaster 10000
+protected-mode no
+sentinel auth-pass yourmaster password
+
+[root@slave1 redis]# chown -R redis. /etc/redis/
+[root@slave1 redis]# chown -R redis. /data/redis/6379
+#su - redis -c 'redis-server /etc/redis/c6.conf'
+#su - redis -c 'redis-server /etc/redis/cs.conf --sentinel' &
+
+
+[slave2]
+10.0.2.13
+
+[root@slave2 redis]# cat c6.conf
+bind 10.0.2.13
+protected-mode yes
+requirepass "password"
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize yes
+supervised no
+pidfile "/var/run/redis_6379.pid"
+loglevel notice
+logfile "/data/redis/6379/logs/redis.log"
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename "dump.rdb"
+dir "/data/redis/6379/data"
+masterauth "password"
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+appendonly no
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+lua-time-limit 5000
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes
+slaveof 10.0.2.11 6379
+
+
+[root@slave2 redis]# cat cs.conf
+port 6000
+sentinel monitor yourmaster 10.0.2.11 6379 2
+sentinel down-after-milliseconds yourmaster 5000
+sentinel failover-timeout yourmaster 10000
+protected-mode no
+sentinel auth-pass yourmaster password
+[root@slave2 redis]# chown -R redis. /etc/redis/
+[root@slave2 redis]# chown -R redis. /data/redis/6379
+#su - redis -c 'redis-server /etc/redis/c6.conf'
+#su - redis -c 'redis-server /etc/redis/cs.conf --sentinel' &
+
+
+
+===console output=====
+2939:X 14 Jan 14:40:55.566 # +monitor master yourmaster 10.0.2.11 6379 quorum 2
+
+
+[root@slave2 redis]# redis-cli 6000
+Could not connect to Redis at 127.0.0.1:6379: Connection refused
+Could not connect to Redis at 127.0.0.1:6379: Connection refused
+[root@slave2 redis]# redis-cli -p 6000
+===before failover
+127.0.0.1:6000> info
+# Server
+redis_version:3.2.4
+redis_git_sha1:00000000
+redis_git_dirty:0
+redis_build_id:13c5f2e478ed7169
+redis_mode:sentinel
+os:Linux 3.10.0-1062.4.3.el7.x86_64 x86_64
+arch_bits:64
+multiplexing_api:epoll
+gcc_version:4.8.5
+process_id:2960
+run_id:0b75f2dcb4d396e26e1e59dbd1082055e486768c
+tcp_port:6000
+uptime_in_seconds:105
+uptime_in_days:0
+hz:14
+lru_clock:1925941
+executable:/home/redis/redis-server
+config_file:/etc/redis/cs.conf
+
+# Clients
+connected_clients:3
+client_longest_output_list:0
+client_biggest_input_buf:0
+blocked_clients:0
+
+# CPU
+used_cpu_sys:0.44
+used_cpu_user:0.10
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.01
+
+# Stats
+total_connections_received:3
+total_commands_processed:301
+instantaneous_ops_per_sec:3
+total_net_input_bytes:16387
+total_net_output_bytes:1893
+instantaneous_input_kbps:0.29
+instantaneous_output_kbps:0.02
+rejected_connections:0
+sync_full:0
+sync_partial_ok:0
+sync_partial_err:0
+expired_keys:0
+evicted_keys:0
+keyspace_hits:0
+keyspace_misses:0
+pubsub_channels:0
+pubsub_patterns:0
+latest_fork_usec:0
+migrate_cached_sockets:0
+
+# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=yourmaster,status=ok,address=10.0.2.11:6379,slaves=2,sentinels=3  ###PATT HERE
+
+127.0.0.1:6000> SENTINEL get-master-addr-by-name yourmaster
+1) "10.0.2.11"
+2) "6379"
+
+
+#After failover,kill master redis
+
+# 2939:X 14 Jan 14:48:35.512 # +sdown master yourmaster 10.0.2.11 6379
+2939:X 14 Jan 14:48:35.563 # +new-epoch 1
+2939:X 14 Jan 14:48:35.568 # +vote-for-leader 7cf2ede41720c42e42861400597e49c8fae526cd 1
+2939:X 14 Jan 14:48:35.568 # +odown master yourmaster 10.0.2.11 6379 #quorum 3/2                         ###KEY
+2939:X 14 Jan 14:48:35.568 # Next failover delay: I will not start a failover before Tue Jan 14 14:48:55 2020
+2939:X 14 Jan 14:48:35.832 # +config-update-from sentinel 7cf2ede41720c42e42861400597e49c8fae526cd 10.0.2.13 6000 @ yourmaster 10.0.2.11 6379
+2939:X 14 Jan 14:48:35.832 # +switch-master yourmaster 10.0.2.11 6379 10.0.2.13 6379
+2939:X 14 Jan 14:48:35.832 * +slave slave 10.0.2.12:6379 10.0.2.12 6379 @ yourmaster 10.0.2.13 6379
+2939:X 14 Jan 14:48:35.832 * +slave slave 10.0.2.11:6379 10.0.2.11 6379 @ yourmaster 10.0.2.13 6379
+2939:X 14 Jan 14:48:40.872 # +sdown slave 10.0.2.11:6379 10.0.2.11 6379 @ yourmaster 10.0.2.13 6379  ###failover to new master
+
+127.0.0.1:6000> SENTINEL get-master-addr-by-name yourmaster
+1) "10.0.2.13"
+2) "6379"
+
+127.0.0.1:6000> info
+# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=yourmaster,status=ok,address=10.0.2.13:6379,slaves=2,sentinels=3
+
+
+
+
+# tail -n 5 c6.conf 
+hz 10
+aof-rewrite-incremental-fsync yes
+# Generated by CONFIG REWRITE
+slaveof 10.0.2.13 6379
+maxclients 4064
+
+
+
+# cat cs.conf 
+port 6000
+sentinel myid 45be4ff4caa135d71884d85f0d1877017e517990
+sentinel monitor yourmaster 10.0.2.13 6379 2
+sentinel down-after-milliseconds yourmaster 5000
+protected-mode no
+sentinel failover-timeout yourmaster 10000
+# Generated by CONFIG REWRITE
+dir "/home/redis"
+maxclients 4064
+sentinel auth-pass yourmaster password
+sentinel config-epoch yourmaster 1
+sentinel leader-epoch yourmaster 1
+sentinel known-slave yourmaster 10.0.2.11 6379
+sentinel known-slave yourmaster 10.0.2.12 6379
+sentinel known-sentinel yourmaster 10.0.2.12 6000 f71ca12483b60f9819a55a137b8ea7ff30c17ce9
+sentinel known-sentinel yourmaster 10.0.2.13 6000 7cf2ede41720c42e42861400597e49c8fae526cd
+sentinel current-epoch 1
+
+
+
+##################

@@ -124,5 +124,14 @@ az network nsg rule update -g YOUR_PROJ-rg01 --nsg-name YOUR_PROJ-Rabbit-S01-nsg
 ####create non-managed disk vm####
 
 
+#####create non-managed disk vm ONLY update availbe-set####
+$> time az vm create -n VMNAME -g RG-NAME  --attach-os-disk https://SOMEsk01.blob.core.chinacloudapi.cn/vhds/OS.vhd \
+ --attach-data-disks https://SOME01.blob.core.chinacloudapi.cn/vhds/data1.vhd --availability-set NEW-AS-NAME  --size Standard_E2_v3 \
+ --os-type Linux --use-unmanaged-disk  --nics NETWORK-INTERFACE-NAME
+
+THIS WILL KEEP DISKS,LAN IP,PUBLIC IP,FIREWALL,USER,PASSWD,DNS NAME,SSH CREDENTIAL.
+
+#####create non-managed disk vm ONLY update availbe-set####
+
 ######End azure.memo #######
 ######Endmemoof azure.memo #######
