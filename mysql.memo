@@ -2,14 +2,14 @@
 
 ####mysql xtrabackup bzip incremental restore 
 --10 unzip all need file to dir respectly
-$>  time  pbzip2 -dc -p2 -m512 -5  20191224-full.bz2|xbstream -x -C full/ && mail -s "OK $(hostname) $(date) time  pbzip2 FULL"  mail_user@50.link </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 FULL"  mail_user@50.link </dev/null
+$>  time  pbzip2 -dc -p2 -m512 -5  20191224-full.bz2|xbstream -x -C full/ && mail -s "OK $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null
 
-$>  time  pbzip2 -dc -p2 -m512 -5  20191224-20191225-rec0.bz2|xbstream -x -C rec/ && mail -s "OK $(hostname) $(date) time  pbzip2 rec"  mail_user@50.link </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 rec"  mail_user@50.link </dev/null
+$>  time  pbzip2 -dc -p2 -m512 -5  20191224-20191225-rec0.bz2|xbstream -x -C rec/ && mail -s "OK $(hostname) $(date) time  pbzip2 rec"  mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 rec"  mail_user@example.com </dev/null
 
 --20 prepare,all file need apply-log-only except last one
-$> time  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full && mail -s "OK $(hostname) $(date) ok  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@50.link </dev/null|| mail -s "ERROR $(hostname) $(date) error  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@50.link </dev/null
+$> time  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full && mail -s "OK $(hostname) $(date) ok  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) error  xtrabackup --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@example.com </dev/null
 
-$>time  xtrabackup --prepare --parallel=4 --incremental-basedir=rec0 --target-dir=full && mail -s "OK $(hostname) $(date) ok  xtrabackup increase --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@50.link </dev/null|| mail -s "ERROR $(hostname) $(date) error  xtrabackup --increase --parallel=4 --apply-log-only --target-dir=full" mail_user@50.link </dev/null
+$>time  xtrabackup --prepare --parallel=4 --incremental-basedir=rec0 --target-dir=full && mail -s "OK $(hostname) $(date) ok  xtrabackup increase --prepare --parallel=4 --apply-log-only --target-dir=full" mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) error  xtrabackup --increase --parallel=4 --apply-log-only --target-dir=full" mail_user@example.com </dev/null
 
 --30 start 
 $> chown -R mysql. /full
