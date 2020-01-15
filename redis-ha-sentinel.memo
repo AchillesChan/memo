@@ -1,3 +1,6 @@
+https://www.willandskill.se/en/setup-a-highly-available-redis-cluster-with-sentinel-and-haproxy/
+https://redis.io/topics/sentinel
+
 [master]
 10.0.2.11
 # cat c6.conf        ###master redis.conf

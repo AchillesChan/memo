@@ -1,4 +1,59 @@
 #####docker with custom password
+
+[mysql]
+--10
+# cat /etc/filebeat/filebeat.yml
+filebeat.inputs:
+- type: log
+  enabled: false
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+output.elasticsearch:
+  hosts: ["your_elk_srv_ip:9200"]
+  protocol: "http"
+  username: "elastic"
+  password: "elastic_pwd"
+setup.kibana:
+  host: "your_elk_srv_ip:5601"
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+--20
+# filebeat modules enable mysql
+
+--30
+# cat /etc/filebeat/modules.d/mysql.yml 
+# Module: mysql
+# Docs: https://www.elastic.co/guide/en/beats/filebeat/7.3/filebeat-module-mysql.html
+
+- module: mysql
+  # Error logs
+  error:
+    enabled: true
+
+    # Set custom paths for the log files. If left empty,
+    # Filebeat will choose the paths depending on your OS.
+    #var.paths:
+    var.paths: ["/data/log/mysql/error.log"]
+  # Slow logs
+  slowlog:
+    enabled: true
+
+    # Set custom paths for the log files. If left empty,
+    # Filebeat will choose the paths depending on your OS.
+    #var.paths:
+    var.paths: ["/data/log/mysql-slow.log"]
+
+--35
+# filebeat setup
+# systemctl start filebeat
+# systemctl enable filebeat
+
+--40
+#tail -f /var/log/filebeat/filebeat
+[mysql]
+
 https://github.com/deviantony/docker-elk
 # cat docker-compose.yml
 version: '3.2'
