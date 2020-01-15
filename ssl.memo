@@ -1,0 +1,94 @@
+
+--10
+curl -v https://abc.example.com
+* About to connect() to elk.example.com port 443 (#0)
+*   Trying 192.168.2.15...
+* Connected to elk.example.com (192.168.2.15) port 443 (#0)
+* Initializing NSS with certpath: sql:/etc/pki/nssdb
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* SSL connection using TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+* Server certificate:
+*       subject: CN=*.example.com
+*       start date: Dec 09 07:31:52 2019 GMT
+*       expire date: Mar 08 07:31:52 2020 GMT
+*       common name: *.example.com
+*       issuer: CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US
+
+
+
+
+--20
+$> openssl s_client -connect abc.example.com:443 --tlsextdebug
+
+CONNECTED(00000003)                                                                                                                                                                                                                                                                                                                                                                        
+TLS server extension "renegotiation info" (id=65281), len=1
+0001 - <SPACES/NULS>
+TLS server extension "EC point formats" (id=11), len=4
+0000 - 03 00 01 02                                       ....
+TLS server extension "session ticket" (id=35), len=0
+TLS server extension "heartbeat" (id=15), len=1
+0000 - 01                                                .
+depth=2 O = Digital Signature Trust Co., CN = DST Root CA X3
+verify return:1
+depth=1 C = US, O = Let's Encrypt, CN = Let's Encrypt Authority X3
+verify return:1
+depth=0 CN = *.example.com
+verify return:1
+---
+Certificate chain
+ 0 s:/CN=*.example.com
+   i:/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+ 1 s:/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+   i:/O=Digital Signature Trust Co./CN=DST Root CA X3
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIFSjCCBDKgAwIBAgISA7zIFd......
+......
+......
+uA7iEY3eSvudddd
+-----END CERTIFICATE-----
+subject=/CN=*.example.com
+issuer=/C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 3210 bytes and written 415 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES256-GCM-SHA384
+    Session-ID: D0EE0FA96DD0F2042E651461C6D2CAC3FDD0FB38FEB25696238DCE2EC5775355
+    Session-ID-ctx:
+    Master-Key: 0E829B077D1A08954938712EAB51515A07E95677944D7F9B8AAF2BE906233890000DEDFA8133BCBC3B654C96A1312CD0
+    Key-Arg   : None
+    Krb5 Principal: None
+    PSK identity: None
+    PSK identity hint: None
+    TLS session ticket lifetime hint: 600 (seconds)
+    TLS session ticket:
+    0000 - 3f 10 ae 55 6d e0 66 7c-69 5e 4f 8c e3 84 6c a9   ?..Um.f|i^O...l.
+    0010 - 71 6b 80 27 61 af 13 8f-db cd bd a2 b2 ee d7 35   qk.'a..........5
+    0020 - a0 10 ab 2f 91 ec 6e 78-8a 5d 98 ba 77 1b 51 3d   .../..nx.]..w.Q=
+    0030 - 42 be 8e d4 b0 1d a1 75-90 5b b7 14 c7 bc f0 75   B......u.[.....u
+    0040 - 62 54 78 5c db c8 4f b2-24 38 01 09 2f b7 fa db   bTx\..O.$8../...
+    0050 - 56 4c 67 ac a7 e0 27 31-72 b1 02 fa af 25 ac 9a   VLg...'1r....%..
+    0060 - 74 21 c9 9a 59 01 11 c8-bb 2e 2a a1 21 33 b8 7b   t!..Y.....*.!3.{
+    0070 - fc 28 ef 49 22 a7 e1 e0-df 66 b8 11 74 9d 61 36   .(.I"....f..t.a6
+    0080 - 6c a1 db e1 67 96 ef 45-b2 16 c1 f1 12 8e 06 9c   l...g..E........
+    0090 - 36 cf ed 42 7f 13 16 1a-29 76 be 8e 3b 9a f8 62   6..B....)v..;..b
+    00a0 - 55 ae fa 8b ec 12 f1 ab-ae d9 cc 7c b2 fa 30 ca   U..........|..0.
+
+    Start Time: 1579076949
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+
