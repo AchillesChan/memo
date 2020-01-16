@@ -1,0 +1,299 @@
+--00 urls
+https://stackoverflow.com/questions/38524150/mongodb-replica-set-with-simple-password-authentication
+https://www.codexpedia.com/devops/mongodb-authentication-setting/
+https://docs.mongodb.com/manual/tutorial/deploy-replica-set-with-keyfile-access-control/
+https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/
+https://docs.mongodb.com/manual/reference/method/rs.add/
+https://docs.mongodb.com/manual/tutorial/enable-authentication/
+
+
+--10 master 10.0.2.11
+$> openssl rand -base64 741 > mongodb_keyfile
+$> chmod 600 mongodb_keyfile
+$> scp mongodb_keyfile user@slave:~
+$> chown mongo. mongodb_keyfile
+
+$> cat mongod.conf 
+systemLog:
+   destination: "file"
+   path: "/data/mongodb/logs/27017.log"
+   logAppend: "true"
+   timeStampFormat: "ctime"
+
+processManagement:
+   fork: "true"
+
+net:
+   bindIp: "0.0.0.0"
+   port: "27017"
+   maxIncomingConnections: "2000"
+   wireObjectCheck: "true"
+
+security:
+   authorization: "enabled"
+   keyFile: "/data/mongodb/conf/mongodb_keyfile"
+
+operationProfiling:
+   slowOpThresholdMs: "500"
+   mode: "slowOp"
+
+storage:
+   dbPath: "/data/mongodb/data"
+   directoryPerDB: "true"
+   indexBuildRetry: "true"
+   journal:
+      enabled: "true"
+   engine: "wiredTiger"
+   wiredTiger:
+      engineConfig:
+         cacheSizeGB: "2"
+         journalCompressor: "snappy"
+         directoryForIndexes: "true"
+      collectionConfig:
+         blockCompressor: "snappy"
+      indexConfig:
+         prefixCompression: "true"
+
+replication:
+   replSetName: "mongo_rs01"
+
+$> cat  /data/mongodb/conf/mongodb_keyfile
+XfCQpAV7rzBzU/oyOQ3/Yc1lKUR4O8DxSPdOmnNFW+C3aEjP6AD72GhFctzalB23
+qjyyZZ9DExpaNm0pdLq31Bo/9AR9YXvenPfBn2u3lwgNLgFp70Izirzp8IycmQn4
+qArl9HowsHZ4193U4pAk0wxYlDrQflwJsVfbOhyD20PHitF6JrNIEj6416I5Zg1b
+oYol0BThXL0Xlbl3QOA+SKbjYqyQw4CShvMmEANn+Kezj1vZd+K4PqEKLCTWfpcT
+CfWbXTb4ykt6p7bjgynb+sQpONb9fmsouuYMmBx+RvuIiFYoIWjpbY22n9ImyDFO
+c9OXgdN7wTjm29OUyWfmTmSEm5kER7imqgyV3sSJZNkCV3uOwvOirE4wXSMirWk9
+VGiZ7vLCE4zj4sMoLarzBwBWd0KyLrJAUKGEd2stF/geddbS7zwsAPpxHFMNYMtQ
+Xjp6dZWl0HleeAO1MPaW6CpDPQEEQSagmD5vKSGMBzfMaYkWn8YfuBp2Wswm6dLR
+FTYZ4QrH+zKcJVkHAqfLYm83VwPfmdebjLwSseNJCUl1+a5kvtCWNNPnPYTZrn9l
+h0PImJiOvnZxGI+eRBrlC5vUpFJvyaYamEW89CWhQ4wkAhuj1yyYnQCDfQ7z+AeV
+WVF5OXznDuMReeaOL1vMjLLPBymVmpOWqEPW+KtWnc41IHhZDNnQnSIuAgIW6mCT
+Y9diWU5wzx8b7X4vSCoutBo/4txFTXDjvbC5qE2ipON0VF6nb0VlTspvhXuIj7nG
+vkOo0EZHEvGYn5c1fIuch8lXB+yg5LVlSTiUhCT4gfG0cc2zoXkM98bUCCE7PB4L
+6JWnnqG1bks4pucuKEu+elfvEl/Ihd4b1nzbd8DHQ23bu03z0VGnNuxJoqLCgrkF
+eEVC5N+IJ9NiORYCXvHSaYoZPblrn7AlYC+SBlxQbS/ntLLThQGIBmo8+5BAyvfk
+QMX/PbWnwlmknzyI2EI/wrnLwQc
+
+$> su - mongo -c 'mongod -f mongod.conf' &
+
+$> mongo                            #####login local
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+> rs.initiate()                    ####Initiate replication
+{
+        "info2" : "no configuration specified. Using a default configuration for the set",
+        "me" : "mongo-master:27017",
+        "ok" : 1
+}
+mongo_rs01:OTHER>
+
+mongo_rs01:PRIMARY> use admin      ####MUST CREATE ROOT FIRST                  
+switched to db admin
+mongo_rs01:PRIMARY> db.createUser({user:"root",pwd:"root",roles:["root"]})
+Successfully added user: { "user" : "root", "roles" : [ "root" ] }
+
+mongo_rs01:PRIMARY> db.auth('root','root')     #####login 
+1
+mongo_rs01:PRIMARY> rs.add('mongo-slave:27017')  ####add replic,MUST replic ONLINE
+{
+        "ok" : 1,
+        "operationTime" : Timestamp(1579165861, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1579165861, 1),
+                "signature" : {
+                        "hash" : BinData(0,"vldJd1aIi4lZzwwIgWAIhAbhypk="),
+                        "keyId" : NumberLong("6782465371472396289")
+                }
+        }
+}
+
+mongo_rs01:PRIMARY> rs.status()  ###view status
+{
+        "set" : "mongo_rs01",
+        "date" : ISODate("2020-01-16T09:13:01.574Z"),
+        "myState" : 1,
+        "term" : NumberLong(1),
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1579165978, 1),
+                        "t" : NumberLong(1)
+                },
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1579165978, 1),
+                        "t" : NumberLong(1)
+                },
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1579165978, 1),
+                        "t" : NumberLong(1)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1579165978, 1),
+                        "t" : NumberLong(1)
+                }
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "mongo-master:27017",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 245,
+                        "optime" : {
+                                "ts" : Timestamp(1579165978, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2020-01-16T09:12:58Z"),
+                        "electionTime" : Timestamp(1579165776, 2),
+                        "electionDate" : ISODate("2020-01-16T09:09:36Z"),
+                        "configVersion" : 2,
+                        "self" : true
+                },
+                {
+                        "_id" : 1,
+                        "name" : "mongo-slave:27017",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 120,
+                        "optime" : {
+                                "ts" : Timestamp(1579165978, 1),
+                                "t" : NumberLong(1)
+
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1579165978, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2020-01-16T09:12:58Z"),
+                        "optimeDurableDate" : ISODate("2020-01-16T09:12:58Z"),
+                        "lastHeartbeat" : ISODate("2020-01-16T09:13:01.329Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-01-16T09:12:59.578Z"),
+                        "pingMs" : NumberLong(0),
+                        "syncingTo" : "mongo-master:27017",
+                        "configVersion" : 2
+                }
+        ],
+        "ok" : 1,
+        "operationTime" : Timestamp(1579165978, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1579165978, 1),
+                "signature" : {
+                        "hash" : BinData(0,"9jIKccSSwMmtXoWAwlI/I02BRls="),
+                        "keyId" : NumberLong("6782465371472396289")
+                }
+        }
+}
+
+
+==20 slave 10.0.2.12 
+ $> chmod 600 mongodb_keyfile
+ $> scp mongodb_keyfile user@slave:~  ###MUST identical with master
+ 
+ $> cat mongod.conf
+ systemLog:
+    destination: "file"
+    path: "/data/mongodb/logs/27017.log"
+    logAppend: "true"
+    timeStampFormat: "ctime"
+ 
+ processManagement:
+    fork: "true"
+ 
+ net:
+    bindIp: "0.0.0.0"
+    port: "27017"
+    maxIncomingConnections: "2000"
+    wireObjectCheck: "true"
+ 
+ security:
+    authorization: "enabled"
+    keyFile: "/data/mongodb/conf/mongodb_keyfile"
+ 
+ operationProfiling:
+    slowOpThresholdMs: "500"
+    mode: "slowOp"
+ 
+ storage:
+    dbPath: "/data/mongodb/data"
+    directoryPerDB: "true"
+    indexBuildRetry: "true"
+    journal:
+       enabled: "true"
+    engine: "wiredTiger"
+    wiredTiger:
+       engineConfig:
+          cacheSizeGB: "2"
+          journalCompressor: "snappy"
+          directoryForIndexes: "true"
+       collectionConfig:
+          blockCompressor: "snappy"
+       indexConfig:
+          prefixCompression: "true"
+ 
+ replication:
+    replSetName: "mongo_rs01"
+
+$> chown mongo. mongodb_keyfile
+$> su - mongo -c "mongod -f mongod.conf &"
+
+$> mongo
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+mongo_rs01:SECONDARY> use admin
+switched to db admin
+mongo_rs01:SECONDARY> db.auth('root','root')
+1
+mongo_rs01:SECONDARY> rs.isMaster()
+{
+        "hosts" : [
+                "mongo-master:27017",
+                "mongo-slave:27017"
+        ],
+        "setName" : "mongo_rs01",
+        "setVersion" : 2,
+        "ismaster" : false,
+        "secondary" : true,
+        "primary" : "mongo-master:27017",   ####master name
+        "me" : "mongo-slave:27017",
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1579166498, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastWriteDate" : ISODate("2020-01-16T09:21:38Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1579166498, 1),
+                        "t" : NumberLong(1)
+                },
+                "majorityWriteDate" : ISODate("2020-01-16T09:21:38Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-01-16T09:21:47.228Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 6,
+        "readOnly" : false,
+        "ok" : 1,
+        "operationTime" : Timestamp(1579166498, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1579166498, 1),
+                "signature" : {
+                        "hash" : BinData(0,"3TtRoRt9purZVrUjBb19AUshzGc="),
+                        "keyId" : NumberLong("6782465371472396289")
+                }
+        }
+}
+
+
+=30 PATT
+IF ONLY MASTER AND SLAVE,SLAVE COULD NOT SWITCH TO MASTER WHEN MASTER DOWN;
+WHEN MASTER UP AGAIN,SLAVE CHANGE TO MASTER IMMEADIATLY
+
+
