@@ -296,4 +296,29 @@ mongo_rs01:SECONDARY> rs.isMaster()
 IF ONLY MASTER AND SLAVE,SLAVE COULD NOT SWITCH TO MASTER WHEN MASTER DOWN;
 WHEN MASTER UP AGAIN,SLAVE CHANGE TO MASTER IMMEADIATLY
 
+==40 master down with ONLY 1 master,change slave to standalone
+$> vim mongod.conf
+#replication:
+#   replSetName: "rs_self"
+
+$> pkill mongod
+
+$> su - mongo -c 'mongod -f mongod.conf' &
+
+$> mongo
+MongoDB shell version v3.6.5
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.5
+> use admin
+switched to db admin
+> db.auth('root','root')
+1
+> show dbs
+admin   0.000GB
+config  0.000GB
+demo01  0.000GB
+local   0.000GB
+> db.demo01.find()
+{ "_id" : ObjectId("5e20325e9d654475bbc34149"), "name" : "3idoits" }
+
 
