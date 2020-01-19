@@ -1,6 +1,102 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
+###BASIC OPERATION
+$> mongo                                                                                                                                                                            
+MongoDB shell version v3.6.5                                                                                                                                                                         
+connecting to: mongodb://127.0.0.1:27017                                                                                                                                                             
+MongoDB server version: 3.6.5                                                                                                                                                                        
+> use admin                                                                                                                                                                                          
+switched to db admin                                                                                                                                                                                 
+> db.auth('root','root')                   ###AUTH LOGIN                                                                                                                                                                           
+1                                                                                                                                                                                                    
 
+> use poc01                                ###create db                                                                                                                                                           
+switched to db poc01                                                                                                                                                                                 
+
+> db                                       ##display current db                                                                                                                                                          
+
+poc01                                      ##display all db,new db not display                                                                                                                                                          
+> show dbs                                                                                                                                                                                           
+admin   0.000GB                                                                                                                                                                                      
+config  0.000GB                                                                                                                                                                                      
+local   0.000GB                                                                                                                                                                                      
+
+> db.poc01.insert({"name":"Adan"})      ###Insert item                                                                                                                                                               
+WriteResult({ "nInserted" : 1 })                                                                                                                                                                     
+
+> show dbs                              ###created db displayed                                                                                                                                                             
+admin   0.000GB                                                                                                                                                                                      
+config  0.000GB                                                                                                                                                                                      
+local   0.000GB                                                                                                                                                                                      
+poc01   0.000GB                                                                                                                                                                                      
+> db.poc01.insert({"Age":"35"})                                                                                                                                                                      
+WriteResult({ "nInserted" : 1 })                                                                                                                                                                     
+
+> db.poc01.find().pretty()           ####select item                                                                                                                                                                
+{ "_id" : ObjectId("5e210ce515ec507bf48a6d76"), "name" : "Adan" }                                                                                                                                    
+{ "_id" : ObjectId("5e210d3115ec507bf48a6d77"), "Age" : "35" } 
+
+
+###update item                                                                                                                                      
+> db.poc01.update({"Age":"35"},{$set:{"Age":"25"}},{multi:true})                                                                                                                                     
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })                                                                                                                                    
+> db.poc01.find().pretty()                                                                                                                                                                           
+{ "_id" : ObjectId("5e210ce515ec507bf48a6d76"), "name" : "Adan" }                                                                                                                                    
+{ "_id" : ObjectId("5e210d3115ec507bf48a6d77"), "Age" : "25" }                                                                                                                                       
+
+###remove item
+> db.poc01.remove({"Age":"25"})                                                                                                                                                                      
+WriteResult({ "nRemoved" : 1 })                                                                                                                                                                      
+> db.poc01.find().pretty()                                                                                                                                                                           
+{ "_id" : ObjectId("5e210ce515ec507bf48a6d76"), "name" : "Adan" }                                                                                                                                    
+> db.poc01.remove({})                                                                                                                                                                                
+WriteResult({ "nRemoved" : 1 })                
+
+
+####create collection
+> use poc01
+switched to db poc01
+> db.createCollection("mycollection")
+{ "ok" : 1 }
+> db.createCollection("yourcollection")
+{ "ok" : 1 }
+> db.createCollection("hercollection")
+{ "ok" : 1 }
+
+> show collections
+hercollection
+mycollection
+yourcollection
+
+###remove collection
+> use poc01
+switched to db poc01
+> db.hercollection.drop()
+true
+> show collections
+mycollection
+yourcollection
+
+###remove db
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+poc01   0.000GB
+
+> use poc01              ###enter db
+switched to db poc01
+
+> db.dropDatabase()      ###remove current db
+{ "dropped" : "poc01", "ok" : 1 }
+
+> show dbs               ###db poc01 removed
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+
+###BASIC OPERATION
 
 ###auto delete collections script
 $ cat auto-delete-mongo-collections.sh

@@ -2062,10 +2062,6 @@ man parallel_tutorial 手册
 
 
 
-
-
-
-
 #### ping youSite 端口80 直到成功才退出 #######
 
 cat continue-test.sh
@@ -2075,8 +2071,10 @@ nc -vz youSite.com 80 >/dev/null 2>&1 && break;
 done
 
 ====##command line run
+while true ;do echo>/dev/tcp/10.0.0.1/80 >/dev/null 2>&1 && break;done     ###successful exit
 while true; do nc -vz ip-or-domain port >/dev/null 2>&1 && break; done
 ====###exit until failed
+while true ;do echo>/dev/tcp/10.0.0.1/80 >/dev/null 2>&1 || break;done     ###fail exit
 while true; do nc -vz ip-or-domain port >/dev/null 2>&1 || break; done
 
 #### ping youSite 直到成功才退出 #######
