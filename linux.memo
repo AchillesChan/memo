@@ -1,6 +1,108 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+[net namespace docker]
+https://linoxide.com/linux-command/use-ip-command-linux/
+https://www.thegeekdiary.com/linux-ip-command-examples-to-manage-networking/
+https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/
+
+
+###add netns
+[host ~]# ip netns list                                                                                                                                                                                    
+[host ~]# ip netns add Blue                                                                                                                                                                                
+[host ~]# ip netns add Red                                                                                                                                                                                 
+[host ~]# ip netns list                                                                                                                                                                                    
+Red                                                                                                                                                                                                               
+Blue                                                                                                                                                                                                              
+[host ~]# ip netns exec Blue ip link show                                                                                                                                                                  
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                                            
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00                                                                                                                                                         
+[host ~]# ip netns exec Red ip link show                                                                                                                                                                   
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                                            
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00                                                                                                                                                         
+
+
+###add veth
+[host ~]# ip link add veth0 type veth peer name veth1                                                                                                                                                      
+[host ~]# ip link list|grep veth0                                                                                                                                                                          
+5: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                  
+6: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                  
+####assign veth to netns
+[host ~]# ip link set veth0 netns Blue                                                                                                                                                                     
+[host ~]# ip link set veth1 netns Red                                                                                                                                                                      
+[host ~]# ip netns exec Blue ip link show                                                                                                                                                                  
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                                            
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00                                                                                                                                                         
+6: veth0@if5: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                           
+    link/ether 5e:ef:3f:d6:78:d4 brd ff:ff:ff:ff:ff:ff link-netnsid 1                                                                                                                                             
+[host ~]# ip netns exec Red ip link show                                                                                                                                                                   
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                                            
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00                                                                                                                                                         
+5: veth1@if6: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000                                                                                                           
+    link/ether 5a:55:0b:06:6c:6a brd ff:ff:ff:ff:ff:ff link-netnsid 0                                                                                                                                             
+
+###up veth
+[host ~]# ip netns exec Blue ip link set veth0 up
+[host ~]# ip netns exec Red ip link set veth1 up
+[host ~]# ip netns exec Blue ip link show
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+6: veth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 5e:ef:3f:d6:78:d4 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+[host ~]# ip netns exec Red ip link show
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+5: veth1@if6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 5a:55:0b:06:6c:6a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+
+###set ip addr
+[host ~]# ip netns exec Blue ip addr add 172.19.99.1/24 dev veth0
+[host ~]# ip netns exec Red  ip addr add 172.19.99.2/24 dev veth1
+[host ~]# ip netns exec Blue ip addr show
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+6: veth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 5e:ef:3f:d6:78:d4 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+    inet 172.19.99.1/24 scope global veth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5cef:3fff:fed6:78d4/64 scope link
+       valid_lft forever preferred_lft forever
+[host ~]# ip netns exec Red ip addr show
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+5: veth1@if6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 5a:55:0b:06:6c:6a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.19.99.2/24 scope global veth1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5855:bff:fe06:6c6a/64 scope link
+       valid_lft forever preferred_lft forever
+
+###test connectiong
+[host ~]# ip netns exec Red  ping -c 2 172.19.99.2   ###not linked to self
+PING 172.19.99.2 (172.19.99.2) 56(84) bytes of data.
+^C
+--- 172.19.99.2 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1004ms
+
+[host ~]# ip netns exec Red  ping -c 2 172.19.99.1   ####linked to peer
+PING 172.19.99.1 (172.19.99.1) 56(84) bytes of data.
+64 bytes from 172.19.99.1: icmp_seq=1 ttl=64 time=0.107 ms
+64 bytes from 172.19.99.1: icmp_seq=2 ttl=64 time=0.060 ms
+
+[host ~]# ip netns exec Blue  ping -c 2 172.19.99.1    ###no linked to self
+PING 172.19.99.1 (172.19.99.1) 56(84) bytes of data.
+^C
+--- 172.19.99.1 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 999ms
+
+[host ~]# ip netns exec Blue  ping -c 2 172.19.99.2    ###linked to peer
+PING 172.19.99.2 (172.19.99.2) 56(84) bytes of data.
+64 bytes from 172.19.99.2: icmp_seq=1 ttl=64 time=0.079 ms
+64 bytes from 172.19.99.2: icmp_seq=2 ttl=64 time=0.083 ms
+
+[net namespace docker]
+
+
 ####install keychain
 rpm --import http://wiki.psychotic.ninja/RPM-GPG-KEY-psychotic
 rpm -ivh http://packages.psychotic.ninja/6/base/i386/RPMS/psychotic-release-1.0.0-1.el6.psychotic.noarch.rpm
