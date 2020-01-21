@@ -1,6 +1,6 @@
 ######Startmemoof docker.memo #######
 ######Start docker.memo #######
-
+https://blog.oddbit.com/post/2014-08-11-four-ways-to-connect-a-docker/
 
 ###view resource usage
 docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"

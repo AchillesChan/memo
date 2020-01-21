@@ -1,0 +1,23 @@
+$>  VBoxManage controlvm vbox-m1 poweroff
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+
+$>  VBoxManage list runningvms
+"vbox-m2" {ee43c918-0aaa-42dc-90cd-c9c955bc5c2c}
+"vbox-m3" {4740c76b-498f-46a9-a089-8681707d89c4}
+"vbox-n1" {38099841-d01a-4564-be0d-0cbbde1b5673}
+"vbox-n2" {a7a7cf5f-e74d-40c5-911d-89302c8d20eb}
+
+$>  VBoxManage list vms
+"windows10" {ea2af487-2498-42b8-b0b7-7d698b79c0eb}
+"CentOS" {5bfb470a-b4b4-4c18-ab78-8ff33cbf6efa}
+"vbox-m2" {ee43c918-0aaa-42dc-90cd-c9c955bc5c2c}
+"vbox-m3" {4740c76b-498f-46a9-a089-8681707d89c4}
+"vbox-n1" {38099841-d01a-4564-be0d-0cbbde1b5673}
+"vbox-n2" {a7a7cf5f-e74d-40c5-911d-89302c8d20eb}
+"vbox-m1" {b9cb71d0-b057-4c55-8e64-c02a0d8b48a2}
+"TEST-jia" {04de2fff-fbc0-44c6-9657-9cb97bbb0da7}
+
+$>  VBoxManage startvm vbox-m1 --type headless
+Waiting for VM "vbox-m1" to power on...
+VM "vbox-m1" has been successfully started.
+
