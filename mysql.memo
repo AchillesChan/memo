@@ -36,9 +36,12 @@ https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
 # shell> chmod 750 mysql-files
 # shell> bin/mysqld --initialize --user=mysql
 # shell> bin/mysql_ssl_rsa_setup
-# shell> bin/mysqld_safe --user=mysql &
+# shell> mkdir /var/log/mariadb -p && touch /var/log/mariadb/mariadb.log 
+# shell> mkdir -p /var/run/mariadb && touch /var/run/mariadb/mariadb.pid && chown -R mysql. /var/run/mariadb  
 # # Next command is optional
 # shell> cp support-files/mysql.server /etc/init.d/mysql.server
+# shell> service mysql.server start  ###or below 
+# shell> bin/mysqld_safe --user=mysql &
 #
 ####mysql 8.0 install from scratch
 
