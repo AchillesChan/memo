@@ -157,7 +157,7 @@ vm_host_1 | SUCCESS => {"backup": "", "changed": true, "failed": false, "msg": "
 $ ansible -i ansible-host vm_grp --list-hosts 
   hosts (1):
     vm_host_1
-
+ansible -i ansible-repo all -m raw -a 'echo "sys  /data/deploy  3" >> /path/2/file' -u user --become --ask-become-pass  ###append to last
 ansible HostGrp -m raw -a "getenforce" -u User --ask-pass --sudo --ask-sudo-pass
 ansible HostGrp -m raw -a "grep -i disable /etc/selinux/config" -u User --ask-pass --sudo --ask-sudo-pass
 ansible HostGrp -m raw -a "grep SELINUX /etc/selinux/config" -u User --ask-pass --sudo --ask-sudo-pass

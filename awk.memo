@@ -1,6 +1,17 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+###concate field with special char
+$> awk -F ',' '{printf "%s--->%s\n", $4,$6}' ssh-cfg
+404 Not Found--->50010
+404 Not Found--->50020
+404 Not Found--->50030
+404 Not Found--->50040
+404 Not Found--->50050
+404 Not Found--->50060
+200 OK--->50070
+1 200--->50080
+
 
 ###merge mulitline to one
 #awk '{if(NR%3!=0)ORS=" ";else ORS="\n"}1' 5.txt

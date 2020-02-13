@@ -94,6 +94,9 @@ Select-AzureSubscription -SubscriptionName "your-scubscription"
 --resource group
 az group create --name  YOUR_PROJ-rg01 --location chinaeast2
 
+--available set
+az vm availability-set create --resource-group YOUR_PROJ-rg01 --name YOUR_as01 --location chinaeast2 --unmanaged 
+
 --storage account
 az storage account create  --resource-group  YOUR_PROJ-rg01 --location chinaeast2 --name beYOUR_PROJlrsstorage --sku Standard_LRS 
 
