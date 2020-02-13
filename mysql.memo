@@ -1,5 +1,48 @@
 ######Startmemoof mysql.memo #######
 
+####mysql 8.0 install from scratch
+https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
+https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
+
+# Preconfiguration setup
+# shell> yum install -y gcc-c++ ncurses-devel gcc gcc++ gcc-g77 openssl-devel cmake3 
+# shell> yum install centos-release-scl 
+# shell> yum install devtoolset-7
+# shell> scl enable devtoolset-7 bash
+# shell> gcc --version      
+ gcc (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)
+ Copyright (C) 2017 Free Software Foundation, Inc.
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# shell> 
+# shell> 
+# shell> groupadd mysql
+# shell> useradd -r -g mysql -s /bin/false mysql
+# # Beginning of source-build specific instructions
+# shell> tar zxvf mysql-VERSION.tar.gz
+# shell> cd mysql-VERSION
+# shell> mkdir bld
+# shell> cd bld
+# shell> cmake .. -DWITH_BOOST=../boost
+# shell> make
+# shell> make install
+
+# # End of source-build specific instructions
+# # Postinstallation setup
+# shell> cd /usr/local/mysql
+# shell> mkdir mysql-files
+# shell> chown mysql:mysql mysql-files
+# shell> chmod 750 mysql-files
+# shell> bin/mysqld --initialize --user=mysql
+# shell> bin/mysql_ssl_rsa_setup
+# shell> bin/mysqld_safe --user=mysql &
+# # Next command is optional
+# shell> cp support-files/mysql.server /etc/init.d/mysql.server
+#
+####mysql 8.0 install from scratch
+
+
 ####mysql xtrabackup bzip incremental restore 
 --10 unzip all need file to dir respectly
 $>  time  pbzip2 -dc -p2 -m512 -5  20191224-full.bz2|xbstream -x -C full/ && mail -s "OK $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null

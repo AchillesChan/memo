@@ -10,7 +10,7 @@ ftpPath="ftp://$srvIP/$mysqlPkg"
 srcPath="/usr/local/src"
 installPath="/usr/local/mysql"
 mysqlConf="/etc/my.cnf"
-root_pwd="Ac*-1985.mk"
+root_pwd="Your_password"
 install_log=/usr/local/src/mysql_install.log
 vmCpuCores=$(cat /proc/cpuinfo |grep processor |wc -l)
 cd $srcPath   ####sourece file dir
@@ -21,7 +21,7 @@ cd $srcPath   ####sourece file dir
 #########function area##################
 GET_INSTALL_FILE(){
 echo "---------start ${FUNCNAME[0]} Fuction-----------"
-#wget --user=$ftpUser --password=$ftpPwd $ftpPath  ####ftp wget comment 
+#wget --user=$ftpUser --password=$ftpPwd $ftpPath  ####ftp wget comment
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
 
@@ -32,7 +32,7 @@ ls /var/log/mysql-slow.log || touch /var/log/mysql-slow.log
 #add mysql user
 if [ `cat /etc/passwd|grep 'mysql' |wc -l` -eq 0 ];then
         groupadd -r mysql
-        useradd -g mysql -s /sbin/nologin -g mysql -M mysql 
+        useradd -g mysql -s /sbin/nologin -g mysql -M mysql
 fi
 chown -R mysql.mysql /var/log/mysql
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
@@ -79,8 +79,8 @@ cd $srcPath/mysql-5.7.17/support-files/
 rm -rfv /data/mysq/*
 rm -fv "$mysqlConf"
 #mv $mysqlConf "$mysqlConf".bak
-chown -R mysql.mysql $installPath  ####basedir and data dir need exactly path 
-ls $install_log || touch $install_log 
+chown -R mysql.mysql $installPath  ####basedir and data dir need exactly path
+ls $install_log || touch $install_log
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
 
