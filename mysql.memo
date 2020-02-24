@@ -5,8 +5,8 @@ https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
 https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
 
 # Preconfiguration setup
+# shell> yum install centos-release-scl -y
 # shell> yum install -y gcc-c++ ncurses-devel gcc gcc++ gcc-g77 openssl-devel cmake3 
-# shell> yum install centos-release-scl 
 # shell> yum install devtoolset-7
 # shell> scl enable devtoolset-7 bash
 # shell> gcc --version      

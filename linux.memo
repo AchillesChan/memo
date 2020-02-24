@@ -1,6 +1,16 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+test lan host open 80 status 
+for ip in $(seq 3 8);do timeout 1 bash -c "</dev/tcp/10.1.0.$ip/80" && echo Port $ip open. || echo Port $ip closed.; done
+
+findout only files(not dir and socket)
+$ find ./ -maxdepth 1 -not -type d -and -not -type s|xargs ls -l
+-rw------- 1 Michael users       0 Jan 26 23:57 ./chromium-upload-23a1c99c307d780d
+-rw------- 1 Michael users   16729 Feb 10 19:05 ./.com.google.Chrome.3uwnXe
+-rw------- 1 Michael users   16729 Nov 11 01:03 ./.com.google.Chrome.4waNE6
+
+
 [net namespace docker]
 https://linoxide.com/linux-command/use-ip-command-linux/
 https://www.thegeekdiary.com/linux-ip-command-examples-to-manage-networking/
@@ -140,9 +150,9 @@ Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
 
 $ yum install mailx -y
 
-$ nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" mail_user@abc.com < ./1.txt
+$ nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" user@abc.com < ./1.txt
 
-$ docker exec conatainer /path/2/file.txt  2>&1|tee log.txt ; mail -s "$(hostname) $(date)" mail_user@abc.com <log.txt
+$ docker exec conatainer /path/2/file.txt  2>&1|tee log.txt ; mail -s "$(hostname) $(date)" user@abc.com <log.txt
 ###nmap check TCP/UDP PORT STATUS
 
 ###add/remove all open port
@@ -726,8 +736,15 @@ Threads: 2  Questions: 46  Slow queries: 0  Opens: 15  Flush tables: 2  Open tab
 ####send mail 
 echo "My mail body text" >MyText
 mail -s "My-subject" rcpt@domain.com <MyText.txt
-mail -s "$HOST $OPDATE io replication error "  mail_user@domain.com< /dev/null
-ls log.txt  && mail -s "$(hostname) success ls" mail_user@abc.com </dev/null || mail -s "fail on $(hostname) $(date) on cmd" mail_user@abc.com </dev/null
+mail -s "$HOST $OPDATE io replication error "  user@domain.com< /dev/null
+ls log.txt  && mail -s "$(hostname) success ls" user@abc.com </dev/null || mail -s "fail on $(hostname) $(date) on cmd" user@abc.com </dev/null
+ shell> time sh cmd ;mail -s "STATUS->$? HOST->$(hostname) DATE->$(date) IP->$(ip a|grep  "inet"|grep global) USER->$(whoami) CMD->$(history|tail -n 1)" user@example.com </dev/null 
+ shell> (time sh AutoInstallMysql8v2.sh ) |& tee full-log;tail -n 20 full-log >abstract-log;mail -s "$? $(hostname) $(ip a|grep  "inet"|grep global|head -n 1|awk '{print $2}') $(whoami) $(date) $(history|tail -n 1|awk '{for (i=2; i<=NF; i++) printf $i FS}') " -a full-log user@abc.com <abstract-log;date   #######yes
+ shell> time sh AutoInstallMysql8v2.sh |tee 2>&1 full-log;tail -n 20 full-log >abstract-log;mail -s "$? $(hostname) $(ip a|grep  "inet"|grep global|head -n 1|awk '{print $2}') $(whoami) $(date) $(history|tail -n 1|awk '{for (i=2; i<=NF; i++) printf $i FS}') " -a full-log user@abc.com <abstract-log;date
+ shell> time sh someth.sh;mail -s "$? $(hostname) $(ip a|grep  "inet"|grep global|head -n 1|awk '{print $2}') $(whoami) $(date) $(history|tail -n 1|awk '{for (i=2; i<=NF; i++) printf $i FS}')" user@abc.com </dev/null;date     ####YES
+ shell> time sh cmd ;mail -s "STATUS->$? HOST->$(hostname) DATE->$(date) IP->$(ip a|grep brd|grep global|head -n 1|awk '{print $2}') USER->$(whoami) CMD->$(history|tail -n 1)" user@example.com </dev/null 
+ shell> time cmd-here "OK $(hostname) $(date) $(history|tail -n 1)" user@example.com </dev/null || mail -s "WRONG $(hostname) $(date)  $(history|tail -n 1)" user@example.com </dev/null
+
 ####send mail 
 
 
@@ -2506,7 +2523,7 @@ if ！ nc -w 2 "$host" "$port" < /dev/null &>/dev/null   #####nc 6.40/7.50 not n
 
 #if [ $? != 0 ];then
         echo -n "WRONG $name ">>"$logFile"
-        mail -s "FWJ $HOST $PORT NOT OPEN" mail_user@example.com </dev/null  ####need only standard smtp mail server
+        mail -s "FWJ $HOST $PORT NOT OPEN" user@example.com </dev/null  ####need only standard smtp mail server
 fi)&
 done <"$managedServiceFile"
 wait

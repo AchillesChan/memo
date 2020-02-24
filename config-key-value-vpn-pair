@@ -29,4 +29,3 @@
 %spoke-router-name-phase1-ike firewall01-phase1-ike
 %spoke-router-name-profile1 firewall01-profile1
 %spoke-vpn-acl-number 3031
- 
