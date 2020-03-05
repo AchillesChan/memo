@@ -71,6 +71,10 @@ server {
 }
 
 
+https://stackoverflow.com/questions/2428416/how-to-create-a-database-from-shell-command
+echo "create database `database-name`" | mysql -u username -p
+cat filename.sql | mysql -u username -p # type mysql password when asked for it
+
 ####mysql 8.0 install from scratch
 https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
 https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
