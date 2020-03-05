@@ -1,5 +1,57 @@
+######kubectl pull private repo
+https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+$k8s-master> kubectl create secret docker-registry regcred --docker-server=dockerhub.abc.com --docker-username=user --docker-password="pwd" --docker-email=a@a.com
+$k8s-master> kubectl get secret regcred -o yaml
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6.........JXKfk9fQ==
+kind: Secret
+metadata:
+  creationTimestamp: "2020-02-25T08:06:05Z"
+  name: regcred
+  namespace: default
+  resourceVersion: "2972"
+  selfLink: /api/v1/namespaces/default/secrets/regcred
+  uid: a16567c5-41ea-4f35-b184-5fcc3d39c265
+type: kubernetes.io/dockerconfigjson
+
+$k8s-master> cat pullFromPrivateDockerHubRepo.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pullFromPrivateDockerHubRepo
+spec:
+  containers:
+  - image: dockerhub.abc.com/image-here
+    name: kubia
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+  imagePullSecrets:            #####key point,the 2 lines 
+  - name: regcred
+
+$>k8s-master> kubectl create -f pullFromPrivateDockerHubRepo.yaml
+
 #######install with ali ############
 https://www.liammoat.com/blog/2019/using-kubectl-to-generate-kubernetes-yaml
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+https://www.liammoat.com/blog/2019/using-kubectl-to-generate-kubernetes-yaml
+$> kubectl run my-nginx --image nginx --restart Never --dry-run -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: my-nginx
+  name: my-nginx
+spec:
+  containers:
+  - image: nginx
+    name: my-nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 
 ==================docker images ver
 # docker images
