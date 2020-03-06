@@ -1,6 +1,8 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
 
+https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
+
 ###return client ip####
 location /ip {
     default_type text/plain;
