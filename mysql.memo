@@ -1,4 +1,75 @@
 ######Startmemoof mysql.memo #######
+$ phpmyadmin server > docker run  -d  -v /home/Michael/config.inc-8090.php:/etc/phpmyadmin/config.inc.php -p 8090:80 phpmyadmin/phpmyadmin
+$ phpmyadmin server >cat config.inc.php 
+<?php
+$cfg['blowfish_secret']='ikdllllllllllllllllll5ikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmultiServerExample70518';
+//any string of your choice
+$i = 0;
+
+$i++;
+$cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+$cfg['Servers'][$i]['verbose'] = 'Database 1';
+$cfg['Servers'][$i]['host'] = '172.16.8.5';
+$cfg['Servers'][$i]['user']      = 'root';
+$cfg['Servers'][$i]['password']      = '123456';
+$cfg['Servers'][$i]['port'] = '';
+$cfg['Servers'][$i]['socket'] = '';
+$cfg['Servers'][$i]['connect_type'] = 'tcp';
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+$cfg['Servers'][$i]['auth_type'] = 'config';
+$i++;
+$cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+$cfg['Servers'][$i]['verbose'] = 'Database-docker2';
+$cfg['Servers'][$i]['host'] = '10.0.0.87';
+$cfg['Servers'][$i]['user']      = 'root';
+$cfg['Servers'][$i]['password']      = '1998';
+$cfg['Servers'][$i]['port'] = '';
+$cfg['Servers'][$i]['socket'] = '';
+$cfg['Servers'][$i]['connect_type'] = 'tcp';
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+$cfg['Servers'][$i]['auth_type'] = 'config';
+
+
+nginx server > cat mysql50yccn.conf
+upstream mysql_back-server {
+    server 10.0.0.97:8080;
+}
+upstream mysql_back-server-8090 {
+    server 10.0.0.97:8090;
+}
+server {
+        server_name mysql.50yc.cn;
+        listen 80;
+        location / {
+                return 301 https://mysql.50yc.cn;
+        }
+}
+server {
+        server_name mysql.50yc.cn;
+    listen 443;
+        ssl on;
+
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        host    $host;
+    proxy_set_header        X-Forwarded-Server      $host;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_redirect          http:// https://;
+    client_max_body_size    1G;
+
+    ssl_certificate "/etc/letsencrypt/archive/50yc.cn/fullchain2.pem";
+    ssl_certificate_key "/etc/letsencrypt/archive/50yc.cn/privkey2.pem";
+    ssl_session_timeout  10m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    location /a8080/ {
+        proxy_pass http://10.0.0.97:8080/;
+    }
+    location /a8090/ {
+        proxy_pass http://10.0.0.97:8090/;
+    }
+}
+
 
 https://stackoverflow.com/questions/2428416/how-to-create-a-database-from-shell-command
 echo "create database `database-name`" | mysql -u username -p

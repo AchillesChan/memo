@@ -1,5 +1,12 @@
 ######Startmemoof network.memo #######
 ######Start network.memo #######
+https://blog.oddbit.com/post/2014-08-11-four-ways-to-connect-a-docker/
+https://blog.scottlowe.org/2016/01/28/docker-macvlan-interfaces/
+https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/
+https://www.thegeekstuff.com/2017/06/brctl-bridge/
+http://www.tldp.org/HOWTO/BRIDGE-STP-HOWTO/practical-example.html
+http://www.tldp.org/HOWTO/BRIDGE-STP-HOWTO/rules-on-bridging.html
+https://linux-blog.anracom.com/2016/02/02/fun-with-veth-devices-linux-virtual-bridges-kvm-vmware-attach-the-host-and-connect-bridges-via-veth/
 ====================================================
 ====================================================
 ====================================================
