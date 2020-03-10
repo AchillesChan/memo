@@ -2,8 +2,40 @@
 ######Start pythondemo.py #######
 http://ginstrom.com/scribbles/2009/09/14/easy-sftp-uploading-with-paramiko/ Easy SFTP uploading with paramiko
 
-https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html 
+https://paramiko-docs.readthedocs.io/en/1.15/api/sftp.html
 https://www.liaoxuefeng.com/ python教学
+
+
+################generate OTP###########
+https://www.geeksforgeeks.org/python-program-to-generate-one-time-password-otp/
+--10
+vm> #cat otp.py
+# Importing random to generate
+# random string sequence
+import random
+
+# Importing string library function
+import string
+
+def rand_pass(size):
+
+    # Takes random choices from
+    # ascii_letters and digits
+    generate_pass = ''.join([random.choice( string.ascii_uppercase +
+                                            string.ascii_lowercase +
+                                            string.digits)
+                                            for n in range(size)])
+    return generate_pass
+
+if __name__ == "__main__" :
+    print("OTP of 8 chars:", rand_pass(8))
+
+--20
+vm> # python otp.py
+('OTP of 8 chars:', 'Bwixg7tO')
+
+################generate OTP###########
+
 
 ###centos install 3.6 python####
 sudo yum install centos-release-scl
@@ -68,7 +100,7 @@ if __name__ == '__main__':
 # -*- codingi:utf-8 -*-
 import os
 import subprocess
-def ping_check(var_hostname):                                                                     ####can not use - to link 
+def ping_check(var_hostname):                                                                     ####can not use - to link
     devnull = open(os.devnull,'w')                                                                ####link to /dev/null
     response = subprocess.call \                                                                  ####use \ span lines
     (["ping","-c","1",var_hostname],stdout=devnull,stderr=devnull)                                ####PATT CMD PARA var
@@ -79,15 +111,15 @@ def main():
     print flag
 
 if __name__ == '__main__':
-    main()    
+    main()
 #####call system cmd and get return code,suppress stdout and errout
 
 
-#########function call and return 
+#########function call and return
 # -*- codingi:utf-8 -*-
 
 def main():
-    sum = add(3,5)                                                                                                                                                       
+    sum = add(3,5)
     print sum
 def add(foo,bar):
     res = foo + bar
@@ -96,7 +128,7 @@ def add(foo,bar):
 if __name__ == '__main__':
     main()
 
-#########function call and return 
+#########function call and return
 
 
 
@@ -108,21 +140,21 @@ if __name__ == '__main__':
 
 import os
 
-def main(): 
+def main():
     print '你好, 世界!'
     print "单引号，双引号，其实是一码事"
     print '字符串内的引号需被转义(如 O\'Neil)'
     print "换个不同的引号就无需转义了(看 O'Neil)"
-    
+
     print """三引号（亦可以是三个单引号）可以安全地处理单双引号混用，例如：
     O'Neil 说: "姚明太瘦。"
     姚明说: "O'Neil 太老。"
 而且还能跨行，跨行后的格式也能被保留。
 """
-    
+
     print '=' * 10
     print '这将直接执行', os.getcwd()
-    
+
     add(5, 10)
 
     counter = 0
@@ -146,14 +178,14 @@ def add(param1, param2):
     # 这也是一个注释。
     res = param1 + param2
     print '%s + %s = %s' %(param1, param2, res)
-    
+
     if res < 50:
         print '这个这个'
     elif res >= 50 and (param1 == 42 or param2 == 24):
         print '那个那个'
     else:
         print '嗯哼...'
-        
+
     return r es      # 注释还可以像这样直接跟在一句代码的后面
 
 if __name__ == '__main__':
@@ -173,7 +205,7 @@ if __name__ == '__main__':
     main()
 
 
-$> python dp.py  ####run 
+$> python dp.py  ####run
 Tue Jan 16 15:19:08 CST 2018
 -rwxr-xr-x 1 Michael users 178 Jan 16 15:18 /home/Michael/dp.py
 
@@ -217,7 +249,7 @@ def replace_in_place_in_file():
         input = open("regex_replace_file","r")
 
         for line in input:
-            output.write(re.sub("regex_pattern","will_be_replaced_string", line))                                       
+            output.write(re.sub("regex_pattern","will_be_replaced_string", line))
         input.close()
         output.close()
         os.remove("regex_replace_file")  ###不优雅
@@ -248,7 +280,7 @@ def replace_in_place_in_file():
 ###########detect port if open
 ###https://stackoverflow.com/questions/19196105/python-how-to-check-if-a-network-port-is-open-on-linux
 # -*- coding: utf-8 -*-
-import socket 
+import socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 result = sock.connect_ex(('ip_or_host',port_number))
 if result == 0:
@@ -265,7 +297,7 @@ import MySQLdb
 # 打开数据库连接
 db = MySQLdb.connect("server_ip_or_host","user","pwd","DB_name" )
 
-# 使用cursor()方法获取操作游标 
+# 使用cursor()方法获取操作游标
 cursor = db.cursor()
 
 # 使用execute方法执行SQL语句
@@ -285,7 +317,7 @@ cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
 sql = """CREATE TABLE EMPLOYEE (
          FIRST_NAME  CHAR(20) NOT NULL,
          LAST_NAME  CHAR(20),
-         AGE INT,  
+         AGE INT,
          SEX CHAR(1),
          INCOME FLOAT )"""
 
@@ -320,7 +352,7 @@ try:
       sex = row[3]
       income = row[4]
       # 打印结果
-      print "fname=%s,lname=%s,age=%d,sex=%s,income=%d" % \ 
+      print "fname=%s,lname=%s,age=%d,sex=%s,income=%d" % \
              (fname, lname, age, sex, income )
 except:
    print "Error: unable to fecth data"
@@ -350,7 +382,7 @@ except:
    db.rollback()
 
 # 关闭数据库连接
-db.close()                     
+db.close()
 
 #####get full path and name ###########
 https://stackabuse.com/python-list-files-in-a-directory/
@@ -363,7 +395,7 @@ from ftplib import FTP
 
 def printfile(mypath):
     shpfiles = []
-    for dirpath, subdirs, files in os.walk(mypath):                                                                                
+    for dirpath, subdirs, files in os.walk(mypath):
         for x in files:
                 shpfiles.append(os.path.join(dirpath, x))
     print shpfiles
@@ -373,13 +405,13 @@ def printfile(mypath):
 ####--15 another function
 import os, fnmatch
 
-listOfFiles = os.listdir('.')  
-pattern = "*.py"  
-for entry in listOfFiles:  
+listOfFiles = os.listdir('.')
+pattern = "*.py"
+for entry in listOfFiles:
     if fnmatch.fnmatch(entry, pattern):
             print (entry)
 
-####--20 call 
+####--20 call
 printfile('/home/user')
 
 #####get full path and name ###########

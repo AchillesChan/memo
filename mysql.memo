@@ -1,4 +1,44 @@
 ######Startmemoof mysql.memo #######
+
+error 2059: Authentication plugin 'caching_sha2_password' cannot be loaded: /usr/lib64/mysql/plugin/caching_sha2_password.so: cannot open shared object file: No such file or directory
+
+http://www.voidcn.com/article/p-zyjabkjj-brz.html
+
+mysql> select version();  
+    +-----------+ 
+    | version() |  
+    +-----------+ 
+    | 8.0.11    |  
+    +-----------+ 
+    1 row in set (0.00 sec)  
+
+    mysql> show variables like 'default_authentication_plugin';  
+    +-------------------------------+-----------------------+ 
+    | Variable_name                 | Value                 |  
+    +-------------------------------+-----------------------+ 
+    | default_authentication_plugin | caching_sha2_password |  
+    +-------------------------------+-----------------------+ 
+    1 row in set (0.01 sec)  
+
+    mysql> select host,user,plugin from mysql.user;  
+    +-----------+------------------+-----------------------+ 
+    | host      | user             | plugin                |  
+    +-----------+------------------+-----------------------+ 
+    | %         | root             | caching_sha2_password |  
+    | localhost | mysql.infoschema | mysql_native_password |  
+    | localhost | mysql.session    | mysql_native_password |  
+    | localhost | mysql.sys        | mysql_native_password |  
+    | localhost | root             | caching_sha2_password |  
+    +-----------+------------------+-----------------------+ 
+    5 rows in set (0.00 sec)
+
+
+mysql> ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+mysql> alter user 'admin'@'%' identified by 'a1';
+mysql> grant all privileges on *.* to 'admin'@'%' with grant option;
+
+
+
 $ phpmyadmin server > docker run  -d  -v /home/Michael/config.inc-8090.php:/etc/phpmyadmin/config.inc.php -p 8090:80 phpmyadmin/phpmyadmin
 $ phpmyadmin server >cat config.inc.php 
 <?php
