@@ -1,4 +1,86 @@
 ######Startmemoof mysql.memo #######
+--05 URL 
+https://archerydms.com/home/
+ https://archerydms.com/configuration/
+ 
+ --10 install archery
+ $> wget https://github.com/hhyo/Archery/archive/v1.7.7.tar.gz
+ $> tar vzxf v1.7.7.tar.gz
+ $> edit ..//src/docker-compose.yml
+ version: '3'
+ 
+ services:
+   redis:
+     image: abc.com/redis:5
+     container_name: redis
+     restart: always
+     command: redis-server --requirepass 123456
+     expose:
+       - "6379"
+ 
+   mysql:
+     image: abc.com/mysql:5.7
+     container_name: mysql
+     restart: always
+     ports:
+       - "3306:3306"
+     volumes:
+       - "./mysql/my.cnf:/etc/mysql/my.cnf"
+       - "./mysql/datadir:/var/lib/mysql"
+     environment:
+       MYSQL_DATABASE: archery
+       MYSQL_ROOT_PASSWORD: 123456
+ 
+   inception:
+     image: abc.com/inception:1.7.7
+     container_name: inception
+     restart: always
+     expose:
+       - "6669"
+     volumes:
+       - "./inception/inc.cnf:/etc/inc.cnf"
+ 
+   goinception:
+     image: abc.com/archery/hanchuanchuan/goinception:1.7.7
+     container_name: goinception
+     restart: always
+     expose:
+       - "4000"
+     volumes:
+       - "./inception/config.toml:/etc/config.toml"
+ 
+   archery:
+     image: abc.com/archery:1.7.7
+     container_name: archery
+     restart: always
+     ports:
+       - "9123:9123"
+     volumes:
+       - "./archery/settings.py:/opt/archery/archery/settings.py"
+       - "./archery/soar.yaml:/etc/soar.yaml"
+       - "./archery/docs.md:/opt/archery/docs/docs.md"
+       - "./archery/downloads:/opt/archery/downloads"
+       - "./archery/sql/migrations:/opt/archery/sql/migrations"
+       - "./archery/logs:/opt/archery/logs"
+     entrypoint: "dockerize -wait tcp://mysql:3306 -wait tcp://redis:6379 -timeout 60s /opt/archery/src/docker/startup.sh"
+     environment:
+       NGINX_PORT: 9123
+ 
+ $> docker-compose up -d
+ $> docker exec -ti archery /bin/bash
+ 
+ docker $> cd /opt/archery
+ docker $> source /opt/venv4archery/bin/activate                     #表结构初始化
+ docker $> python3 manage.py makemigrations sql 
+ docker $> python3 manage.py migrate
+ docker $> python3 manage.py dbshell<sql/fixtures/auth_group.sql     #数据初始化
+ docker $> python3 manage.py createsuperuser                         #创建管理用户
+ docker $> exit
+
+ $> docker restart archery
+ $> curl 127.0.0.1:9123                                             #check
+#############Archery####
+
 
 error 2059: Authentication plugin 'caching_sha2_password' cannot be loaded: /usr/lib64/mysql/plugin/caching_sha2_password.so: cannot open shared object file: No such file or directory
 
