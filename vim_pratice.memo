@@ -1,6 +1,20 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
 ########vim zero-width assertion
+https://stackoverflow.com/questions/3860532/vim-regex-replace-multiple-consecutive-spaces-with-only-one-space
+In the interests of pragmatism, I tend to just do it as a three-stage process:
+
+:g/^    /s//XYZZYPARA/g
+:g/ \+/s// /g        ###firest g is select the match line include more than one space,s// / is replace selective chars to ONLY one space  
+:g/^XYZZYPARA/s//    /g     ###firest g is select the match line,s// / is replace selective chars to ONLY one space
+:g: \+:s::|:g          ####replace multiple space with only one '|'
+
+Aside: If you're wondering why I use :g instead of :s, that's just habit mostly. :g can do everything :s can and so much more. It's actually a way to execute an arbitrary command on selected lines. The command to execute happens to be s in this case so there's no real difference but, if you want to become a vi power user, you should look into :g at some point.
+
+@anteatersa, the s is the substitute command itself. If you read the last part of my answer it explains the g simply selects the lines, then executes an arbitrary command on each of them, of which s is one possibility. For example :g/^$/d will run the d command (delete line) on all empty lines. You can have all sorts of fun such as with :g/^/m0 :-) – paxdiablo Nov 28
+
+
+
 https://jbodah.github.io/blog/2016/11/01/positivenegative-lookaheadlookbehind-vim/
 
 For example, say I have a document: hello foo, welcome to foobar and I only wanted to match the second “foo” which is followed by “bar”. I could use positive lookahead (i.e. “match me ‘foo’ where the next expression is ‘bar’, but don’t include ‘bar’ in the match”).
