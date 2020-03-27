@@ -1,12 +1,45 @@
 ######Startmemoof io.memo #######
 ######Start io.memo #######
+https://www.settlersoman.com/what-is-storage-queue-depth-qd-and-why-is-it-so-important/
+
+Fan-out ratio (Storage Port to Host Port) shows the number of hosts that are connected/attached to a single port of a storage array.
+
+Fan-in ratio (Host Port to Target Port) shows the number of storage ports can be served from a single host channel.
+
+Port queue depth shows the number of requests are placed in the port queue to be serviced when the current one is complete.
+
+
+
+In general, the number of servers an array can adequately support is dependent upon following things:
+
+    Queues Depth per Physical Storage Port.
+        Number of Storage Ports.
+            Bandwidth (throughput) per Controller.
+
+                (Queues Depth per Physical Storage Port x Storage Ports) / Host Queue Depth = Number of servers
+
+                So for example, we have an 8 port array (4 ports per controller) with 1024 queues per storage port and a host (LUN) queue depth setting of 64 will be able to connect up to:
+
+                ( 8 x 1024) / 64 = 128 single connected servers or 64 (2 x HBA) or 32 (4 x HBA)
+
+                The fan-out ratio is 16:1 meaning 16 initiators per storage port.
+
+                What's about VMware infrastructure and multiple ESXi hosts communicating with the storage ports? The Queue Depth should be calculated by the following formula:
+
+                Port-QD => ESXi Host 1 (P * QD * L) + ESXi Host 2 (P * QD * L) ..... + ESXi Host n (P * QD * L)
+
+                where:
+
+                Port-QD  = Target Port Queue Depth
+                P = Number of host paths connected to the array target port
+                L = Number of LUNs presented to the host via the array target port
+                QD = LUN queue depth on the host
+
+                As shown above, it is recommended that the total aggregate of the maximum number of outstanding SCSI commands from all ESXi hosts connected to a port of an array should be less than the maximum queue depth of the port.
+
 ==========windows=================
 during 60s random write 99% file 1G block 8k threads 8 on t1.dat-to-8.dat
 .\diskspd.exe -d60 -r -w99 -c1G -b 8k -t8 t1.dat t2.dat t3.dat t4.dat 5.dat 6.dat 7.dat 8.dat
-
-
-
-
 
 Usage: diskspd [options] target1 [ target2 [ target3 ...] ]
 version 2.0.17a (2016/5/01)
