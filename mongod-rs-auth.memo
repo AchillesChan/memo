@@ -7,6 +7,95 @@ https://docs.mongodb.com/manual/reference/method/rs.add/
 https://docs.mongodb.com/manual/tutorial/enable-authentication/
 
 
+###error handle
+##################################################
+###log,data,cfg,key_file MUST have mongo owner####
+##################################################
+slave > ...not authorized on admin to execute command {...
+maste > db.grantRolesToUser('root', [{ role: 'root', db: 'admin' }])
+
+slave > "errmsg" : "not master and slaveOk=false",
+slave > rs.slaveOk()
+
+####mongd.service
+# systemctl cat mongod.service 
+# /usr/lib/systemd/system/mongod.service
+[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+Documentation=https://docs.mongodb.org/manual
+
+[Service]
+User=mongod
+Group=mongod
+Environment="OPTIONS=--nssize 1024 --noIndexBuildRetry -f /etc/mongod.conf"
+ExecStart=/bin/mongod $OPTIONS
+ExecStartPre=/usr/bin/mkdir -p /data/mongo
+ExecStartPre=/usr/bin/chown mongod:mongod /data/mongo
+ExecStartPre=/usr/bin/chmod 0755 /data/mongo
+PermissionsStartOnly=true
+PIDFile=/data/mongo/mongod.pid
+Type=forking
+# file size
+LimitFSIZE=infinity
+# cpu time
+LimitCPU=infinity
+# virtual memory size
+LimitAS=infinity
+# open files
+LimitNOFILE=64000
+# processes/threads
+LimitNPROC=64000
+# locked memory
+LimitMEMLOCK=infinity
+# total threads (user+kernel)
+TasksMax=infinity
+TasksAccounting=false
+# Recommended limits for for mongod as specified in
+# http://docs.mongodb.org/manual/reference/ulimit/#recommended-settings
+
+[Install]
+WantedBy=multi-user.target
+
+####mongd.service
+
+###mongod.conf
+# mongod.conf                                                                                                                                                                                                 
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+# Where and how to store data.
+storage:
+  dbPath: /data/mongo
+  journal:
+    enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
+
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /data/mongo/mongod.pid  # location of pidfile
+
+net:
+  port: 27017
+  bindIp: 0.0.0.0
+security:
+  authorization: enabled
+  keyFile: /etc/mongodb_keyfile
+
+replication:
+  replSetName: mongo_rs01
+
+###mongod.conf
+
 --10 master 10.0.2.11
 $> openssl rand -base64 741 > mongodb_keyfile
 $> chmod 600 mongodb_keyfile
