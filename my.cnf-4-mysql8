@@ -1,0 +1,170 @@
+## 初始化及启动mysql服务前，请修改以下参数
+# basedir/datadir/max_connections
+# innodb_buffer_pool_size
+# report_host/report_port
+# server_id
+
+[mysqld]
+user                                            = mysql
+basedir                                         = /usr/local/mysql
+datadir                                         = /data/mysql/db_3306/data
+log_error                                       = /data/mysql/db_3306/errlog/mysql.err
+socket                                          = /data/mysql/db_3306/mysql.sock
+pid_file                                        = /data/mysql/db_3306/mysql.pid
+tmpdir                                          = /data/mysql/db_3306/tmp
+innodb_tmpdir                                   = /data/mysql/db_3306/tmp
+secure_file_priv                                = /data/mysql/db_3306/tmp
+lc_messages_dir                                 = /usr/local/mysql/share
+lc_messages                                     = en_US
+default_authentication_plugin                   = 'mysql_native_password'
+
+## Needs change vars
+port                                            = 3306          # mysql服务端口，必须项，默认3306
+server_id                                       = 521          # 自定义，建议用ip截取
+report_host                                     = 192.168.1.5  # 本机ip
+report_port                                     = 3306          # mysql服务端口.非必须，建议配置，方便运维管理
+max_connections                                 = 500
+table_open_cache                                = 6000          # 配置为大于常用表的数量
+table_open_cache_instances                      = 2             # 建议配置为cpu逻辑内核数
+table_definition_cache                          = 4000          # 默认为：400+table_open_cache/2
+innodb_buffer_pool_size                         = 10G            # 关键参数，建议配置为物理内存的50~70%
+innodb_buffer_pool_instances                    = 10
+innodb_io_capacity                              = 300           # 视磁盘iops配置
+innodb_io_capacity_max                          = 5000
+
+## Global variables
+#************** General ******************
+lower_case_table_names                          = 1
+disabled_storage_engines                        = "MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+character_set_server                            = utf8mb4
+skip_name_resolve                               = ON
+explicit_defaults_for_timestamp                 = OFF
+log_timestamps                                  = SYSTEM
+local_infile                                    = ON
+event_scheduler                                 = ON
+symbolic-links                                  = 0
+skip_ssl
+#init_file                                       = /data/mysql/db_3306/conf/init_file.sql
+#query_cache_type                                = OFF
+
+#************** connection ***************
+thread_cache_size                               = 500
+max_connect_errors                              = 1000000
+connect_timeout                                 = 10
+wait_timeout                                    = 600
+interactive_timeout                             = 600
+net_read_timeout                                = 30
+net_write_timeout                               = 30
+max_allowed_packet                              = 1024M
+open_files_limit                                = 65000
+
+#************** sql limits ***************
+max_execution_time                              = 1000000000
+group_concat_max_len                            = 1048576
+lock_wait_timeout                               = 3600
+init_connect                                    = "set names utf8mb4"
+event_scheduler                                 = ON
+#sql_mode                                        = "NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+
+#**************** Connection Level Buffers **************   会话级别，随会话创建释放
+bulk_insert_buffer_size                         = 4M
+binlog_cache_size                               = 2M
+read_buffer_size                                = 2M
+read_rnd_buffer_size                            = 2M
+sort_buffer_size                                = 2M
+join_buffer_size                                = 2M
+thread_stack                                    = 256K
+
+#**************** Global Shared Buffer ******************   全局共享
+innodb_log_buffer_size                          = 16M
+innodb_sort_buffer_size                         = 8M    # 用于创建索引时，创建完毕即释放
+key_buffer_size                                 = 8M    # MyISAM 引擎表使用
+tmp_table_size                                  = 64M
+max_heap_table_size                             = 64M
+#query_cache_size                                = 0
+
+#******************* slow & general ***************
+slow_query_log                                  = ON
+slow_query_log_file                             = /data/mysql/db_3306/errlog/slow.log
+long_query_time                                 = 0.5
+log_queries_not_using_indexes                   = 1
+log_throttle_queries_not_using_indexes          = 100
+general_log                                     = OFF
+general_log_file                                = /data/mysql/db_3306/errlog/gen.log
+#log_output                                      ="TABLE,FILE"
+
+#************** binlog & relaylog ***************
+binlog_expire_logs_seconds                      = 259200 
+sync_binlog                                     = 1
+innodb_flush_log_at_trx_commit                  = 2
+log-bin                                         = /data/mysql/db_3306/binlog/bin
+log-bin-index                                   = /data/mysql/db_3306/binlog/bin.index
+max_binlog_size                                 = 1G
+binlog_format                                   = ROW
+binlog_rows_query_log_events                    = ON
+binlog_stmt_cache_size                          = 2M
+max_binlog_cache_size                           = 1G
+max_binlog_stmt_cache_size                      = 1G
+relay_log                                       = /data/mysql/db_3306/relaylog/relay
+relay_log_index                                 = /data/mysql/db_3306/relaylog/relay.index
+max_relay_log_size                              = 1G
+relay_log_purge                                 = ON
+relay_log_recovery                              = ON
+innodb_online_alter_log_max_size                = 2G
+
+##***************** System tablespace & Redo log *********************
+innodb_data_home_dir                            = /data/mysql/db_3306/data
+innodb_log_group_home_dir                       = /data/mysql/db_3306/redolog
+innodb_log_file_size                            = 1G
+innodb_log_files_in_group                       = 4
+
+##**************** Undo tablespace *****************
+innodb_undo_directory                           = /data/mysql/db_3306/undolog
+innodb_undo_log_truncate                        = ON
+innodb_max_undo_log_size                        = 1G
+
+#*************** gtid ***************
+gtid_mode                                       = ON
+enforce_gtid_consistency                        = ON
+master_verify_checksum                          = ON
+sync_master_info                                = 1
+
+#************* replication ***************
+skip-slave-start                                = 1                         # 每次重启后，需手工启动slave线程
+log_slave_updates                               = ON
+slave_load_tmpdir                               = /data/mysql/db_3306/tmp
+slave_sql_verify_checksum                       = ON
+master_info_repository                          = TABLE
+relay_log_info_repository                       = TABLE
+
+#*************** muti thread slave ***************
+slave_parallel_type                             = LOGICAL_CLOCK
+slave_parallel_workers                          = 2         # 视cpu逻辑内核数酌情配置
+slave_preserve_commit_order                     = 1         # 多线程复制时，是否有序提交事务
+
+#*********** myisam ***************
+skip_external_locking                           = ON
+concurrent_insert                               = ALWAYS
+
+#*********** innodb ***************
+innodb_flush_method                             = O_DIRECT
+innodb_buffer_pool_load_at_startup              = ON
+innodb_buffer_pool_dump_at_shutdown             = ON
+innodb_buffer_pool_dump_pct                     = 15
+innodb_max_dirty_pages_pct                      = 80
+innodb_lock_wait_timeout                        = 120       # 不建议过大，影响并发性
+innodb_old_blocks_time                          = 1000
+innodb_open_files                               = 65000
+innodb_page_cleaners                            = 2
+innodb_strict_mode                              = ON
+innodb_thread_concurrency                       = 0
+innodb_print_all_deadlocks                      = 1
+innodb_rollback_on_timeout                      = ON
+#default_storage_engine                          = InnoDB
+#default_tmp_storage_engine                      = InnoDB
+#internal_tmp_disk_storage_engine                = InnoDB
+
+##************** PS ******************
+performance_schema                              = ON
+performance-schema-instrument                   = '%=on'
+innodb_monitor_enable                           = all

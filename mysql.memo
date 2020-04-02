@@ -127,7 +127,7 @@ mysql> grant all privileges on *.* to 'admin'@'%' with grant option;
 $ phpmyadmin server > docker run  -d  -v /home/Michael/config.inc-8090.php:/etc/phpmyadmin/config.inc.php -p 8090:80 phpmyadmin/phpmyadmin
 $ phpmyadmin server >cat config.inc.php 
 <?php
-$cfg['blowfish_secret']='ikdllllllllllllllllll5ikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmultiServerExample70518';
+$cfg['blowfish_secret']='ikdltiServerExample70518';
 //any string of your choice
 $i = 0;
 
@@ -155,7 +155,7 @@ $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['auth_type'] = 'config';
 
 
-nginx server > cat mysql50yccn.conf
+nginx server > cat mysqlmywebsitecn.conf
 upstream mysql_back-server {
     server 10.0.0.97:8080;
 }
@@ -163,14 +163,14 @@ upstream mysql_back-server-8090 {
     server 10.0.0.97:8090;
 }
 server {
-        server_name mysql.50yc.cn;
+        server_name mysql.mywebsite.cn;
         listen 80;
         location / {
-                return 301 https://mysql.50yc.cn;
+                return 301 https://mysql.mywebsite.cn;
         }
 }
 server {
-        server_name mysql.50yc.cn;
+        server_name mysql.mywebsite.cn;
     listen 443;
         ssl on;
 
@@ -182,8 +182,8 @@ server {
     proxy_redirect          http:// https://;
     client_max_body_size    1G;
 
-    ssl_certificate "/etc/letsencrypt/archive/50yc.cn/fullchain2.pem";
-    ssl_certificate_key "/etc/letsencrypt/archive/50yc.cn/privkey2.pem";
+    ssl_certificate "/etc/letsencrypt/archive/mywebsite.cn/fullchain2.pem";
+    ssl_certificate_key "/etc/letsencrypt/archive/mywebsite.cn/privkey2.pem";
     ssl_session_timeout  10m;
     ssl_ciphers HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
@@ -308,7 +308,7 @@ mysql    107428 107080  0 14:06 pts/8    00:00:02 /usr/sbin/mysqld --defaults-fi
 $> mysql -u root -p -S /data/mysql/mysql2.sock
 Enter password: 
 ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
-[root@HNZY-MYS WLYD-50YC-MYS2_10.31.100.37]# mysql -u root -p -S /data/mysql/mysql2.sock
+[root@HNZY-MYS WLYD-mywebsite-MYS2_10.31.100.37]# mysql -u root -p -S /data/mysql/mysql2.sock
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 3
@@ -1860,15 +1860,21 @@ or
 
 10 systemctl stop mysqld
 
-20 $>/path/2/mysqld --user=mysql --skip-grant-tables --skip-networking
+20 $ > /path/2/mysqld --user=mysql --skip-grant-tables --skip-networking
 
-30 mysql>update mysql.user SET authentication_string = PASSWORD('newPass') where user='root';
+25  mysql > flush privileges;
 
-40 mysql>flush privileges;
+30 mysql > update mysql.user SET authentication_string = PASSWORD('newPass') where user='root';
 
-50 mysql>exit;
+35 mysql >  alter user 'root'@'localhost' identified by 'newPass';
 
-60 $>systemctl or pkill mysqld 
+40 mysql > flush privileges;
+
+50 mysql > exit;
+
+55 $> mysqladmin -uroot -pnewPass shutdown
+
+#60 $>systemctl or pkill mysqld 
 
 70 $>systemctl restart mysqld
 
