@@ -137,20 +137,6 @@ kubia-manual             1/1     Running   0          50m   app=kubia           
 
 [root@k8s-m2 ha ~]# cat /etc/haproxy/haproxy.cfg |tail -n 40
 ......
-frontend k8s-api
-  bind *:6443
-  mode tcp 
-  option tcplog
-  default_backend k8s-api
-
-backend k8s-api
-  mode tcp                                                                                                                                                                                                                                                                    
-  option tcplog
-  option tcp-check
-  balance roundrobin
-  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100 
-  server k8s-m01 10.0.2.11:6443 check
-
 frontend k8s-80
   bind *:80
   mode tcp 
@@ -163,22 +149,18 @@ backend k8s-80
   option tcp-check
   balance roundrobin
   default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100 
-  server k8s-m01 10.0.2.11:31080 check
-  server k8s-n01 10.0.2.21:31080 check
+  server k8s-n02 10.0.2.22:31080 check        ###KEY POINT PORT FROM DAEMONSET
+  server k8s-n01 10.0.2.21:31080 check        ###KEY POINT PORT FROM DAEMONSET  
 
 
 --30 client
-[root@k8s-m3 client ~]# cat /etc/hosts|grep exa
-10.0.2.12   kubia.example.com
-10.0.2.12   ab.example.com
-10.0.2.12   mk.example.com
+[root@k8s-m3 ~]# curl mk.example.com -I   ###NOT REVERSE PROXY
+HTTP/1.1 404 Not Found
+Server: nginx/1.17.8
 
-[root@k8s-m3 ~]# curl ab.example.com 
-You've hit kubia-manual
+[root@k8s-m3 ~]# curl ab.example.com -I   ####PREVERSE PROXY
+HTTP/1.1 200 OK
+Server: nginx/1.17.9
 
-[root@k8s-m3 ~]# curl kubia.example.com 
-You've hit kubia-manual
-
-[root@k8s-m3 ~]# curl mk.example.com     ####SITE NOT RESERVE PROXYED,got 404 
-<html>
-<head><title>404 Not Found</title></head>
+[root@k8s-m3 ~]# curl example.example.com -I ###NO DNS A RECORD
+curl: (6) Could not resolve host: example.example.com; Unknown error
