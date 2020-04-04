@@ -81,7 +81,9 @@ Rules:
   ab.example.com     
                      /   kubia-nodeport:80 (10.249.1.24:8080)
 Annotations:                                ####serviceName is KEYPOINT
-  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},"name":"kubia","namespace":"default"},"spec":{"rules":[{"host":"kubia.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}},{"host":"ab.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}}]}}
+  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},
+  "name":"kubia","namespace":"default"},"spec":{"rules":[{"host":"kubia.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport",
+  "servicePort":80},"path":"/"}]}},{"host":"ab.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}}]}}
 
 Events:
   Type    Reason          Age                   From                      Message
@@ -177,33 +179,6 @@ You've hit kubia-manual
 [root@k8s-m3 ~]# curl kubia.example.com 
 You've hit kubia-manual
 
-[root@k8s-m3 ~]# curl mk.example.com 
+[root@k8s-m3 ~]# curl mk.example.com     ####SITE NOT RESERVE PROXYED,got 404 
 <html>
 <head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx/1.17.8</center>
-</body>
-</html>
-
-
-
---40 node
-[root@k8s-node1 ~]# ss -tlnp|grep kube  ########NO HOSTPORT 31080 HERE,BUT is work from k8s-m1####
-LISTEN     0      128    127.0.0.1:10248                    *:*                   users:(("kubelet",pid=20414,fd=33))
-LISTEN     0      128    127.0.0.1:41800                    *:*                   users:(("kubelet",pid=20414,fd=14))
-LISTEN     0      128    127.0.0.1:10249                    *:*                   users:(("kube-proxy",pid=16129,fd=12))
-LISTEN     0      128       [::]:30147                 [::]:*                   users:(("kube-proxy",pid=16129,fd=11))
-LISTEN     0      128       [::]:10250                 [::]:*                   users:(("kubelet",pid=20414,fd=31))
-LISTEN     0      128       [::]:10256                 [::]:*                   users:(("kube-proxy",pid=16129,fd=10))
-
-
-[root@k8s-m1 Chapter05]# curl 10.0.2.22:31080
-<html>
-<head><title>404 Not Found</title></head>
-......
-
-[root@k8s-m1 Chapter05]# curl 10.0.2.21:31080
-<html>
-<head><title>404 Not Found</title></head>
-......
