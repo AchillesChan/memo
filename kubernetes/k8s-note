@@ -26,6 +26,8 @@ kubectl apply -f svc-kubia-nodeport.yaml
 kubectl apply -f pod-kubia.yaml
 
 
+--05 
+data flow:client->haproxy->ds->ing(nginx)->svc(app)->pod(labeld)
 
 --10 master
 [root@k8s-m1 Chapter05]# kubectl get ds
@@ -51,8 +53,8 @@ Pod Template:
   Containers:
    nginx-ingress:
     Image:      nginx/nginx-ingress:edge
-    Port:       80/TCP
-    Host Port:  31080/TCP
+    Port:       80/TCP                            ###container port
+    Host Port:  31080/TCP                         ###node port NOT SHOWED ON NODE,BUT worked if check from other node
     Args:
       -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
       -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
@@ -78,7 +80,7 @@ Rules:
                      /   kubia-nodeport:80 (10.249.1.24:8080)
   ab.example.com     
                      /   kubia-nodeport:80 (10.249.1.24:8080)
-Annotations:                             
+Annotations:                                ####serviceName is KEYPOINT
   kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},"name":"kubia","namespace":"default"},"spec":{"rules":[{"host":"kubia.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}},{"host":"ab.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}}]}}
 
 Events:
@@ -105,7 +107,7 @@ Namespace:                default
 Labels:                   <none>
 Annotations:              kubectl.kubernetes.io/last-applied-configuration:
                             {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"kubia-nodeport","namespace":"default"},"spec":{"ports":[{"port":8...
-Selector:                 app=kubia
+Selector:                 app=kubia                 ####KEY POINT
 Type:                     NodePort
 IP:                       10.107.200.168
 Port:                     <unset>  80/TCP
@@ -117,12 +119,13 @@ External Traffic Policy:  Cluster
 Events:                   <none>
 
 
+[root@k8s-m1 Chapter05]# kubectl label po kubia-manual app=kubia            ###KEY POINT
 
 [root@k8s-m1 Chapter05]# kubectl get po --show-labels
 NAME                     READY   STATUS    RESTARTS   AGE   LABELS
 ds-nginx-ingress-s746p   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
 ds-nginx-ingress-xklnp   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
-kubia-manual             1/1     Running   0          50m   app=kubia
+kubia-manual             1/1     Running   0          50m   app=kubia           ####KEY POINT
 
 
 
@@ -198,18 +201,9 @@ LISTEN     0      128       [::]:10256                 [::]:*                   
 [root@k8s-m1 Chapter05]# curl 10.0.2.22:31080
 <html>
 <head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx/1.17.9</center>
-</body>
-</html>
+......
 
 [root@k8s-m1 Chapter05]# curl 10.0.2.21:31080
 <html>
 <head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx/1.17.8</center>
-</body>
-</html>
-
+......
