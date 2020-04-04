@@ -1,0 +1,266 @@
+
+https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
+
+git clone https://github.com/nginxinc/kubernetes-ingress/
+cd kubernetes-ingress/deployments
+ git checkout v1.6.3
+
+
+ kubectl apply -f common/ns-and-sa.yaml
+ kubectl apply -f rbac/rbac.yaml
+ kubectl apply -f common/default-server-secret.yaml
+ kubectl apply -f common/nginx-config.yaml
+ kubectl apply -f common/custom-resource-definitions.yaml
+
+
+
+ kubectl apply -f daemon-set/nginx-ingress.yaml
+
+
+ kubectl get pods --namespace=nginx-ingress
+
+
+
+
+
+
+kubectl apply -f ds-nginx-ingress.yaml
+kubectl apply -f ing-kubia.yaml 
+kubectl apply -f svc-kubia-nodeport.yaml
+kubectl apply -f pod-kubia.yaml
+
+
+
+[root@k8s-m1 Chapter05]# kubectl get ds
+NAME               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+ds-nginx-ingress   2         2         2       2            2           <none>          26m
+[root@k8s-m1 Chapter05]# kubectl describe ds 
+Name:           ds-nginx-ingress
+Selector:       app=nginx-ingress
+Node-Selector:  <none>
+Labels:         <none>
+Annotations:    deprecated.daemonset.template.generation: 1
+                kubectl.kubernetes.io/last-applied-configuration:
+                  {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"ds-nginx-ingress","namespace":"default"},"spec":{"selector...
+Desired Number of Nodes Scheduled: 2
+Current Number of Nodes Scheduled: 2
+Number of Nodes Scheduled with Up-to-date Pods: 2
+Number of Nodes Scheduled with Available Pods: 2
+Number of Nodes Misscheduled: 0
+Pods Status:  2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=nginx-ingress
+  Service Account:  nginx-ingress
+  Containers:
+   nginx-ingress:
+    Image:      nginx/nginx-ingress:edge
+    Port:       80/TCP
+    Host Port:  31080/TCP
+    Args:
+      -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+      -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+    Environment:
+      POD_NAMESPACE:   (v1:metadata.namespace)
+      POD_NAME:        (v1:metadata.name)
+    Mounts:           <none>
+  Volumes:            <none>
+Events:
+  Type    Reason            Age   From                  Message
+  ----    ------            ----  ----                  -------
+  Normal  SuccessfulCreate  26m   daemonset-controller  Created pod: ds-nginx-ingress-xklnp
+  Normal  SuccessfulCreate  26m   daemonset-controller  Created pod: ds-nginx-ingress-s746p
+
+[root@k8s-m1 Chapter05]# kubectl get ds
+NAME               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+ds-nginx-ingress   2         2         2       2            2           <none>          26m
+[root@k8s-m1 Chapter05]# kubectl describe ds 
+Name:           ds-nginx-ingress
+Selector:       app=nginx-ingress
+Node-Selector:  <none>
+Labels:         <none>
+Annotations:    deprecated.daemonset.template.generation: 1
+                kubectl.kubernetes.io/last-applied-configuration:
+                  {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"ds-nginx-ingress","namespace":"default"},"spec":{"selector...
+Desired Number of Nodes Scheduled: 2
+Current Number of Nodes Scheduled: 2
+Number of Nodes Scheduled with Up-to-date Pods: 2
+Number of Nodes Scheduled with Available Pods: 2
+Number of Nodes Misscheduled: 0
+Pods Status:  2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=nginx-ingress
+  Service Account:  nginx-ingress
+  Containers:
+   nginx-ingress:
+    Image:      nginx/nginx-ingress:edge
+    Port:       80/TCP
+    Host Port:  31080/TCP
+    Args:
+      -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+      -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+    Environment:
+      POD_NAMESPACE:   (v1:metadata.namespace)
+      POD_NAME:        (v1:metadata.name)
+    Mounts:           <none>
+  Volumes:            <none>
+Events:
+  Type    Reason            Age   From                  Message
+  ----    ------            ----  ----                  -------
+  Normal  SuccessfulCreate  26m   daemonset-controller  Created pod: ds-nginx-ingress-xklnp
+  Normal  SuccessfulCreate  26m   daemonset-controller  Created pod: ds-nginx-ingress-s746p
+
+
+
+
+
+
+
+[root@k8s-m1 Chapter05]# kubectl get ing
+NAME    HOSTS                              ADDRESS   PORTS   AGE
+kubia   kubia.example.com,ab.example.com             80      8m3s
+[root@k8s-m1 Chapter05]# kubectl describe ing
+Name:             kubia
+Namespace:        default
+Address:          
+Default backend:  default-http-backend:80 (<none>)
+Rules:
+  Host               Path  Backends
+  ----               ----  --------
+  kubia.example.com  
+                     /   kubia-nodeport:80 (10.249.1.24:8080)
+  ab.example.com     
+                     /   kubia-nodeport:80 (10.249.1.24:8080)
+Annotations:
+  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},"name":"kubia","namespace":"default"},"spec":{"rules":[{"host":"kubia.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}},{"host":"ab.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}}]}}
+
+Events:
+  Type    Reason          Age                   From                      Message
+  ----    ------          ----                  ----                      -------
+  Normal  AddedOrUpdated  5m25s (x2 over 8m9s)  nginx-ingress-controller  Configuration for default/kubia was added or updated
+  Normal  AddedOrUpdated  5m25s (x2 over 8m8s)  nginx-ingress-controller  Configuration for default/kubia was added or updated
+
+
+
+
+
+
+ot@k8s-m1 Chapter05]# kubectl get svc
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP   10.96.0.1        <none>        443/TCP        15d
+kubia            ClusterIP   10.102.254.118   <none>        80/TCP         5h35m
+kubia-nodeport   NodePort    10.107.200.168   <none>        80:31025/TCP   7m1s
+[root@k8s-m1 Chapter05]# kubectl get svc kubia-nodeport
+NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubia-nodeport   NodePort   10.107.200.168   <none>        80:31025/TCP   7m12s
+[root@k8s-m1 Chapter05]# kubectl describe svc kubia-nodeport
+Name:                     kubia-nodeport
+Namespace:                default
+Labels:                   <none>
+Annotations:              kubectl.kubernetes.io/last-applied-configuration:
+                            {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"kubia-nodeport","namespace":"default"},"spec":{"ports":[{"port":8...
+Selector:                 app=kubia
+Type:                     NodePort
+IP:                       10.107.200.168
+Port:                     <unset>  80/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  31025/TCP
+Endpoints:                10.249.1.24:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+
+
+[root@k8s-m1 Chapter05]# kubectl get po --show-labels
+NAME                     READY   STATUS    RESTARTS   AGE   LABELS
+ds-nginx-ingress-s746p   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
+ds-nginx-ingress-xklnp   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
+kubia-2-manual           1/1     Running   2          3h    app=two-kubia
+kubia-manual             1/1     Running   0          50m   app=kubia
+
+
+
+
+
+
+
+[root@k8s-m2 ha ~]# cat /etc/haproxy/haproxy.cfg |tail -n 40
+......
+frontend k8s-api
+  bind *:6443
+  mode tcp 
+  option tcplog
+  default_backend k8s-api
+
+backend k8s-api
+  mode tcp                                                                                                                                                                                                                                                                    
+  option tcplog
+  option tcp-check
+  balance roundrobin
+  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100 
+  server k8s-m01 10.0.2.11:6443 check
+
+frontend k8s-80
+  bind *:80
+  mode tcp 
+  option tcplog
+  default_backend k8s-80
+
+backend k8s-80
+  mode tcp                                                                                                                                                                                                                                                                    
+  option tcplog
+  option tcp-check
+  balance roundrobin
+  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100 
+  server k8s-m01 10.0.2.11:31080 check
+  server k8s-n01 10.0.2.21:31080 check
+
+
+[root@k8s-m3 client ~]# cat /etc/hosts|grep exa
+10.0.2.12   kubia.example.com
+10.0.2.12   ab.example.com
+10.0.2.12   mk.example.com
+
+[root@k8s-m3 ~]# curl ab.example.com 
+You've hit kubia-manual
+
+[root@k8s-m3 ~]# curl kubia.example.com 
+You've hit kubia-manual
+
+[root@k8s-m3 ~]# curl mk.example.com 
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.17.8</center>
+</body>
+</html>
+
+
+
+[root@k8s-node1 ~]# ss -tlnp|grep kube  ########NO HOSTPORT 31080 HERE,BUT is work from k8s-m1####
+LISTEN     0      128    127.0.0.1:10248                    *:*                   users:(("kubelet",pid=20414,fd=33))
+LISTEN     0      128    127.0.0.1:41800                    *:*                   users:(("kubelet",pid=20414,fd=14))
+LISTEN     0      128    127.0.0.1:10249                    *:*                   users:(("kube-proxy",pid=16129,fd=12))
+LISTEN     0      128       [::]:30147                 [::]:*                   users:(("kube-proxy",pid=16129,fd=11))
+LISTEN     0      128       [::]:10250                 [::]:*                   users:(("kubelet",pid=20414,fd=31))
+LISTEN     0      128       [::]:10256                 [::]:*                   users:(("kube-proxy",pid=16129,fd=10))
+
+
+[root@k8s-m1 Chapter05]# curl 10.0.2.22:31080
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.17.9</center>
+</body>
+</html>
+[root@k8s-m1 Chapter05]# curl 10.0.2.21:31080
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.17.8</center>
+</body>
+</html>
+

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubia-manual
+  #namespace: ingress-nginx
+spec:
+  containers:
+  - image: dockerhub.50yc.com/it/luksa/kubia
+    imagePullPolicy: IfNotPresent
+    name: kubia
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+  imagePullSecrets:
+  - name: regcred
