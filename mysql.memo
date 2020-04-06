@@ -616,7 +616,7 @@ These settings should always be used, and they are necessary for crash-safe GTID
 $>sudo yum install mariadb-server && systemctl start mariadb
 
 ####partition
-lter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;
+alter table history partition by hash((clock-1552003200) DIV (60*60*24)) partitions 300;
 
 
 partition by hash(clock DIV (60*60*24)) partitions 3;

@@ -1,6 +1,24 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+column to row support multiple column
+https://stackoverflow.com/questions/9534744/how-to-transfer-the-data-of-columns-to-rows-with-awk
+https://ideone.com/F1TJm
+
+awk '{
+       for (f = 1; f <= NF; f++) { a[NR, f] = $f } 
+     }
+     NF > nf { nf = NF }
+     END {
+       for (f = 1; f <= nf; f++) {
+           for (r = 1; r <= NR; r++) {
+               printf a[r, f] (r==NR ? RS : FS)
+           }
+       }
+    }' YOUR_text
+
+
+
 ###concate field with special char
 $> awk -F ',' '{printf "%s--->%s\n", $4,$6}' ssh-cfg
 404 Not Found--->50010
