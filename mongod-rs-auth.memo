@@ -22,9 +22,24 @@ rs:PRIMARY> db.createUser(
          { role: "read", db: "dbs" },
      ]
      }  
+)
 
-rs:PRIMARY> db.getUsers()
+rs:PRIMARY> db.getUsers("userName")
+db.getUser("userName")
+{
+        "_id" : "admin.userName",
+        "user" : "userName",
+        "db" : "admin",
+        "roles" : [
+                {
+                        "role" : "read",
+                        "db" : "dbName"
+                }
+        ]
+}
+
 #####user and roles
+
 
 ###error handle
 ##################################################
