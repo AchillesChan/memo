@@ -5,6 +5,36 @@ https://blog.jcole.us/2010/09/28/mysql-swap-insanity-and-the-numa-architecture/
 https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-balancer-for-mysql-on-ubuntu-16-04
 https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
+
+
+https://dba.stackexchange.com/questions/83109/bulk-delete-for-large-table-in-mysql
+Make a temp table, switch it in and out, and copy the last 30 days data into it.
+#
+# Make empty temp table
+#
+CREATE TABLE NOTIFICATION_NEW LIKE NOTIFICATION;
+#
+# Switch in new empty temp table
+#
+RENAME TABLE NOTIFICATION TO NOTIFICATION_OLD,NOTIFICATION_NEW TO NOTIFICATION;
+#
+# Retrieve last 30 days data 
+#
+INSERT INTO NOTIFICATION SELECT * FROM NOTIFICATION_OLD
+WHERE CreatedAt >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+In your off hours, drop the old table
+
+DROP TABLE NOTIFICATION_OLD;
+Here are the Advantages to doing DELETEs like this
+
+NOTIFICATION is emptied fast by means switching in an empty table.
+NOTIFICATION is immediately available for new INSERTs
+The remaining 30 days are added back into NOTIFICATION while new INSERTs can take place.
+Dropping the old version of NOTIFICATION does not interfere with new INSERTs
+NOTE : I have recommended doing bait-and-switch for table DELETEs before : (See my July 19, 2012 post : Optimizing DELETE Query on MySQL MEMORY Table)
+
+
+
 --05 URL 
 https://archerydms.com/home/
  https://archerydms.com/configuration/

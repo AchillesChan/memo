@@ -6,6 +6,25 @@ https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-exist
 https://docs.mongodb.com/manual/reference/method/rs.add/
 https://docs.mongodb.com/manual/tutorial/enable-authentication/
 
+#####user and roles
+https://docs.mongodb.com/manual/reference/method/db.createUser/
+https://docs.mongodb.com/manual/reference/built-in-roles/#database-user-roles
+
+rs:PRIMARY> use admin
+
+rs:PRIMARY> db.auth('admin','adminpwd')
+
+rs:PRIMARY> db.createUser(
+    { 
+     user: "user",
+     pwd: "pwd",
+    roles:  [
+         { role: "read", db: "dbs" },
+     ]
+     }  
+
+rs:PRIMARY> db.getUsers()
+#####user and roles
 
 ###error handle
 ##################################################
