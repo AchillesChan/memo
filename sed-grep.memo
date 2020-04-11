@@ -1,3 +1,58 @@
+
+############replace (sed?) a single line/string in file with multiple lines (string) from another file??
+https://www.unix.com/shell-programming-and-scripting/148888-replace-sed-single-line-string-file-multiple-lines-string-another-file.html
+
+Say file1.txt contains:
+
+today is monday
+the 22 of
+NOVEMBER
+2010
+
+and file2.txt contains:
+
+the
+11th
+month
+of
+
+How do i replace the word NOVEMBER with
+
+the
+11th
+month
+of
+
+so output file is:
+
+today is monday
+the 22 of
+the
+11th
+month
+of
+2010
+
+
+sed  '/NOVEMBER/r file2.txt' file1.txt |sed '/NOVEMBER/d'
+
+
+
+#!/bin/bash
+# tested with bash 4
+file2=$(<file2)
+while read -r line
+do
+    case "$line" in
+        *NOVEMBER*)
+        line="$file2"
+        ;;
+    esac
+    echo "$line"
+done < file1 > t && mv t file1
+
+############replace (sed?) a single line/string in file with multiple lines (string) from another file??
+
 --10 orginal text
 Shell>$ head vmresult.txt.bak 
 Message              : Controller ID:  0  VD is now DEGRADED   VD  
