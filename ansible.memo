@@ -1,6 +1,32 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
+##generate ssh config from dns vm name
+--10 orgin text
+[Opensuse ]$ cat add-host-to-ssh-config
+vm-m02.abc.com
+vm-s02.abc.com
+
+--20 result
+[Opensuse ]$ awk -F'.' '{print "vm-"$1,$0}' add-host-to-ssh-config |xargs -P 1 -n 2 sh -c 'echo _Host $1,Hostname $2,User ssh_user,ProxyCommand    ssh -q -W %h:%p vm-jump-01,port 22,IdentityFile  ~/.ssh/my_rsa_key' _|sed -e "s:,:\n:g"|sed -e "s:_:\n:g" >>~/.ssh/config
+
+Host vm-vm-m02
+Hostname vm-m02.abc.com
+User ssh_user
+ProxyCommand ssh -q -W %h:%p vm-jump-01
+port 22
+IdentityFile /home/Michael/.ssh/my_rsa_key
+
+Host vm-vm-s02
+Hostname vm-s02.abc.com
+User ssh_user
+ProxyCommand ssh -q -W %h:%p vm-jump-01
+port 22
+IdentityFile /home/Michael/.ssh/my_rsa_key
+
+##generate ssh config from dns vm name
+
+
 ###ansible jump server bastion###
 $cat /path/2/ansible/4/ssh/config
 Host *
@@ -15,7 +41,7 @@ Port                  56789
 IdentityFile          ~/.ssh/key1
 ProxyCommand none
 
-Host az-my-app-p01
+Host vm-my-app-p01
 Hostname myAPP-P01.example.com
 User root
 ProxyCommand    ssh  -W %h:%p my-bastion-vm
@@ -23,7 +49,7 @@ Port 22
 IdentityFile ~/.ssh/kye2
 ControlPath ~/.ssh/ansible-%r@%h:%p
 
-Host az-my-app-p02
+Host vm-my-app-p02
 Hostname myAPP-P02.example.com
 User root
 ProxyCommand    ssh -W %h:%p my-bastion-vm
@@ -37,12 +63,12 @@ control_path = ~/.ssh/ansible-%%r@%%h:%%p
 
 
 cat $cat ~/ansible/ansible-my-host
-[az-my]
+[vm-my]
 my-bastion-vm       ansible_ssh_host=192.168.1.10 ansible_ssh_user=Michael    ansible_ssh_port=22 ansible_ssh_key=~/.ssh/key1
-az-my-app-p01    ansible_ssh_host=myAPP-P01.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
-az-my-app-p02    ansible_ssh_host=myAPP-P02.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
-az-my-app-p03    ansible_ssh_host=myAPP-P03.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
-az-my-bak-p01    ansible_ssh_host=myBAK-P01.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+vm-my-app-p01    ansible_ssh_host=myAPP-P01.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+vm-my-app-p02    ansible_ssh_host=myAPP-P02.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+vm-my-app-p03    ansible_ssh_host=myAPP-P03.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
+vm-my-bak-p01    ansible_ssh_host=myBAK-P01.example.com    ansible_ssh_user=root    ansible_ssh_port=22    ansible_ssh_key=~/.ssh/kye2
 
 ###ansible jump server bastion###
 
