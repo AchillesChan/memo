@@ -921,9 +921,9 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
-And, here is a snippet from Andrzej Szelachowski's instructive .bash_profile file.
+#And, here is a snippet from Andrzej Szelachowski's instructive .bash_profile file.
 
-Example M-2. .bash_profile file
+#Example M-2. .bash_profile file
 
 # From Andrzej Szelachowski's ~/.bash_profile:
 
@@ -948,9 +948,9 @@ echo \$T \`"
 #+ when the variable is exported/read from .bash_profile,
 #+ and it will not change afterwards even if the user ID changes.
 if [[ $EUID -ne 0 ]];then
-    PS1='\[\e[34m\]\n\w    \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
+    PS1='\[\e[34m\]\n\w  $(ip a|grep inet|grep global|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S)   $?   \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
 else
-    PS1='\[\e[31m\]\n\w    \u\n\[\e[31m\][\h ]\$\[\e[0m\] '
+    PS1='\[\e[31m\]\n\w  $(ip a|grep inet|grep global|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S)  $?   \u\n\[\e[31m\][\h ]\$\[\e[0m\] '
 fi
 
     #PS1="\n$GREEN[\w] \n$DARKGRAY($PCT\t$DARKGRAY)-($PCT\u$DARKGRAY)-($PCT\!
