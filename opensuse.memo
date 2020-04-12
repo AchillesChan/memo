@@ -25,14 +25,14 @@ sudo zypper dup --from packman --allow-vendor-change
 
 
 install krdc keychain git locate
-$>sudo zypper in -y git krdc keychain mlocate
+$>sudo zypper in -y git krdc keychain mlocate ibus ibus-googlepinyin
 
 
 
 ======================
 fast copy & paste
 1 clipboard-->right client-->config -->general-->uncheck Ignore selection,check all other
-2 sudo zypper install fcitx
+2 sudo zypper install fcitx 
 3 start-->fcitx config-->addon config-->clipboard-->Trigger key...-->use Ctrl+;
 4 install google chrome 
 bulit in google flash player plugin,friendly for video web site 
@@ -64,10 +64,9 @@ Now we can install Google Chrome using the following command. in stands for inst
 
 $ sudo zypper in google-chrome-stable
 
-
 #########add show desktop and lock screen
 right task bar-->pannel option-->widgets-->search desktop-->double click show desktop
-yast-->desktop behavior-->screen locking-->set timeout -->set shortcut(default is ctrl+alt+L) 
+yast-->(config desktop)? desktop behavior-->screen locking-->set timeout -->set shortcut(default is ctrl+alt+L) 
 
 #########reenable window grid(Ctrl + F8)
 start-->configure desktop -->display and monitor-->compositor-->correct opengl error-->rendering backend select opengl 3.1 -->apply
