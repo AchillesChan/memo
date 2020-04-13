@@ -947,11 +947,11 @@ echo \$T \`"
 #  Otherwise, the value of PCT variable is assigned only once,
 #+ when the variable is exported/read from .bash_profile,
 #+ and it will not change afterwards even if the user ID changes.
-if [[ $EUID -ne 0 ]];then
-    PS1='\[\e[34m\]\n\w $? $(ip a|grep inet|grep global|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S) \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
-else
-    PS1='\[\e[31m\]\n\w $? $(ip a|grep inet|grep global|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S)  \u\n\[\e[31m\][\h ]\$\[\e[0m\] '
-fi
+#if [[ $EUID -ne 0 ]];then
+PS1='\[\e[34m\]\n\w $? $(ip a|grep inet|grep global|head -n 1|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S) \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
+#else
+#    PS1='\[\e[31m\]\n\w $? $(ip a|grep inet|grep global|head -n 1|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S)  \u\n\[\e[31m\][\h ]\$\[\e[0m\] '
+#fi
 
     #PS1="\n$GREEN[\w] \n$DARKGRAY($PCT\t$DARKGRAY)-($PCT\u$DARKGRAY)-($PCT\!
 #$DARKGRAY)$YELLOW-> $NC"

@@ -1,0 +1,83 @@
+#need update basedir/datadir/server-id
+#Must do it before start mysql
+[mysqld]
+user                                            = mysql
+basedir                                         = /usr/local/mysql
+datadir                                         = /datassd/mysql
+slow_query_log                                  = 1 
+slow_query_log_file                             = /data/mysql/logs/mysql-slow.log
+long_query_time                                 = 0.5 
+log-bin                                         = /data/mysql/logs/mysql-2-binlog     ###file name prefix
+binlog_format                                   = MIXED 
+tmpdir                                          = /var/log/mysql
+innodb_undo_directory                           = /var/log/mysql
+log_error                                       = /var/log/mysql/mysql.err
+innodb_undo_log_truncate                        = ON
+innodb_max_undo_log_size                        = 1G
+port                                            = 3306
+max_connections                                 = 1000 
+innodb_buffer_pool_instances                    = 10
+innodb_io_capacity                              = 900 
+innodb_io_capacity_max                          = 1000
+
+
+report_host                                     = 192.168.1.2 # host ip
+report_port                                     = 3306          # mysql port
+table_open_cache                                = 6000          # 配置为大于常用表的数量
+table_open_cache_instances                      = 2             # 建议配置为cpu逻辑内核数
+table_definition_cache                          = 4000          # 默认为：400+table_open_cache/2
+disabled_storage_engines                        = "MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+explicit_defaults_for_timestamp                 = OFF
+log_timestamps                                  = SYSTEM
+local_infile                                    = ON
+
+thread_cache_size                               = 500
+max_connect_errors                              = 1000000
+connect_timeout                                 = 10
+wait_timeout                                    = 600
+interactive_timeout                             = 600
+net_read_timeout                                = 30
+net_write_timeout                               = 30
+max_allowed_packet                              = 1024M
+open_files_limit                                = 65000
+
+
+max_execution_time                              = 1000000000
+innodb_flush_method                             = O_DIRECT
+innodb_buffer_pool_load_at_startup              = ON
+innodb_buffer_pool_dump_at_shutdown             = ON
+innodb_buffer_pool_dump_pct                     = 15
+innodb_max_dirty_pages_pct                      = 80
+innodb_lock_wait_timeout                        = 120       # 不建议过大，影响并发性
+innodb_old_blocks_time                          = 1000
+innodb_open_files                               = 65000
+innodb_page_cleaners                            = 2
+innodb_strict_mode                              = ON
+innodb_thread_concurrency                       = 0
+innodb_print_all_deadlocks                      = 1
+innodb_rollback_on_timeout                      = ON
+
+
+performance_schema                              = ON
+performance-schema-instrument                   = '%=on'
+innodb_monitor_enable                           = all     
+                                                                                                                                                                    
+server-id                                       = 352                 ########change as need
+symbolic-links                                  = 0
+event_scheduler                                 =ON
+gtid-mode                                       = on
+enforce-gtid-consistency                        = true
+log-slave-updates                               = true
+character-set-server                            = utf8mb4
+lower_case_table_names                          = 1 
+max_connect_errors                              = 1000
+skip-name-resolve                               = 1 
+skip_ssl
+innodb_buffer_pool_size                         = 10G  #####change as need
+sql_mode                                        = NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+ 
+ 
+#general_log=1
+#general_log_file  = /var/log/mysql/mysql_general.log
+ 
+relay-log                                       = relay-bin
