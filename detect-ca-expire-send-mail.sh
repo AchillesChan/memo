@@ -1,11 +1,11 @@
-[root@S-INFRA-MON01L Achilles]# cat sites
+[root@host user]# cat sites
 #SITE                               TAG
 www.abcyc.com                        WAN2.8.6
 an.abc.link                          139.359.7.3
 
 
 
-[root@S-INFRA-MON01L Achilles]# cat detect-ca.sh
+[root@host user]# cat detect-ca.sh
 #!/bin/bash
 PATH="/usr/local/bin:/usr/bin:/bin"
 SITELIST="/home/Achilles/sites"
