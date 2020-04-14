@@ -948,6 +948,8 @@ echo \$T \`"
 #+ when the variable is exported/read from .bash_profile,
 #+ and it will not change afterwards even if the user ID changes.
 #if [[ $EUID -ne 0 ]];then
+repeatf() { while :; do $@ || return; sleep 3; done }
+repeats() { while :; do $@ && return; sleep 3; done }
 PS1='\[\e[34m\]\n\w $? $(ip a|grep inet|grep global|head -n 1|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S) \u\n\[\e[34m\][\h ]\$\[\e[0m\] '
 #else
 #    PS1='\[\e[31m\]\n\w $? $(ip a|grep inet|grep global|head -n 1|sed 's/inet//'g|sed 's/brd.*$//g') $(ip route|grep default|sed -e 's/defa.*via//g'|sed -e 's/dev.*$//g')  $(date +%Y/%m%d-%H:%M:%S)  \u\n\[\e[31m\][\h ]\$\[\e[0m\] '

@@ -1,5 +1,46 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
+##############debug style
+cat script.sh
+#!/bin/bash
+_DEBUG="off"                     ###set to on,print debug msg,off slient
+function DEBUG()
+{
+     [ "$_DEBUG" == "on" ] &&  $@ || :
+ }
+
+ DEBUG echo 'Reading files'        ###echo msg when mode on,not for off
+ for i in *
+ do
+       grep 'Sth' $i > /dev/null
+       [ $? -eq 0 ] && echo "Found in $i file"
+  done
+
+  DEBUG set -x                     ###debug mode on
+     a=2
+     b=3
+     c=$(( $a + $b ))
+  DEBUG set +x                     ####debug mode off
+     echo "$a + $b = $c"
+
+
+$ ./script.sh                      ####set mode on
+Reading files
+Found in xyz.txt file
++ a=2
++ b=3
++ c=5
++ DEBUG set +x
++ '[' on == on ']'
++ set +x
+2 + 3 = 5
+
+
+$ ./script.sh                     ###debug mode off
+Found in xyz.txt file
+2 + 3 = 5
+####debug style
+
 
 ###auto restart ssh tunnel
 $ cat auto-restart-ssh-cfg 

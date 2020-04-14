@@ -1,6 +1,22 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 
+
+https://linuxhint.com/bash-environment-variables/
+Special Parameters
+We can also have parameters which the shell treats specially which can only be used as references and assigning a value to them is not possible.
+
+￼
+$*  Expands to the positional parameters, starting from one. When the expansion occurs within double quotes, it expands to a single word with the value of each parameter separated by the first character of the IFS special variable.
+$@  Provides the positional parameters, starting from one. When the expansion occurs within double quotes, each parameter expands to a separate word.
+$#  Provides the number of positional parameters in decimal.
+$?  Provides the exit status of the most recently executed foreground pipeline.
+$-  A hyphen-sign provides the current option flags as specified upon invocation, by the set built-in command, or those set by the shell itself (such as the -i)
+$$  Provides the current process ID of the shell
+$!  Provides the current process ID of the most recently executed background command
+$0  Provides the name of the current shell or shell script
+
+
 test lan host open 80 status 
 for ip in $(seq 3 8);do timeout 1 bash -c "</dev/tcp/10.1.0.$ip/80" && echo Port $ip open. || echo Port $ip closed.; done
 
