@@ -3,7 +3,7 @@
 ##############debug style
 cat script.sh
 #!/bin/bash
-_DEBUG="off"                     ###set to on,print debug msg,off slient
+#_DEBUG="off"                     ###on print debug msg,off slient;or disable this ,revoke on calling
 function DEBUG()
 {
      [ "$_DEBUG" == "on" ] &&  $@ || :
@@ -24,7 +24,7 @@ function DEBUG()
      echo "$a + $b = $c"
 
 
-$ ./script.sh                      ####set mode on
+$ _DEBUG=on ./script.sh                      ####set mode on
 Reading files
 Found in xyz.txt file
 + a=2
