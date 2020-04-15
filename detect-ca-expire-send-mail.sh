@@ -38,7 +38,7 @@ then
         DATE_DIFFERENCE=$((($DATE_THEN - $DATE_NOW)/86400))
         if [[ "$DATE_DIFFERENCE" -le "$MIN_DAYS" ]]
         then
-            mail -s "$URL 剩余$DATE_DIFFERENCE天 $TAG $(hostname) $(date)" mail_user@abc.com </dev/null
+            mail -s "$URL 证书剩余$DATE_DIFFERENCE天 $TAG $(hostname) $(date)" mail_user@abc.com </dev/null
         fi
 else
     mail -s "https://$URL 没有响应 $(hostname) $(date) " mail_user@abc.com </dev/null
