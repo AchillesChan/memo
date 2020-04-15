@@ -50,9 +50,9 @@ ssh -p 22 -l domain_user_from_windows_AD server-ip-or-dns-name
 $> tail /var/log/secure -f
 
 --40 ca login
-ssh-copy-id -i ~/.ssh/logcdbak domain\\user@server-ip-or-dns-name
+ssh-copy-id -i ~/.ssh/key domain\\user@server-ip-or-dns-name
 
-ssh -i -i ~/.ssh/logcdbak domain\\user@server-ip-or-dns-name
+ssh -i -i ~/.ssh/key domain\\user@server-ip-or-dns-name
 
 
 
