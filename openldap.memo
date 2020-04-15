@@ -1,3 +1,64 @@
+
+Windows Active Directory
+--10 install
+
+$> yum -y install adcli sssd authconfig
+
+$> authconfig --enablesssd --enablesssdauth --enablemkhomedir --update
+
+$> vim /etc/reslv.conf
+nameserver dns-server-ip
+
+$ adcli join --login-user=domain-user-can-join-AD wlyd.local
+
+
+$> vim /etc/sssd/sssd.conf
+[sssd]
+domains = DOMAIN.COM
+config_file_version = 2
+services = nss, pam
+
+[domain/DOMAIN.COM]
+ad_domain = DOMAIN.COM
+realmd_tags = manages-system joined-with-samba
+cache_credentials = True
+id_provider = ad
+default_shell = /bin/bash
+ldap_id_mapping = True
+use_fully_qualified_names = False
+fallback_homedir = /home/%d/%u
+access_provider = ad
+
+$> chmod 600 /etc/sssd/sssd.conf
+
+$> systemctl start sssd
+
+$> systemctl enable sssd
+
+$> vim /etc/ssh/sshd_config
+
+    AllowGroups domain_user_from_windows_AD 
+    AllowGroups root 
+
+$> systemctl restart sshd
+
+--20 login
+
+ssh -p 22 -l domain_user_from_windows_AD server-ip-or-dns-name
+
+--30 debug
+$> tail /var/log/secure -f
+
+--40 ca login
+ssh-copy-id -i ~/.ssh/logcdbak domain\\user@server-ip-or-dns-name
+
+ssh -i -i ~/.ssh/logcdbak domain\\user@server-ip-or-dns-name
+
+
+
+
+#################
+
 10 uri
 https://www.golinuxcloud.com/configure-openldap-with-tls-certificates/
 https://www.itzgeek.com/how-tos/linux/centos-how-tos/step-step-openldap-server-configuration-centos-7-rhel-7.html/2
