@@ -38,10 +38,10 @@ then
         DATE_DIFFERENCE=$((($DATE_THEN - $DATE_NOW)/86400))
         if [[ "$DATE_DIFFERENCE" -le "$MIN_DAYS" ]]
         then
-            mail -s "$(hostname) $(date) $URL $TAG cert only $DATE_DIFFERENCE DAYS" mail_user@abc.com </dev/null
+            mail -s "$URL 剩余$DATE_DIFFERENCE天 $TAG $(hostname) $(date)" mail_user@abc.com </dev/null
         fi
 else
-        mail -s "$(hostname) $(date) https://$URL 没有响应 " mail_user@abc.com </dev/null
+    mail -s "https://$URL 没有响应 $(hostname) $(date) " mail_user@abc.com </dev/null
 fi
 done <"$SITELIST"
 wait
