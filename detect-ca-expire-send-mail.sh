@@ -15,8 +15,8 @@ function DEBUG()
   }
 
 PATH="/usr/local/bin:/usr/bin:/bin"
-SITELIST="/home/Achilles/sites"
-LOGFILE="/home/Achilles/siteca"
+SITELIST="/home/user/sites"
+LOGFILE="/home/user/siteca"
 TIMEOUT=5
 
 while IFS= read -r SITE
