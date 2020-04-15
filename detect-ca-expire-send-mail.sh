@@ -25,7 +25,7 @@ do
     TAG=$(echo "$SITE"|awk '{print $2}')
 
 
-curl -kvLI $URL 2>$LOGFILE
+curl -kvLI $URL 1>/dev/null 2>$LOGFILE
 
 DATE_THEN=$(date -d "$(grep "expire date" "$LOGFILE" |sed -e 's/^.*date://g')" +%s)
 DATE_NOW=$(date +%s)
