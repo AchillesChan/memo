@@ -1,7 +1,7 @@
 [root@host user]# cat sites
-#SITE                               TAG
-www.abc.com                         rp-abc
-an.abc.link                         rp-2.5.5
+#SITE                               TAG                MIN_DAYS
+www.abc.com                         rp-abc               22
+an.abc.link                         rp-2.5.5             33
 
 
 
