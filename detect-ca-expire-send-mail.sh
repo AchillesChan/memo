@@ -31,15 +31,14 @@ TAG=$(echo "$SITE"|awk '{print $2}')
 MIN_DAYS=$(echo "$SITE"|awk '{print $3}')
 if curl -kvLI -ILkv --connect-timeout "$TIMEOUT" https://$URL 2>$LOGFILE 1>/dev/null
 then
+    DATE_THEN=$(date -d "$(grep "expire date" "$LOGFILE" |sed -e 's/^.*date://g')" +%s)
+    DATE_NOW=$(date +%s)
 
-        DATE_THEN=$(date -d "$(grep "expire date" "$LOGFILE" |sed -e 's/^.*date://g')" +%s)
-        DATE_NOW=$(date +%s)
-
-        DATE_DIFFERENCE=$((($DATE_THEN - $DATE_NOW)/86400))
-        if [[ "$DATE_DIFFERENCE" -le "$MIN_DAYS" ]]
-        then
-            mail -s "$URL 证书剩余$DATE_DIFFERENCE天 $TAG $(hostname) $(date)" mail_user@abc.com </dev/null
-        fi
+    DATE_DIFFERENCE=$((($DATE_THEN - $DATE_NOW)/86400))
+    if [[ "$DATE_DIFFERENCE" -le "$MIN_DAYS" ]]
+    then
+        mail -s "$URL 证书剩余$DATE_DIFFERENCE天 $TAG $(hostname) $(date)" mail_user@abc.com </dev/null
+    fi
 else
     mail -s "https://$URL 没有响应 $(hostname) $(date) " mail_user@abc.com </dev/null
 fi
