@@ -3663,6 +3663,15 @@ logging slow query 记录慢查询
 
 mysql 5.5 以后加了一个profile设置,可以观察到具体语句的执行步骤.
 
+step:
+a  Show variables like ‘%profiling%’
+b  set profiling=on;
+c  show profiles;
+d  select * from db.tb;
+e  show profiles;
+f  show profile for query id;
+
+
 
 0:查看profile是否开启
 
