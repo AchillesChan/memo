@@ -30,7 +30,7 @@ cd $srcPath   ####sourece file dir
 #########function area##################
 GET_INSTALL_FILE(){
 echo "---------start ${FUNCNAME[0]} Fuction-----------"
-#wget --user=$ftpUser --password=$ftpPwd $ftpPath  ####ftp wget comment 
+#wget --user=$ftpUser --password=$ftpPwd $ftpPath  ####ftp wget comment
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
 
@@ -39,7 +39,7 @@ echo "---------start ${FUNCNAME[0]} Fuction-----------"
 #add mysql user
 if [ `cat /etc/passwd|grep 'mysql' |wc -l` -eq 0 ];then
         groupadd -r mysql
-        useradd -g mysql -s /sbin/nologin -g mysql -M mysql 
+        useradd -g mysql -s /sbin/nologin -g mysql -M mysql
 fi
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
@@ -87,8 +87,8 @@ chown -R mysql.mysql "$ERRORLOG"
 chown -R mysql.mysql "$SLOWLOG"
 chown -R mysql.mysql "$TMPLOG"
 rm -fv "$mysqlConf"
-chown -R mysql.mysql $installPath  ####basedir and datassd dir need exactly path 
-ls $install_log || touch $install_log 
+chown -R mysql.mysql $installPath  ####basedir and datassd dir need exactly path
+ls $install_log || touch $install_log
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
 
@@ -119,6 +119,17 @@ firewall-cmd --list-all|grep 3306 || firewall-cmd --add-port 3306/tcp --perm && 
 
 echo "---------end   ${FUNCNAME[0]} Fuction-----------"
 }
+
+fun CREATE_MYSQL_TMP_DIR() {
+cat startdb.sh
+#!/bin/sh
+sleep 10s
+ls /mnt/resource/mysql || mkdir -p /mnt/resource/mysql
+sleep 2
+chown mysql.mysql /mnt/resource/mysql &&systemctl start mysqld
+}
+
+
 #########function area##################
 
 ###########main area########
@@ -129,4 +140,6 @@ DECOMPRESS_TAR
 CONFIG
 INSTALL
 INITIAL
+
+#ls /mnt/resource/mysql || mkdir -p /mnt/resource/mysql ;chown mysql.mysql /mnt/resource/mysql && systemctl start mysqld
 ############main area############

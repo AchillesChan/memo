@@ -10,6 +10,9 @@ vm-s02.abc.com
 --20 result
 [Opensuse ]$ awk -F'.' '{print "vm-"$1,$0}' add-host-to-ssh-config |xargs -P 1 -n 2 sh -c 'echo _Host $1,Hostname $2,User ssh_user,ProxyCommand    ssh -q -W %h:%p vm-jump-01,port 22,IdentityFile  ~/.ssh/my_rsa_key' _|sed -e "s:,:\n:g"|sed -e "s:_:\n:g" >>~/.ssh/config
 
+
+ cat ansible-yc|awk '{print $2}'|cut -d'.' -f 1|cut -d'=' -f 2|xargs -P 1 -n 1 sh -c 'echo _Host az-$1,Hostname $1.abc.com,User user,ProxyCommand    ssh -q -W %h:%p vm-jump-01,port 22,       IdentityFile  ~/.ssh/key_file' _|sed -e "s:,:\n:g"|sed -e "s:_:\n:g" -e "s:^ ::g"   ###from ansible-cfg-file-directly
+
 Host vm-vm-m02
 Hostname vm-m02.abc.com
 User ssh_user
