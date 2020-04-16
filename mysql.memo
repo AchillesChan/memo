@@ -6,6 +6,45 @@ https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-b
 https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
 
+####slow log analyze
+https://www.techawaken.com/enable-mysql-slow-query-log/
+
+It will be difficult to interpret the MySQL slow query log without any tool, fortunately MySql provides “mysqldumpslow” . “mysqldumpslow” parses MySQL slow query log files and prints a summary of their contents.
+
+Normally, mysqldumpslow groups queries that are similar except for the particular values of number and string data values. It “abstracts” these values to N and ‘S’ when displaying summary output. The -a and -n options can be used to modify value abstracting behavior.
+
+1
+mysql> mysqldumpslow /var/log/mysql/slow_query.log
+ 
+
+ To find the top 5 queries which returned the maximum rows, you can run the following command:
+
+ 1
+ mysqldumpslow -a -s r -t 5 /var/log/mysql/mysql-slow.log
+ This can help you find the queries where you missed LIMIT clause.
+
+  
+
+  To sort output by count (the number of times the query is found in the slow log), run the following command:
+
+  1
+  mysqldumpslow -a -s c -t 5 /var/log/mysql/mysql-slow.log
+  You can refer to the MySQL official documentation to see all the options available with “mysqldumpslow”.
+
+
+--output like ....
+
+Count: 8  Time=1.10s (8s)  Lock=0.01s (0s)  Rows=22671.0 (181368), root[root]@[172.16.1136]          ###KEY
+  SELECT R.rpt_id AS rptId,R.area_code AS  areaId ,
+             ...... 
+                en_search_string as  E  on R.rpt_id=E.rpt_id
+
+                Count: 24  Time=0.06s (1s)  Lock=0.04s (0s)  Rows=3526.0 (84624), root[root]@3hosts   ###KEY
+                                ....
+                                FROM      area
+
+####slow log analyze
+
 
 https://dba.stackexchange.com/questions/83109/bulk-delete-for-large-table-in-mysql
 Make a temp table, switch it in and out, and copy the last 30 days data into it.
