@@ -7,6 +7,7 @@ https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
 
 ####slow log analyze
+https://severalnines.com/database-blog/deep-dive-sql-workload-analysis-using-pt-query-digest
 https://severalnines.com/database-blog/analyzing-your-sql-workload-using-pt-query-digest
 https://www.jeffgeerling.com/blog/2018/analyzing-mysql-slow-query-log-pt-query-digest
 https://www.percona.com/doc/percona-toolkit/LATEST/pt-query-digest.html
