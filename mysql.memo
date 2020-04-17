@@ -13,6 +13,23 @@ https://www.jeffgeerling.com/blog/2018/analyzing-mysql-slow-query-log-pt-query-d
 https://www.percona.com/doc/percona-toolkit/LATEST/pt-query-digest.html
 https://www.techawaken.com/enable-mysql-slow-query-log/
 
+wget percona.com/get/pt-query-digest
+wget percona.com/get/tools-by-name
+
+###yum install percona-toolkit
+--10  install from yum 
+#> wget https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+#> rpm -ivh percona-release-latest.noarch.rpm 
+#> yum install percona-toolkit
+#> ./pt-query-digest /var/log/mysql_slow_log >log-an
+
+--20 install from local file
+#> wget https://www.percona.com/downloads/percona-toolkit/3.1.0/binary/redhat/7/x86_64/percona-toolkit-3.1.0-2.el7.x86_64.rpm
+#> yum install -y "perl(IO::Socket::SSL)"  "perl(Term::ReadKey)"
+#> rpm -ivh percona-toolkit-3.1.0-2.el7.x86_64.rpm
+#> ./pt-query-digest /var/log/mysql_slow_log >log-an
+###yum install percona-toolkit
+
 It will be difficult to interpret the MySQL slow query log without any tool, fortunately MySql provides “mysqldumpslow” . “mysqldumpslow” parses MySQL slow query log files and prints a summary of their contents.
 
 Normally, mysqldumpslow groups queries that are similar except for the particular values of number and string data values. It “abstracts” these values to N and ‘S’ when displaying summary output. The -a and -n options can be used to modify value abstracting behavior.
