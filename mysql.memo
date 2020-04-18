@@ -1734,11 +1734,20 @@ $ nc -l 9999 | cat - > /data/backups/backup.tar
 $ nc -l 9999 |xbstream -x -C /data/backup/   ###use xbstream
 
 ####!!!!!NOT NEED EXTRACT,high speed networking recommand,running on dst mysql data path
-$ nc -l 9999 | tar -ivxf -  ####dst mysql/new/data/path
+$ systemctl stop mysqld && ss -tlnp|grep 3306           ###Must have no mysqld server  
+$ nc -l 9999 | tar -ivxf -   ####dst mysql/new/data/path
 $ top 
 $ iostat 
 $ du -sh /mysql/new/data/path
+$ mv -v mysql mysql-old
+$ mv -v /mysql/new/data/path /data/to/cfged/mysql/path
+$ chown -R mysql.mysql /data/to/cfged/mysql/path
+$ cd /data/to/old/mysql/path && innobackupex --apply-log /data/to/cfged/mysql/path
 
+slave mysql>reset master
+slave mysql>SET GLOBAL gtid_purged="c....35ef5:1-4";   ####from cat xtrabackup_binlog_info
+slave mysql> change master to master_host='master_ip',master_user='root',master_port=3306,master_password='pwd',master_auto_position=1;
+slave slave> start slave;
 
 ## On the source master host:
 yum install -y nc libev perl-devel rsync perl-Digest-MD5.x86_64 perl-DBD-MySQL
