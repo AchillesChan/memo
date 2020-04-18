@@ -2,16 +2,16 @@
 #Must do it before start mysql
 [mysqld]
 user                                            = mysql
-basedir                                         = /usr/local/mysql
-datadir                                         = /datassd/mysql
+basedir                                         = /usr/local/mysql                     ####DIRPATH
+datadir                                         = /datassd/mysql                       ####DIRPATH
 slow_query_log                                  = 1 
-slow_query_log_file                             = APP-DB-M02-mysql-slow.log 
+slow_query_log_file                             = APP-DB-M02-mysql-slow.log            ####FILEPATH
 long_query_time                                 = 0.5 
-log-bin                                         = /data/mysql/logs/mysql-2-binlog
-binlog_format                                   = MIXED 
-tmpdir                                          = /var/log/mysql
-innodb_undo_directory                           = /var/log/mysql
-log_error                                       = APP-DB-M02-mysql-error.log 
+log-bin                                         = /data/mysql/logs/mysql-2-binlog-prex  ###NOT NEED ON REP SLAVE
+binlog_format                                   = MIXED                                 ###NOT NEED ON REP SLAVE
+tmpdir                                          = /var/log/mysql                        ###DIRPATH
+innodb_undo_directory                           = /var/log/mysql                        ###DIRPATH
+log_error                                       = APP-DB-M02-mysql-error.log            ###FILEPATH
 innodb_undo_log_truncate                        = ON
 innodb_max_undo_log_size                        = 1G
 port                                            = 3306
@@ -78,6 +78,5 @@ sql_mode                                        = NO_ENGINE_SUBSTITUTION,STRICT_
  
  
 #general_log=1
-#general_log_file  = /var/log/mysql/mysql_general.log
- 
-relay-log                                       = relay-bin
+#general_log_file                                = /var/log/mysql/mysql_general.log           #####FILEPATH
+relay-log                                        = /var/log/mysql/relay-bin-prefix            #####FILE PREFIX            
