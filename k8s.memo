@@ -1,3 +1,104 @@
+####persistentVolumn pv
+--10 m1 is master n1 is node
+[k8s-m1 ]# cat storageClass.yaml                                                                                                                                                             
+kind: StorageClass                                                                                                                                                                           
+apiVersion: storage.k8s.io/v1                                                                                                                                                                
+metadata:                                                                                                                                                                                    
+  name: my-local-storage                                                                                                                                                                     
+provisioner: kubernetes.io/no-provisioner                                                                                                                                                    
+volumeBindingMode: WaitForFirstConsumer                                                                                                                                                      
+                                                                                                                                                                                             
+[k8s-m1 ]# kubectl get sc                                                                                                                                                                    
+NAME               PROVISIONER                    AGE                                                                                                                                        
+my-local-storage   kubernetes.io/no-provisioner   24m   
+
+-m1 ]# cat persistentVolume.yaml                                                                                                                                                         
+apiVersion: v1                                                                                                                                                                               
+kind: PersistentVolume                                                                                                                                                                       
+metadata:                                                                                                                                                                                    
+  name: my-local-pv                                                                                                                                                                          
+spec:                                                                                                                                                                                        
+  capacity:                                                                                                                                                                                  
+    storage: 5Gi                                                                                                                                                                             
+  accessModes:                                                                                                                                                                               
+  - ReadWriteOnce                                                                                                                                                                            
+  persistentVolumeReclaimPolicy: Retain                                                                                                                                                      
+  storageClassName: my-local-storage                                                                                                                                                         
+  local:                                                                                                                                                                                     
+    path: /mnt/vol1                                                                                                                                                                          
+  nodeAffinity:                                                                                                                                                                              
+    required:                                                                                                                                                                                
+      nodeSelectorTerms:                                                                                                                                                                     
+      - matchExpressions:                                                                                                                                                                    
+        - key: kubernetes.io/hostname                                                                                                                                                        
+          operator: In                                                                                                                                                                       
+          values:                                                                                                                                                                            
+          - k8s-n1                                                                                                                                                                           
+
+[k8s-m1 ]# kubectl get pv
+NAME          CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM              STORAGECLASS       REASON   AGE
+my-local-pv   5Gi        RWO            Retain           Bound    default/my-claim   my-local-storage            18m
+
+
+
+[k8s-m1 ]# cat persistentVolumeClaim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: my-local-storage
+  resources:
+    requests:
+      storage: 3Gi
+
+PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:53:43CST USER:root
+[k8s-m1 ]# kubectl get pvc
+NAME       STATUS   VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS       AGE
+my-claim   Bound    my-local-pv   5Gi        RWO            my-local-storage   17m
+
+
+[k8s-m1 ]# cat http-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: www
+  labels:
+    name: www
+spec:
+  containers:
+  - name: www
+    image: dockerhub.abc.com/it/nginx:alpine
+    ports:
+      - containerPort: 80
+        name: www
+    volumeMounts:
+      - name: www-persistent-storage
+        mountPath: /usr/share/nginx/html
+  volumes:
+    - name: www-persistent-storage
+      persistentVolumeClaim:
+        claimName: my-claim
+
+PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:54:04CST USER:root
+[k8s-m1 ]# kubectl get po -o wide
+NAME                  READY   STATUS    RESTARTS   AGE     IP            NODE     NOMINATED NODE   READINESS GATES
+www                   1/1     Running   0          4m50s   10.249.1.30   k8s-n1   <none>           <none>
+
+--20
+[root@k8s-n1 ~]# mkdir -p /mnt/vol1
+[root@k8s-n1 ~]echo "Hello local persistent volume" > /mnt/disk/vol1/index.html
+
+--30
+[k8s-m1 ]# curl 10.249.1.30
+Hello local persistent volume
+
+#persistentVolumn pv
+
+
+
 ######kubectl pull private repo
 https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 $k8s-master> kubectl create secret docker-registry regcred --docker-server=dockerhub.abc.com --docker-username=user --docker-password="pwd" --docker-email=a@a.com
