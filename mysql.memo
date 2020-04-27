@@ -1826,7 +1826,7 @@ slave mysql> CHANGE REPLICATION FILTER REPLICATE_IGNORE_DB = (mysql,sys,informat
 slave slave> start slave;
 ####xtrabackup with compress stream
 
-###backup
+###backup 
 1 full backup 
 innobackupex --user=bkpuser --port=3306 \
 --socket=/usr/local/mysql/mysql.sock \
@@ -1839,7 +1839,7 @@ innobackupex --user=root --host=localhost --password=somePW \
 上面的tables-file需要接完整的路径
 
 ###restore
-0 innobackupex --apply-log --exports your-backup-full-path ###do it on source 
+0 innobackupex --apply-log --exports your-backup-full-path ###do it on source,5.7 on dst OK already 
 
 1 systemctl stop mysqld
 
@@ -1866,9 +1866,6 @@ innobackupex --user=root --host=localhost --password=somePW \
 备份还原单个表，验证成功。
 
 
-
-
-
 mysql> drop database your-database;
 ERROR 1010 (HY000): Error dropping database (can't rmdir './your-database/', errno: 17)
 
@@ -1876,14 +1873,10 @@ ERROR 1010 (HY000): Error dropping database (can't rmdir './your-database/', err
 mysql> drop database your-database;
 Query OK, 0 rows affected (0.00 sec)
 
-
-
 Partial Backups
 使用这个方法还原单个数据库也成功，但文档上要还原mysql，我
 没有做，模拟数据文件丢失，在原来的服务器上处理好copy-back，
 shutdown mysql，copy back，chown ，start mysql，done
-
-
 
 注意：backup后一定要innobackupex --apply-log --export your-backup-full-path
 这个过程在源服务器的正常状态下运行，并且一定要成功，
@@ -1891,14 +1884,14 @@ shutdown mysql，copy back，chown ，start mysql，done
 ==============================================
 
 
-====verification 
+====verification   ####RESTORE ONLY ONE TABLE FROM MANY DATABASES FILES
 --10 from source
-mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only backup table structure
+mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only backup table structure,OR HAVE CREATE TABLE STATEMENT
 
 --20 backup single database from source
 innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs --no-timestamp ./dest/path
 or 
-innobackupex --user=root --password=pwd --databases=dt1 /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1
+innobackupex --user=root --password=pwd /path/2/back/dir --no-timestamp --port=3306 --host=127.0.0.1   ###backup all dbs
 --25 prepare backup file,it's generate exp and cfg file when done                                                                                                              
 innobackupex --user=root --port=3306 -pPwd --apply-log --export --socket=/path/2/mysql.sock --databases=dbs /backup/path
 
@@ -1911,10 +1904,11 @@ Alter TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
 --40 discard tablespace from destination
 ALTER TABLE tbls discard TABLESPACE;
 set FOREIGN_KEY_CHECKS=0;
-copy *.exp(not need) *.ibd to data directroy
+copy *.exp(not need) *.ibd to data directroy ###file must CLEAN,CAN RESTORE ONLY ONE TABLE FROM LOTS OF DBS FILE.
 chown -R mysql.mysql data\dbs
 
 --50 import tablespace from destination
+
 
 ALTER TABLE tbls IMPORT TABLESPACE;
 set FOREIGN_KEY_CHECKS=1;
