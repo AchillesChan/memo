@@ -208,6 +208,8 @@ And if you prefer vice versa (urls without trailing slashes), just use the follo
 # Remove trailing slash
 rewrite ^/(.*)/$ /$1 permanent;
 
+https://www.scalescale.com/tips/nginx/nginx-remove-trailing-slash/
+https://www.scalescale.com/tips/nginx/add-trailing-slash-nginx/
 http://www.osbmedia.com/blog/view/adding-a-trailing-slash-to-your-urls-on-nginx
 https://www.digrouz.com/mediawiki/index.php/HOWTO_fix_the_trailing_slash_problem_in_Nginx
 #####trailing slash##########
