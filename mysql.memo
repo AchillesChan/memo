@@ -1,10 +1,27 @@
 ######Startmemoof mysql.memo #######
+https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html
+https://www.tecmint.com/mysqladmin-commands-for-database-administration-in-linux/
+https://mysqlstepbystep.com/2016/11/21/check-these-before-shutting-down-mysql/
 http://cenalulu.github.io/linux/numa/
 https://blog.jcole.us/2012/04/16/a-brief-update-on-numa-and-mysql/
 https://blog.jcole.us/2010/09/28/mysql-swap-insanity-and-the-numa-architecture/
 https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-balancer-for-mysql-on-ubuntu-16-04
 https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
+
+
+####mysqladmin usage
+$> mysqladmin ext -uroot -p|grep -i com_delete|column -t
+Enter password: 
+|  Com_delete        |  6951  |
+|  Com_delete_multi  |  0     |
+
+$> mysqladmin ext -uroot -p|grep -i dirty|column -t
+Enter password: 
+|  Innodb_buffer_pool_pages_dirty  |  209      |
+|  Innodb_buffer_pool_bytes_dirty  |  3424256  |
+
+####mysqladmin usage
 
 ####slow log analyze
 https://severalnines.com/database-blog/deep-dive-sql-workload-analysis-using-pt-query-digest
