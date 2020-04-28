@@ -362,6 +362,8 @@ https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
 
 
 ####mysql xtrabackup bzip incremental restore 
+--05 install pbzip2
+$> yum -y install epel* && yum -y install pbzip2
 --10 unzip all need file to dir respectly
 $>  time  pbzip2 -dc -p2 -m512 -5  20191224-full.bz2|xbstream -x -C full/ && mail -s "OK $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null|| mail -s "ERROR $(hostname) $(date) time  pbzip2 FULL"  mail_user@example.com </dev/null
 
