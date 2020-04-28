@@ -1788,10 +1788,11 @@ $  time xtrabackup --backup --user=root --socket=/usr/local/mysql/mysql.sock  --
  --innodb-buffer-pool-size=256M --target-dir=/mnt/resource | nc desthost 9999   
                                      ##########The targe-dir here just a temp path,not storage file exactly???
 $ top                                ##########check io,cpu,memory,disk,network metric 
-$ iostat 
-$ du -sh /mysql/new/data/path
+$ iostat         
+$ du -sh /mysql/new/data/path  
 
-
+##backup sys mysql information_schema performance_schema etc system dbs and transaction dbs when backup partial 
+#####transaction dbs with --databases="db1 db2" can partial backup & restore specfic dbs(here is db1 db2)
 
 
     xtrabackup --backup --tables="^DB1[.]time.*$|^DB3[.]tri.*$" --user=root --password=pwd --target-dir=./
