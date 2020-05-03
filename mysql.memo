@@ -401,7 +401,7 @@ mysql    107428 107080  0 14:06 pts/8    00:00:02 /usr/sbin/mysqld --defaults-fi
 $> mysql -u root -p -S /data/mysql/mysql2.sock
 Enter password: 
 ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
-[root@HNZY-MYS WLYD-mywebsite-MYS2_10.31.100.37]# mysql -u root -p -S /data/mysql/mysql2.sock
+# mysql -u root -p -S /data/mysql/mysql2.sock
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 3
@@ -446,6 +446,11 @@ SET foreign_key_checks = 0;
 
 mysqldump 5.7 can export from latin and import to utf8 ,not need transform.
 
+Restore a Single MySQL Database from a Full MySQL Dump
+$> mysql --one-database database_name < all_databases.sql
+
+Export and Import a MySQL Database in One Command
+$> mysqldum -u root -p database_name | mysql -h remote_host -u root -p remote_datab
 ###MySQL – How to convert all Database Tables and Columns to a specific Collation
 
 ###mysqldump exclude some table
@@ -1876,7 +1881,7 @@ shutdown mysql，copy back，chown ，start mysql，done
 
 ====verification 
 --10 from source
-mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only backup table structure
+mysqldump -uroot -hlocalhost -pPassowrd --no-data -d dbs >dbs_only_structure.sql   ###only backup table structure
 
 --20 backup single database from source
 innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs --no-timestamp ./dest/path
