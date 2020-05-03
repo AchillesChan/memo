@@ -1134,16 +1134,16 @@ https://github.com/CISOfy/lynis
 ######
 #tar some file find filter pick up 
 ==tested
-find ./ -maxdepth 1 -type f -name "*.txt"|xargs -p -t tar vzcf txt.tar.gz
+find ./ -maxdepth 1 -type f -name "*.txt"|xargs -p -t tar vzcf txt.tar.gz  ###not work!!!
 ==tested
 
 --10 xargs process 
 find ./ -mtime -77 -type f -print0 |xargs -0 -P 1 -n 1 -I {} tar vzcf a.tar.gz {}
-
+find ./ -regextype posix-extended -iregex "./an.*$|./au.*$" -print0|xargs -t -0 -I {} tar vrf a.tar {} && tar vzcf a.tar.gz a.tar && rm -fv rm a.tar
 --20 pipe process --null -T read relative  find print0 generated output 
 --/dev/stdin or - receive find output 
-find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T /dev/stdin
-find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T - 
+find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T /dev/stdin ##no xargs
+find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T -          ##no xargs;--null -T,null as delimiter;last - is /dev/stdin from find
 ######
 
 
