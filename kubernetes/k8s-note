@@ -1,3 +1,29 @@
+###file transfer
+Copy requires that tar be installed in the container image.
+kubectl cp /tmp/foo_dir <some-pod>:/tmp/bar_dir
+kubectl cp <some-pod>:/tmp/foo /tmp/bar
+kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>
+kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
+https://kubectl.docs.k8s.io/pages/container_debugging/copying_container_files.html
+
+
+docker cp foo.txt mycontainer:/foo.txt
+docker cp mycontainer:/foo.txt foo.txt
+https://linuxhandbook.com/docker-cp-example/
+####create token 
+https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/#cmd-token-create
+[k8s-m1 ]# kubeadm token generate
+eut5io.190s76dl6u7qi23b
+
+[k8s-m1 ]# kubeadm token create eut5io.190s76dl6u7qi23b --print-join-command --ttl=0
+kubeadm join 10.0.2.12:6443 --token eut5io.190s76dl6u7qi23b     --discovery-token-ca-cert-hash sha256:07d685118812c8331fb938574388853a654c21c588386f1d0b663e3f5e6ef335 
+
+[k8s-m1 ]# kubeadm token list
+TOKEN                     TTL         EXPIRES   USAGES                   DESCRIPTION   EXTRA GROUPS
+eut5io.190s76dl6u7qi23b   <forever>   <never>   authentication,signing   <none>        system:bootstrappers:kubeadm:default-node-token
+
+
+
 ####config map
 --10
 [k8s-m1 ]# ls configmap-files/
@@ -73,7 +99,7 @@ server {
 }
 
 
-[k8s-m1 ]# kubectl edit configmap fortune-config
+[k8s-m1 ]# kubectl edit configmap fortune-config      ####After save edit,the new status will take effect after monment auto.
 
 
 # Please edit the object below. Lines beginning with a '#' will be ignored,

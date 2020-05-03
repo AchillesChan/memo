@@ -1,4 +1,32 @@
 ######Startmemoof docker.memo #######
+
+###clean docker log
+--10
+truncate -s 0 /var/lib/docker/containers/*/*-json.log.
+
+--20
+You can switch to the none log driver, either as the default for all new containers, or on a per container basis. Documentation on logging drivers is here: https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers
+
+To configure it as a daemon default for new containers, setup /etc/docker/daemon.json with:
+
+{
+      "log-driver": "none"
+}
+Or to run a single container without logging:
+
+docker run --log-driver none ...
+
+--30
+
+You can also set this as part of your daemon.json file instead of modifying your startup scripts:
+
+{
+      "log-driver": "json-file",
+        "log-opts": {"max-size": "10m", "max-file": "3"}
+}
+
+###clean docker log
+
 ######Start docker.memo #######
 https://blog.oddbit.com/post/2014-08-11-four-ways-to-connect-a-docker/
 
