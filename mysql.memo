@@ -1,7 +1,6 @@
 ######Startmemoof mysql.memo #######
 https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html
 https://www.tecmint.com/mysqladmin-commands-for-database-administration-in-linux/
-https://mysqlstepbystep.com/2016/11/21/check-these-before-shutting-down-mysql/
 http://cenalulu.github.io/linux/numa/
 https://blog.jcole.us/2012/04/16/a-brief-update-on-numa-and-mysql/
 https://blog.jcole.us/2010/09/28/mysql-swap-insanity-and-the-numa-architecture/
@@ -9,6 +8,51 @@ https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-b
 https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
 
+###Check these before shutting down MySQL
+https://mysqlstepbystep.com/2016/11/21/check-these-before-shutting-down-mysql/
+--10 
+Double check the instance you are going to shutdown!!
+
+--20
+Stop Replication:
+mysql> STOP SLAVE IO_THREAD;
+mysql> SHOW SLAVE STATUS\G;    ###check Seconds_Behind_Master =0
+mysql> STOP SLAVE sql_THREAD;  ###only invoke confirm last is ok
+
+--30
+Flush the dirty pages:
+A Set the max percentage of dirty pages to zero:
+mysql> SET GLOBAL innodb_max_dirty_pages_pct = 0;
+
+B Monitor the dirty pages:
+shell$ mysqladmin ext -i10 | grep dirty
+Wait until the number of dirty pages gets close to zero before you shutdown
+
+--40
+Check the long running transactions 
+To check the running queries:
+mysql> SHOW PROCESSLIST;
+
+Kill the long running queries – if it is OK to interrupt them – (or wait until they finish):
+mysql> kill thread_id;
+Even if killing a query took long time, your system will still be up!
+
+Note: if you found many running transactions, maybe the application is not aware of that maintenance or it may be a sign that you are going to shutdown a wrong instance!
+
+--50 
+Dump and reload the buffer pool:
+You may want to avoid having a cold buffer pool after the restart. To do so, you need to dump the buffer pool before shutting down MySQL and reload it again after starting MySQL.
+Dump the buffer pool at shutdown:
+mysql> SET GLOBAL innodb_buffer_pool_dump_at_shutdown = ON;
+
+Reload the buffer pool after restart (this is a read only variable which needs to be added to the my.cnf:
+# vi /etc/my.cnf
+ innodb_buffer_pool_load_at_startup = ON
+ innodb_buffer_pool_dump_at_shutdown = ON # to avoid setting it before every restart
+
+# To check the reloading buffer pool status after the restart:
+ mysql> SHOW GLOBAL STATUS LIKE 'Innodb_buffer_pool_load_status';
+###Check these before shutting down MySQL
 
 ####mysqladmin usage
 $> mysqladmin ext -uroot -p|grep -i com_delete|column -t

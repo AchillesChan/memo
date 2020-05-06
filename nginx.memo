@@ -1,5 +1,6 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
+https://www.nginx.com/blog/help-the-world-by-healing-your-nginx-configuration/
 
 https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
 
@@ -311,7 +312,6 @@ server {
                 proxy_send_timeout          900;
                 proxy_read_timeout          900;
                 send_timeout                900;
-                proxy_set_header Host $host;
                 proxy_buffers   8 64k;
                 proxy_buffer_size          128k;
                 proxy_busy_buffers_size    256k;   
