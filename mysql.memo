@@ -1938,11 +1938,7 @@ shutdown mysql，copy back，chown ，start mysql，done
 
 ====verification   ####RESTORE ONLY ONE TABLE FROM MANY DATABASES FILES
 --10 from source
-<<<<<<< HEAD
-mysqldump -uroot -hlocalhost -pPassowrd --no-data -d dbs >dbs_only_structure.sql   ###only backup table structure
-=======
 mysqldump -uroot -hlocalhost -pPassowrd -d dbs >dbs_only_structure.sql   ###only backup table structure,OR HAVE CREATE TABLE STATEMENT
->>>>>>> 2d8ad2860a7a5248d555c9ec3276ae047021c8df
 
 --20 backup single database from source
 innobackupex --user=root --port=3306 -pPwd  --socket=/path/2/mysql.sock --databases=dbs --no-timestamp ./dest/path
@@ -1951,11 +1947,13 @@ innobackupex --user=root --password=pwd /path/2/back/dir --no-timestamp --port=3
 --25 prepare backup file,it's generate exp and cfg file when done                                                                                                              
 innobackupex --user=root --port=3306 -pPwd --apply-log --export --socket=/path/2/mysql.sock --databases=dbs /backup/path
 
---30 5.6 -->5.7 format transfomation from destination
-
+--30 5.6 -->5.7 format transfomation on destination
 CREATE TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
 or
 Alter TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
+
+--35 
+mysql -uroot -hlocalhost -pPWD -d dbs <dbs_only_structure.sql   ###import table structure on dest
 
 --40 discard tablespace from destination
 ALTER TABLE tbls discard TABLESPACE;
@@ -1970,27 +1968,6 @@ ALTER TABLE tbls IMPORT TABLESPACE;
 set FOREIGN_KEY_CHECKS=1;
 
 ############xtrabackup mysql##################################
-
-####only copy db file to another server problem 
---10 result
-mysql> select * from t3;
-ERROR 1146 (42S02): Table 't3.t3' doesn't exist
-mysql> show tables;
-+--------------+
-| Tables_in_t3 |
-+--------------+
-| t3           |
-+--------------+
-1 row in set (0.00 sec)
-
-mysql> select * from t3;
-ERROR 1146 (42S02): Table 't3.t3' doesn't exist
-
-
---20 must import tables space 
-
-
-####only copy db file to another server problem 
 ###########docker xtrabackup 8.0############
 --10 get Dockerfile
 https://github.com/martin-helmich/docker-xtrabackup/blob/master/entrypoint.sh

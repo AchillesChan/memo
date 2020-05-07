@@ -15,7 +15,7 @@ lsync_path=/data/backup/lsync
 ls $bak_dst_path || mkdir -p $bak_dst_path
 ls $lsync_path || mkdir -p $lsync_path
 #delete old date
-find "$bak_dst_path" -mmin +600 |xargs -I {} rm -fv {}
+find "$bak_dst_path" -mmin +600 |xargs -I {} rm -rf {}
 
 #backup current mongodb
 mongodump  --username=root --password='pwd' --host=172.16.3.1 --gzip --out="$bak_dst_path/$(hostname)$op_date"  
