@@ -1953,7 +1953,7 @@ or
 Alter TABLE `foo` (. . .) ENGINE=InnoDB ROW_FORMAT=compact
 
 --35 
-mysql -uroot -hlocalhost -pPWD -d dbs <dbs_only_structure.sql   ###import table structure on dest
+mysql -uroot -hlocalhost -pPWD -d dbs <dbs_only_structure.sql   ###import table structure on dest,May need truncate some clause
 
 --40 discard tablespace from destination
 ALTER TABLE tbls discard TABLESPACE;
