@@ -9,6 +9,7 @@ slow_query_log_file                             = APP-DB-M02-mysql-slow.log     
 long_query_time                                 = 0.5 
 log-bin                                         = /data/mysql/logs/mysql-2-binlog-prex  ###NOT NEED ON REP SLAVE
 binlog_format                                   = MIXED                                 ###NOT NEED ON REP SLAVE
+expire_logs_days                                = 5
 tmpdir                                          = /var/log/mysql                        ###DIRPATH
 innodb_undo_directory                           = /var/log/mysql                        ###DIRPATH
 log_error                                       = APP-DB-M02-mysql-error.log            ###FILEPATH
