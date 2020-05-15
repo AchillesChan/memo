@@ -11,18 +11,18 @@ server {
     server_name example.abc.com;
     root /usr/local/www;
     
-    location /break/ {                           ###longest is better
-        rewrite ^/break/(.*) /test/$1 break;
+    location /break/ {                           ###prefix longest is higher prefence,BUT LOWER PREFENCE THAN REGEX
+        rewrite ^/break/(.*) /test/$1 break;     ###be ignored in the server segment config
         index break.html;
     }   
 
-    location ~* ^/(break)/ {                     ###better than prefix,first match take effect
+    location ~* ^/(break)/ {                     ###higher prefence than prefix,first match take effect
             rewrite ^/break/(.*) /test/$1 break; ###access example.abc.com/break/home/ rewrite to /usr/local/www/test/home/regex.html 
             index regex.html;
     }   
 
-    location ~* ^/(break/home)/ {                ###better than prefix,BUT ignored by last one shorter regex location ~* ^/(break)/
-            rewrite ^/break/home/(.*) /test/$1 break;
+    location ~* ^/(break/home)/ {                      ###higher prefence than prefix,BUT be ignored by PREVIOUS 
+            rewrite ^/break/home/(.*) /test/$1 break;  ###one shorter regex location ~* ^/(break)/
             index regex-sec.html;
     }
 
