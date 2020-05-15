@@ -1,8 +1,55 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
 https://www.nginx.com/blog/help-the-world-by-healing-your-nginx-configuration/
-
+https://www.bulafish.com/centos/2018/05/03/nginx-rewrite-example/
 https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
+
+
+###location regex equ prefix prefence
+server {
+    listen 80; 
+    server_name example.abc.com;
+    root /usr/local/www;
+    
+    location /break/ {                           ###longest is better
+        rewrite ^/break/(.*) /test/$1 break;
+        index break.html;
+    }   
+
+    location ~* ^/(break)/ {                     ###better than prefix,first match take effect
+            rewrite ^/break/(.*) /test/$1 break; ###access example.abc.com/break/home/ rewrite to /usr/local/www/test/home/regex.html 
+            index regex.html;
+    }   
+
+    location ~* ^/(break/home)/ {                ###better than prefix,BUT ignored by last one shorter regex location ~* ^/(break)/
+            rewrite ^/break/home/(.*) /test/$1 break;
+            index regex-sec.html;
+    }
+
+    location =/break/ {                          ###top prefence
+        rewrite ^/break/(.*) /test/$1 break;
+        index equ.html;
+    }   
+}   
+###location regex equ prefix prefence
+
+###rewrite
+server {
+    listen 80;
+    server_name test.abc.com;
+    root /usr/local/www;
+    location /break/ {
+        rewrite ^/break/(.*) /test/$1 break; ###match will echo /usr/local/www/test/break.html msg,NOT jump other
+        index break.html;                    ###location 
+    } 
+    location /last/ {
+         rewrite ^/last/(.*) /test/$1 last;  ###match will jump to /test/ location
+         index last.html;
+    }    
+    location /test/ {                       ###match will echo /usr/local/www/test/test.html msg.
+       index test.html;
+    }
+}
 
 ###return client ip####
 location /ip {
