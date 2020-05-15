@@ -1,5 +1,8 @@
 ######Startmemoof openssl.memo #######
 ######Start openssl.memo #######
+#convert to pfx from key and crt
+openssl pkcs12 -export -in crt-2020 -inkey key-2020 -out pfx-2020.pfx
+
 ####verify csr
 $>openssl req -in abc.csr -noout -text
 Certificate Request:
