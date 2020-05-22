@@ -18,7 +18,7 @@ SLOWLOG="/var/log/$(hostname)-mysql-slow.log"
 ERRORLOG="/var/log/$(hostname)-mysql-error.log"
 TMPLOG="/var/log/mysql"
 OTHERLOG="/data/mysql/logs"
-
+RELAYLOG="/var/log/mysql/$(hostname)-relay"
 
 
 
@@ -81,11 +81,13 @@ ls "$OTHERLOG" || mkdir -p "$OTHERLOG"
 ls "$SLOWLOG"  || touch "$SLOWLOG"
 ls "$ERRORLOG" || touch "$ERRORLOG"
 ls "$TMPLOG"   || mkdir -p "$TMPLOG"
+ls "$RELAYLOG" || touch -p "$RELAYLOG"
 chown -R mysql.mysql "$DATAPATH"
 chown -R mysql.mysql "$OTHERLOG"
 chown -R mysql.mysql "$ERRORLOG"
 chown -R mysql.mysql "$SLOWLOG"
 chown -R mysql.mysql "$TMPLOG"
+chown -R mysql.mysql "$RELAYLOG"
 rm -fv "$mysqlConf"
 chown -R mysql.mysql $installPath  ####basedir and datassd dir need exactly path
 ls $install_log || touch $install_log
