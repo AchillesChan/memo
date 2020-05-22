@@ -8,6 +8,106 @@ https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-b
 https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
 
+###MGR
+docker mysql group replicaton (MGR)
+https://mysqlhighavailability.com/setting-up-mysql-group-replication-with-mysql-docker-images/
+--10 initial
+docker network create groupnet
+docker pull mysql/mysql-server:5.7
+docker images
+docker network ls
+
+--20 setup
+for N in 1 2 3; do docker run -d --name=node$N --net=groupnet --hostname=node$N  \
+-v $PWD/d$N:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass   mysql/mysql-server:5.7 \
+--server-id=$N   --log-bin='mysql-bin-1.log'   --enforce-gtid-consistency='ON'  \
+--log-slave-updates='ON'   --gtid-mode='ON'   --transaction-write-set-extraction='XXHASH64' \
+--binlog-checksum='NONE'   --master-info-repository='TABLE'   --relay-log-info-repository='TABLE' \
+--plugin-load='group_replication.so'   --relay-log-recovery='ON'   \ 
+--group-replication-start-on-boot='OFF'   \
+--group-replication-group-name='aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee' \
+--group-replication-local-address="node$N:33061" \
+--group-replication-group-seeds='node1:33061,node2:33061,node3:33061'  \
+--loose-group-replication-single-primary-mode='OFF'   --loose-group-replication-enforce-update-everywhere-checks='ON'; \
+done
+
+docker ps
+# CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS                             PORTS                 NAMES
+# eb9d26fa8719        mysql/mysql-server:5.7   "/entrypoint.sh --se…"   25 seconds ago      Up 22 seconds (health: starting)   3306/tcp, 33060/tcp   node3
+# f1fa98a013f4        mysql/mysql-server:5.7   "/entrypoint.sh --se…"   28 seconds ago      Up 25 seconds (health: starting)   3306/tcp, 33060/tcp   node2
+# e15f172d3393        mysql/mysql-server:5.7   "/entrypoint.sh --se…"   30 seconds ago      Up 28 seconds (health: starting)   3306/tcp, 33060/tcp   node1
+
+docker logs -f node1
+# docker logs -f node1
+# [Entrypoint] MySQL Docker Image 5.7.30-1.1.16
+# [Entrypoint] Initializing database
+# [Entrypoint] Database initialized
+# Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
+# Warning: Unable to load '/usr/share/zoneinfo/leapseconds' as time zone. Skipping it.
+# Warning: Unable to load '/usr/share/zoneinfo/tzdata.zi' as time zone. Skipping it.
+# Warning: Unable to load '/usr/share/zoneinfo/zone.tab' as time zone. Skipping it.
+# Warning: Unable to load '/usr/share/zoneinfo/zone1970.tab' as time zone. Skipping it.
+#
+# [Entrypoint] ignoring /docker-entrypoint-initdb.d/*
+#
+# [Entrypoint] Server shut down
+#
+# [Entrypoint] MySQL init process done. Ready for start up.
+#
+# [Entrypoint] Starting MySQL 5.7.30-1.1.16
+
+
+docker exec -it node1 mysql -uroot -pmypass   -e "SET @@GLOBAL.group_replication_bootstrap_group=1;" \
+-e "create user 'repl'@'%';"   -e "GRANT REPLICATION SLAVE ON *.* TO repl@'%';"   -e "flush privileges;" \
+-e "change master to master_user='repl' for channel 'group_replication_recovery';"  \
+-e "START GROUP_REPLICATION;"   -e "SET @@GLOBAL.group_replication_bootstrap_group=0;"  \
+-e "SELECT * FROM performance_schema.replication_group_members;"
+
+for N in 2 3; do docker exec -it node$N mysql -uroot -pmypass   \
+-e "change master to master_user='repl' for channel 'group_replication_recovery';"   -e "START GROUP_REPLICATION;"; done
+
+docker exec -it node1 mysql -uroot -pmypass   -e "SELECT * FROM performance_schema.replication_group_members;"
+
+--30 insert test data
+docker exec -it node1 mysql -uroot -pmypass \
+-e "create database TEST; use TEST; CREATE TABLE t1 (id INT NOT NULL PRIMARY KEY) ENGINE=InnoDB; show tables;"
+
+for N in 2 3; do docker exec -it node$N mysql -uroot -pmypass -e "INSERT INTO TEST.t1 VALUES($N);"; done
+
+for N in 1 2 3; do docker exec -it node$N mysql -uroot -pmypass \
+-e "SHOW VARIABLES WHERE Variable_name = 'hostname';" -e "SELECT * FROM TEST.t1;"; done
+
+--40 test disconnect
+docker exec -it node3 mysql -uroot -pmypass -e "set @@global.group_replication_exit_state_action=READ_ONLY;"
+docker exec -it node3 mysql -uroot -pmypass -e "stop group_replication;start group_replication;"
+docker network disconnect groupnet node3
+for N in 1 2 3; do docker exec -it node$N mysql -uroot -pmypass \
+    -e "SHOW VARIABLES WHERE Variable_name = 'hostname';" -e "SELECT * FROM TEST.t1;"; done
+for N in 1 2 3; do docker exec -it node$N mysql -uroot -pmypass \
+    -e "show variables where variable_name='hostname';" \
+    -e "select * from performance_schema.replication_group_members;"; done
+ 
+--50 reconnect
+ docker network connect groupnet node3
+ docker exec -it node3 mysql -uroot -pmypass -e "stop group_replication;start group_replication;"
+for N in 1 2 3; do docker exec -it node$N mysql -uroot -pmypass \
+    -e "show variables where variable_name='hostname';" \
+    -e "select * from performance_schema.replication_group_members;"; done
+
+--50 instance crashed
+docker kill node3
+for N in 1 2 3; do docker exec -it node$N mysql -uroot -pmypass -e "show variables where variable_name='hostname';" \
+    -e "select * from performance_schema.replication_group_members;"; done
+
+--60 cleanup
+docker stop node1 node2 node3
+docker rm node1 node2 node3
+sudo rm -rf d1 d2 d3
+docker network rm groupnet
+docker rmi mysql/mysql-server:5.7
+###MGR
+
+
 ###Check these before shutting down MySQL
 https://mysqlstepbystep.com/2016/11/21/check-these-before-shutting-down-mysql/
 --10 
