@@ -4,7 +4,7 @@
 https://stackoverflow.com/questions/3860532/vim-regex-replace-multiple-consecutive-spaces-with-only-one-space
 In the interests of pragmatism, I tend to just do it as a three-stage process:
 
-:g/^    /s//XYZZYPARA/g
+:g/^    /s//XYZZYPARA/g ###/s// is matched elements(here is consective space at start) 
 :g/ \+/s// /g        ###first g is select the match line include more than one space,s// / is replace selective chars to ONLY one space  
 :g/^XYZZYPARA/s//    /g     ###first g is select the match line,s// / is replace selective chars to ONLY one space
 :g: \+:s::|:g          ####replace multiple space with only one '|'

@@ -2,6 +2,18 @@
 ######Start linux.memo #######
 
 
+curl -d "@data.json" -X POST http://localhost:3000/data
+cat data.json
+{
+      "key1":"value1",
+        "key2":"value2"
+}
+
+curl -d "param1=value1&param2=value2" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://localhost:3000/data
+curl -d "param1=value1&param2=value2" -X POST http://localhost:3000/data
+curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
+
+
 https://linuxhint.com/bash-environment-variables/
 Special Parameters
 We can also have parameters which the shell treats specially which can only be used as references and assigning a value to them is not possible.
