@@ -8,11 +8,13 @@ https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentica
 sysctl -w net.core.somaxconn=512
 sysctl -w net.core.somaxconn=98000
 sysctl -w net.ipv4.ip_local_port_range="1024 65535"
+sysctl -w net.ipv4.ip_local_reserved_ports = "8000-10000"
 
 or vim /etc/sysctl.conf
 net.ipv4.ip_local_port_range = 1024 65000
 net.core.somaxconn=512
 net.core.somaxconn=98000
+net.ipv4.ip_local_reserved_ports = 8000-10000
 
 
 
