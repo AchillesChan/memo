@@ -1,5 +1,8 @@
 ######Startmemoof favourite.memo #######
 ######Start favourite.memo #######
+https://tools.ietf.org/html/draft-stenberg-httpbis-tcp-03
+https://hpbn.co/building-blocks-of-tcp/
+
 https://www.digitalocean.com/community/tools/nginx
 https://github.com/krishnapmv/k8s-ldap
 https://www.ershicimi.com/a/8290
@@ -69,16 +72,9 @@ https://unix.stackexchange.com/questions/41740/find-exec-vs-find-xargs-which-one
 https://danielmiessler.com/study/find/
 
 
-touch sample.txt
-find . -maxdepth 1 -type f -name '*.txt' \
-    -exec sh -c 'printf "%s " "$1"; printf "%s %s %s\n" "before.txt" "$1" "after.txt" | sed "s/txt/TXT/g"' sh {} ';'
-
 https://kkc.github.io/2017/12/18/Network-Performance-Tuning/
 https://docs.microsoft.com/en-us/previous-versions/azure/virtual-machines/linux/classic/optimize-mysql
 https://docs.microsoft.com/en-us/azure/virtual-machines/linux/optimization
-
-https://hpbn.co/building-blocks-of-tcp/
-
 https://doc.opensuse.org/documentation/leap/tuning/single-html/book.sle.tuning/index.html#cha.tuning.memory
 
 https://segmentfault.com/a/1190000008061457 proxy_pass的小说明
