@@ -1,6 +1,31 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
 ##backup scripts
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db1')
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db2')
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db3')
+
+db.getUser("UserName")
+{
+        "_id" : "admin.UserName",
+        "user" : "UserName",
+        "db" : "admin",
+        "roles" : [
+                {
+                        "role" : "read",
+                        "db" : "db1"
+                },
+                {
+                        "role" : "read",
+                        "db" : "db2"
+                },
+                {
+                        "role" : "read",
+                        "db" : "db3"
+                }
+        ]
+}
+
 #!/bin/bash
 set -o errexit
 set -o pipefail

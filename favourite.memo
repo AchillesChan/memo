@@ -1,4 +1,3 @@
-######Startmemoof favourite.memo #######
 ######Start favourite.memo #######
 https://tools.ietf.org/html/draft-stenberg-httpbis-tcp-03
 https://hpbn.co/building-blocks-of-tcp/
@@ -14,7 +13,6 @@ https://www.cnblogs.com/f-ck-need-u/p/9278839.html
 https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-balancer-for-mysql-on-ubuntu-16-04
 https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
-
 https://gryzli.info/2019/04/21/working-with-ingest-pipelines-in-elasticsearch-and-filebeat/
 https://facingissuesonit.com/2019/10/16/elasticsearch-ingest-node-filebeat-integration-for-log-parsing/
 https://blog.oddbit.com/post/2014-08-11-four-ways-to-connect-a-docker/
@@ -41,12 +39,8 @@ https://www.hi-linux.com
 https://www.linode.com/docs/applications/containers/kubernetes/how-to-install-apps-on-kubernetes-with-helm/
 https://randomopenstackthoughts.wordpress.com/2019/01/26/install-kubernetes-v1-13-with-docker-18-06-on-centos-7/
 https://docs.gluster.org/en/latest/Quick-Start-Guide/Architecture/
-
-
-
 http://techgenix.com/configure-vpn-windows-server-2012-r2/ Configure VPN in Windows Server 2012 R2
 http://techgenix.com/optimize-vpn-windows-server-2012-r2/   Optimize VPN in Windows Server 2012 R2 
-
 https://www.gnu.org/software/findutils/manual/html_node/find_html/Invoking-the-shell-from-xargs.html#Invoking-the-shell-from-xargs
 http://blog.joylau.cn/2018/05/08/Filebeat-Nginx/  Filebeat实时收集Nginx日志
 http://ddrk.me/particle-fever/ documentary 粒子狂热
@@ -104,7 +98,6 @@ https://blog.51cto.com/wzlinux/2322616https://blog.51cto.com/wzlinux/2322616
 https://blog.51cto.com/wzlinux/2322345
 https://blog.51cto.com/wzlinux/2321767
 https://www.cnblogs.com/Erik_Xu/p/8783789.html
-https://dogedoge.com
 https://www.howtoing.com/centos-kubernetes-docker-cluster
 =======
 https://github.com/HikoQiu/kubeadm-install-k8s#42-%E5%AE%89%E8%A3%85-master-m01
@@ -134,7 +127,6 @@ https://www.percona.com/blog/2015/11/04/mysql-5-7-change-replication-filter-onli
 
 200~http://techgenix.com/natt2003/  Configuring Windows Server 2003-based ISA Server Firewall/VPN Server to Accept inbound NAT-T L2TP/IPSec Calls
 
-
 https://github.com/containership/konstellate-editor
 
 https://github.com/mikemix/percona-xtrabackup-cron
@@ -142,14 +134,8 @@ https://blog.pythian.com/backing-mysql-instance-physically-docker/
 
 http://stable.ascii-flow.appspot.com/#    
 https://www.percona.com/live/18/sites/default/files/slides/proxysqltutorial-plsc18-180507205040.pdf
-https://www.slideshare.net/lalitchoudhary8/mysql-80-architecture-and-enhancement?qid=e8d32cea-7ba8-4f8a-9c51-60ab98a74ba8&v=&b=&from_search=8  mysql 8.0 architecture and enhancement
-https://www.slideshare.net/brendangregg/velocity-2017-performance-analysis-superpowers-with-linux-ebpf  
-h265 h.265 hevc
 https://www.libde265.org/blog/2014/04/10/libde265-js-javascript-hevch-265-bitstream-decoder/
 https://github.com/strukturag/libde265.js/blob/gh-pages/index.html
-
-
-https://medium.freecodecamp.org/learn-kubernetes-in-under-3-hours-a-detailed-guide-to-orchestrating-containers-114ff420e882 
 https://www.fromdual.com/xtrabackup_in_a_nutshell#pb_create_backup   Xtrabackup in a nutshell
 https://superuser.com/
 https://stackoverflow.com/
@@ -311,13 +297,6 @@ http://tool.oschina.net/regex# 中文 支持常用正则列表与替换
 https://twofactorauth.org/ 检查是否支持多因子验证
 https://github.com/koalaman/shellcheck脚本测试
 powershell  http://www.pstips.net/powershell-online-tutorials/   
-http://docs.ansible.com/ansible/ 
-https://github.com/AnthoneyMichale
-http://www.chartgeek.com/wp-content/uploads/2015/04/Game-of-Thrones-Character-Relationships.png
-http://gameofthrones-gotseries.rhcloud.com/game-of-thrones-characters-and-relationships/    game of thrones characters relationships 权利的游戏人物关系图
-http://www.cnblogs.com/gaizai/p/3644510.html MSSQL负载均衡
-
-
 corosync
 http://clusterlabs.org/doc/en-US/Pacemaker/1.1/html-single/Clusters_from_Scratch/
 http://freeloda.blog.51cto.com/2033581/1274533
@@ -325,7 +304,6 @@ http://freeloda.blog.51cto.com/2033581/1275384
 http://freeloda.blog.51cto.com/2033581/1275528
 http://clusterlabs.org/doc/en-US/Pacemaker/1.1/html/Clusters_from_Scratch/ 
 http://clusterlabs.org/doc/zh-CN/Pacemaker/1.1-plugin/html-single/Clusters_from_Scratch/#_quorum_and_two_node_clusters
-
 
 https://awstcocalculator.com/  AWS Total Cost of Ownership (TCO) Calculator
 http://calculator.s3.amazonaws.com/index.html  SIMPLE MONTHLY CALCULATOR
@@ -341,42 +319,20 @@ engfluent.com/english-pronunciation-exercises-main-sounds/
 Google Dictionary (by Google) 4.0.2
 crxMouse Chrome Gestures 2.8.2
 https://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-4.5.pdf
-https://www.youtube.com/watch?v=irQVUlXP4y4 35：00
-
-
-http://pecl.php.net/
-
-
-https://wiki.wireshark.org/SampleCaptures 
-如果看了这个你还是不会用Wireshark，那就来找我吧（8月6日完结）
-https://community.emc.com/thread/194901
-
 
 http://daily.zhihu.com/story/7428446  
 一些玩物不丧志，能学到知识的游戏
-http://m.shopex.cn/products/ecshop/
-商派云 开源PHP B2C商城服务端
-
 
 http://www.makeuseof.com/tag/watch-space-documentaries-universe/ save？
 
-
-http://www.coreseek.com/ 
-Coreseek开源中文检索引擎-Sphinx中文版
-
-
 http://zyan.cc/tech/  我的技术文章与计算机作品汇总页 linux mysql nginx apache php
 
-
 http://www.julyedu.com/index.php 七月算法
-
 
 http://www.zhihu.com/roundtable/kitchen  
 厨房的秘密
 
-
 图文详细解析单反的用法  http://seyingwuji.lofter.com/post/d18a4_7871877
-
 
 http://engfluent.com/english-pronunciation-exercises-main-sounds/ improve english pronunciation
 
@@ -397,98 +353,39 @@ Love Movies? 4 Awesome YouTube Channels You Need to Watch
 http://www.makeuseof.com/tag/5-sites-nature-background-sounds-white-noise-help-focus/ 
 5 Sites with Nature Background Sounds & White Noise to Help You Focus
 
-
 http://www.makeuseof.com/tag/10-fascinating-engineering-channels-youtube/
 10 Fascinating Engineering Channels on YouTube
-
-
 http://www.makeuseof.com/tag/test-home-network-security-free-hacking-tools/ How To Test Your Home Network Security With Free Hacking Tools  
-
-
-滴灌卖家 绿之美 霖又多
-http://hongruichun8812.taobao.com/index.htm?spm=2013.1.w5002-5389937205.2.8DBsI8&v=1
-http://shop105019396.taobao.com/category-750860805.htm?spm=2013.1.w5002-10812903950.4.NHdiBD&search=y&catName=%B5%CE%B9%E0%CF%B5%C1%D0&v=1 http://www.wastewatersystems.com/bioline.html
-
-
 http://www.zixue.it/    自学IT网http://www.makeuseof.com/tag/11-unbelievable-super-slow-mo-videos-record/ 超高速摄影 视频 11 Unbelievable Super Slow-Mo Videos (And How to Record Your Own)
-Sublime Text 编辑器http://sphinxsearch.com/ mysql中文全文索引
-
 
 http://www.etymonline.com/index.php 词源学查询网址
 
 
 Speaky  http://www.gospeaky.com/  和外国人讲英语
-
-
 http://qixing.8264.com/ 骑行天下 户外旅行
-
 
 http://user.yeeyan.org/articles/504726/source  译言 朱贝壳
 
-
 http://www.vaikan.com/  外刊IT评论
 
-
 http://ping.eu/ping/  online ping
-
 
 http://www.zhihu.com/question/26822388/answer/34191366 
 地球上有哪些裸眼可直接观察到的，极其震撼的太空景象？
 
 
-http://www.amandatastes.com/   曼食慢语
-
-
 http://www.javatpoint.com/jsp-page-directive JSP 20150322
-
 
 IT英文电子书下载地址
 http://it-ebooks.info/
-
-
 http://www.wolfexp.net/gh_e1d13f14e227/56888.html excel技巧
-
-
-http://www.xfeater.com/page/SAP-BI-BW-%E9%A1%BE%E9%97%AE%E9%9D%A0%E6%89%8B   
-SAP BI BW 顾问靠手
-
-
 4. Urban dictionary
 俚語粗話網路用語通通給你！
 語言隨著時代演進，無庸置疑。中文是如此，英文亦是如此。想想現在時下年輕人常說的，很瞎很潮，你魯蛇我溫拿，在一般字典理因找不著。Urban dictionary 囊括各種很潮的英文俚語，很潮的各位一定要善用它！
-
-
 SiWanYi 关于大型网站技术演进的思考（十）--网站静态化处理—动静整合方案（2）http://blog.jobbole.com/84328/
-
-
 http://www.playpcesor.com/2015/02/chinese-language-learning.html
-
-
-兽行种种（15）那些吊炸天的化学实验 图片有意思 没有流量了，未存
-
-
-http://www.ruanyifeng.com/blog/archives.html 阮一峰博客文集目录
-
-
-CSS
-
-
-1、https://qqgroup.insight-labs.org
-     看看别人的QQ都有哪些好友关系，嘿嘿！！
-
-
-2、http://www.reg007.com
-     忘记了你注册过哪些网站？一搜便知！！
-
-
-4、http://diaos123.com     简洁有内涵！！无任何广告/弹窗，良心站！！！我一直设置为主页，嘿嘿
-
-
-5、http://www.fanhao520.com/   番号，你懂的！！ 。。
-
-
-7、http://www.flvcd.com/   想珍藏你喜欢的在线视频，又不支持下载？有了这个网站后就不在是问题了
-HTTPS://www.random.org 牛哄哄的真随机数生成网http://www.mathpapa.com/ mathpapa 分步骤解决代数题目，比如方程
+HTTPS://www.random.org 牛哄哄的真随机数生成网
+http://www.mathpapa.com/ mathpapa 分步骤解决代数题目，比如方程
 
 
 http://www.yiym.com/  http://onlineslangdictionary.com/ 英语俚语解释网站
@@ -499,12 +396,9 @@ http://dictionary.reference.com/
 http://www.oxforddictionaries.com/ (牛津英语,有短语的解释,有例句发音,音节标注,推荐)
 http://www.thefreedictionary.com/
 
-
 http://deeplearning.cs.toronto.edu/i2t 人工智能 看图说话 图片转文字
 
-
 https://zygotebody.com 人体结构 需要谷歌帐号登录 付费有精确模型
-
 
 http://episte.math.ntu.edu.tw/ 数学知识网  
 
@@ -514,58 +408,23 @@ http://www.junyiacademy.org/ 台湾均一教育平台 数学 生物
 
 第9阅览室 http://9yls.net/ 
 
-
-https://www.youtube.com/watch?v=Gy6qC92bCCM&list=PLXH05kw-i_5JhnABOgMHXS0UOM57ysdc- 指数生成函数 GOOGLE选4任排
-
-
-https://www.youtube.com/watch?v=IITw5kUaijc&index=8&list=PLXH05kw-i_5LXMMDw4Kbry-FoHsOrzWH4 统计上的负二项式分布(?)
-
-
 http://www.wolframalpha.com/ 数学在线计算画图求解网站 http://mathworld.wolfram.com/  
-
-
 http://blog.csdn.net/acdreamers/article/details/9314913 生成函数
 http://blog.csdn.net/qq429205464/article/details/6963265 
-
-
- http://www.kikinote.com/article/30378.html    免费美国电话 语音短信 http://pinger.com/textfree/ 
-http://sofree.cc/sip-iptel-ipkall/  http://www.henghengzhu.com/share/36.html 
-【免費美國電話號碼】綁定LINE手機號碼 ; 可收驗證碼 / 語音簡訊 ─ Pinger TextFree 安裝教學 (Android/iOS)
 http://ocw.nctu.edu.tw/course_detail_3.php?bgid=9&gid=0&nid=252&v1=67ae94cd11239d21d122ea13d6f1cfeca1f826c5 离散数学 高级计算技术(?)
 http://ocw.nctu.edu.tw/course_detail_3.php?bgid=9&gid=0&nid=252&v1=e4d7203a181c2508ebf90ebec8f771f635c38c55#.VG6qbZBJOl0 离散数学 数学归纳法证明
-
-
 http://ocw.nctu.edu.tw/course_detail_3.php?bgid=9&gid=0&nid=252&v1=4fefe1a913c9589544aef4fef7249e225ffe4bd6 离散数学 排列组合
-
-
 http://www.vaikan.com/  http://rss.aqee.net/ 外刊IT评论 http://www.fulltextrssfeed.com/  全文RSS转换网址  http://www.wizardrss.com/ (好用一些)   http://www.wmutils.com/fulltextrss/
 Full Text RSS Feed Builder
 https://www.youtube.com/watch?v=8uE_Q5yXH3Y&index=3&list=PLvWQohjH8rwhbO6JvCbzX3jQ7JOcU75GI 6' 离散数学 離散數學 Discrete Mathematics http://ocw.nctu.edu.tw/course_detail_3.php?bgid=9&gid=0&nid=252
-
-
-FullyFeedly - Chrome Web Store - Google rss全文阅读扩展,加载缓慢,坑爹啊
-
-
 http://civil.nju.edu.tw/weng/excel/ excel高级数据数学计算 矩阵,行列式,线性规划,高次方程求解
-
-
 http://blogs.technet.com/b/markrussinovich/archive/2011/02/27/3390475.aspx Windows sysinternal 应用博客
 阶乘FACT,组合combin,排列permut EXCEL函数
 http://barrons.blog.caixin.com/archives/54496 图解贝叶斯公式
-
-
-ttps://defuse.ca/big-number-calculator.htm  在线大数相乘结果
-
+https://defuse.ca/big-number-calculator.htm  在线大数相乘结果
 
 http://mindlee.net/ 酷行天下 中文算法blog,还不错
-
-
-https://www.youtube.com/watch?v=18_91wFdcW8 堆排序,印度人讲的还不错,没有字幕.
-
-
 http://www.cs.princeton.edu/~wayne/cs423/demos.html 算法动画,需要java8 runtime environment
-
-
 维度：数学漫步 Dimensions: A Walk Through Mathematics (2008)
 http://www.dimensions-math.org/Dim_ZH_si.htm douban.com
 
@@ -575,9 +434,6 @@ https://my.vmware.com/cn/web/vmware/evalcenter?p=vmware-vsphere-operations&src=P
 VMWARE企业版文档
 http://www.datapointed.net/visualizations/math/factorization/animated-diagrams/ 因数分解,有点意思
 http://technet.microsoft.com/en-us/library/dd277323.aspx rms部署 存档 http://technet.microsoft.com/en-us/library/cc753531(v=ws.10).aspx
-
-
-奥斯卡 86届 http://www.iqiyi.com/w_19rr0tg6xp.html
 
 
 http://keepvid.com/ http://en.savefrom.net/ youtube 下载http://keepsubs.com/ 在线下载YOUTUBE字幕 http://mo.dbxdb.com/Yang/
@@ -591,50 +447,24 @@ http://sxyd.sdut.edu.cn/ 数学http://episte.math.ntu.edu.tw/ 高等数学知识
 http://technet.microsoft.com/en-us/library/cc753354(v=ws.10).aspx
 微软有线认证接入解决方案
 
-
-谷歌关键字wired authentication microsoft 802.1 x 
-
-
 http://technet.microsoft.com/en-us/video 微软技术视频网(technet)http://www.masterhsiao.com.tw/ExcelFinance/PMT/PMT.htm
 年金 Excel 房贷计算函数 PMT 怪老子理财（台湾）
-
 
 http://scn.sap.com/community/erp/manufacturing-pp/blog/2013/12/08/book-outline-production-planning-and-control-with-sap-erp 
 Book Outline: Production Planning and Control with SAP ERP 一本SAP生产模块的好书,没有找到电子版
 http://www.sap-press.de/download/dateien/3052/sappress_production_planning_control_sap_erp.pdf 这是一个SAMPLE
 https://www.sap-press.com/production-planning-and-control-with-sap-erp_3358/
-
-
 http://www.sap-press.com/products/Production-Planning-and-Control-with-SAP-ERP.html? 在线购买,支持电子版本,支持中国?
 思维导图
  http://www.zhihu.com/question/19651621
 
-
 http://www.nuanhuhu.net/2011/01/02/mindmap1-job-hunting/ 
 手绘思维导图(1)找工作——我是怎么用思维导图找到工作的
 
-
 http://freemind.sourceforge.net/wiki/index.php/Main_Page   freemind
-
-
 http://help.sap.com/saphelp_46c/helpdata/en/18/22b800773211d396b20004ac96334b/content.htm Basic Concepts of ALE Technology
 
-
-http://publib.boulder.ibm.com/infocenter/domhelp/v8r0/index.jsp?topic=%2Fcom.ibm.help.domino.admin85.doc%2FH_SETTING_UP_A_PERSON_DOCUMENT_FOR_THE_CLIENT_2887_STEPS.html
- ibm domino notes 文档
-
-
-http://v.pptv.com/show/KWUicvSWLibzmcGuY.html
-http://v.youku.com/v_show/id_XNjQ0MTc5Mjg0.html
-JAVA IDE eclipse
-http://ishare.iask.sina.com.cn/f/36056292.html  大话数据结构下载 page 72
-
-
-双城记
 http://www.techonthenet.com/index.php SQL语法 程序语法 EXCEL函数 database语法
-
-
-http://npz-xuexuexue.nipponpaint.com.cn/content/Course/ScoCourse.aspx?DB=DevDB&SessionID=6b25b52f-144e-4cac-a860-763db348db41 提高记忆力
 
 
 http://www.kanterwang.cn/ SAP知识
@@ -645,40 +475,11 @@ http://ocw.nctu.edu.tw/course_detail_3.php?bgid=9&gid=0&nid=252#.VGCKLpBJOl0  �
 
 http://nctucs.wordpress.com/2011/08/05/cs-ocw/ IT科学在线课程合集
 
-
-https://www.debuggex.com/ 正则测试
-https://jex.im/regulex 正则测试
-https://github.com/koalaman/shellcheck脚本测试
-powershell  http://www.pstips.net/powershell-online-tutorials/   
-http://docs.ansible.com/ansible/ 
-https://github.com/AnthoneyMichale
-http://www.chartgeek.com/wp-content/uploads/2015/04/Game-of-Thrones-Character-Relationships.png
-http://gameofthrones-gotseries.rhcloud.com/game-of-thrones-characters-and-relationships/    game of thrones characters relationships 权利的游戏人物关系图
-http://www.cnblogs.com/gaizai/p/3644510.html MSSQL负载均衡
-
-
- http://dl.dbank.com/c0v74y2j5t 华为网盘 还可以下载 无需注册 略牛
-
-
-http://meldmerge.org/features.html   melt 文档差异比较 用于代码编辑 跨平台
-https://www.debuggex.com/ 正则测试
-https://jex.im/regulex 正则测试
-https://github.com/koalaman/shellcheck脚本测试
-powershell  http://www.pstips.net/powershell-online-tutorials/   
-http://docs.ansible.com/ansible/ 
-https://github.com/AnthoneyMichale
-http://www.chartgeek.com/wp-content/uploads/2015/04/Game-of-Thrones-Character-Relationships.png
-http://gameofthrones-gotseries.rhcloud.com/game-of-thrones-characters-and-relationships/    game of thrones characters relationships 权利的游戏人物关系图
-http://www.cnblogs.com/gaizai/p/3644510.html MSSQL负载均衡
-
-
-site:115.com |site:pan.baidu.com |site:dbank.com |site:vdisk.weibo.com |site:weiyun.com |site:yunpan.360.cn |site:yun.baidu.com
 https://www.sslforfree.com/ 免费ssl
 https://my.freenom.com/clientarea.php 免费域名管理
 http://www.dot.tk/en/index.html?lang=en 免费域名注册
 https://www.songsan.tk 免费域名
 https://www.namecheap.com/support/knowledgebase/article.aspx/795/69/how-to-install-ssl-certificates 各平台安装ssl
-site:115.com |site:pan.baidu.com |site:dbank.com |site:vdisk.weibo.com |site:weiyun.com |site:yunpan.360.cn |site:yun.baidu.com
 https://www.sslforfree.com/ 免费ssl
 https://my.freenom.com/clientarea.php 免费域名管理
 http://www.dot.tk/en/index.html?lang=en 免费域名注册
@@ -692,7 +493,6 @@ https://twofactorauth.org/ 检查是否支持多因子验证
 https://github.com/koalaman/shellcheck脚本测试
 powershell  http://www.pstips.net/powershell-online-tutorials/   
 http://docs.ansible.com/ansible/ 
-https://github.com/AnthoneyMichale
 http://www.chartgeek.com/wp-content/uploads/2015/04/Game-of-Thrones-Character-Relationships.png
 http://gameofthrones-gotseries.rhcloud.com/game-of-thrones-characters-and-relationships/    game of thrones characters relationships 权利的游戏人物关系图
 http://www.cnblogs.com/gaizai/p/3644510.html MSSQL负载均衡
