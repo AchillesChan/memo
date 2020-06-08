@@ -1,9 +1,25 @@
 ######Startmemoof mongod.memo #######
 ######Start mongod.memo #######
 ##backup scripts
-db.grantRolesToUser('UserName',[{role: 'read', db: 'db1')
-db.grantRolesToUser('UserName',[{role: 'read', db: 'db2')
-db.grantRolesToUser('UserName',[{role: 'read', db: 'db3')
+
+use dbs
+db.createUser(
+   {
+            user: "User1",
+                 pwd: "User1Pwd",
+                      roles: [ "read", "read" ]
+                         }
+                         )
+
+use admin
+db.auth('root','rootpwd')
+db.grantRolesToUser('User1', [{ role: 'read', db: 'dbs' }])
+db.getuser('User1')
+
+
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db1'}])
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db2'}])
+db.grantRolesToUser('UserName',[{role: 'read', db: 'db3'}])
 
 db.getUser("UserName")
 {
