@@ -1,5 +1,15 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
+https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces
+For tab characters that appear 4-spaces-wide:
+set tabstop=4
+Finally, if you want an indent to correspond to a single tab, you should also use:
+set shiftwidth=4
+
+For indents that consist of 4 space characters but are entered with the tab key:
+set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+To make the above settings permanent add these lines to your vimrc.
+
 ########vim zero-width assertion
 https://stackoverflow.com/questions/3860532/vim-regex-replace-multiple-consecutive-spaces-with-only-one-space
 In the interests of pragmatism, I tend to just do it as a three-stage process:
