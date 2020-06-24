@@ -913,6 +913,64 @@ Ncat: Version 7.50 ( https://nmap.org/ncat )
 Ncat: Connected to 10.96.0.1:443.
 Ncat: 0 bytes sent, 0 bytes received in 0.01 seconds.
 
+
+
+==create helm chart
+https://docs.bitnami.com/tutorials/create-your-first-helm-chart/
+https://codefresh.io/docs/docs/new-helm/helm-best-practices/
+
+--10
+helm create mychart
+
+helm install --dry-run --debug ./mychart
+
+helm install --dry-run --debug ./mychart --set service.internalPort=8080
+
+helm install example ./mychart --set service.type=NodePort
+
+modify  values.yaml
+image:
+repository: prydonius/todo
+tag: 1.0.0
+pullPolicy: IfNotPresent
+
+helm lint ./mychart
+
+helm install example2 ./mychart --set service.type=NodePort
+
+helm package ./mychart
+
+helm install example3 mychart-0.1.0.tgz --set service.type=NodePort
+
+helm serve &
+
+helm search local
+NAME            VERSION DESCRIPTION
+local/mychart   0.1.0   A Helm chart for Kubernetes
+
+helm install example4 local/mychart --set service.type=NodePort
+
+cat > ./mychart/requirements.yaml <<EOF
+dependencies:
+- name: mariadb
+version: 0.6.0
+repository: https://kubernetes-charts.storage.googleapis.com
+EOF
+
+helm dep update ./mychart
+Hang tight while we grab the latest from your chart repositories...
+...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
+    Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
+...Successfully got an update from the "bitnami" chart repository
+...Successfully got an update from the "incubator" chart repository
+Update Complete. *Happy Helming!*
+Saving 1 charts
+Downloading mariadb from repo
+$ ls ./mychart/charts
+mariadb-0.6.0.tgz
+
+
+
 =====nginx-ingress
 master> helm install stable/nginx-ingress --set defaultBackend.image.repository=gcr.azk8s.cn/google_containers/defaultbackend --set defaultBackend.image.tag=1.4
 
