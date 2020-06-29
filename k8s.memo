@@ -6,6 +6,38 @@ https://kubernetes.io/docs/reference/access-authn-authz/authorization/
 https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 
+###
+devops.stackexchange.com/questions/4013/how-to-pull-a-docker-image-from-a-private-docker-registry-using-helm
+
+$> less values.yaml
+
+mageCredentials:
+  name: credentials-name
+  registry: private-docker-registry
+  username: user
+  password: pass
+
+$> cat templates/imagePullSecret.yaml
+{{- define "imagePullSecret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.registry (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }}
+{{- end }}
+
+$> cat templates/secret.yaml         ####add below snippy
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.imageCredentials.name }}
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+
+$> cat templates/deployment.yaml  or templates/statefulset.yaml
+    imagePullSecrets:                                          ###PATT: LEVEL
+    - name: {{ .Values.imageCredentials.name }} 
+    initContainers:
+
+
 
 ####persistentVolumn pv
 https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-volumes-example-nfs-persistent-volume.html
