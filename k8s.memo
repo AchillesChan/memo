@@ -7,6 +7,87 @@ https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
 
+###restrict pod schedule to specfic node
+https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+
+$> kubectl label nodes k8s-n1 disktype=ssd
+$> kubectl taint nodes k8s-n1 nonbms=value:NoSchedule
+$> kubectl describe node k8s-n1 |grep nonbms
+Taints:             nonbms=value:NoSchedule
+$> kubectl get nodes --show-labels|grep ssd
+k8s-n1   Ready   ...... disktype=ssd,kubernetes.io/arch=amd64 ......
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: dlr.abc.com/nginx:1.19.0-debian-10-r2
+    imagePullPolicy: IfNotPresent
+  nodeSelector:
+    #disktype: hdd 
+    disktype: ssd
+
+$> kubectl apply -f nginx.yaml
+
+$> kubectl describe  po nginx
+Name:         nginx
+Namespace:    default
+Priority:     0
+Node:         <none>
+Labels:       env=test
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+......
+Events:
+  Type     Reason            Age                From               Message
+  ----     ------            ----               ----               -------
+  Warning  FailedScheduling  76s (x7 over 10m)  default-scheduler  0/3 nodes are available:                                                            1 node(s) had taints that the pod didn't tolerate, 2 node(s) didn't match node selector.
+ 
+
+
+###https://computingforgeeks.com/join-new-kubernetes-worker-node-to-existing-cluster/
+https://www.serverlab.ca/tutorials/containers/kubernetes/how-to-add-workers-to-kubernetes-clusters/
+How to Add Workers to Kubernetes Clusters
+
+--10 list your current tokens on the Master node
+master >$ kubeadm token list
+
+--20 if not present ,create one
+
+master >$ kubeadm token create --print-join-command
+
+--30 Get Discovery Token CA cert Hash
+master >$ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+
+--40 Get API Server Advertise address
+master >$ Kubernetes master is running at https://192.168.122.195:6443
+KubeDNS is running at https://192.168.122.195:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Metrics-server is running at https://192.168.122.195:6443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
+
+--50 Join a new Kubernetes Worker Node a Cluster
+node >$ kubeadm join \
+  <control-plane-host>:<control-plane-port> \
+    --token <token> \
+      --discovery-token-ca-cert-hash sha256:<hash>
+
+
+## Removing a Worker Node from the Cluster
+--10 Migrate pods from the node:
+master >$ kubectl drain  <node-name> --delete-local-data --ignore-daemonsets
+
+--20 Prevent a node from scheduling new pods use – Mark node as unschedulable
+
+master >$ kubectl cordon <node-name>
+
+--30 Revert changes made to the node by ‘kubeadm join‘ – Run on worker node to be removed
+
+$node >$ kubeadm reset
+
 Q: “Error: found in requirements.yaml, but missing in charts/ directory” Satisfying Helm Chart Dependencies
 A: helm dependency update
 R: https://andrewaadland.me/2018-08-10-error-found-in-requirements-yaml-but-missing-in-charts-directory-helm-chart-dependencies/
@@ -372,6 +453,7 @@ quay.io quay.azk8s.cn   quay.azk8s.cn/<repo-name>/<image-name>:<version>        
 
 =========================
 useful cmd
+reset/remove exist cluster
 echo y|kubeadm reset && rm -rfv $HOME/.kube/config && ip link delete flannel.1                                                                 
 kubeadm init --config=kubeadm-config.yaml --upload-certs
 

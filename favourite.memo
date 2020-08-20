@@ -1,4 +1,9 @@
 ######Start favourite.memo #######
+nodeSelector
+https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+https://thenewstack.io/implement-node-and-pod-affinity-anti-affinity-in-kubernetes-a-practical-example/
+https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+
 https://docs.bitnami.com/tutorials/create-your-first-helm-chart/
 https://codefresh.io/docs/docs/new-helm/helm-best-practices/
 https://devops.stackexchange.com/questions/4013/how-to-pull-a-docker-image-from-a-private-docker-registry-using-helm
