@@ -12,9 +12,9 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
 
 $> kubectl label nodes k8s-n1 disktype=ssd
-$> kubectl taint nodes k8s-n1 nonbms=value:NoSchedule
-$> kubectl describe node k8s-n1 |grep nonbms
-Taints:             nonbms=value:NoSchedule
+$> kubectl taint nodes k8s-n1 non_projA=value:NoSchedule
+$> kubectl describe node k8s-n1 |grep non_projA
+Taints:             non_projA=value:NoSchedule
 $> kubectl get nodes --show-labels|grep ssd
 k8s-n1   Ready   ...... disktype=ssd,kubernetes.io/arch=amd64 ......
 
@@ -46,7 +46,11 @@ Annotations:  kubectl.kubernetes.io/last-applied-configuration:
 Events:
   Type     Reason            Age                From               Message
   ----     ------            ----               ----               -------
-  Warning  FailedScheduling  76s (x7 over 10m)  default-scheduler  0/3 nodes are available:                                                            1 node(s) had taints that the pod didn't tolerate, 2 node(s) didn't match node selector.
+  Warning  FailedScheduling  76s (x7 over 10m)  default-scheduler
+  
+  0/3 nodes are available:
+  1 node(s) had taints that the pod didn't tolerate,
+  2 node(s) didn't match node selector.
  
 
 
