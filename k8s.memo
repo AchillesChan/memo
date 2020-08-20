@@ -8,9 +8,10 @@ https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
 
 ###restrict pod schedule to specfic node
+https://www.decodingdevops.com/kubernetes-node-affinity-example/
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-
+https://ithelp.ithome.com.tw/articles/10221929
 $> kubectl label nodes k8s-n1 disktype=ssd
 $> kubectl taint nodes k8s-n1 non_projA=value:NoSchedule
 $> kubectl describe node k8s-n1 |grep non_projA
@@ -30,8 +31,37 @@ spec:
     image: dlr.abc.com/nginx:1.19.0-debian-10-r2
     imagePullPolicy: IfNotPresent
   nodeSelector:
-    #disktype: hdd 
     disktype: ssd
+#---   ###nodeAffinity 
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: nginx-deployment
+#spec:
+#  replicas: 2
+#  selector:
+#    matchLabels:
+#      app: nginx
+#  template:
+#    metadata:
+#      labels:
+#        app: nginx
+#    spec:
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#            - matchExpressions:
+#              - key: disktype
+#                operator: In
+#                values:
+#                - hdd 
+#      containers:
+#      - name: nginx
+#        image: repo.a.com/bitnami/nginx:1.19.0-debian-10-r2
+#        ports:
+#        - containerPort: 80
+
 
 $> kubectl apply -f nginx.yaml
 
