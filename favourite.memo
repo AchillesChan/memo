@@ -3,6 +3,11 @@ nodeSelector
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://thenewstack.io/implement-node-and-pod-affinity-anti-affinity-in-kubernetes-a-practical-example/
 https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+https://www.cnblogs.com/luoahong/p/12857783.html  深入剖析Kubernetes学习笔记：StatefulSet-MySQL集群（20）
+https://www.cnblogs.com/luoahong/p/10411868.html
+https://deepzz.com/post/dockerfile-reference.html
+https://juejin.im/post/6844904199818313735   Helm template快速入门
+https://github.com/helm/charts/tree/master/stable/nfs-client-provisioner
 
 https://docs.bitnami.com/tutorials/create-your-first-helm-chart/
 https://codefresh.io/docs/docs/new-helm/helm-best-practices/

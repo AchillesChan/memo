@@ -12,6 +12,8 @@ https://www.decodingdevops.com/kubernetes-node-affinity-example/
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
 https://ithelp.ithome.com.tw/articles/10221929
+https://medium.com/faun/node-affinity-in-kubernetes-75777bf02adb
+
 $> kubectl label nodes k8s-n1 disktype=ssd
 $> kubectl taint nodes k8s-n1 non_projA=value:NoSchedule
 $> kubectl describe node k8s-n1 |grep non_projA
