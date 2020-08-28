@@ -7,6 +7,69 @@ https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
 
+
+###use ingress tunnel mysql
+https://stackoverflow.com/questions/59252103/kubernetes-1-16-nginx-ingress-0-26-1-tcp-mariadb-mysql-service-not-working
+
+opr$ kubectl get po -n demo bitnamimysql8-master-0 -o yaml|head -n 10
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: bitnamimysql8-master-a
+  labels:
+    app: mysql                ###used for svc selector
+    chart: mysql-6.14.8
+    component: master          ###used for svc selector
+
+opr$ cat mysql-tunnel-http.yaml                                                                                                                                                                    
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-mysql
+  namespace: demo
+  labels:
+    app.kubernetes.io/name: ingress-mysql
+    app.kubernetes.io/part-of: ingress-mysql
+spec:
+  type: NodePort
+  ports:
+    - name: proxie-tcp-mysql
+      port: 3306
+      targetPort: 3306
+      protocol: TCP
+  selector:
+    app: mysql                 ###mysql pod's label
+    component: master          ###mysql pod's label
+
+
+opr$ kubectl get svc -n demo |grep ingr                                                                                                                                                                  
+ingress-mysql                                            NodePort    10.97.245.149    <none>        3306:30406/TCP   6m38s
+
+
+opr$ mysql -uroot -hNodeIP -P 30406 -ppwd
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 51461
+Server version: 8.0.21 Source distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| my_database        |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+MySQL [(none)]>
+
+
 ###use subPathExpr 
 https://kubernetes.io/docs/concepts/storage/volumes/
 
