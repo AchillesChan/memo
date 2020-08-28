@@ -142,9 +142,10 @@ PING 172.19.99.2 (172.19.99.2) 56(84) bytes of data.
 
 
 ####install keychain
+https://www.cyberciti.biz/faq/installing-keychain-manager-for-ssh-agent-on-centos-linux-6-7/
 rpm --import http://wiki.psychotic.ninja/RPM-GPG-KEY-psychotic
 rpm -ivh http://packages.psychotic.ninja/6/base/i386/RPMS/psychotic-release-1.0.0-1.el6.psychotic.noarch.rpm
-yum --enablerepo=psychotic install keychain
+yum -y --enablerepo=psychotic install keychain
 
 
 ###ntp operation

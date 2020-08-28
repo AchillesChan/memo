@@ -1,4 +1,6 @@
 ######Start favourite.memo #######
+https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
+https://stackoverflow.com/questions/59252103/kubernetes-1-16-nginx-ingress-0-26-1-tcp-mariadb-mysql-service-not-working
 nodeSelector
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://thenewstack.io/implement-node-and-pod-affinity-anti-affinity-in-kubernetes-a-practical-example/
