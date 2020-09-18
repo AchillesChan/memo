@@ -1,3 +1,4 @@
+https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline
 https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#optional-cluster-services
 https://kubernetes.io/docs/concepts/cluster-administration/logging/
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
@@ -559,6 +560,16 @@ Hello local persistent volume
 
 
 ######kubectl pull private repo
+nodeSelector:              ###spec 
+  proj: bms 
+
+tolerations:               ###spec
+  - key: env
+    effect: NoSchedule
+    operator: Exists
+
+
+
 https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 $k8s-master> kubectl create secret docker-registry regcred --docker-server=dockerhub.abc.com --docker-username=user --docker-password="pwd" --docker-email=a@a.com
 $k8s-master> kubectl get secret regcred -o yaml
