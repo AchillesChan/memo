@@ -1,6 +1,9 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
-
+###offline yum install
+online$> yumdownloader --assumeyes --destdir=<your_rpm_dir> --resolve yum-utils kubeadm-1.18.* kubelet-1.18.* kubectl-1.18.* ebtables
+online$> scp <your_rpm_dir> offlien:/path/2/rpm 
+offline$> yum install -y --cacheonly --disablerepo=* ./*.rpm
 
 curl -d "@data.json" -X POST http://localhost:3000/data
 cat data.json
