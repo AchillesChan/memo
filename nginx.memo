@@ -4,6 +4,29 @@ https://www.nginx.com/blog/help-the-world-by-healing-your-nginx-configuration/
 https://www.bulafish.com/centos/2018/05/03/nginx-rewrite-example/
 https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
 
+upstream keepalive-long-connection {
+        server 172.16.1.5:80;
+        server 172.16.1.6:80;
+        keepalive 200;           ###key config
+}
+
+    location   /pdaapi/ {
+        proxy_set_header         X-Real_IP        $remote_addr;
+        proxy_set_header         X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header         X-Access-Time    $time_local;
+        proxy_set_header         X-Access-referer $http_referer;
+        proxy_set_header         X-User-Agent     $http_user_agent;
+        proxy_set_header         REMOTE-HOST      $remote_addr;
+        proxy_pass http://keepalive-long-connection/;                                                                                                                                       
+        proxy_connect_timeout       900;
+        proxy_send_timeout          900;
+        proxy_read_timeout          900;
+        send_timeout                900;
+        proxy_http_version 1.1;                ###key config
+        proxy_set_header Connection "";        ###key config
+   }
+
+
 ###regex for multiple path
 #https://serverfault.com/questions/564127/nginx-location-regex-for-multiple-paths
 

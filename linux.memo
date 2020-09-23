@@ -1,5 +1,8 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+https://theojulienne.io/2020/07/03/scaling-linux-services-before-accepting-connections.html
+https://theojulienne.io/2020/08/21/mtu-mss-why-connections-stall.html
+
 ###offline yum install
 online$> yumdownloader --assumeyes --destdir=<your_rpm_dir> --resolve yum-utils kubeadm-1.18.* kubelet-1.18.* kubectl-1.18.* ebtables
 online$> scp <your_rpm_dir> offlien:/path/2/rpm 
