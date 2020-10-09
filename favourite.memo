@@ -10,12 +10,15 @@ https://www.cnblogs.com/luoahong/p/10411868.html
 https://deepzz.com/post/dockerfile-reference.html
 https://juejin.im/post/6844904199818313735   Helm template快速入门
 https://github.com/helm/charts/tree/master/stable/nfs-client-provisioner
-
+https://stackoverflow.com/questions/33904451/check-and-create-amqp-virtual-host-vhost-in-python-pika  ###rabbitmq
+https://min.io/product/overview                 ###MinIO Object Storage
+https://blog.scaleway.com/object-storage-how-it-works/   ####Object Storage
+http://www.brendangregg.com/USEmethod/use-linux.html    ###USE Method: Linux Performance Checklist
 https://docs.bitnami.com/tutorials/create-your-first-helm-chart/
 https://codefresh.io/docs/docs/new-helm/helm-best-practices/
 https://devops.stackexchange.com/questions/4013/how-to-pull-a-docker-image-from-a-private-docker-registry-using-helm
 https://tools.ietf.org/html/draft-stenberg-httpbis-tcp-03
-https://hpbn.co/building-blocks-of-tcp/
+https://hpbn.co/building-blocks-of-tcp/         #### High Performance Browser Networking
 https://ceph.readthedocs.io/en/latest/architecture/
 https://www.digitalocean.com/community/tools/nginx
 https://github.com/krishnapmv/k8s-ldap

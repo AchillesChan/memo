@@ -1,3 +1,4 @@
+https://theojulienne.io/2019/07/06/debugging-network-latency-kubernetes.html
 https://severalnines.com/database-blog/running-proxysql-kubernetes-service
 https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline
 https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#optional-cluster-services
@@ -8,6 +9,9 @@ https://kubernetes.io/docs/reference/access-authn-authz/authorization/
 https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
+
+firewalld $>echo "8285/udp 8472/udp 43170/tcp 10100-10300/tcp 2300-2500/tcp 30000-32767/tcp 9100/tcp"|sed -e 's:\ :\n:g'|xargs -P 1 -n 1 -I {} -t sh -c 'firewall-cmd --add-port {} --perm' _
+
 
 
 $online> docker pull k8s.gcr.io/kube-apiserver:v1.18.1 
