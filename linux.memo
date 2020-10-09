@@ -392,10 +392,10 @@ Transfer a file, sender listens
 The above technique works fine for sending a single file. One way to send multiple files is to bundle them up with tar or zip and send the archive file. But there's an even easier way. Just pipe the output of tar directly into Ncat on the sending side, and pipe Ncat's output into tar on the receiving side. This is especially useful when the sending computer doesn't have enough free disk space to hold the archive file. Here's how to transfer <files> using the “receiver listens” method, though of course the “sender listens” method works just as well.
 
 Transfer a bundle of files
-!!!!!!!!!!!!!!!!!!!!!!!#########################VERFIED USE NCAT NOT NC!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    dst$ ncat -l 9999| tar xzv                                       ###dest,9999 is port,run 1st
-    src$ tar czv ./* | ncat --send-only dst 9999    ###change dir to be copied on source,run 2nd;cp file give full file name
-!!!!!!!!!!!!!!!!!!!!!!!#########################VERFIED USE NCAT NOT NC!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!#########################VERFIED USE NCAT NOT NC!!!!!!!!!!!!!!!!
+dst$ ncat -l 9999| tar xzv                                       ###dest,9999 is port,run 1st
+src$ tar czv ./* | ncat --send-only dst 9999    ###change dir to be copied on source,run 2nd;cp file give full file name
+!!!!!!!#########################VERFIED USE NCAT NOT NC!!!!!!!!!!!!!!!!
 Not only tar files but any stream of bytes can be transferred in this way. Here is an example of transferring an entire disk image from host1 to host2. Naturally, the disk should be unmounted or mounted read-only.
 
 Transfer a disk image
