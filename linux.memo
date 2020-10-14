@@ -3,6 +3,37 @@
 https://theojulienne.io/2020/07/03/scaling-linux-services-before-accepting-connections.html
 https://theojulienne.io/2020/08/21/mtu-mss-why-connections-stall.html
 
+###ubuntu set locale
+https://help.ubuntu.com/community/Locale
+
+$ locale -a   ###list
+C               # fall-back, ASCII encoding, same as POSIX
+de_DE.utf8      # German language,  Germany,     UTF-8 encoding
+de_CH.utf8      # German language,  Switzerland, UTF-8 encoding
+fr_CH.utf8      # French language,  Switzerland, UTF-8 encoding
+fr_CA.utf8      # French language,  Canada,      UTF-8 encoding
+en_US.utf8      # English language, USA,         UTF-8 encoding
+POSIX           # fall-back, ASCII encoding, same as C
+
+$ locale ##List current settings
+
+$ date
+Sat May 14 15:59:12 CEST 2011
+
+$ LC_TIME=zh_CN.UTF-8   ##Changing settings temporarily
+
+$ date
+2011年 05月 14日 星期六 16:00:13 CEST 2011
+
+
+$Changing settings permanently
+If you want more fine-grained control, you may manually change your system's locale entries by modifying the file /etc/default/locale (or the user-specific $HOME/.pam_environment, which can be set by gnome-language-selector as well).
+
+For example on a German system, to prevent system messages from being translated, you may use:
+
+LANG=de_DE.UTF-8
+LC_MESSAGES=POSIX
+
 ###offline yum install
 online$> yumdownloader --assumeyes --destdir=<your_rpm_dir> --resolve yum-utils kubeadm-1.18.* kubelet-1.18.* kubectl-1.18.* ebtables
 online$> scp <your_rpm_dir> offlien:/path/2/rpm 

@@ -1,5 +1,27 @@
 ######Startmemoof docker.memo #######
 
+
+###set docker locale
+http://jaredmarkell.com/docker-and-locales/
+https://www.jianshu.com/p/43a3468362aa
+https://help.ubuntu.com/community/Locale
+https://lintut.com/how-to-set-up-system-locale-on-ubuntu-18-04/
+https://stackoverflow.com/questions/28405902/how-to-set-the-locale-inside-a-debian-ubuntu-docker-container
+
+$> apt-get -y install locales
+$> vim dockerfile
+
+
+    RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
+    ENV LANG en_US.UTF-8  
+    ENV LANGUAGE en_US:en  
+    ENV LC_ALL en_US.UTF-8   
+    ###ENV LANG C.UTF-8   CHINESE SUPPORT ? ###
+    
+    $ cat Dockerfile   ###chinese example 
+     From dockerhub.yoursite.com/common/foobar:v3.1
+     ENV LANG C.UTF-8
+     ENV LC_ALL C.UTF-8
 ###clean docker log
 --10
 truncate -s 0 /var/lib/docker/containers/*/*-json.log.
