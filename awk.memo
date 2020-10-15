@@ -1,6 +1,26 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+$> tail svn.memo        ###orgin 
+
+* Dumped revision 791.
+* Dumped revision 792.
+* Dumped revision 793.
+* Dumped revision 794.
+* Dumped revision 795.
+* Dumped revision 796.
+
+$> awk '                                           ####format start
+BEGIN{SUM=0}                                       ####begin seg
+/791/,/793/{SUM=SUM+NF;print $0}                   ####pattern 791-793 and action
+END{printf "\n%s %d\n","Filed number is",SUM}      ####end seg
+' svn.memo                                         ####operation file
+* Dumped revision 791.                             ####output 
+* Dumped revision 792.
+* Dumped revision 793.
+
+Filed number is 12                                 ####output
+
 
 https://www.thegeekstuff.com/2010/03/awk-arrays-explained-with-5-practical-examples/
 
