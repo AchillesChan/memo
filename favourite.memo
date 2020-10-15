@@ -1,4 +1,5 @@
 ######Start favourite.memo #######
+https://kubernetes.github.io/ingress-nginx/deploy/
 https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
 https://stackoverflow.com/questions/59252103/kubernetes-1-16-nginx-ingress-0-26-1-tcp-mariadb-mysql-service-not-working
 nodeSelector
