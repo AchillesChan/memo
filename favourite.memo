@@ -1,4 +1,5 @@
 ######Start favourite.memo #######
+https://newshimalaya.com/2020/07/04/scaling-linux-services-and-products-earlier-than-accepting-connections/  ##network tunning benchmark
 https://kubernetes.github.io/ingress-nginx/deploy/
 https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
 https://stackoverflow.com/questions/59252103/kubernetes-1-16-nginx-ingress-0-26-1-tcp-mariadb-mysql-service-not-working
@@ -27,8 +28,8 @@ https://www.ershicimi.com/a/8290
 https://blog.inkubate.io/access-your-kubernetes-cluster-with-your-active-directory-credentials/
 https://theithollow.com/2020/01/21/active-directory-authentication-for-kubernetes-clusters/
 https://mysqlhighavailability.com/mysql-group-replication-a-quick-start-guide/
-https://www.cnblogs.com/f-ck-need-u/p/9203154.html
-https://www.cnblogs.com/f-ck-need-u/p/9278839.html
+https://www.cnblogs.com/f-ck-need-u/p/9203154.html  mysql group rep
+https://www.cnblogs.com/f-ck-need-u/p/9278839.html  mysql proxysql
 https://www.digitalocean.com/community/tutorials/how-to-use-proxysql-as-a-load-balancer-for-mysql-on-ubuntu-16-04
 https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
