@@ -1,6 +1,14 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
 
+az aks nodepool add --cluster-name  pressaks-01 \
+                    --name  pressaks03 \
+                    --resource-group   press-rg01 \
+                      --max-pods 28 \
+                      --os-type Linux \
+                      --node-vm-size Standard_E2s_v3 \
+                      --vnet-subnet-id /subscriptions/subid/resourceGroups/press-rg01/providers/Microsoft.Network/virtualNetworks/press-vnet01/subnets/aks03
+
 ###azure cli
                 docker pull mcr.microsoft.com/azure-cli
                 docker run -v ~:/tmp -it mcr.microsoft.com/azure-cli   ###map /tmp in container to my home path
