@@ -27,7 +27,7 @@ sudo zypper dup --from packman --allow-vendor-change
 
 
 install krdc keychain git locate
-$>sudo zypper in -y git krdc keychain mlocate ibus ibus-googlepinyin tmux fcitx-googlepinyin fcitx-libpinyin
+$>sudo zypper in -y git krdc keychain mlocate ibus ibus-googlepinyin tmux fcitx-googlepinyin fcitx-libpinyin ansible
 
 
 

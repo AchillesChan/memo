@@ -1,8 +1,11 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
+https://github.com/nginx-modules/nginx_upstream_check_module
 https://www.nginx.com/blog/help-the-world-by-healing-your-nginx-configuration/
 https://www.bulafish.com/centos/2018/05/03/nginx-rewrite-example/
 https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
+https://sites.psu.edu/jasonheffner/2015/06/19/nginx-use-different-backend-based-on-http-header/
+https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-health-check/
 
 upstream keepalive-long-connection {
         server 172.16.1.5:80;
