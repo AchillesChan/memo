@@ -226,7 +226,7 @@ $ docker exec conatainer /path/2/file.txt  2>&1|tee log.txt ; mail -s "$(hostnam
 
 $ echo “Message body” | mail -s “Subject” user@abc.com         ###without redirection
 
-$ mail -s 'Subject' mail_user@50.link <<<'$(hostname) Message'  
+$ mail -s 'Subject' mail_user@50.link <<<"$(hostname) Message"  
 ###nmap check TCP/UDP PORT STATUS
 
 ###add/remove all open port
