@@ -2,6 +2,8 @@
 ######Start linux.memo #######
 https://theojulienne.io/2020/07/03/scaling-linux-services-before-accepting-connections.html
 https://theojulienne.io/2020/08/21/mtu-mss-why-connections-stall.html
+https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/
+https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/
 
 ###ubuntu set locale
 https://help.ubuntu.com/community/Locale

@@ -1,6 +1,22 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
 
+https://stackoverflow.com/questions/17476879/difference-between-number-in-the-same-column-using-awk
+compute delta
+
+$ echo "1
+3
+9
+6"| awk 'NR==1{OLD=$1;next}
+NR>1{print $1-OLD;OLD=$1}'
+
+##output
+2
+6
+-3
+#####
+
+
 $> tail svn.memo        ###orgin 
 
 * Dumped revision 791.
