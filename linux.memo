@@ -214,11 +214,19 @@ PORT   STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
 
+
+https://www.interserver.net/tips/kb/linux-mail-command-usage-examples/
+https://www.binarytides.com/linux-mail-command-examples/
+
 $ yum install mailx -y
 
 $ nmap -sU 192.168.2.16 -p 50-55 2>&1 |tee 1.txt ;mail -s "run on $(hostname) $(date) on result  is done" user@abc.com < ./1.txt
 
 $ docker exec conatainer /path/2/file.txt  2>&1|tee log.txt ; mail -s "$(hostname) $(date)" user@abc.com <log.txt
+
+$ echo “Message body” | mail -s “Subject” user@abc.com         ###without redirection
+
+$ mail -s 'Subject' mail_user@50.link <<<'$(hostname) Message'  
 ###nmap check TCP/UDP PORT STATUS
 
 ###add/remove all open port
