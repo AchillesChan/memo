@@ -5,6 +5,8 @@ https://theojulienne.io/2020/08/21/mtu-mss-why-connections-stall.html
 https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/
 https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/
 
+before=$(date +%s);CMD 2>&1|tee -a LOG;after=$(date +%s);mail -s "CMD spent $(($after-$before)) on $(hostname)" mail_user@your.com <LOG
+
 ###ubuntu set locale
 https://help.ubuntu.com/community/Locale
 

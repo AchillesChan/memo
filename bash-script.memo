@@ -1,5 +1,18 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
+
+###date convert
+$ s=$(($(date --date='2020-10-31 12:31:51.35' +%s%N)/100000000))
+
+$ echo $s
+16041187113
+
+
+$ date -d "$(echo 20140103T1422 | sed 's/T/ /')"
+Fri Jan  3 14:22:00 CST 2014
+
+###date convert
+
 ##############debug style
 cat script.sh
 #!/bin/bash

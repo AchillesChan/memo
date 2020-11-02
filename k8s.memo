@@ -1,3 +1,5 @@
+https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/podaffinity.md
+https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://theojulienne.io/2019/07/06/debugging-network-latency-kubernetes.html
 https://severalnines.com/database-blog/running-proxysql-kubernetes-service
 https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline
