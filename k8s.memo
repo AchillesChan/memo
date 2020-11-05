@@ -1,3 +1,4 @@
+https://yunlzheng.gitbook.io/prometheus-book/
 https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/podaffinity.md
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://theojulienne.io/2019/07/06/debugging-network-latency-kubernetes.html
@@ -1481,4 +1482,557 @@ change "Type": "vxlan" to "Type": "host-gw"
    resourceVersion: "2810"
    selfLink: /api/v1/namespaces/kube-system/configmaps/kube-flannel-cfg
    uid: ddfa00fe-eb34-4fdd-8e09-18c749070453
+###########
+[flannel network]
+# kubectl describe pod kube-flannel-ds-amd64-9dbxj -n kube-system
+Name:         kube-flannel-ds-amd64-9dbxj
+Namespace:    kube-system
+Priority:     0
+Node:         k8s-n2/10.0.2.22
+Start Time:   Mon, 25 Nov 2019 10:11:57 +0800
+.....
 
+# kubectl get pods -n kube-system -l app=flannel
+NAME                          READY   STATUS    RESTARTS   AGE
+kube-flannel-ds-amd64-9dbxj   1/1     Running   3          55d
+kube-flannel-ds-amd64-f5q8z   1/1     Running   5          55d
+......
+
+# kubectl get cm -n kube-system -l app=flannel
+NAME               DATA   AGE
+kube-flannel-cfg   2      55d
+
+# kubectl get cm -n kube-system -o yaml kube-flannel-cfg
+apiVersion: v1
+data:
+ ......
+ net-conf.json: |
+    {
+      "Network": "10.249.0.0/16",
+      "Backend": {
+        "Type": "vxlan"                        #######This is very import
+      }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+......
+labels:
+    app: flannel
+    tier: node
+  name: kube-flannel-cfg
+  namespace: kube-system
+  resourceVersion: "2810"
+  selfLink: /api/v1/namespaces/kube-system/configmaps/kube-flannel-cfg
+  uid: ddfa00fe-eb34-4fdd-8e09-18c749070453
+
+
+# kubectl edit cm -n kube-system -o yaml kube-flannel-cfg
+change "Type": "vxlan" to "Type": "host-gw"
+
+# kubectl delete pod -n kube-system -l app=flannel
+
+ # kubectl get cm -n kube-system -o yaml kube-flannel-cfg
+ apiVersion: v1
+ data:
+  ......
+  net-conf.json: |
+     {
+       "Network": "10.249.0.0/16",
+       "Backend": {
+         "Type": "host-gw"                        #######This is very import,changed
+       }
+     }
+ kind: ConfigMap
+ metadata:
+   annotations:
+ ......
+ labels:
+     app: flannel
+     tier: node
+   name: kube-flannel-cfg
+   namespace: kube-system
+   resourceVersion: "2810"
+   selfLink: /api/v1/namespaces/kube-system/configmaps/kube-flannel-cfg
+   uid: ddfa00fe-eb34-4fdd-8e09-18c749070453
+
+###file transfer
+Copy requires that tar be installed in the container image.
+kubectl cp /tmp/foo_dir <some-pod>:/tmp/bar_dir
+kubectl cp <some-pod>:/tmp/foo /tmp/bar
+kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>
+kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
+https://kubectl.docs.k8s.io/pages/container_debugging/copying_container_files.html
+
+
+docker cp foo.txt mycontainer:/foo.txt
+docker cp mycontainer:/foo.txt foo.txt
+https://linuxhandbook.com/docker-cp-example/
+####create token 
+https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/#cmd-token-create
+[k8s-m1 ]# kubeadm token generate
+eut5io.190s76dl6u7qi23b
+
+[k8s-m1 ]# kubeadm token create eut5io.190s76dl6u7qi23b --print-join-command --ttl=0
+kubeadm join 10.0.2.12:6443 --token eut5io.190s76dl6u7qi23b     --discovery-token-ca-cert-hash sha256:07d685118812c8331fb938574388853a654c21c588386f1d0b663e3f5e6ef335 
+
+[k8s-m1 ]# kubeadm token list
+TOKEN                     TTL         EXPIRES   USAGES                   DESCRIPTION   EXTRA GROUPS
+eut5io.190s76dl6u7qi23b   <forever>   <never>   authentication,signing   <none>        system:bootstrappers:kubeadm:default-node-token
+
+
+
+####config map
+--10
+[k8s-m1 ]# ls configmap-files/
+my-nginx-config.conf  sleep-interval
+
+[k8s-m1 ]# cat configmap-files/my-nginx-config.conf 
+server {
+    listen              80;
+    server_name         www.kubia-example.com;
+
+    gzip on;
+    gzip_types text/plain application/xml;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+}
+
+[k8s-m1 ]# cat configmap-files/sleep-interval 
+25
+
+
+[k8s-m1 ]# kubectl create cm fortune-config --from-file=configmap-files                                                                                                                      
+configmap/fortune-config created 
+
+[k8s-m1 ]# kubectl get cm fortune-config -o yaml
+apiVersion: v1
+data:
+  my-nginx-config.conf: |
+    server {
+        listen              80;
+        server_name         www.kubia-example.com;
+
+        gzip on;
+        gzip_types text/plain application/xml;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+
+    }
+  sleep-interval: |
+    25
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-23T04:00:01Z"
+  name: fortune-config
+  namespace: default
+  resourceVersion: "4368184"
+  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
+  uid: a6b0e0a5-4953-48cf-85e5-908fd8bd456c
+
+
+## After vim wq :configmap/fortune-config edited
+
+
+[k8s-m1 ]# kubectl exec fortune-configmap-volume -c web-server cat /etc/nginx/conf.d/my-nginx-config.conf                                                                                    
+server {
+    listen              80;
+    server_name         www.kubia-example.com;
+
+    gzip on;
+    gzip_types text/plain application/xml;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+}
+
+
+[k8s-m1 ]# kubectl edit configmap fortune-config      ####After save edit,the new status will take effect after monment auto.
+
+
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  my-nginx-config.conf: |
+    server {
+        listen              80;
+        server_name         www.kubia-example.com;
+
+        gzip off;                             #######change from on to off
+        gzip_types text/plain application/xml;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+
+    }
+  sleep-interval: |
+    25
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-23T04:00:01Z"
+  name: fortune-config
+  namespace: default
+  resourceVersion: "4368184"
+  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
+  uid: a6b0e0a5-4953-48cf-85e5-908fd8bd456c
+
+
+
+[k8s-m1 ]# kubectl exec fortune-configmap-volume -c web-server cat /etc/nginx/conf.d/my-nginx-config.conf
+server {
+    listen              80;
+    server_name         www.kubia-example.com;
+
+    gzip off;                           #######Wait moment,this while change to config new status
+    gzip_types text/plain application/xml;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+}
+
+
+
+kubectl delete pod kubia-2-manual --grace-period=0 --force
+
+kubectl create cm fortune-config --from-literal=sleep-interval=25
+
+
+
+[k8s-m1 ]# cat fortune-pod-configmap-volume.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-configmap-volume
+spec:
+  containers:
+  - image: fortune:evn
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: INTERVAL
+      valueFrom:
+        configMapKeyRef:
+          name: fortune-config
+          key: sleep-interval
+    name: html-generator
+    volumeMounts:
+    - name: html
+      mountPath: /var/htdocs
+  - image: nginx:alpine
+    name: web-server
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+      readOnly: true
+    - name: config
+      mountPath: /etc/nginx/conf.d
+      readOnly: true
+    - name: config
+      mountPath: /tmp/whole-fortune-config-volume
+      readOnly: true
+    ports:
+      - containerPort: 80
+        name: http
+        protocol: TCP
+  volumes:
+  - name: html
+    emptyDir: {}
+  - name: config
+    configMap:
+      name: fortune-config
+
+####config map
+
+
+
+
+https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
+
+git clone https://github.com/nginxinc/kubernetes-ingress/
+cd kubernetes-ingress/deployments
+ git checkout v1.6.3
+
+
+ kubectl apply -f common/ns-and-sa.yaml
+ kubectl apply -f rbac/rbac.yaml
+ kubectl apply -f common/default-server-secret.yaml
+ kubectl apply -f common/nginx-config.yaml
+ kubectl apply -f common/custom-resource-definitions.yaml
+
+
+
+ kubectl apply -f daemon-set/nginx-ingress.yaml
+ 
+ kubectl get pods --namespace=nginx-ingress
+
+
+
+kubectl apply -f ds-nginx-ingress.yaml
+kubectl apply -f ing-kubia.yaml 
+kubectl apply -f svc-kubia-nodeport.yaml
+kubectl apply -f pod-kubia.yaml
+
+
+--05 
+data flow:client->haproxy->ds->ing(nginx)->svc(app)->pod(labeld)
+
+--10 master
+[root@k8s-m1 Chapter05]# kubectl get ds
+NAME               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+ds-nginx-ingress   2         2         2       2            2           <none>          26m
+[root@k8s-m1 Chapter05]# kubectl describe ds 
+Name:           ds-nginx-ingress
+Selector:       app=nginx-ingress
+Node-Selector:  <none>
+Labels:         <none>
+Annotations:    deprecated.daemonset.template.generation: 1
+                kubectl.kubernetes.io/last-applied-configuration:
+                  {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"ds-nginx-ingress","namespace":"default"},"spec":{"selector...
+Desired Number of Nodes Scheduled: 2
+Current Number of Nodes Scheduled: 2
+Number of Nodes Scheduled with Up-to-date Pods: 2
+Number of Nodes Scheduled with Available Pods: 2
+Number of Nodes Misscheduled: 0
+Pods Status:  2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=nginx-ingress
+  Service Account:  nginx-ingress
+  Containers:
+   nginx-ingress:
+    Image:      nginx/nginx-ingress:edge
+    Port:       80/TCP                            ###container port
+    Host Port:  31080/TCP                         ###node port NOT SHOWED ON NODE,BUT worked if check from other node
+    Args:
+      -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+      -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+    Environment:
+      POD_NAMESPACE:   (v1:metadata.namespace)
+      POD_NAME:        (v1:metadata.name)
+.......
+
+
+
+[root@k8s-m1 Chapter05]# kubectl get ing
+NAME    HOSTS                              ADDRESS   PORTS   AGE
+kubia   kubia.example.com,ab.example.com             80      8m3s
+[root@k8s-m1 Chapter05]# kubectl describe ing
+Name:             kubia
+Namespace:        default
+Address:          
+Default backend:  default-http-backend:80 (<none>)
+Rules:
+  Host               Path  Backends
+  ----               ----  --------
+  kubia.example.com  
+                     /   kubia-nodeport:80 (10.249.1.24:8080)
+  ab.example.com     
+                     /   kubia-nodeport:80 (10.249.1.24:8080)
+Annotations:                                ####serviceName is KEYPOINT
+  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},
+  "name":"kubia","namespace":"default"},"spec":{"rules":[{"host":"kubia.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport",
+  "servicePort":80},"path":"/"}]}},{"host":"ab.example.com","http":{"paths":[{"backend":{"serviceName":"kubia-nodeport","servicePort":80},"path":"/"}]}}]}}
+
+Events:
+  Type    Reason          Age                   From                      Message
+  ----    ------          ----                  ----                      -------
+  Normal  AddedOrUpdated  5m25s (x2 over 8m9s)  nginx-ingress-controller  Configuration for default/kubia was added or updated
+  Normal  AddedOrUpdated  5m25s (x2 over 8m8s)  nginx-ingress-controller  Configuration for default/kubia was added or updated
+
+
+
+
+
+
+[root@k8s-m1 Chapter05]# kubectl get svc
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP   10.96.0.1        <none>        443/TCP        15d
+kubia-nodeport   NodePort    10.107.200.168   <none>        80:31025/TCP   7m1s
+[root@k8s-m1 Chapter05]# kubectl get svc kubia-nodeport
+NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubia-nodeport   NodePort   10.107.200.168   <none>        80:31025/TCP   7m12s
+[root@k8s-m1 Chapter05]# kubectl describe svc kubia-nodeport
+Name:                     kubia-nodeport
+Namespace:                default
+Labels:                   <none>
+Annotations:              kubectl.kubernetes.io/last-applied-configuration:
+                            {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"kubia-nodeport","namespace":"default"},"spec":{"ports":[{"port":8...
+Selector:                 app=kubia                 ####KEY POINT
+Type:                     NodePort
+IP:                       10.107.200.168
+Port:                     <unset>  80/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  31025/TCP
+Endpoints:                10.249.1.24:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+
+[root@k8s-m1 Chapter05]# kubectl label po kubia-manual app=kubia            ###KEY POINT
+
+[root@k8s-m1 Chapter05]# kubectl get po --show-labels
+NAME                     READY   STATUS    RESTARTS   AGE   LABELS
+ds-nginx-ingress-s746p   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
+ds-nginx-ingress-xklnp   1/1     Running   0          30m   app=nginx-ingress,controller-revision-hash=6d4cbc867,pod-template-generation=1
+kubia-manual             1/1     Running   0          50m   app=kubia           ####KEY POINT
+
+
+
+
+
+--20 haproxy
+
+[root@k8s-m2 ha ~]# cat /etc/haproxy/haproxy.cfg |tail -n 40
+......
+frontend k8s-80
+  bind *:80
+  mode tcp 
+  option tcplog
+  default_backend k8s-80
+
+backend k8s-80
+  mode tcp                                                                                                                                                                                                                                                                    
+  option tcplog
+  option tcp-check
+  balance roundrobin
+  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100 
+  server k8s-n02 10.0.2.22:31080 check        ###KEY POINT PORT FROM DAEMONSET
+  server k8s-n01 10.0.2.21:31080 check        ###KEY POINT PORT FROM DAEMONSET  
+
+
+--30 client
+[root@k8s-m3 ~]# curl mk.example.com -I   ###NOT REVERSE PROXY
+HTTP/1.1 404 Not Found
+Server: nginx/1.17.8
+
+[root@k8s-m3 ~]# curl ab.example.com -I   ####PREVERSE PROXY
+HTTP/1.1 200 OK
+Server: nginx/1.17.9
+
+[root@k8s-m3 ~]# curl example.example.com -I ###NO DNS A RECORD
+curl: (6) Could not resolve host: example.example.com; Unknown error
+
+
+
+
+
+####persistentVolumn pvp/fortune-config edited
+
+https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-volumes-example-nfs-persistent-volume.html
+https://lapee79.github.io/en/article/use-a-local-disk-by-local-volume-static-provisioner-in-kubernetes/
+https://vocon-it.com/2018/12/20/kubernetes-local-persistent-volumes/
+
+--10 m1 is master n1 is node
+[k8s-m1 ]# cat storageClass.yaml                                                                                                                                                             
+kind: StorageClass                                                                                                                                                                           
+apiVersion: storage.k8s.io/v1                                                                                                                                                                
+metadata:                                                                                                                                                                                    
+  name: my-local-storage                                                                                                                                                                     
+provisioner: kubernetes.io/no-provisioner                                                                                                                                                    
+volumeBindingMode: WaitForFirstConsumer                                                                                                                                                      
+                                                                                                                                                                                             
+[k8s-m1 ]# kubectl get sc                                                                                                                                                                    
+NAME               PROVISIONER                    AGE                                                                                                                                        
+my-local-storage   kubernetes.io/no-provisioner   24m   
+
+-m1 ]# cat persistentVolume.yaml                                                                                                                                                         
+apiVersion: v1                                                                                                                                                                               
+kind: PersistentVolume                                                                                                                                                                       
+metadata:                                                                                                                                                                                    
+  name: my-local-pv                                                                                                                                                                          
+spec:                                                                                                                                                                                        
+  capacity:                                                                                                                                                                                  
+    storage: 5Gi                                                                                                                                                                             
+  accessModes:                                                                                                                                                                               
+  - ReadWriteOnce                                                                                                                                                                            
+  persistentVolumeReclaimPolicy: Retain                                                                                                                                                      
+  storageClassName: my-local-storage                                                                                                                                                         
+  local:                                                                                                                                                                                     
+    path: /mnt/vol1                                                                                                                                                                          
+  nodeAffinity:                                                                                                                                                                              
+    required:                                                                                                                                                                                
+      nodeSelectorTerms:                                                                                                                                                                     
+      - matchExpressions:                                                                                                                                                                    
+        - key: kubernetes.io/hostname                                                                                                                                                        
+          operator: In                                                                                                                                                                       
+          values:                                                                                                                                                                            
+          - k8s-n1                                                                                                                                                                           
+
+[k8s-m1 ]# kubectl get pv
+NAME          CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM              STORAGECLASS       REASON   AGE
+my-local-pv   5Gi        RWO            Retain           Bound    default/my-claim   my-local-storage            18m
+
+
+
+[k8s-m1 ]# cat persistentVolumeClaim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: my-local-storage
+  resources:
+    requests:
+      storage: 3Gi
+
+PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:53:43CST USER:root
+[k8s-m1 ]# kubectl get pvc
+NAME       STATUS   VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS       AGE
+my-claim   Bound    my-local-pv   5Gi        RWO            my-local-storage   17m
+
+
+[k8s-m1 ]# cat http-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: www
+  labels:
+    name: www
+spec:
+  containers:
+  - name: www
+    image: dockerhub.abc.com/it/nginx:alpine
+    ports:
+      - containerPort: 80
+        name: www
+    volumeMounts:
+      - name: www-persistent-storage
+        mountPath: /usr/share/nginx/html
+  volumes:
+    - name: www-persistent-storage
+      persistentVolumeClaim:
+        claimName: my-claim
+
+PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:54:04CST USER:root
+[k8s-m1 ]# kubectl get po -o wide
+NAME                  READY   STATUS    RESTARTS   AGE     IP            NODE     NOMINATED NODE   READINESS GATES
+www                   1/1     Running   0          4m50s   10.249.1.30   k8s-n1   <none>           <none>
+
+--20
+[root@k8s-n1 ~]# mkdir -p /mnt/vol1
+[root@k8s-n1 ~]echo "Hello local persistent volume" > /mnt/disk/vol1/index.html
+
+--30
+[k8s-m1 ]# curl 10.249.1.30
+Hello local persistent volume
+
+#persistentVolumn pv
