@@ -1,5 +1,9 @@
 ####basic
+https://helm.sh/docs/chart_template_guide/
 https://juejin.im/post/6844904199818313735
+05 flow control
+{{ if eq .Values.favorite.drink "coffee" }}mug: true{{ end }}
+
 
 10 with
 apiVersion: v1
@@ -8,10 +12,50 @@ metadata:
   name: {{ .Release.Name }}-configmap
 data:
   myvalue: "Hello World"
-  {{- with .Values.favorite }}                   ###switch path to .Values.favorite
+  {{- with .Values.favorite }}                   ###switch path(scope) to .Values.favorite
+  release: {{ $.Release.Name }}                  ###$ is mapped to the root scope when template execution begins and it does not change during template execution. 
   drink: {{ .drink | default "tea" | quote }}    ###eq reference Values.favorite.drink
   food: {{ .food | upper | quote }}              ###eq reference Values.favorite.food
   {{- end }}
+
+sizes: |-                                         ##tuples, lists map or dict is OK
+  {{- range tuple "small" "medium" "large" }}
+  - {{ . }}
+  {{- end }}
+  
+sizes: |-
+  - small
+  - medium
+  - large
+
+15 template
+{{/* Generate basic labels */}}      ###define,globally shared.
+  name: silly-snake-configmap
+data:
+  salad: caesar
+
+---
+# Source: mychart/charts/mysubchart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: silly-snake-cfgmap2
+data:
+  dessert: ice cream
+  salad: caesar
+{{- define "mychart.labels" }}
+  labels:
+    generator: helm
+    date: {{ now | htmlDate }}
+    chart: {{ .Chart.Name }}
+    version: {{ .Chart.Version }}
+{{- end }}
+
+{{- template "mychart.labels" . }}   ###call from name
+##Note that we pass . at the end of the template call. We could just as easily pass .Values or .Values.favorite or whatever scope we want. But what we want is the top-level scope.
+
+{{ include "mychart.app" . | indent 2 }}   ###use include instead of template (last)
+#It is considered preferable to use include over template in Helm templates simply so that the output formatting can be handled better for YAML documents.
 
 20 range
 
@@ -26,10 +70,77 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  toppings: |-
+  toppings: |-                ###|- line is declaring a multi-line string. 
     {{- range $index, $topping := .Values.pizzaToppings }}
     {{ $index }}: {{ $topping }}
     {{- end }}
+#we used | to indicate a multi-line string. But notice that the content of our string was followed with a trailing \n. If we want the YAML processor to strip off the trailing newline, we can add a - after the |:
+#Now the coffee value will be: Latte\nCappuccino\nEspresso (with no trailing \n).
+
+#Now the coffee value will be: Latte\nCappuccino\nEspresso (with no trailing \n).
+
+#Other times, we might want all trailing whitespace to be preserved. We can do this with the |+ notation:
+
+coffee: |+
+  Latte
+  Cappuccino
+  Espresso
+
+
+another: value
+
+Now the value of coffee will be Latte\nCappuccino\nEspresso\n\n\n.
+
+##Folded Multi-line Strings
+coffee: >
+  Latte
+  Cappuccino
+  Espresso
+
+The value of coffee above will be Latte Cappuccino Espresso\n. 
+te that all but the last line feed will be converted to spaces. You can combine the whitespace controls with the folded text marker, so >- will replace or trim all newlines.
+
+
+coffee: >-
+  Latte
+    12 oz
+    16 oz
+  Cappuccino
+  Espresso
+
+The above will produce Latte\n 12 oz\n 16 oz\nCappuccino Espresso. Note that both the spacing and the newlines are still there.
+
+##Embedding Multiple Documents in One File
+It is possible to place more than one YAML documents into a single file. This is done by prefixing a new document with --- and ending the document with ...
+
+---
+document:1
+...
+---
+document: 2
+...
+
+
+apiVersion:nt v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "Hello World"
+  {{- range $key, $val := .Values.favorite }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+
+# Source: mychart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eager-rabbit-configmap
+data:
+  myvalue: "Hello World"
+  drink: "coffee"
+  food: "pizza"
+
 
 apiVersion: v1     ####rendered
 kind: ConfigMap
@@ -54,6 +165,9 @@ data:
 **{{- if eq .Values.favorite.drink "coffee" }}    ####erase last empty line,if - on the right,erase next empty line
   mug: true*
 **{{- end }}
+
+###Make sure there is a space between the - and the rest of your directive. {{- 3 }} means "trim left whitespace and print 3" while {{-3 }} means "print -3".
+
 
 40 reference by file
 # foo.yaml
@@ -94,10 +208,181 @@ $ helm install mychart --debug --dry-run./mychart
 
 $ helm get manifest myrelsese   ###get release's manifest
 
-60 tips 
+60 tips
+###force data type convert
+coffee: "yes, please"
+age: !!str 21
+port: !!int "80"
+
+In the above, !!str tells the parser that age is a string, even if it looks like an int. And port is treated as an int, even though it is quoted.
+
+ 
 Notes.txt .prompt info after install
-|-     ###multiple line string,used to config??
-$.path.2.key   ###global full path key
+# helm lint is your go-to tool for verifying that your chart follows best practices
+value: {{ required "A valid .Values.who entry required!" .Values.who }}
+
+#The tpl function allows developers to evaluate strings as templates inside a template. This is useful to pass a template string as a value to a chart or render external configuration files. Syntax: {{ tpl TEMPLATE_STRING VALUES }}
+# values
+template: "{{ .Values.name }}"
+name: "Tom"
+
+# template
+{{ tpl .Values.template . }}
+
+# output
+Tom
+
+
+# external configuration file conf/app.conf
+firstName={{ .Values.firstName }}
+lastName={{ .Values.lastName }}
+
+# values
+firstName: Peter
+lastName: Parker
+
+# template
+{{ tpl (.Files.Get "conf/app.conf") . }}
+
+# output
+firstName=Peter
+lastName=Parker
+
+
+##Creating Image Pull Secrets
+First, assume that the credentials are defined in the values.yaml
+
+imageCredentials:
+  registry: quay.io
+  username: someone
+  password: sillyness
+  email: someone@host.com
+
+We then define our _helpers_tpl template as follows:
+
+{{- define "imagePullSecret" }}
+{{- with .Values.imageCredentials }}
+{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"auth\":\"%s\"}}}" .registry .username .password .email (printf "%s:%s" .username .password | b64enc) | b64enc }}
+{{- end }}
+{{- end }}
+
+Finally, we use the helper template in a larger template to create the Secret manifest:
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myregistrykey
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+
+##Tell Helm Not To Uninstall a Resource
+kind: Secret
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep      ###(Quotation marks are required)
+[...]
+
+
+
+##Let's create a simple NOTES.txt file:
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
+##Creating a Subchart
+$ cd mychart/charts
+$ helm create mysubchart
+Creating mysubchart
+$ rm -rf mysubchart/templates/*.*
+
+##global value
+favorite:
+  drink: coffee
+  food: pizza
+pizzaToppings:
+  - mushrooms
+  - cheese
+  - peppers
+  - onions
+
+mysubchart:
+  dessert: ice cream
+
+global:       ###global value define
+  salad: caesar
+
+# Source: mychart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: silly-snake-configmap
+data:
+  salad: caesar     ###global value reference on chart
+
+---
+# Source: mychart/charts/mysubchart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: silly-snake-cfgmap2
+data:
+  dessert: ice cream
+  salad: caesar              ###global value reference on subchart  
+
+---
+# Source: mychart/charts/mysubchart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: silly-snake-cfgmap2
+data:
+  dessert: ice cream
+  salad: caesar
+
+
+#The .helmignore file
+#The .helmignore file is used to specify files you don't want to include in your helm chart.
+# comment
+
+# Match any file or path named .git
+.git
+
+# Match any text file
+*.txt
+
+# Match only directories named mydir
+mydir/
+
+# Match only text files in the top-level directory
+/*.txt
+
+# Match only the file foo.txt in the top-level directory
+/foo.txt
+
+# Match any file named ab.txt, ac.txt, or ad.txt
+a[b-d].txt
+
+# Match any file under subdir matching temp*
+*/temp*
+
+*/*/temp*
+temp?
+
+
+
+Some notable differences from .gitignore:
+
+The '**' syntax is not supported.
+The globbing library is Go's 'filepath.Match', not fnmatch(3)
+Trailing spaces are always ignored (there is no supported escape sequence)
+There is no support for '!' as a special leading sequence.
+
+
 
 ###podAffinity and podAntiAffinity
 https://docs.openshift.com/container-platform/3.11/admin_guide/scheduling/pod_affinity.html
