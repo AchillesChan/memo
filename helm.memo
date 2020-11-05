@@ -1,0 +1,155 @@
+####basic
+https://juejin.im/post/6844904199818313735
+
+10 with
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "Hello World"
+  {{- with .Values.favorite }}                   ###switch path to .Values.favorite
+  drink: {{ .drink | default "tea" | quote }}    ###eq reference Values.favorite.drink
+  food: {{ .food | upper | quote }}              ###eq reference Values.favorite.food
+  {{- end }}
+
+20 range
+
+pizzaToppings:   ###key-v
+  - mushrooms
+  - cheese
+  - peppers
+  - onions
+
+apiVersion: v1     ###template
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  toppings: |-
+    {{- range $index, $topping := .Values.pizzaToppings }}
+    {{ $index }}: {{ $topping }}
+    {{- end }}
+
+apiVersion: v1     ####rendered
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  toppings: |-
+    0: mushrooms
+    1: cheese
+    2: peppers
+    3: onions
+
+30 delete empty line
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "Hello World"
+  drink: {{ .Values.favorite.drink | default "tea" | quote }}
+  food: {{ .Values.favorite.food | upper | quote }}*
+**{{- if eq .Values.favorite.drink "coffee" }}    ####erase last empty line,if - on the right,erase next empty line
+  mug: true*
+**{{- end }}
+
+40 reference by file
+# foo.yaml
+foo: true
+fileName: foo.yaml
+
+# bar.yaml
+bar: true
+fileName: bar.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+{{(.Files.Glob "*.yaml").AsConfig | indent 2 }}           ###glob bar.yaml foo.yaml to config
+##{{(.Files.Glob "*.yaml").AsSecrets | indent 2 }}        ###glob bar.yaml foo.yaml to secret
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-config
+data:                                                    ####config 
+  bar.yaml: |-
+    bar: true
+    fileName: bar.yaml
+  foo.yaml: |-
+    foo: true
+    fileName: foo.yaml
+##data:                                                 ###secret
+##  bar.yaml: YmFyOiB0cnVlCmZpbGVOYW1lOiBiYXIueWFtbA==
+##  foo.yaml: Zm9vOiB0cnVlCmZpbGVOYW1lOiBmb28ueWFtbA==
+
+50 commands
+$ helm install -n myns myredis-release ./redis -f values.yaml
+
+$ helm install mychart --debug --dry-run./mychart
+
+$ helm get manifest myrelsese   ###get release's manifest
+
+60 tips 
+Notes.txt .prompt info after install
+|-     ###multiple line string,used to config??
+$.path.2.key   ###global full path key
+
+###podAffinity and podAntiAffinity
+https://docs.openshift.com/container-platform/3.11/admin_guide/scheduling/pod_affinity.html
+
+10 vim templates/_helpers.tpl           ###_helpers.tpl is  template's templates 
+ 
+{{/*
+ Labels to use on {deploy|sts}.spec.template.metadata.labels       ###apply to where,path is point
+ */}}
+ {{- define "wordpress.deploymentLabels" -}}                       ###name,referenced by deploy 
+ WebGroup: {{ .Values.WebGroup }}                                  ###key-value paire,value on values.yaml                                            
+ {{- end -}}
+
+
+20 vim values.yaml
+
+WebGroup: WebGroup01      ####refenced by _helpers.tpl
+
+
+affinity: {}              ###podaffinity and podAntiaffinity
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: WebGroup 
+          operator: In
+          values:
+          - WebGroup01
+      topologyKey: kubernetes.io/hostname
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: WebGroup 
+          operator: In
+          values:                                                                                             
+          - WebGroup3
+      topologyKey: kubernetes.io/hostname
+
+30 
+apiVersion: {{ template "wordpress.deployment.apiVersion" . }}                                                                        
+ kind: Deployment
+ metadata:
+...... 
+spec:
+   ......
+   template:
+     metadata:
+       labels: {{- include "wordpress.labels" . | nindent 8 }}           ###default label,include present reference _helpers.tpl's 
+         {{- include "wordpress.deploymentLabels" . | nindent 8 }}       ###reference custom defined label
+         ......
+
+
+###podAffinity and podAntiAffinity
