@@ -1,4 +1,8 @@
 #####docker with custom password
+https://www.elastic.co/guide/en/beats/heartbeat/current/configuring-ingest-node.html
+https://stackoverflow.com/questions/40460830/filebeat-parse-fields-from-message-line
+https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html
+https://performanceengineeringsite.wordpress.com/2019/01/05/parsing-data-with-ingest-node-of-elastic-search/
 
 [mysql]
 --10
