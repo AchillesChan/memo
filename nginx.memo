@@ -36,9 +36,12 @@ upstream keepalive-long-connection {
 server {
              server_name abc.exp.com;
              listen 80;
-             #location ~* \.(js|css|png|jpg|jpeg|gif|ico)$
+             #location ~* \.(js|css|png|jpg|jpeg|gif|ico)$    ###multiple path
              location  ~* \/(api_prj|client_prj|pda_prj|update_prj)\/ {
              add_header X-Frame-Options SAMEORIGIN always;
+             #add_header Content-Security-Policy "frame-ancestors prj.abc.cn";     ##This work
+             #add_header X-Frame-Options "ALLOW-FROM http://prj.abc.cn/,https://prj.abc.cn/";  ##This work?
+             #https://stackoverflow.com/questions/30731290/how-to-set-x-frame-options-allow-from-in-nginx-correctly
              proxy_set_header         X-Real_IP        $remote_addr;
              proxy_set_header         X-Forwarded-For  $proxy_add_x_forwarded_for;
              proxy_set_header         X-Access-Time    $time_local;

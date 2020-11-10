@@ -198,11 +198,22 @@ Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/
 
 10 
 $> cat /usr/local/zabbix/etc/zabbix_agentd.conf.d/userparameter_custom.conf 
+HostnameItem=system.hostname
+HostMetadataItem=system.uname
 UserParameter=myCPU.cpunumber,/bin/cat /proc/cpuinfo | /bin/grep process | /bin/wc -l
+UserParameter=myOS.THREAD_COUNT,ps -eLf|wc -l
+UserParameter=myOS.PROCESS_COUNT,ps -ef|wc -l
 UserParameter=myOS.TCP_ESTABLISHED_COUNT,ss -tlnpa|/bin/grep ESTAB|wc -l
 UserParameter=myOS.TCP_LISTEN_COUNT,ss -tlnpa|/bin/grep LISTEN|wc -l
 UserParameter=myOS.TCP_TIMEWAIT_COUNT,ss -tlnpa|/bin/grep TIME-WAIT|wc -l
 UserParameter=myOS.FILE_DESCRIBE_COUNT,cat /proc/sys/fs/file-nr|awk '{print $1}'
+UserParameter=myOS.TCP_SEGMENTS_RETRANSMITED,netstat -s|grep -i retransmit|grep segm|awk '{print $1}'
+UserParameter=myOS.TCP_RENO_TIMEOUT_RETRANSMITED,netstat -s|grep -i retransmit|grep timeout|awk  '{print $1}'
+UserParameter=myOS.TCP_SACK_RETRANSMITED_FAILED,netstat -s|grep -i retransmit|grep failed|grep SACK|awk '{print $1}'
+UserParameter=myOS.TCP_RENO_RETRANSMITED_FAILED,netstat -s|grep -i retransmit|grep failed|grep Reno|awk '{print $1}'
+UserParameter=myOS.TCP_FIN_TIMEOUT_COUNT,ss -tlna|grep -i fin-wai|wc -l
+UserParameter=myOS.TCP_failed_connection_attempts,netstat -s |grep failed|grep connect|awk '{print $1}'
+
 ###get top 2 memory usage name and percent over 100 columns
 UserParameter=myOS.MEMORY_USAGE_PERCENT_TOP1,top -c -n 1 -b -o +%MEM|head -n 8|tail -n 1|awk '{print $10}'
 UserParameter=myOS.MEMORY_USAGE_NAME_TOP1,COLUMNS=1000 top -c -n 1 -b -o +%MEM|head -n 8|tail -n 1|awk '{print $13_$12}'|sed -e 's/\.//g' -e 's/BE_RMED_CHAR//g'
