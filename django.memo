@@ -37,3 +37,39 @@ urlpatterns = [
 
 
 python3 manage.py startapp polls
+
+
+
+###connect to mysql
+https://studygyaan.com/django/how-to-use-mysql-database-with-django-project
+http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-mysql-for-django
+$> yum install python3-devel 
+$> pip3 install PyMySQL
+$> pip3 install mysqlclient   ##not need
+$> vim settings.py
+# Database,replace old sqlite segment
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DB_name',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'DB_user',
+        'PASSWORD': 'DB_password',
+    }
+}
+
+$> python3 manage.py makemigrations 
+$> python3 manage.py migrate
+$> python3 manage.py check
+python3 manage.py test
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+OK
+Destroying test database for alias 'default'...
+
