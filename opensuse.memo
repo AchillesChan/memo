@@ -2,6 +2,8 @@ text editor/Kate use vi mode
 Edit-->Input modes-->vi mode
 or
 Ctrl+Alt+v
+
+To exec cmd,press F4 call console pane
 ===============
 googlepinyin
 
