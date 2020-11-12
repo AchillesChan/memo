@@ -1,4 +1,6 @@
 text editor/Kate use vi mode 
+https://docs.kde.org/trunk5/en/applications/katepart/vi-input-mode-chapter.html
+
 Edit-->Input modes-->vi mode
 or
 Ctrl+Alt+v

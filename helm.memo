@@ -258,15 +258,18 @@ imageCredentials:
   password: sillyness
   email: someone@host.com
 
-We then define our _helpers_tpl template as follows:
+We then define our template/_helpers_tpl template as follows:
 
+cat template/_helpers_tpl
 {{- define "imagePullSecret" }}
-{{- with .Values.imageCredentials }}
-{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"auth\":\"%s\"}}}" .registry .username .password .email (printf "%s:%s" .username .password | b64enc) | b64enc }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.registry (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc 2) | b64enc }} 
 {{- end }}
-{{- end }}
+
 
 Finally, we use the helper template in a larger template to create the Secret manifest:
+
+cat template/mysec.yaml
+
 apiVersion: v1
 kind: Secret
 metadata:
