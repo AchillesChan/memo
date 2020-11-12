@@ -252,6 +252,10 @@ lastName=Parker
 ##Creating Image Pull Secrets
 First, assume that the credentials are defined in the values.yaml
 
+global:
+  imagePullSecrets:
+    - releaseName-myregistrykey  ###-myregistrykey is postfix,releaseName is helm releaseName,change as need.  
+
 imageCredentials:
   registry: quay.io
   username: someone
@@ -273,7 +277,7 @@ cat template/mysec.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: myregistrykey
+  name: {{ .Release.Name }}-myregistrykey
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
