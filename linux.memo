@@ -8,6 +8,15 @@ https://ovh.github.io/the-bastion/index.html#
 
 before=$(date +%s);CMD 2>&1|tee -a LOG;after=$(date +%s);mail -s "CMD spent $(($after-$before)) on $(hostname)" mail_user@your.com <LOG
 
+[root@k8s]# docker images|awk '{print $1,$2,$3}'_
+your.domain.com/it/google_containers/kube-proxy v1.16.2 8454cbe08dc9
+your.domain.com/it/google_containers/kube-controller-manager v1.16.2 6e4bffa46d70
+...
+[root@k8s]# docker images|awk '{print $1,$2,$3}'_|xargs -P 1 -n 3 sh -c 'docker save "$3" >"$1"-"$2".tar' _
+docker save 8454cbe08dc9 >kube-proxy-v1.16.2.tar
+docker save 6e4bffa46d70 >kube-controller-manager-v1.16.2.tar
+...
+
 ###ubuntu set locale
 https://help.ubuntu.com/community/Locale
 
