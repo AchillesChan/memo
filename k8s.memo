@@ -21,6 +21,26 @@ https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
 
+
+#####rejoin master to cluster
+//10 get command and ca key on normal master
+$ sudo kubeadm token create --print-join-command            ####get join-command on normal master
+kubeadm join haproxyIP:6443 --token iy534.dk     --discovery-token-ca-cert-hash sha256:8d91...354
+
+$ sudo  kubeadm init phase upload-certs --upload-certs       ####get join ca key on normal master
+W1113 10:37:56.760319   20588 version.go:101] could not fetch a Kubernetes version from the internet: unable to get URL "https://dl.k8s.io/release/stable-1.txt": Get https://storage.googleapis.com/kubernetes-release/release/stable-1.txt: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+W1113 10:37:56.760418   20588 version.go:102] falling back to the local client version: v1.16.2
+[upload-certs] Storing the certificates in Secret "kubeadm-certs" in the "kube-system" Namespace
+[upload-certs] Using certificate key:
+412b...588      ######ca key
+
+//20 join master on malfunction master
+$ sudo  kubeadm reset        #####clean master info on malfunction master,then exec next join command with control-plane parameter
+$ sudo  kubeadm join haproxyIP:6443 --token iy534.dk \    
+--discovery-token-ca-cert-hash sha256:8d91...354 \
+--control-plane --certificate-key 412b...588
+#####rejoin master to cluster
+
 firewalld $>echo "8285/udp 8472/udp 43170/tcp 10100-10300/tcp 2300-2500/tcp 30000-32767/tcp 9100/tcp"|sed -e 's:\ :\n:g'|xargs -P 1 -n 1 -I {} -t sh -c 'firewall-cmd --add-port {} --perm' _
 
 
