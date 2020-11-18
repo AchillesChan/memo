@@ -1,5 +1,6 @@
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
+https://alexandrnikitin.github.io/blog/transparent-hugepages-measuring-the-performance-impact/
 https://theojulienne.io/2020/07/03/scaling-linux-services-before-accepting-connections.html
 https://theojulienne.io/2020/08/21/mtu-mss-why-connections-stall.html
 https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/
@@ -1228,8 +1229,8 @@ find ./ -mtime -77 -type f -print0 |xargs -0 -P 1 -n 1 -I {} tar vzcf a.tar.gz {
 find ./ -regextype posix-extended -iregex "./an.*$|./au.*$" -print0|xargs -t -0 -I {} tar vrf a.tar {} && tar vzcf a.tar.gz a.tar && rm -fv rm a.tar
 --20 pipe process --null -T read relative  find print0 generated output 
 --/dev/stdin or - receive find output 
-find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T /dev/stdin ##no xargs
-find ./ -mtime -30 -type f -print0| tar -czvf a.tar.gz  --null -T -          ##no xargs;--null -T,null as delimiter;last - is /dev/stdin from find
+find ./ -mmin -3 -print0| tar -czvf a.tar.gz  --null -T /dev/stdin ##no xargs
+find ./ -mmin -3 -print0| tar -czvf a.tar.gz  --null -T -   ##no xargs;--null -T,null as delimiter;last - is /dev/stdin from find
 ######
 
 
