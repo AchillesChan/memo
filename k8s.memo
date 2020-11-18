@@ -650,7 +650,7 @@ kubeadm init --config=kubeadm-config.yaml --upload-certs
 
 kubectl describe pod coredns-58cc8c89f4-jjrz8 -n kube-system
 
-kubeadm init --image-repository=gcr.azk8s.cn/google_containers --pod-network-cidr=10.244.0.0/16 --upload-certs \
+kubeadm init --image-repository=azk.cn/containers --pod-network-cidr=10.1.0.0/16 --upload-certs \
 --apiserver-cert-extra-sans your-public-dns-or-ip.domain.com ###for public use
 
 kubectl apply -f kube-flannel.yaml  ######only run on first master
