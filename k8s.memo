@@ -24,6 +24,62 @@ https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
 
 
+####debug dns error
+https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
+
+$> kubectl apply -f https://k8s.io/examples/admin/dns/busybox.yaml
+pod/busybox created
+
+$> kubectl get pods busybox
+NAME      READY     STATUS    RESTARTS   AGE
+busybox   1/1       Running   0          <some-time>
+
+
+$> kubectl exec -ti busybox -- nslookup kubernetes.default
+
+$> kubectl exec busybox cat /etc/resolv.conf
+$> kubectl exec -ti busybox -- nslookup kubernetes.default
+Server:    10.0.0.10
+Address 1: 10.0.0.10
+
+nslookup: can't resolve 'kubernetes.default'
+$ kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+NAME                       READY     STATUS    RESTARTS   AGE
+...
+coredns-7b96bf9f76-5hsxb   1/1       Running   0           1h
+coredns-7b96bf9f76-mvmmt   1/1       Running   0           1h
+...
+
+$ kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+NAME                    READY     STATUS    RESTARTS   AGE
+...
+kube-dns-v19-ezo1y      3/3       Running   0           1h
+...
+
+$ for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name); do kubectl logs --namespace=kube-system $p; done
+
+.:53
+2018/08/15 14:37:17 [INFO] CoreDNS-1.2.2
+2018/08/15 14:37:17 [INFO] linux/amd64, go1.10.3, 2e322f6
+CoreDNS-1.2.2
+linux/amd64, go1.10.3, 2e322f6
+2018/08/15 14:37:17 [INFO] plugin/reload: Running configuration MD5 = 24e6c59e83ce706f07bcc82c31b1ea1c
+
+$> kubectl logs --namespace=kube-system $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name | head -1) -c kubedns
+
+$> kubectl logs --namespace=kube-system $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name | head -1) -c dnsmasq
+
+$> kubectl logs --namespace=kube-system $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name | head -1) -c sidecar
+
+$ kubectl get svc --namespace=kube-system
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+...
+kube-dns     ClusterIP   10.0.0.10      <none>        53/UDP,53/TCP        1h
+...
+
+pod $>echo >/dev/tcp/10.96.0.10/53       ###$?=0 is ok ,or error,ip is equal kube-dns.kube-system next
+$ echo >/dev/tcp/kube-dns.kube-system/53 ###centos firewalld deny coredns,open it's port not work,WORNG PORT?
+
 #####rejoin master to cluster
 //10 get command and ca key on normal master
 $ sudo kubeadm token create --print-join-command            ####get join-command on normal master
@@ -1988,7 +2044,7 @@ my-local-storage   kubernetes.io/no-provisioner   24m
 apiVersion: v1                                                                                                                                                                               
 kind: PersistentVolume                                                                                                                                                                       
 metadata:                                                                                                                                                                                    
-  name: my-local-pv                                                                                                                                                                          
+  name: my-local-pv       ###referenced by pvc volumeName
 spec:                                                                                                                                                                                        
   capacity:                                                                                                                                                                                  
     storage: 5Gi                                                                                                                                                                             
@@ -2025,6 +2081,8 @@ spec:
   resources:
     requests:
       storage: 3Gi
+  volumeName: my-local-pv                 ###reference pv name
+  volumeMode: Filesystem
 
 PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:53:43CST USER:root
 [k8s-m1 ]# kubectl get pvc
