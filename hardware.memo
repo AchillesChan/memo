@@ -1,3 +1,9 @@
+https://www.running-system.com/kill-power-virtual-machine-using-esxcli-command/
+https://code.vmware.com/docs/11743/esxi-7-0-esxcli-command-reference/namespace/esxcli_vm.html
+esxcli vm process list
+esxcli vm process kill -t force -w 2100705
+
+
 dell ack
 https://www.dell.com/support/article/zh-cn/sln300675/poweredge-tutorials-physicals-disks-and-raid-controller-perc-on-servers?lang=en#drives
 
