@@ -1,6 +1,20 @@
 ######Startmemoof docker.memo #######
 
 
+No network connectivity to/from Docker CE container on CentOS 8
+https://serverfault.com/questions/987686/no-network-connectivity-to-from-docker-ce-container-on-centos-8
+
+# Masquerading allows for docker ingress and egress (this is the juicy bit)
+firewall-cmd --zone=public --add-masquerade --permanent   ####this working ?
+
+# Specifically allow incoming traffic on port 80/443 (nothing new here)
+firewall-cmd --zone=public --add-port=80/tcp
+firewall-cmd --zone=public --add-port=443/tcp
+
+# Reload firewall to apply permanent rules
+firewall-cmd --reload
+
+
 ###set docker locale
 http://jaredmarkell.com/docker-and-locales/
 https://www.jianshu.com/p/43a3468362aa
@@ -295,7 +309,8 @@ http://www.cnblogs.com/sparkdev/p/6890995.html 局域网内部署 Docker Registr
 http://www.cnblogs.com/sparkdev/p/8032330.html Docker: 限制容器可用的内存
 
 
-
+docker run --rm --name mysql01 -e MYSQL_ROOT_PASSWORD=my-secret -p 172.16.0.1:3306:3306 mysql:8.0.22 \
+ --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci  ####run a temp mysql using docker
 
 https://yeasy.gitbooks.io/docker_practice/content/ Docker — 从入门到实践
 
