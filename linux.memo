@@ -3375,6 +3375,11 @@ success
 Warning: NOT_ENABLED: http
 success
 
+firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4"
+    source address="1.2.3.4/32"
+      port protocol="tcp" port="3306" accept' && firewall-cmd \
+      remove-port 3306/tcp --perm && firewall-cmd --reload
 ####firewalld centos7
 
 DNAT

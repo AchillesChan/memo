@@ -1,3 +1,11 @@
+https://aws.amazon.com/premiumsupport/knowledge-center/convert-pem-file-into-ppk/
+$ sudo yum install putty 
+
+On the instance shell, run the puttygen command to convert your .pem file to a .ppk file:
+$ sudo puttygen pemKey.pem -o ppkKey.ppk -O private     
+
+Run the puttygen command to convert a .ppk file into a .pem file:
+$ sudo puttygen ppkkey.ppk -O private-openssh -o pemkey.pem
 
 --10
 curl -v https://abc.example.com

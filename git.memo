@@ -1,6 +1,35 @@
 ######Startmemoof git.memo #######
 ######Start git.memo #######
 
+https://git.seveas.net/how-to-back-up-a-git-repository.html
+####gitlab with docker
+# cat docker-compose.yml 
+version: '3.1'
+services:
+  gitlab-ce:
+    image: hub.docker.com/gitlab/gitlab-ce:13.6.1 
+    container_name: gitlab-ce
+    ports:
+      - 80:80
+      - 222:22
+    volumes:
+      - /data/gitlab-ce/data:/var/opt/gitlab
+      - /data/gitlab-ce/logs:/var/log/gitlab
+      - /data/gitlab-ce/config:/etc/gitlab
+    restart: always
+    cap_add:
+      - ALL
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://172.16.20.86'
+        gitlab_rails['gitlab_shell_ssh_port'] = 222
+
+# docker ps
+CONTAINER ID        IMAGE                                           COMMAND                  CREATED             STATUS                    PORTS                                                           NAMES
+7da15a4d6c82        dockerhub.50yc.com/it/gitlab/gitlab-ce:13.6.1   "/assets/wrapper"        51 minutes ago      Up 51 minutes (healthy)   22/tcp, 443/tcp, 0.0.0.0:80->80/tcp, 0.0.0.0:32769->13342/tcp   gitlab-ce
+
+
+
 ###set up your own git server 
 https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
 https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-git-server-on-a-vps
