@@ -33,7 +33,7 @@ docker restart <name of container>
 docker exec -it <name of container> gitlab-rake gitlab:check SANITIZE=true
 
 For GitLab 12.1 and earlier, use gitlab-rake gitlab:backup:restore.
-
+docker exec -it 353a  gitlab-rake gitlab:backup:restore BACKUP=1607067920_2020_12_04_11.4.6  ###NO OTHER POSTFIX ##
 https://git.seveas.net/how-to-back-up-a-git-repository.html
 ####gitlab with docker
 # cat docker-compose.yml 
