@@ -11,6 +11,29 @@ set backup path
 
 $> gitlab-rake gitlab:backup:create 
 
+###create backup(prior v12.1)
+gitlab-rake gitlab:backup:create
+
+###restore backup
+# Stop the processes that are connected to the database
+docker exec -it <name of container> gitlab-ctl stop unicorn
+docker exec -it <name of container> gitlab-ctl stop puma
+docker exec -it <name of container> gitlab-ctl stop sidekiq
+
+# Verify that the processes are all down before continuing
+docker exec -it <name of container> gitlab-ctl status
+
+# Run the restore
+docker exec -it <name of container> gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
+
+# Restart the GitLab container
+docker restart <name of container>
+
+# Check GitLab
+docker exec -it <name of container> gitlab-rake gitlab:check SANITIZE=true
+
+Users of GitLab 12.1 and earlier should use the command gitlab-rake gitlab:backup:create instead.
+
 
 https://git.seveas.net/how-to-back-up-a-git-repository.html
 ####gitlab with docker
