@@ -32,8 +32,7 @@ docker restart <name of container>
 # Check GitLab
 docker exec -it <name of container> gitlab-rake gitlab:check SANITIZE=true
 
-Users of GitLab 12.1 and earlier should use the command gitlab-rake gitlab:backup:create instead.
-
+For GitLab 12.1 and earlier, use gitlab-rake gitlab:backup:restore.
 
 https://git.seveas.net/how-to-back-up-a-git-repository.html
 ####gitlab with docker
