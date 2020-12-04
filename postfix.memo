@@ -2,6 +2,7 @@
 ######Start postfix.memo #######
 https://www.digitalocean.com/community/tutorials/how-to-set-up-a-postfix-e-mail-server-with-dovecot
 https://www.cyberciti.biz/tips/postfix-smtp-ssl-certificate-csr-installation-guide.html
+https://wiki.dovecot.org/SSL/DovecotConfiguration
 https://www.rational-pi.be/2015/12/postfix-tls-configuration/
 ######postfix config##########
 ##########plain txt###########
