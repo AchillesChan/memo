@@ -1,5 +1,16 @@
 ######Startmemoof git.memo #######
 ######Start git.memo #######
+http://www.ttlsa.com/linux/gitlab-backup-restore/
+https://docs.gitlab.com/12.10/ee/raketasks/backup_restore.html
+
+set backup path
+ $> vim /var/opt/gitlab/gitlab-rails/etc/gitlab.yml
+
+  backup:    ###need enough disk space 
+      path: "/var/opt/gitlab/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
+
+$> gitlab-rake gitlab:backup:create 
+
 
 https://git.seveas.net/how-to-back-up-a-git-repository.html
 ####gitlab with docker

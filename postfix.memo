@@ -1,5 +1,8 @@
 ######Startmemoof postfix.memo #######
 ######Start postfix.memo #######
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-postfix-e-mail-server-with-dovecot
+https://www.cyberciti.biz/tips/postfix-smtp-ssl-certificate-csr-installation-guide.html
+https://www.rational-pi.be/2015/12/postfix-tls-configuration/
 ######postfix config##########
 ##########plain txt###########
 ########Example.com has MX dns record
@@ -75,6 +78,15 @@ broken_sasl_auth_clients = yes
 smtpd_recipient_restrictions = permit_sasl_authenticated,reject_unauth_destination,permit_mynetworks
 smtpd_client_restrictions = permit_sasl_authenticated
 
+
+####ssl config ,must used for grafana,skip cert set to ture is work,port only listening on 25/tcp
+smtpd_use_tls = yes
+smtpd_tls_key_file = /etc/ssl/privkey.pem
+smtpd_tls_cert_file = /etc/ssl/cert.pem
+smtpd_tls_security_level=may
+smtpd_tls_protocols = !SSLv2, !SSLv3
+smtpd_tls_loglevel = 1
+
 step 4
 #######dovecot config#############
 # vim /etc/dovecot/dovecot.conf
@@ -105,6 +117,10 @@ mail_location = maildir:~/Maildir
 ###
 vim /etc/dovecot/conf.d/10-ssl.conf
 ssl = no
+--or
+ssl = yes
+ssl_cert = </etc/ssl/cert.pem
+ssl_key = </etc/ssl/privkey.pem
 
 step 5
 ###########sasl2 config
@@ -218,6 +234,27 @@ step 9
   7.3  smtp:     25
 
 
+
+
+
+###log record example of one mail
+root@HostName postfix]# tail -f /var/log/maillog
+Dec  4 13:55:41 HostName postfix/smtpd[7235]: connect from unknown[1.1.1.104]
+Dec  4 13:55:41 HostName postfix/smtpd[7235]: Anonymous TLS connection established from unknown[1.1.1.104]: TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
+Dec  4 13:55:50 HostName postfix/smtpd[7235]: 369DF140114: client=unknown[1.1.1.104], sasl_method=PLAIN, sasl_username=mail_user@abc.com
+Dec  4 13:55:50 HostName postfix/cleanup[6019]: 369DF140114: message-id=<>
+Dec  4 13:55:50 HostName postfix/qmgr[5998]: 369DF140114: from=<mail_user@abc.com>, size=34510, nrcpt=1 (queue active)
+Dec  4 13:55:50 HostName postfix/local[6020]: 369DF140114: to=<mail_user@abc.com>, relay=local, delay=8.4, delays=8.4/0/0/0.04, dsn=2.0.0, status=sent (delivered to maildir)
+Dec  4 13:55:50 HostName postfix/qmgr[5998]: 369DF140114: removed
+Dec  4 13:55:50 HostName postfix/smtpd[7235]: disconnect from unknown[1.1.1.104]
+Dec  4 13:55:50 HostName postfix/smtpd[7238]: connect from unknown[1.1.1.104]
+Dec  4 13:55:50 HostName postfix/smtpd[7238]: Anonymous TLS connection established from unknown[1.1.1.104]: TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
+Dec  4 13:55:51 HostName postfix/smtpd[7238]: 0539A1415EB: client=unknown[1.1.1.104], sasl_method=PLAIN, sasl_username=mail_user@abc.com
+Dec  4 13:55:51 HostName postfix/cleanup[6019]: 0539A1415EB: message-id=<>
+Dec  4 13:55:51 HostName postfix/qmgr[5998]: 0539A1415EB: from=<mail_user@abc.com>, size=34520, nrcpt=1 (queue active)
+Dec  4 13:55:51 HostName postfix/smtpd[7238]: disconnect from unknown[1.1.1.104]
+Dec  4 13:55:55 HostName postfix/smtp[6021]: 0539A1415EB: to=<foo@bar.com>, relay=bar.mail.protection.partner.outlook.cn[1.2.3.5]:25, delay=4.9, delays=0.29/0/3.5/1.1, dsn=2.6.0, status=sent (250 2.6.0 <afc74aa7-d8f9-4e6d-aeff-c4426d991b54@SHAFFO30FD008.protectioncn.gbl> [InternalId=19666655250314, Hostname=BJSPR01MB0754.CHNPR01.prod.partner.outlook.cn] 41868 bytes in 0.108, 376.969 KB/sec Queued mail for delivery)
+Dec  4 13:55:55 HostName postfix/qmgr[5998]: 0539A1415EB: removed
 
 #########Tips ##########
 1 view logs on /var/log/malllog

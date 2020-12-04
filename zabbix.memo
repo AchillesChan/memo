@@ -1,6 +1,33 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+
+####grafana settings with smtp mail(grafana.ini)##
+[analytics]
+check_for_updates = true
+[grafana_net]
+url = https://grafana.net
+[log]
+mode = console
+[paths]
+data = /var/lib/grafana/data
+logs = /var/log/grafana
+plugins = /var/lib/grafana/plugins
+provisioning = /etc/grafana/provisioning
+[smtp]                 ;only work on smtp ssl enabled  
+enabled = true
+host = mail.abc.com:25
+user = mail_user@abc.com
+password = """pwd@here"""   ;need triple " for escape  
+;cert_file =
+;key_file =
+skip_verify = true     ;key point
+from_address = mail_user@abc.com
+from_name = mail_user
+; EHLO identity in SMTP dialog (defaults to instance_name)
+; ehlo_identity = mail.abc.com
+
+####grafana settings##
 #####reset Admin password forget######
 mysql> update zabbix.users set passwd=md5('passw0rd') where alias='Admin';
 
