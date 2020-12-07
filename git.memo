@@ -2,6 +2,26 @@
 ######Start git.memo #######
 http://www.ttlsa.com/linux/gitlab-backup-restore/
 https://docs.gitlab.com/12.10/ee/raketasks/backup_restore.html
+https://zhuanlan.zhihu.com/p/195813801
+
+###ldap
+$> vim /etc/gitlab/gitlab.rb
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main:
+    label: 'foo.local'
+    host: '192.168.1.10'
+    port: 389
+    uid: 'sAMAccountName'
+    bind_dn: 'CN=gitapp,OU=bar,DC=foo,DC=local'
+    password: 'GitPwd'
+    active_directory: true
+    allow_username_or_email_login: true
+    base: 'DC=foo,DC=local'
+    user_filter: ''
+EOS
+
+$> gitlab-ctl reconfigure
 
 set backup path
  $> vim /var/opt/gitlab/gitlab-rails/etc/gitlab.yml
@@ -25,6 +45,62 @@ docker exec -it <name of container> gitlab-ctl status
 
 # Run the restore
 docker exec -it <name of container> gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
+户cking backup ... done                                                                                                                                                                    
+Before restoring the database, we will remove all existing                                    
+tables to avoid future upgrade problems. Be aware that if you have                                                                                                                           
+custom tables in the GitLab database these tables and all data will be                        
+removed.                                                                                                                                                                                     
+                                                                                              
+Do you want to continue (yes/no)? yes                                                                                                                                                        
+Removing all tables. Press `Ctrl-C` within 5 seconds to abort                                 
+Cleaning the database ...                                                                     
+done                                                                                          
+Restoring database ...                                                                        
+Restoring PostgreSQL database gitlabhq_production ... SET                                     
+SET                                                                                           
+SET                                                                                           
+SET                                                                                           
+SET                                                                                           
+ set_config                                                                                   
+------------                                                                                  
+                                                                                              
+(1 row)                                                                                       
+                                                                                              
+SET                                                                                           
+SET                                                                                           
+SET                                                                                           
+ERROR:  relation "public.timelogs" does not exist                                             
+ERROR:  relation "public.timelogs" does not exist       
+ * MobileAndroid/mobile-pda-hs ... [DONE]
+ * foo/FileStore ... [DONE]
+ * foo/District ... [DONE]
+ * foo/SMS ... [DONE]
+ * foo/Email ... [DONE]
+ * foo/SSO ... [DONE]
+done
+Restoring uploads ... 
+done
+Restoring builds ... 
+done
+Restoring artifacts ... 
+done
+Restoring pages ... 
+done
+Restoring lfs objects ... 
+done
+This task will now rebuild the authorized_keys file.
+You will lose any data stored in the authorized_keys file.
+Do you want to continue (yes/no)? yes
+
+.........................
+Deleting tmp directories ... done
+done
+done
+done
+done
+done
+done
+done
 
 # Restart the GitLab container
 docker restart <name of container>
