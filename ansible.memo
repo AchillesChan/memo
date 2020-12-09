@@ -1,6 +1,28 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
 
+##fetch file from remote to local 
+https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fetch_module.html
+- name: Specifying a path directly
+  fetch:
+    src: /tmp/somefile    ####{{  variable name }}
+    dest: /tmp/prefix-{{ inventory_hostname }}
+    flat: yes
+
+- name: Specifying a destination path
+  fetch:
+    src: /tmp/uniquefile
+    dest: /tmp/special/
+    flat: yes
+
+- name: Storing in a path relative to the playbook
+  fetch:
+    src: /tmp/uniquefile
+    dest: special/prefix-{{ inventory_hostname }}
+    flat: yes
+
+$> ansible hostGrp -m fetch -a "src=/{{ inventory_hostname }}.log dest=/log.txt" -u user --sudo --ask-pass --ask-sudo-pass
+
 ##generate ssh config from dns vm name
 --10 orgin text
 [Opensuse ]$ cat add-host-to-ssh-config

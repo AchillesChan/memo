@@ -3,6 +3,39 @@
 http://www.ttlsa.com/linux/gitlab-backup-restore/
 https://docs.gitlab.com/12.10/ee/raketasks/backup_restore.html
 https://zhuanlan.zhihu.com/p/195813801
+https://docs.gitlab.com/ee/administration/auth/ldap/
+
+###Chinese 中文支持
+# 进入容器
+docker exec -it gl bash
+# 由于GitLab的镜像制作时没有支持多语言
+# 这会导致带有中文的配置信息出现乱码，我们现在配置UTF8的环境
+
+# 终端支持中文输入
+echo '
+set meta-flag on 
+set convert-meta off 
+set input-meta on 
+set output-meta on
+' > ~/.inputrc
+
+# vim支持中文
+echo '
+set encoding=utf-8
+set langmenu=C.UTF-8
+' >  ~/.vimrc
+
+# 系统支持UTF8
+echo '
+export LANG="C.UTF-8"
+export LANGUAGE="en_US:en"
+' >> ~/.bashrc
+
+# 重新进入容器
+exit
+docker exec -it gl bash
+
+
 
 ###ldap
 $> vim /etc/gitlab/gitlab.rb
@@ -15,10 +48,18 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
     uid: 'sAMAccountName'
     bind_dn: 'CN=gitapp,OU=bar,DC=foo,DC=local'
     password: 'GitPwd'
+    encryption: 'plain'
+    verify_certificates: false
     active_directory: true
     allow_username_or_email_login: true
     base: 'DC=foo,DC=local'
     user_filter: ''
+    attributes:
+      username: ['uid', 'userid', 'sAMAccountName']
+      email:    ['mail', 'email', 'userPrincipalName']
+      name:      'cn'
+      first_name: 'givenName'
+      last_name:  'sn'
 EOS
 
 $> gitlab-ctl reconfigure
