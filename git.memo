@@ -87,9 +87,9 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
     password: 'pwd'
     encryption: 'start_tls'                         ###key 2 start_tls
     verify_certificates: false                      ###key 3 DO NOT VERIFY server cert
-#    tls_options:
-#      ca_file: '/etc/gitlab/cert.pem'
-#      ssl_version: ''
+#    tls_options:                             
+#      ca_file: '/etc/gitlab/cert.pem'             ###uncomment here 3 row if got CA cert
+#      ssl_version: ''                             ###upper is CA cert's full path,pem format
     active_directory: true
     allow_username_or_email_login: true
     base: 'DC=foo,DC=local'
@@ -116,8 +116,8 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
     encryption: 'start_tls'                         ###key 2 simple_tls
     verify_certificates: false                      ###key 3 DO NOT VERIFY server cert
 #    tls_options:
-#      ca_file: '/etc/gitlab/cert.pem'
-#      ssl_version: ''
+#      ca_file: '/etc/gitlab/cert.pem'             ###uncomment here 3 row if got CA cert
+#      ssl_version: ''                             ###upper is CA cert's full path,pem format
     active_directory: true
     allow_username_or_email_login: true
     base: 'DC=foo,DC=local'
