@@ -74,6 +74,7 @@ $> gitlab-rake gitlab:backup:create
 
 
 ###ldap with ssl
+https://dev.blueprism.com/gitlab/help/administration/auth/ldap.md
 --gitlab.rb 
 
 gitlab_rails['ldap_enabled'] = true
