@@ -72,6 +72,64 @@ set backup path
 
 $> gitlab-rake gitlab:backup:create 
 
+
+###ldap with ssl
+--gitlab.rb 
+
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main:
+    label: 'Lable01'
+    host: 'ldap-server'
+    port: 389                                      ###key 1 ,the same ldap port
+    uid: 'sAMAccountName'
+    bind_dn: 'CN=git,OU=Users,DC=foo,DC=local'
+    password: 'pwd'
+    encryption: 'start_tls'                         ###key 2 start_tls
+    verify_certificates: false                      ###key 3 DO NOT VERIFY server cert
+#    tls_options:
+#      ca_file: '/etc/gitlab/cert.pem'
+#      ssl_version: ''
+    active_directory: true
+    allow_username_or_email_login: true
+    base: 'DC=foo,DC=local'
+    user_filter: ''
+    attributes:
+      username: ['uid', 'userid', 'sAMAccountName']
+      email:    ['mail', 'email', 'userPrincipalName']
+      name:      'cn'
+      first_name: 'givenName'
+      last_name:  'sn'
+EOS
+
+--or gitlab.rb like this:
+
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main:
+    label: 'Lable01'
+    host: 'ldap-server'
+    port: 636                                      ###key 1 ,the server ldaps port 636
+    uid: 'sAMAccountName'
+    bind_dn: 'CN=git,OU=Users,DC=foo,DC=local'
+    password: 'pwd'
+    encryption: 'start_tls'                         ###key 2 simple_tls
+    verify_certificates: false                      ###key 3 DO NOT VERIFY server cert
+#    tls_options:
+#      ca_file: '/etc/gitlab/cert.pem'
+#      ssl_version: ''
+    active_directory: true
+    allow_username_or_email_login: true
+    base: 'DC=foo,DC=local'
+    user_filter: ''
+    attributes:
+      username: ['uid', 'userid', 'sAMAccountName']
+      email:    ['mail', 'email', 'userPrincipalName']
+      name:      'cn'
+      first_name: 'givenName'
+      last_name:  'sn'
+EOS
+
 ###create backup(prior v12.1)
 gitlab-rake gitlab:backup:create
 
