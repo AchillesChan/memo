@@ -72,7 +72,7 @@ set backup path
 
 $> gitlab-rake gitlab:backup:create 
 
-
+https://computingforgeeks.com/how-to-secure-gitlab-server-with-ssl-certificate/
 ###ldap with ssl
 --gitlab.rb 
 

@@ -7,6 +7,8 @@ $ sudo puttygen pemKey.pem -o ppkKey.ppk -O private
 Run the puttygen command to convert a .ppk file into a .pem file:
 $ sudo puttygen ppkkey.ppk -O private-openssh -o pemkey.pem
 
+convert .cer file to .pem file (##.cer file must base64 coding in Windows OS)
+$ openssl x509 -in foo.cer -out bar.pem
 --10
 curl -v https://abc.example.com
 * About to connect() to elk.example.com port 443 (#0)
