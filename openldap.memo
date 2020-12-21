@@ -1,3 +1,24 @@
+https://www.server-world.info/en/note?os=Ubuntu_20.04&p=openldap&f=2
+https://www.digitalocean.com/community/tutorials/how-to-manage-and-use-ldap-servers-with-openldap-utilities
+https://tylersguides.com/guides/managing-openldap/
+
+##connect error
+https://access.redhat.com/solutions/459683
+[root@host ~] ldapsearch -LL -v -x -W -D "cn=admin,dc=example,dc=com" -H ldaps://localhost -ZZ "(objectclass=*)"
+ldap_initialize( ldaps://localhost:636/??base )
+ldap_start_tls: Operations error (1)
+    additional info: TLS already started
+
+Try secure ldap (ldaps://)
+$ ldapsearch -x -H ldaps://fqdn -b "dc=example,dc=com"
+$ ldapsearch -x -H ldaps://ldap.my-company.com -b "dc=my-company,dc=com" -D "cn=admin,dc=my-company,dc=com"  -wJonSn0w
+
+or start TLS
+$ ldapsearch -x -ZZ -h ldap://fqdn -b "dc=example,dc=com"
+$  ldapsearch -x -H ldap://ldap.my-company.com -b dc=my-company,dc=com -D "cn=admin,dc=my-company,dc=com" -ZZ -wJonSn0w
+
+STARTTLS and SSL connections cannot be used at the same time.
+##connect error
 
 Windows Active Directory
 --10 install

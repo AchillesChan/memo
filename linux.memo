@@ -7,6 +7,30 @@ https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-s
 https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/
 https://ovh.github.io/the-bastion/index.html#
 
+###Use Pam_Tally2 to Lock and Unlock SSH Failed Login Attempts
+#https://www.tecmint.com/use-pam_tally2-to-lock-and-unlock-ssh-failed-login-attempts/
+$> /etc/pam.d/some-auth-file
+auth        required      pam_tally2.so  file=/var/log/tallylog deny=3 even_deny_root unlock_time=60 
+
+[root@tecmint ~]# pam_tally2 --user=tecmint
+Login           Failures  Latest    failure     From
+tecmint              5    04/22/13  21:22:37    172.16.16.52
+
+
+[root@tecmint pam.d]# pam_tally2 --user=tecmint --reset
+Login           Failures  Latest    failure     From
+tecmint             5     04/22/13  17:10:42    172.16.16.52
+
+
+[root@tecmint pam.d]# pam_tally2 --user=tecmint
+Login           Failures   Latest   failure     From
+tecmint            0
+
+##check memory usage per process
+https://www.golinuxcloud.com/check-memory-usage-per-process-linux/
+$ cat /proc/20506/smaps |  awk '{Total+=$2} END {print Total/1024" MB"}'
+22603.1 MB
+
 before=$(date +%s);CMD 2>&1|tee -a LOG;after=$(date +%s);mail -s "CMD spent $(($after-$before)) on $(hostname)" mail_user@your.com <LOG
 
 [root@k8s]# docker images|awk '{print $1,$2,$3}'_
