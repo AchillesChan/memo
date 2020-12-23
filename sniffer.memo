@@ -7,7 +7,31 @@ tcpdump -nNxXi eth0 -s 0 proto TCP and port 25 -w mail.txt
 strings mail.txt
 #############get sniffer packages and use string read it
 
+###tcpdump sniffer docker container sidecar
+https://rmoff.net/2019/11/29/using-tcpdump-with-docker/
+https://docs.docker.com/engine/reference/run/#network-container
 
+#backgroud
+#Example running a Redis container with Redis binding to localhost then running the redis-cli command and
+#connecting to the Redis server over the localhost interface.
+$ docker run -d --name redis example/redis --bind 127.0.0.1
+$ # use the redis container's network stack to access localhost
+$ docker run --rm -it --network container:redis example/redis-cli -h 127.0.0.1
+
+
+$ docker build -t tcpdump - <<EOF  ###genereate tcpdump image 
+FROM ubuntu 
+RUN apt-get update && apt-get install -y tcpdump 
+CMD tcpdump -i eth0 
+EOF
+
+$ docker run --tty --net=container:3e...db docker.io/tcpdump:4.9.3 tcpdump -tttt -nnNNxxXX -w tcpdump.log
+--net=container:3e...db   ##Container being sniffer
+--docker.io/tcpdump:4.9.3 ##tcpdump image
+tcpdump -tttt -nnNNxxXX -w tcpdump.log  ###tcpdump cmd redirect to tcpdump.log
+
+$ docker cp tcpdump-container-id:/tcpdump.log ./      ###copy tcpdump.log to local host analyze with wireshark
+-------------------------
 October 1, 2014
 In most cases you will need root permission to be able to capture packets on an interface. Using tcpdump (with root) to capture the packets and saving them to a file to analyze with Wireshark (using a regular account) is recommended over using Wireshark with a root account to capture packets on an "untrusted" interface. See the Wireshark security advisories for reasons why.
 
