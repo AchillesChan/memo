@@ -35,6 +35,9 @@ spec:
       containers:
       - name: tcpdumper
         image: docker.io/dockersec/tcpdump
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
 
 $ kubectl patch deployment radarhack-deployment --patch “$(cat patch.yaml)”  ###apply
 
