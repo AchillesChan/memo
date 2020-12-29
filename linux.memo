@@ -7,6 +7,11 @@ https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-s
 https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/
 https://ovh.github.io/the-bastion/index.html#
 
+###set secondary ip 
+#https://ma.ttias.be/how-to-add-secondary-ip-alias-on-network-interface-in-rhel-centos-7/
+#https://computingforgeeks.com/adding-a-secondary-ip-address-to-rhel-centos-8-network-interface/
+$ ip a add 10.50.100.5/24 dev eth0
+
 ###Use Pam_Tally2 to Lock and Unlock SSH Failed Login Attempts
 #https://www.tecmint.com/use-pam_tally2-to-lock-and-unlock-ssh-failed-login-attempts/
 $> /etc/pam.d/some-auth-file

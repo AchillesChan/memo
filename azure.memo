@@ -1,5 +1,9 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+https://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges?ocid=AID754288&wt.mc_id=azfr-c9-scottha&wt.mc_id=CFID0533
+Secure access to the API server using authorized IP address ranges in Azure Kubernetes Service (AKS)
+
+https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
 
 az aks nodepool add --cluster-name  pressaks-01 \
                     --name  pressaks03 \

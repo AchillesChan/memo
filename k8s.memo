@@ -1,3 +1,8 @@
+https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-cluster-security
+https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
+https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
+https://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges?ocid=AID754288&wt.mc_id=azfr-c9-scottha&wt.mc_id=CFID0533
+https://sysdig.com/blog/kubernetes-monitoring-prometheus-operator-part3/
 https://medium.com/@xxradar/how-to-tcpdump-effectively-in-kubernetes-part-1-a1546b683d2f
 https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/
 https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/
