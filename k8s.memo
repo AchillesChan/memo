@@ -1,3 +1,4 @@
+https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
 https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-cluster-security
 https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
 https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
@@ -31,6 +32,221 @@ https://kubernetes.io/docs/reference/access-authn-authz/authorization/
 https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
+
+
+###Access To Your Cluster With A Client CertificateAccess To Your Cluster With A Client Certificate
+https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
+https://medium.com/better-programming/k8s-tips-give-access-to-your-clusterwith-a-client-certificate-dfb3b71a76fe
+
+$ openssl genrsa -out dave.key 4096
+
+$ cat <<eof >dave.csr
+[ req ]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+[ dn ]
+CN = dave
+O = dev
+[ v3_ext ]
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
+extendedKeyUsage=serverAuth,clientAuth ####Note: the clientAuth entry in the extendedKeyUsage field is important 
+###as the certificate will be used to identify the client.
+eof
+
+$ openssl req -config ./csr.cnf -new -key dave.key -nodes -out dave.csr
+
+$ cat <<eof >csr.yaml
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: mycsr
+spec:
+  groups:
+  - system:authenticated
+  request: ${BASE64_CSR}
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+  - client auth
+eof
+
+# Encoding the .csr file in base64
+$ export BASE64_CSR=$(cat ./dave.csr | base64 | tr -d '\n')
+# Substitution of the BASE64_CSR env variable and creation of the CertificateSigninRequest resource
+$ cat csr.yaml | envsubst | kubectl apply -f -
+
+# Checking the status of the newly created CSR
+$ kubectl get csr
+NAME        AGE   REQUESTOR            CONDITION
+mycsr       9s    28b93...d73801ee46   Pending
+
+$ kubectl certificate approve mycsr
+
+$ kubectl get csr
+NAME        AGE   REQUESTOR            CONDITION
+mycsr       9s    28b93...d73801ee46   Approved,Issued
+
+$ kubectl get csr mycsr -o jsonpath='{.status.certificate}' \
+  | base64 --decode > dave.crt
+
+$ openssl x509 -in ./dave.crt -noout -text
+Certificate:
+            ...
+			Not After : Jun  2 07:56:00 2020 GMT
+        Subject: O=dev, CN=dave         #####key point
+...
+
+$ kubectl create ns development
+
+$ echo <<eof |kubectl apply -f -
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ namespace: development
+ name: dev
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["create", "get", "update", "list", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["create", "get", "update", "list", "delete"]
+eof
+
+$ echo <<eof |kubectl apply -f -
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ name: dev
+ namespace: development
+subjects:
+- kind: User
+  name: dave
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+ kind: Role
+ name: dev
+ apiGroup: rbac.authorization.k8s.io
+eof
+
+###or binding to group(last one not applied)
+$ echo <<eof |kubectl apply -f -
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ name: dev
+ namespace: development
+subjects:
+- kind: Group
+  name: dev
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+ kind: Role
+ name: dev
+ apiGroup: rbac.authorization.k8s.io
+eof
+
+#create a kubeconfig.tpl file
+$ echo '
+apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority-data: ${CLUSTER_CA}
+    server: ${CLUSTER_ENDPOINT}
+  name: ${CLUSTER_NAME}
+users:
+- name: ${USER}
+  user:
+    client-certificate-data: ${CLIENT_CERTIFICATE_DATA}
+contexts:
+- context:
+    cluster: ${CLUSTER_NAME}
+    user: dave
+  name: ${USER}-${CLUSTER_NAME}
+current-context: ${USER}-${CLUSTER_NAME} ' >kubeconfig.tpl
+
+# User identifier
+$ export USER="dave"
+# Cluster Name (get it from the current context)
+$ export CLUSTER_NAME=$(kubectl config view --minify -o jsonpath={.current-context})
+# Client certificate
+$ export CLIENT_CERTIFICATE_DATA=$(kubectl get csr mycsr -o jsonpath='{.status.certificate}')
+# Cluster Certificate Authority
+$ export CLUSTER_CA=$(kubectl config view --raw -o json | jq -r '.clusters[] | select(.name == "'$(kubectl config current-context)'") | .cluster."certificate-authority-data"')
+# API Server endpoint
+$ export CLUSTER_ENDPOINT=$(kubectl config view --raw -o json | jq -r '.clusters[] | select(.name == "'$(kubectl config current-context)'") | .cluster."server"')
+
+$ cat kubeconfig.tpl | envsubst > kubeconfig
+
+$ export KUBECONFIG=$PWD/kubeconfig
+
+#add his private key, dave.key generated at the beginning of the process
+$ kubectl config set-credentials dave \
+  --client-key=$PWD/dave.key \
+  --embed-certs=true
+
+$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.2", GitCommit:"66049e3b21efe110454d67df4fa62b08ea79a19b", GitTreeState:"clean", BuildDate:"2019-05-16T16:23:09Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.2", GitCommit:"66049e3b21efe110454d67df4fa62b08ea79a19b", GitTreeState:"clean", BuildDate:"2019-05-16T16:14:56Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
+
+$ kubectl get nodes   
+Error from server (Forbidden): nodes is forbidden: User "dave" cannot list resource "nodes" in API group "" at the cluster scope
+
+$ echo <<eof|kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www
+  namespace: development
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www
+  template:
+    metadata:
+      labels:
+        app: www
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14-alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: www
+  namespace: development
+spec:
+  selector:
+    app: vote
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+eof
+
+$ echo <<eof|kubectl apply -f -
+# credentials.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+  namespace: development
+data:
+  username: YWRtaW4=
+  password: MWYyZDFlMmU2N2Rm
+
+
+
 
 ###sniffer tcpdump
 $ vim patch.yaml
