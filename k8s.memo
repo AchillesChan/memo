@@ -152,7 +152,7 @@ roleRef:
 eof
 
 #create a kubeconfig.tpl file
-$ echo '
+$ cat  <<eof >kubeconfig.tpl
 apiVersion: v1
 kind: Config
 clusters:
@@ -169,7 +169,8 @@ contexts:
     cluster: ${CLUSTER_NAME}
     user: dave
   name: ${USER}-${CLUSTER_NAME}
-current-context: ${USER}-${CLUSTER_NAME} ' >kubeconfig.tpl
+current-context: ${USER}-${CLUSTER_NAME} 
+eof
 
 # User identifier
 $ export USER="dave"
