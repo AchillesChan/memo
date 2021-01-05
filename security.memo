@@ -1,3 +1,52 @@
+visudo config
+# grep -v '#' /etc/sudoers|grep -v '^$'
+Cmnd_Alias NETWORKING = /bin/firewall-cmd *, /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool
+Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum
+Cmnd_Alias SERVICES = /bin/systemctl stop *, /bin/systemctl start *, /bin/systemctl status *, /bin/systemctl restart, /sbin/service, /sbin/chkconfig, /usr/bin/systemctl start, /usr/bin/systemctl stop, /usr/bin/systemctl reload, /usr/bin/systemctl restart, /usr/bin/systemctl status, /usr/bin/systemctl enable, /usr/bin/systemctl disable
+Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall
+Cmnd_Alias SYSLOG = /bin/cat /var/log/messages   ###allow dev group read
+Defaults   !visiblepw
+Defaults    always_set_home
+Defaults    match_group_by_gid
+Defaults    always_query_group_plugin
+Defaults    env_reset
+Defaults    env_keep =  "COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS"
+Defaults    env_keep += "MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"
+Defaults    env_keep += "LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES"
+Defaults    env_keep += "LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"
+Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"
+Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+root    ALL=(ALL)       ALL
+%wheel  ALL=(ALL)       ALL
+
+#!!!here is key point disable
+%dev    ALL=SOFTWARE, SERVICES, PROCESSES, NETWORKING, SYSLOG, !/bin/systemctl stop auditd, !/bin/systemctl stop firewalld
+
+
+https://www.computernetworkingnotes.com/rhce-study-guide/etc-shadow-file-in-linux-explained-with-examples.html
+
+Each line in /etc/shadow file represents an individual user account and contains following nine fields separated by colons (:).
+
+1 Username
+2 Encrypted password
+3 Date of last password change
+4 Minimum required days between password changes
+5 Maximum allowed days between password changes
+6 Number of days in advance to display password expiration message
+7 Number of days after password expiration to disable the account
+8 Account expiration date
+9 Reserve field
+
+1:    2                     :3:    4:5: 6 :7:8:9
+John:$6$iTET...zoFzaMm.YwOl/:17707:0:90:14:::
+
+Controlling Login
+Linux does not support blank password in login process. Any user or service which does not have a valid password or have a blank password is not allowed to login. By setting a value other than an encrypted password, this field can be used to control the user login. For example, if the value (!) or (*) is stored in this field, the account will be locked and user or service will not be allowed to login.
+
+Both characters (! and *) represent a blank password. The difference between both characters is that, the first character, the exclamation sign (!), is used for user accounts and the second character, the asterisk sign (*), is used for service accounts. If require, a user account can be unlocked by setting a password in this field through passwd command.
+
+
+
 $sudo  cat /etc/pam.d/system-auth
 #%PAM-1.0
 auth        required      pam_tally2.so deny=5 even_deny_root unlock_time=60  ###key point
