@@ -1,3 +1,6 @@
+https://www.sonarqube.org/features/security/  ###code review
+https://github.com/sqlmapproject/sqlmap/wiki/Usage   ###sql injection check
+
 visudo config
 # grep -v '#' /etc/sudoers|grep -v '^$'
 Cmnd_Alias NETWORKING = /bin/firewall-cmd *, /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool

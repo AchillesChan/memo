@@ -1,3 +1,28 @@
+https://help.sonatype.com/repomanager2/rpm-packages-and-yum-repositories
+https://www.fosslinux.com/27838/installing-sonatype-nexus-repository-oss-on-centos-7.htm
+https://www.devopsroles.com/install-nexus-repository-oss-on-centos-7/
+https://help.sonatype.com/repomanager3/user-interface/browsing-repositories-and-repository-groups
+https://hub.docker.com/_/sonatype-nexus#!  
+
+###key point config
+$ grep JAVA /path/2/nexus-3.13.0-01/bin/nexus|head -n 2
+INSTALL4J_JAVA_HOME_OVERRIDE="/path/2/jdk1.8.0_192"
+INSTALL4J_JAVA_PREFIX=""
+
+$ ls  /path/2/jdk1.8.0_192/ -l
+total 25976
+drwxr-xr-x 2 10 143     4096 Oct  6  2018 bin
+-r--r--r-- 1 10 143     3244 Oct  6  2018 COPYRIGHT
+drwxr-xr-x 3 10 143      132 Oct  6  2018 include
+-rw-r--r-- 1 10 143  5207429 Sep 12  2018 javafx-src.zip
+drwxr-xr-x 5 10 143      185 Oct  6  2018 jre
+drwxr-xr-x 5 10 143      245 Oct  6  2018 lib
+......
+
+$ cat /etc/crontab |grep slee
+@reboot         root    sleep 60s;/path/2/nexus-3.13.0-01/bin/nexus start
+
+
 ######Startmemoof linux.memo #######
 ######Start linux.memo #######
 https://alexandrnikitin.github.io/blog/transparent-hugepages-measuring-the-performance-impact/
@@ -2628,11 +2653,11 @@ tee是一个把stdin保存到文件的小工具。
 ##########后项引用变量替换END###############
 
 ##########detecv port status V4####################
-cat /data/backup/detectServiceStatusV4.mon01.sh
+cat /path/2/backup/detectServiceStatusV4.mon01.sh
 #!/bin/bash
 PATH="/usr/local/bin:/usr/bin:/bin"
 export PATH
-managedServiceFile="/data/backup/managedServiceListMon01"
+managedServiceFile="/path/2/backup/managedServiceListMon01"
 logFile="/var/log/serviceStatusLogs/serviceStatusLog"
 operationDate=$(date +%Y%m%d-%H%M)
 echo -n "$operationDate:">"$logFile"
@@ -2672,7 +2697,7 @@ sed -i 's# WRONG##g' "$logFile"  ##删除多余的WRONG字符
 #!/bin/bash
 PATH="/home/Michael/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games"
 export PATH
-managedServiceFile="/data/backup/managedServiceListMon01"
+managedServiceFile="/path/2/backup/managedServiceListMon01"
 logFile="/var/log/serviceStatusLogs/serviceStatusLog"
 operationDate=$(date +%Y%m%d-%H%M)
 
@@ -2852,9 +2877,9 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
 ####find -ctime +10 表示10天以前的所有时间
 ####find -ctime 10 表示只是前第10天的文件
 ####注意rm所操作的目录
-mallimage_path="/data/backup/mall/attachement/"
-mallattache_path="/data/backup/mall/image/pictures/"
-dbbak_path="/data/backup/db/"
+mallimage_path="/path/2/backup/mall/attachement/"
+mallattache_path="/path/2/backup/mall/image/pictures/"
+dbbak_path="/path/2/backup/db/"
 if [ -d $mallimage_path ];then
 find $mallimage_path  -ctime +10 |xargs rm  -rf
 else
