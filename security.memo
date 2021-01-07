@@ -1,8 +1,16 @@
 https://www.sonarqube.org/features/security/  ###code review
 https://github.com/sqlmapproject/sqlmap/wiki/Usage   ###sql injection check
 
-visudo config
-# grep -v '#' /etc/sudoers|grep -v '^$'
+###disable su cmd
+https://www.cyberciti.biz/tips/restrict-the-use-of-su-command.html
+$ vi /etc/pam.d/su
+auth            required        /usr/lib64/security/pam_wheel.so use_uid
+
+##visudo config
+$ grep -v '#' /etc/sudoers|grep -v '^$'
+Cmnd_Alias USERMGMT = /usr/sbin/usermod -s *, /sbin/usermod -s *, /usr/bin/tail -f /var/log/secure,\
+/usr/bin/tail -f /var/log/mess*  ##only permit change login shell
+
 Cmnd_Alias NETWORKING = /bin/firewall-cmd *, /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool
 Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum
 Cmnd_Alias SERVICES = /bin/systemctl stop *, /bin/systemctl start *, /bin/systemctl status *, /bin/systemctl restart, /sbin/service, /sbin/chkconfig, /usr/bin/systemctl start, /usr/bin/systemctl stop, /usr/bin/systemctl reload, /usr/bin/systemctl restart, /usr/bin/systemctl status, /usr/bin/systemctl enable, /usr/bin/systemctl disable
@@ -22,9 +30,9 @@ Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
 root    ALL=(ALL)       ALL
 %wheel  ALL=(ALL)       ALL
 
-#!!!here is key point disable
+#!!!here is key point grant specfic right for groups
 %dev    ALL=SOFTWARE, SERVICES, PROCESSES, NETWORKING, SYSLOG, !/bin/systemctl stop auditd, !/bin/systemctl stop firewalld
-
+%audit   ALL=USERMGMT, !/sbin/usermod root *, !/usr/sbin/usermod root *, !/usr/sbin/usermod * root, !/sbin/usermod * root
 
 https://www.computernetworkingnotes.com/rhce-study-guide/etc-shadow-file-in-linux-explained-with-examples.html
 

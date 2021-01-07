@@ -1,5 +1,6 @@
 ######Startmemoof docker.memo #######
 
+docker pull hub.docker.com/it/ingress-nginx/controller:v0.43.0@sha256:hexxxx....
 
 No network connectivity to/from Docker CE container on CentOS 8
 https://serverfault.com/questions/987686/no-network-connectivity-to-from-docker-ce-container-on-centos-8

@@ -1,3 +1,28 @@
+https://ss64.com/bash/bang.html
+https://ss64.com/bash/syntax-keyboard.html
+
+Re-run all or part of a previous command.
+
+Syntax
+      !!       Run the last command again
+
+      !foo     Run the most recent command that starts with 'foo' (e.g. !ls)
+
+      !foo:p   Print out the command that !foo would run
+               also add it to the command history
+
+      !$       Run the last word of the previous command (same as Alt + .)
+
+      !$:p     Print out the word that !$ would substitute
+
+      !*       Run the previous command except for the last word
+
+      !*:p     Print out the previous command except for the last word
+
+     ^foo^bar  Run the previous command replacing foo with bar
+“This is the way the world ends. Not with a bang but a whimper” ~ T.S. Eliot (The Hollow Men)
+
+
 https://help.sonatype.com/repomanager2/rpm-packages-and-yum-repositories
 https://www.fosslinux.com/27838/installing-sonatype-nexus-repository-oss-on-centos-7.htm
 https://www.devopsroles.com/install-nexus-repository-oss-on-centos-7/
