@@ -1,6 +1,19 @@
+https://linuxconfig.org/how-to-perform-a-faster-data-compression-with-pbzip2
+##compression
+$ time tar -c FOOBAR_dir_or_file | pbzip2 -c -p1 -m10 > FOOBAR5.tar.bz2
+
+real    0m20.362s
+user    0m19.932s
+sys     0m0.704s
+
+##decompression
+$ tar xf FOOBAR1.tar.bz2 --use-compress-prog=pbzip2
+OR
+# pbzip2 -dc FOOBAR1.tar.bz2 | tar x
+
+
 https://ss64.com/bash/bang.html
 https://ss64.com/bash/syntax-keyboard.html
-
 Re-run all or part of a previous command.
 
 Syntax

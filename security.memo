@@ -1,5 +1,20 @@
 https://www.sonarqube.org/features/security/  ###code review
 https://github.com/sqlmapproject/sqlmap/wiki/Usage   ###sql injection check
+https://madaidans-insecurities.github.io/guides/linux-hardening.html
+https://elatov.github.io/2017/06/install-lynis-and-fix-some-suggestions/
+https://linux-audit.com/lynis-3-major-release/
+https://www.liquidweb.com/kb/lynis-a-security-auditing-tool-for-linux/
+https://opensource.com/article/20/8/linux-lynis-security
+https://cisofy.com/documentation/lynis/get-started/
+#root@host:~# lynis show commands
+
+Commands:
+lynis audit
+lynis configure
+lynis generate
+lynis show
+lynis update
+lynis upload-only
 
 ###disable su cmd
 https://www.cyberciti.biz/tips/restrict-the-use-of-su-command.html

@@ -1,5 +1,7 @@
 ######Startmemoof network.memo #######
 ######Start network.memo #######
+https://netbeez.net/blog/how-to-use-the-linux-traffic-control/
+https://wiki.linuxfoundation.org/networking/netem   ###emulates delay,loss,duplication and re-ordering
 https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/
 https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/
 https://kb.iu.edu/d/ajmi
