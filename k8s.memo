@@ -1,3 +1,4 @@
+https://www.cnblogs.com/ryanyangcs/   
 https://www.yellowduck.be/posts/k8s-getting-real-ip-digital-ocean/  ###ingress get real clientIP not pod GW
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
 https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-cluster-security
@@ -33,7 +34,9 @@ https://kubernetes.io/docs/reference/access-authn-authz/authorization/
 https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/   ###stateful mysql cluster
-
+https://my.oschina.net/u/4148359/blog/4531605 ##comparing-thanos-to-victoriametrics-cluster
+https://fuckcloudnative.io/posts/comparing-thanos-to-victoriametrics-cluster/`
+https://segmentfault.com/a/1190000022453911
 
 ###Access To Your Cluster With A Client CertificateAccess To Your Cluster With A Client Certificate
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/

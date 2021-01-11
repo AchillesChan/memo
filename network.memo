@@ -1,5 +1,6 @@
 ######Startmemoof network.memo #######
 ######Start network.memo #######
+https://cizixs.com/2018/01/13/linux-udp-packet-drop-debug/ ###linux 系统 UDP 丢包问题分析思路
 https://netbeez.net/blog/how-to-use-the-linux-traffic-control/
 https://wiki.linuxfoundation.org/networking/netem   ###emulates delay,loss,duplication and re-ordering
 https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/

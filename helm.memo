@@ -1,3 +1,46 @@
+###glob nginx config
+$ cat nginx.conf     ###key                                                                                                                                 
+user nginx;                                                                                                                                                                                  
+worker_processes auto;                                                                                                                                                                       
+error_log /var/log/nginx/error.log;                                                                                                                                                          
+pid /run/nginx.pid;                                                                                                                                                                          
+worker_rlimit_nofile 16384;                                                                                                                                                                  
+events {                                                                                                                                                                                     
+    worker_connections 2048;                                                                                                                                                                 
+......
+
+$ cat templates/configmap.yaml 
+apiVersion: v1                                                                                                                                                                               
+kind: ConfigMap                ###key                                                                                                                                                        
+metadata:                                                                                                                                                                                    
+  name: nginx-conf                                                                                                                                                                           
+data:
+{{ (.Files.Glob "nginx.conf").AsConfig | indent 2 }}
+
+$ cat templates/deployment.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mychart.fullname" . }}
+spec:
+  template:
+    metadata:
+    .....
+    spec:
+      volumes:                    ###key
+      - name: nginx-config
+        configMap:
+          name: nginx-conf
+      containers:
+        - name: {{ .Chart.Name }}
+          ......
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:        ###key
+          - name: nginx-config
+            mountPath: /etc/nginx
+            readOnly: true
+          ports:
+
 ####basic
 https://helm.sh/docs/chart_template_guide/
 https://juejin.im/post/6844904199818313735
