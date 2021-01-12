@@ -315,7 +315,7 @@ http://192.168.2.88:5601/app/siem#
 https://www.netways.de/blog/2017/09/14/secure-elasticsearch-and-kibana-with-an-nginx-http-proxy/
 https://sysadmins.co.za/secure-your-elasticsearch-cluster-with-basic-auth-using-nginx-and-ssl-from-letsencrypt/
 
-# cat elasticsearch50yccn.conf
+# cat elasticsearchabccn.conf
 upstream elasticsearch {
     server 192.168.2.8:9200;
     keepalive 15;

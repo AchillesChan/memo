@@ -13,9 +13,9 @@ server {
     listen 443; 
     ssl on;
     server_name  ahhhh %nginx-domain-name hhhh ;
-        ssl_certificate /etc/ssl/50yc.crt;
+        ssl_certificate /etc/ssl/abc.crt;
         #ssl_certificate /etc/ssl/cert.pem;
-        ssl_certificate_key /etc/ssl/50yc.key;
+        ssl_certificate_key /etc/ssl/abc.key;
         ssl_dhparam /etc/ssl/dhparams.pem;
         ssl_session_cache shared:SSL:10m;
         ssl_session_timeout  10m; 
