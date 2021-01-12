@@ -294,12 +294,12 @@ lastName=Parker
 
 ##Creating Image Pull Secrets
 First, assume that the credentials are defined in the values.yaml
-
-global:
-  imagePullSecrets:
+$ cat values.yaml
+global:                         ###checked,those three line optional,why???
+  imagePullSecrets:            
     - releaseName-myregistrykey  ###-myregistrykey is postfix,releaseName is helm releaseName,change as need.  
 
-imageCredentials:
+imageCredentials:          ###key point ,MUST 
   registry: quay.io
   username: someone
   password: sillyness
@@ -307,15 +307,15 @@ imageCredentials:
 
 We then define our template/_helpers_tpl template as follows:
 
-cat template/_helpers_tpl
+$ cat template/_helpers_tpl
 {{- define "imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.registry (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc 2) | b64enc }} 
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.registry (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }} 
 {{- end }}
 
 
 Finally, we use the helper template in a larger template to create the Secret manifest:
 
-cat template/mysec.yaml
+$ cat template/mysec.yaml
 
 apiVersion: v1
 kind: Secret
@@ -324,6 +324,28 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
+
+$ cat template/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mychart.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "mychart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "mychart.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "mychart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      imagePullSecrets:                        ###key optional ??
+      - name: {{ .Release.Name }}-myregistrykey
+      containers:
+        ......
 
 ##Tell Helm Not To Uninstall a Resource
 kind: Secret
