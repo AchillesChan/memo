@@ -822,7 +822,7 @@ yum install policycoreutils-python
 semanage port -a -t ssh_port_t 2200 -p tcp
 firewall-cmd --add-port 2200/tcp --perm
 firewall-cmd --reload
-
+firewall-cmd --zone=public --remove-service=ssh --permanent
 ###permit specfic ip access specfic port
 firewall-cmd --permanent --zone=public --add-rich-rule='
   rule family="ipv4"
