@@ -1,5 +1,51 @@
 ######Startmemoof mysql.memo #######
+#https://stackoverflow.com/questions/11003442/how-to-use-select-in-mysql-insert-statement
+root@mysqlSrv:test> show create table stud;
+      1 +-------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+      2 | Table | Create Table                                                                                                                                        |
+      3 +-------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+      4 | stud  | CREATE TABLE `stud` (\n  `id` int DEFAULT NULL,\n  `name` char(15) DEFAULT NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
+      5 +-------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+      6 
+1 row in set
+Time: 0.014s
+root@mysqlSrv:test> show create table score;
+      1 +-------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+      2 | Table | Create Table                                                                                                                                       |
+      3 +-------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+      4 | score | CREATE TABLE `score` (\n  `id` int DEFAULT NULL,\n  `eng` tinyint DEFAULT NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
+      5 +-------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+      6 
+1 row in set
+Time: 0.007s
+root@mysqlSrv:test> insert into stud values(25,"liu");
+Query OK, 1 row affected
+Time: 0.149s
+root@mysqlSrv:test> insert into score values((select id from test.stud where name='liu'),97);   ###insert 
+Query OK, 1 row affected
+Time: 0.134s
+root@mysqlSrv:test> select * from score;
++----+-----+
+| id | eng |
++----+-----+
+| 25 | 97  |
++----+-----+
+1 rows in set
+Time: 0.013s
+root@mysqlSrv:test> select * from stud;
++----+-------+
+| id | name  |
++----+-------+
+| 25 | liu   |
++----+-------+
+1 rows in set
+Time: 0.012s
+
+
+
+
 ##bigdata 
+https://www.tutorialspoint.com/apache_spark/apache_spark_introduction.htm
 https://www.tutorialspoint.com/sqoop/index.htm
 https://www.tutorialspoint.com/hadoop/index.htm
 
