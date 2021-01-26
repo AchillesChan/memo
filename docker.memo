@@ -303,12 +303,6 @@ http://geekyplatypus.com/dockerise-your-php-application-with-nginx-and-php7-fpm/
 https://github.com/mikechernev/dockerised-php
 ####How To Install and Use Docker Compose on CentOS 7#######
 
-http://www.cnblogs.com/sparkdev/p/7077333.html Docker Machine 创建 Azure 虚拟主机
-http://www.cnblogs.com/sparkdev/p/7044950.html 在远程主机上安装 Docker
-http://www.cnblogs.com/sparkdev/p/7066789.html Docker Machine 详解
-http://www.cnblogs.com/sparkdev/p/6890995.html 局域网内部署 Docker Registry
-http://www.cnblogs.com/sparkdev/p/8032330.html Docker: 限制容器可用的内存
-
 
 docker run --rm --name mysql01 -e MYSQL_ROOT_PASSWORD=my-secret -p 172.16.0.1:3306:3306 mysql:8.0.22 \
  --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci  ####run a temp mysql using docker

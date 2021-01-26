@@ -1,3 +1,8 @@
+http://liftoffsoftware.com/Products/GateOne
+
+https://unix.stackexchange.com/questions/410727/figure-out-which-process-forks-too-many-threads
+$ watch -n 1 'ps -eo nlwp,pid,args --sort -nlwp | head'
+
 https://linuxconfig.org/how-to-perform-a-faster-data-compression-with-pbzip2
 ##compression
 $ time tar -c FOOBAR_dir_or_file | pbzip2 -c -p1 -m10 > FOOBAR5.tar.bz2
