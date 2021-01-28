@@ -1,6 +1,8 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+$> docker run --name zabbix_agent -v /usr/local/zabbix/etc/zabbix_agentd.conf:/etc/zabbix/zabbix_agentd.conf  --network=host --privileged  -d --restart=always zabbix/zabbix-agent:alpine-4.2-latest
+$> add docker-server ip to zabbix_agentd.conf
 
 ####grafana settings with smtp mail(grafana.ini)##
 [analytics]
