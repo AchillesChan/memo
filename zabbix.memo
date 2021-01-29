@@ -1,8 +1,90 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 
+##docker-compose zabbix-server with host network
+$ cat docker-compose.yml|grep -v '#'
+version: "3.8"
+services:
+  zabbix_db:
+    container_name: zabbix_db
+    image: yourepo.example.com/mysql:5.7
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - "/data/zbx-db/mysql:/var/lib/mysql"
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_general_ci'] 
+    restart: always
+    network_mode: host   ###key point,docker ps NO PORT display,NEED ss -tlnp and docker log zabbix_xxx checek status
+
+  zabbix_server:
+    container_name: zabbix_server
+    image: yourepo.example.com/zabbix/zabbix-server-mysql:${VERSION}
+    restart: always
+    environment:
+      - DB_SERVER_HOST=${ZABBIX_DB_SERVER_HOST}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - ZBX_DEBUGLEVEL=${LOG_LEVEL}
+    network_mode: host ###key point,docker ps NO PORT display,NEED ss -tlnp and docker log zabbix_xxx checek status
+    depends_on:
+      - zabbix_db
+
+  zabbix_web:
+    image: yourepo.example.com/zabbix/zabbix-web-apache-mysql:${VERSION}
+    container_name: zabbix_web
+    restart: always
+    environment:
+      - ZBX_SERVER_HOST=${ZABBIX_SERVER_HOST}
+      - DB_SERVER_HOST=${ZABBIX_DB_SERVER_HOST}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - PHP_TZ=${TIME_ZONE}
+    network_mode: host  ###key point,docker ps NO PORT display,NEED ss -tlnp and docker log zabbix_xxx checek status
+
+$ docker-compose -f /data/zbx-docker/docker-compose.yml up -d
+
+$ cat .env
+cat .env
+OS=alpine
+VERSION=4.2
+DB_NAME=zabbix
+DB_USER=zabbix
+DB_USER_PASSWORD=zabbix
+DB_ROOT_PASSWORD=zabbix
+#HTTP_PORT=6080
+TIME_ZONE=Asia/Shanghai
+LOG_LEVEL=3
+ZABBIX_SERVER_HOST=172.16.0.8
+ZABBIX_DB_SERVER_HOST=172.16.0.8
+
+$ cat <<eof >>/etc/crontab
+@reboot           root           docker-compose -f /data/zbx-docker/docker-compose.yml up -d
+eof
+
 $> docker run --name zabbix_agent -v /usr/local/zabbix/etc/zabbix_agentd.conf:/etc/zabbix/zabbix_agentd.conf  --network=host --privileged  -d --restart=always zabbix/zabbix-agent:alpine-4.2-latest
-$> add docker-server ip to zabbix_agentd.conf
+
+$ cat zabbix_agentd.conf
+cat zabbix_agentd.conf |grep -v '#'|grep -v '^$'
+LogFile=/tmp/zabbix_agentd.log
+Server=172.16.0.8
+ServerActive=172.16.0.8:10051
+HostnameItem=system.hostname
+HostMetadataItem=system.uname
+UserParameter=myCPU.cpunumber,/bin/cat /proc/cpuinfo | /bin/grep process | /bin/wc -l
+UserParameter=myOS.THREAD_COUNT,ps -eLf|wc -l
+UserParameter=myOS.PROCESS_COUNT,ps -ef|wc -l
+UserParameter=myOS.TCP_ESTABLISHED_COUNT,ss -tlnpa|/bin/grep ESTAB|wc -l
+UserParameter=myOS.TCP_LISTEN_COUNT,ss -tlnpa|/bin/grep LISTEN|wc -l
+UserParameter=myOS.TCP_TIMEWAIT_COUNT,ss -tlnpa|/bin/grep TIME-WAIT|wc -l
+UserParameter=myOS.FILE_DESCRIBE_COUNT,cat /proc/sys/fs/file-nr|awk '{print $1}'
 
 ####grafana settings with smtp mail(grafana.ini)##
 [analytics]
