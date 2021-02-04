@@ -1,4 +1,5 @@
 ######Startmemoof mysql.memo #######
+https://sqldatabasetutorials.com/
 #https://stackoverflow.com/questions/11003442/how-to-use-select-in-mysql-insert-statement
 root@mysqlSrv:test> show create table stud;
       1 +-------+-----------------------------------------------------------------------------------------------------------------------------------------------------+

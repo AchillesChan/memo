@@ -239,7 +239,7 @@ Match user backup
 
 --error handle
 lsyncd error terminating since out of inotify watcheslsyncd error terminating since out of inotify watches
-$>/sbin/sysctl sysctl fs.inotify.max_user_watches=5000000
+$> sysctl fs.inotify.max_user_watches=5000000
 
 ------备份目标服务器设置END-----------------------
 ############使用证书的成功的配置END############

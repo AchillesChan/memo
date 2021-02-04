@@ -1,6 +1,11 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
-
+https://blog.zabbix.com/security-related-monitoring-with-zabbix/8659/ ##login,checksums,vulnerablitity scan,service,sensor,logs,ports etc
+##find out top 5 login attempt on zabbix events table
+     mysql> use zabbix;
+     mysql> desc events;
+     mysql> select from_unixtime(clock) as date,name as record from events where name like '%Login att%' order by  clock desc limit 5;
+                       
 ##docker-compose zabbix-server with host network
 $ cat docker-compose.yml|grep -v '#'
 version: "3.8"
