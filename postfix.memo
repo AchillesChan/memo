@@ -163,21 +163,21 @@ public (active)
 
 step 7
 ####################add user
->$groupadd postfixusers
+>$ groupadd postfixusers
 
->$useradd -g postfixusers -d /data/mail_user  mail_user
+>$ useradd -g postfixusers -d /data/mail_user  mail_user
 
->$mkdir -p /data/mail_user/Maildir
->$passwd mail_user
+>$ mkdir -p /data/mail_user/Maildir
+>$ passwd mail_user
 
 #deny ssh login
->$ usermod -s /sbin/nologin mail_user  and/or AllowGroups postfixusers@127.0.0.1 in /etc/ssh/sshd_config
+>$  usermod -s /sbin/nologin mail_user  and/or AllowGroups postfixusers@127.0.0.1 in /etc/ssh/sshd_config
 
->$cat /etc/passwd
+>$ cat /etc/passwd|grep mail_user
 mail_user:x:1002:1001::/data/mail_user:/bin/bash
 
->$chown -R mail_user.postfixusers   /data/mail_user/
->$chmod 700 /data/mail_user
+>$ chown -R mail_user.postfixusers   /data/mail_user/
+>$ chmod 700 /data/mail_user
 
 
 >$ ls -ld /data/mail_user/Maildir/

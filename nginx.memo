@@ -7,6 +7,15 @@ https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentica
 https://sites.psu.edu/jasonheffner/2015/06/19/nginx-use-different-backend-based-on-http-header/
 https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-health-check/
 
+location priority:
+http://nginx.org/en/docs/http/ngx_http_core_module.html#location
+
+location =  a1       ##first 
+location ^~ a2       ##second
+location ~* a3       ##third (the first match,not check anthoer)
+location    a4       ##the longest,prefix match  
+
+
 upstream keepalive-long-connection {
         server 172.16.1.5:80;
         server 172.16.1.6:80;
