@@ -9,7 +9,7 @@ item:login events-->dependent item-->login.event.key-->Template OS Linux: secure
 preprocessing:regular expressiong:( +[A-Za-z0-9].*Accepted .*)(publickey for .* from .* port .* ssh2)-->\1\2 -->check custom on fail -->test
 
 3> trigger
-name:{HOST.NAME} {{ITEM.VALUE}.regsub("public.*for (.+)", user: \1)} {{ITEM.VALUE}.regsub("(from .* port)(.+)", port: \2)}
+name: {HOST.NAME} {{ITEM.VALUE}.regsub("(sshd.*)for (.+)", \1 \2)} {{ITEM.VALUE}.regsub("(from) .* port(.+)", \1 \2)}  ###key point 
 serverity:Disater 
 expression:{Template OS Linux:login.event.key.str(Accepted publickey for)}=1
 OK event generation: none
