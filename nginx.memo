@@ -6,6 +6,14 @@ https://www.bulafish.com/centos/2018/05/03/nginx-rewrite-example/
 https://blog.wuliwala.net/2015/12/01/how-to-configure-nginx-with-ldap-authentication/  
 https://sites.psu.edu/jasonheffner/2015/06/19/nginx-use-different-backend-based-on-http-header/
 https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-health-check/
+https://www.tecmint.com/nginx-web-server-security-hardening-and-performance-tips/
+hide version:
+ server_tokens       off; ###add to nginx.conf http section 
+
+disable Methods:          ###add to server level
+if ($request_method !~ ^(GET|HEAD|POST)$) {
+       return 444;
+}
 
 location priority:
 http://nginx.org/en/docs/http/ngx_http_core_module.html#location
@@ -207,10 +215,27 @@ Limit                     Soft Limit           Hard Limit           Units
 Max open files            65536                65536                files   ##key point  
 ... ...
 
-handle selinux
-#sealert -a /var/log/audit/audit.log
-#ausearch -c 'nginx' --raw | audit2allow -M my-nginx
-#semodule -i my-nginx.pp
+##handle selinux
+$ sealert -a /var/log/audit/audit.log
+$ ausearch -c 'nginx' --raw | audit2allow -M my-nginx
+$ semodule -i my-nginx.pp
+
+###Let's Encrypt/Certbot CA for Centos 7
+https://snapcraft.io/docs/installing-snap-on-centos
+https://certbot.eff.org/lets-encrypt/centosrhel7-nginx
+$  yum install epel-release
+$  yum install snapd
+$   systemctl enable --now snapd.socket
+$ systemctl start snapd.socket   ###??
+$  ln -s /var/lib/snapd/snap /snap
+
+$  snap install --classic certbot
+$ ln -s /snap/bin/certbot /usr/bin/certbot
+
+$ certbot renew --dry-run
+$ certbot certonly --manual --preferred-challenges=dns --email examples@a.com --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.example.com
+
+
 ######Let’s Encrypt/Certbot CA 
 https://letsencrypt.org/docs/
 https://github.com/certbot/certbot
