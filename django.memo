@@ -1,12 +1,19 @@
+https://www.geeksforgeeks.org/how-to-create-a-basic-project-using-mvt-in-django/
+https://www.geeksforgeeks.org/django-project-mvt-structure/
+
+
 https://docs.djangoproject.com/en/3.1/intro/tutorial01/
 
-yum -y install python3.x86_64
-python3 -m pip install Django==2.1.2
-python3 -m django --version
-ln -s /usr/local/bin/django-admin /bin/django-admin
-django-admin startproject mysite
-python3 manage.py runserver 0:8000
+$> yum -y install python3.x86_64
+$> python3 -m pip install Django==2.1.2
+$> python3 -m django --version
+$> ln -s /usr/local/bin/django-admin /bin/django-admin
+$> django-admin startproject mysite
+$> python3 manage.py runserver 0:8000
 
+###create new app
+$ stop python3 django first ???
+$ python3 manage.py startapp polls
 
 $ cat polls/views.py
 from django.http import HttpResponse
@@ -32,11 +39,14 @@ from django.urls import include, path
 
 urlpatterns = [
     path('polls/', include('polls.urls')),
-        path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
         ]
 
-
-python3 manage.py startapp polls
+$> python3 manage.py makemigrations 
+$> python3 manage.py migrate
+$> python3 manage.py check
+$> python3 manage.py test
+$> python3 manage.py runserver 0:8000
 
 
 
@@ -63,7 +73,7 @@ DATABASES = {
 $> python3 manage.py makemigrations 
 $> python3 manage.py migrate
 $> python3 manage.py check
-python3 manage.py test
+$> python3 manage.py test
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
 
