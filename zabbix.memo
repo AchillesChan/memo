@@ -1,10 +1,30 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
 https://blog.zabbix.com/security-related-monitoring-with-zabbix/8659/ ##login,checksums,vulnerablitity scan,service,sensor,logs,ports etc
+1> master key
+secure log-->zabbix agent(active)-->log["/var/log/secure"]-->log-->30s-->90d-->security-->enable
+
+2> depend key
+item:login events-->dependent item-->login.event.key-->Template OS Linux: secure log(last master one)-->log-->90d-->security-->enable
+preprocessing:regular expressiong:( +[A-Za-z0-9].*Accepted .*)(publickey for .* from .* port .* ssh2)-->\1\2 -->check custom on fail -->test
+
+3> trigger
+name: {HOST.NAME} {{ITEM.VALUE}.regsub("(sshd.*)for (.+)", \1 \2)} {{ITEM.VALUE}.regsub("(from) .* port(.+)", \1 \2)}  ###key point 
+serverity:Disater 
+expression:{Template OS Linux:login.event.key.str(Accepted publickey for)}=1
+OK event generation: none
+PROBLEM event generation mode:multiple
+Enabled: check
+
+4> set a mail server that never reachable for alert 
+5> mysql> select from_unixtime(clock) as date ,name from events where name like '%ssh2%';  ##find ssh login item on db zabbix events table
+
+
 ##find out top 5 login attempt on zabbix events table
      mysql> use zabbix;
      mysql> desc events;
      mysql> select from_unixtime(clock) as date,name as record from events where name like '%Login att%' order by  clock desc limit 5;
+     mysql> select from_unixtime(clock) as date, message from alerts where eventid=230951;   ###item type set to TEXT,where get user,ip,key/password info
                        
 ##docker-compose zabbix-server with host network
 $ cat docker-compose.yml|grep -v '#'
