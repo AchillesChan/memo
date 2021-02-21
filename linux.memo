@@ -1,3 +1,9 @@
+https://stackoverflow.com/questions/7124778/how-to-match-anything-up-until-this-sequence-of-characters-in-a-regular-expres/7124976#7124976
+Thus, in other terms the regex /.+?(?=abc)/ means:
+Match any characters as few as possible until a "abc" is found, without counting the "abc".
+qwerty qwerty whatever abc match "qwerty qwerty whatever"
+
+
 https://www.shell-tips.com/linux/how-to-format-date-and-time-in-linux-macos-and-bash/
 http://liftoffsoftware.com/Products/GateOne
 http://deer-run.com/~hal/linux_passwords_pam.html
