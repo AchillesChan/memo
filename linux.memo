@@ -1,4 +1,8 @@
 https://stackoverflow.com/questions/7124778/how-to-match-anything-up-until-this-sequence-of-characters-in-a-regular-expres/7124976#7124976
+When using .+?, instead of matching all at once and going back for other conditions (if any), the engine will match the next characters by step until the subsequent part of the regex is matched (again if any). This is the un-greedy, meaning match the fewest possible to satisfy.
+
+Following that we have (?={contents}), a zero width assertion, a look around. This grouped construction matches its contents, but does not count as characters matched (zero width). It only returns if it is a match or not (assertion).
+
 Thus, in other terms the regex /.+?(?=abc)/ means:
 Match any characters as few as possible until a "abc" is found, without counting the "abc".
 qwerty qwerty whatever abc match "qwerty qwerty whatever"
