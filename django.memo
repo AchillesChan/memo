@@ -15,7 +15,7 @@ $> python3 manage.py runserver 0:8000
 $ stop python3 django first ???
 $ python3 manage.py startapp polls
 
-$ cat polls/views.py
+$ cat polls/views.py     ###app view,one-to-one map
 from django.http import HttpResponse
 
 
@@ -23,7 +23,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
 
-$cat polls/urls.py
+$cat polls/urls.py      ###app urls,one-to-one map
 
 from django.urls import path
 
@@ -33,12 +33,13 @@ urlpatterns = [
     path('', views.index, name='index'),
     ]
 
-$ cat mysite/urls.py
+$ cat mysite/urls.py             ###project urls.py not app urls,summary app urls here
 from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
     path('polls/', include('polls.urls')),
+    ... ...
     path('admin/', admin.site.urls),
         ]
 

@@ -16,8 +16,9 @@ OK event generation: none
 PROBLEM event generation mode:multiple
 Enabled: check
 
-4> set a mail server that never reachable for alert 
-5> mysql> select from_unixtime(clock) as date ,name from events where name like '%ssh2%';  ##find ssh login item on db zabbix events table
+4> set a mail server that never reachable for alert   ###NOT NEED
+
+5> mysql> select from_unixtime(clock) as date ,name from events where name like '%SshLoginEvent%';  ##find ssh login item on db zabbix events table
 
 
 ##find out top 5 login attempt on zabbix events table
