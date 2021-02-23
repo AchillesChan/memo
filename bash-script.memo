@@ -1,5 +1,8 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
+https://betterdev.blog/minimal-safe-bash-script-template/
+https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel/246128#246128
 
 ###date convert
 $ s=$(($(date --date='2020-10-31 12:31:51.35' +%s%N)/100000000))

@@ -6,18 +6,22 @@ secure log-->zabbix agent(active)-->log["/var/log/secure"]-->log-->30s-->90d-->s
 
 2> depend key
 item:login events-->dependent item-->login.event.key-->Template OS Linux: secure log(last master one)-->log-->90d-->security-->enable
-preprocessing:regular expressiong:( +[A-Za-z0-9].*Accepted .*)(publickey for .* from .* port .* ssh2)-->\1\2 -->check custom on fail -->test
+preprocessing:regular expressiong:(^.*)\s(\w.*)\s(sshd.*]:)(.*)for(.*)from(.*)port(.*)ssh2(.*)$    SshLoginEvent: [Host:\2 Date: \1 Status:\4 User:\5 IP:\6 Port:\7] -->check custom on fail -->test
+
+Result example:
+SshLoginEvent: [Date: Feb 22 15:44:55 Host: foo-host Status: Accepted password User: user1 IP: 1.2.3.4 Port: 10924 
 
 3> trigger
-name: {HOST.NAME} {{ITEM.VALUE}.regsub("(sshd.*)for (.+)", \1 \2)} {{ITEM.VALUE}.regsub("(from) .* port(.+)", \1 \2)}  ###key point 
+name: {HOST.NAME} {{ITEM.VALUE}   ###key point 
 serverity:Disater 
-expression:{Template OS Linux:login.event.key.str(Accepted publickey for)}=1
+expression:{Template OS Linux:login.event.key.str(SshLoginEvent)}=1
 OK event generation: none
 PROBLEM event generation mode:multiple
 Enabled: check
 
-4> set a mail server that never reachable for alert 
-5> mysql> select from_unixtime(clock) as date ,name from events where name like '%ssh2%';  ##find ssh login item on db zabbix events table
+4> set a mail server that never reachable for alert   ###NOT NEED
+
+5> mysql> select from_unixtime(clock) as date ,name from events where name like '%SshLoginEvent%';  ##find ssh login item on db zabbix events table
 
 
 ##find out top 5 login attempt on zabbix events table
