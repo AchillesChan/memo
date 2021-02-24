@@ -1,4 +1,7 @@
 https://www.sonarqube.org/features/security/  ###code review
+ttps://owasp.org/www-community/Source_Code_Analysis_Tools
+https://rushter.com/blog/detecting-sql-injections-in-python/
+https://security-code-scan.github.io/
 https://github.com/sqlmapproject/sqlmap/wiki/Usage   ###sql injection check
 https://madaidans-insecurities.github.io/guides/linux-hardening.html
 https://elatov.github.io/2017/06/install-lynis-and-fix-some-suggestions/
@@ -6,6 +9,11 @@ https://linux-audit.com/lynis-3-major-release/
 https://www.liquidweb.com/kb/lynis-a-security-auditing-tool-for-linux/
 https://opensource.com/article/20/8/linux-lynis-security
 https://cisofy.com/documentation/lynis/get-started/
+
+
+wget https://github.com/sqlmapproject/sqlmap/zipball/master && unzip master && cd sqlinjast-master
+./sqlmap.py -a --batch  -u http://foo.com/member?key= --dbms mysql
+
 #root@host:~# lynis show commands
 
 Commands:
