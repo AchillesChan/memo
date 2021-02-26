@@ -2308,6 +2308,8 @@ Output:
 --{} represented variables,after ::: the value of the variables list here--
 $>time parallel -j8 -k 'ping -c 1 172.16.1.{}' ::: 10 20 118 136
 
+$> time ll |grep 2020|awk '{print $9}'|parallel  -j 4 --keep-order  sha512sum {}  :::
+
 Academic tradition requires you to cite works you base your article on.
 ......
 To silence the citation notice: run 'parallel --bibtex'.
