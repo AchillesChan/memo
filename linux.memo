@@ -1,3 +1,15 @@
+https://perf.wiki.kernel.org/index.php/Tutorial
+http://www.brendangregg.com/blog/index.html
+http://www.brendangregg.com/perf.html
+http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
+# git clone https://github.com/brendangregg/FlameGraph  # or download it from github
+# cd FlameGraph
+# perf record -F 99 -a -g -- sleep 60
+# perf script | ./stackcollapse-perf.pl > out.perf-folded
+# ./flamegraph.pl out.perf-folded > perf-kernel.svg
+
+
+
 https://stackoverflow.com/questions/7124778/how-to-match-anything-up-until-this-sequence-of-characters-in-a-regular-expres/7124976#7124976
 Thus, in other terms the regex /.+?(?=abc)/ means:
 Match any characters as few as possible until a "abc" is found, without counting the "abc".
