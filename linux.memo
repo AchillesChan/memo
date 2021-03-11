@@ -1,3 +1,6 @@
+https://www.metricly.com/linux-memory-leak/
+http://blog.thewebsitepeople.org/2011/03/linux-memory-leak-detection/
+https://linoxide.com/tools/valgrind-memcheck/
 https://perf.wiki.kernel.org/index.php/Tutorial
 http://www.brendangregg.com/blog/index.html
 http://www.brendangregg.com/perf.html
@@ -120,7 +123,7 @@ Login           Failures   Latest   failure     From
 tecmint            0
 
 ##check memory usage per process
-https://www.golinuxcloud.com/check-memory-usage-per-process-linux/
+https://www.golinuxcloud.com/check-memory-usage-per-process-linux/        ###check memory leak
 $ cat /proc/20506/smaps |  awk '{Total+=$2} END {print Total/1024" MB"}'
 22603.1 MB
 

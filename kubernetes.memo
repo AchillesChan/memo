@@ -1,3 +1,4 @@
+https://github.com/prometheus-community/helm-charts                ####prometheus and grafana
 https://istio.io/latest/docs/ops/deployment/architecture/
 https://istio.io/latest/docs/concepts/traffic-management/
 https://www.cuelogic.com/blog/istio-service-mesh
@@ -50,6 +51,7 @@ https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-applica
 https://my.oschina.net/u/4148359/blog/4531605 ##comparing-thanos-to-victoriametrics-cluster
 https://fuckcloudnative.io/posts/comparing-thanos-to-victoriametrics-cluster/`
 https://segmentfault.com/a/1190000022453911
+https://github.com/kayrus/prometheus-kubernetes/blob/master/alertmanager-configmap.yaml
 
 ###Access To Your Cluster With A Client CertificateAccess To Your Cluster With A Client Certificate
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
