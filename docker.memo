@@ -1,3 +1,4 @@
+https://sysdig.com/blog/7-docker-security-vulnerabilities/
 ######Startmemoof docker.memo #######
 
 docker pull hub.docker.com/it/ingress-nginx/controller:v0.43.0@sha256:hexxxx....
