@@ -1,3 +1,18 @@
+https://www.metricly.com/linux-memory-leak/
+http://blog.thewebsitepeople.org/2011/03/linux-memory-leak-detection/
+https://linoxide.com/tools/valgrind-memcheck/
+https://perf.wiki.kernel.org/index.php/Tutorial
+http://www.brendangregg.com/blog/index.html
+http://www.brendangregg.com/perf.html
+http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
+# git clone https://github.com/brendangregg/FlameGraph  # or download it from github
+# cd FlameGraph
+# perf record -F 99 -a -g -- sleep 60
+# perf script | ./stackcollapse-perf.pl > out.perf-folded
+# ./flamegraph.pl out.perf-folded > perf-kernel.svg
+
+
+
 https://stackoverflow.com/questions/7124778/how-to-match-anything-up-until-this-sequence-of-characters-in-a-regular-expres/7124976#7124976
 When using .+?, instead of matching all at once and going back for other conditions (if any), the engine will match the next characters by step until the subsequent part of the regex is matched (again if any). This is the un-greedy, meaning match the fewest possible to satisfy.
 
@@ -112,7 +127,7 @@ Login           Failures   Latest   failure     From
 tecmint            0
 
 ##check memory usage per process
-https://www.golinuxcloud.com/check-memory-usage-per-process-linux/
+https://www.golinuxcloud.com/check-memory-usage-per-process-linux/        ###check memory leak
 $ cat /proc/20506/smaps |  awk '{Total+=$2} END {print Total/1024" MB"}'
 22603.1 MB
 
