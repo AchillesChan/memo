@@ -1,0 +1,9 @@
+https://www.howtogeek.com/116184/how-to-see-which-group-policies-are-applied-to-your-pc-and-user-account/
+
+GUI:  hit Start, type “rsop.msc,” and then click the resulting entry.
+
+or CUI:
+c:\ > gpresult /Scope User /v
+
+c:\ > gpresult /Scope Computer /v
+

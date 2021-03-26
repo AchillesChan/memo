@@ -56,6 +56,19 @@ https://fuckcloudnative.io/posts/comparing-thanos-to-victoriametrics-cluster/`
 https://segmentfault.com/a/1190000022453911
 https://github.com/kayrus/prometheus-kubernetes/blob/master/alertmanager-configmap.yaml
 
+https://dzone.com/articles/cicd-for-kubernetes-with-jenkins-and-spinnaker-con
+https://spinnaker.io/guides/user/kubernetes-v2/
+https://aws.amazon.com/blogs/opensource/deployment-pipeline-spinnaker-kubernetes/
+https://www.metricfire.com/blog/continuous-delivery-pipeline-for-kubernetes-using-spinnaker/
+
+
+#https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###reate Kubernetes secret for the TLS certificate
+$>  kubectl create secret tls aks-ingress-tls \
+    --namespace ingress-basic \
+    --key aks-ingress-tls.key \
+    --cert aks-ingress-tls.crt
+
+
 ###Access To Your Cluster With A Client CertificateAccess To Your Cluster With A Client Certificate
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
 https://medium.com/better-programming/k8s-tips-give-access-to-your-clusterwith-a-client-certificate-dfb3b71a76fe

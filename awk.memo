@@ -1,6 +1,6 @@
 ######Startmemoof awk.memo #######
 ######Start awk.memo #######
-
+https://vds-admin.ru/sed-and-awk-101-hacks
 https://stackoverflow.com/questions/17476879/difference-between-number-in-the-same-column-using-awk
 compute delta
 
@@ -106,6 +106,8 @@ awk -f replace.cmd replace.value |sed  's/,/\n/g'     #####generate ssh config f
 #####
 
 ###nginx findo out most access ip 
+https://www.thegeekstuff.com/2010/03/awk-arrays-explained-with-5-practical-examples/
+
 awk '{
 Ip[$1]++;
 }
