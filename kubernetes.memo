@@ -56,6 +56,29 @@ https://fuckcloudnative.io/posts/comparing-thanos-to-victoriametrics-cluster/`
 https://segmentfault.com/a/1190000022453911
 https://github.com/kayrus/prometheus-kubernetes/blob/master/alertmanager-configmap.yaml
 
+https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+https://www.digitalocean.com/community/tutorials/how-to-build-docker-images-and-host-a-docker-image-repository-with-gitlab
+https://www.digitalocean.com/community/tutorials/how-to-set-up-continuous-integration-pipelines-with-gitlab-ci-on-ubuntu-16-04
+https://dzone.com/articles/cicd-for-kubernetes-with-jenkins-and-spinnaker-con
+https://spinnaker.io/guides/user/kubernetes-v2/
+https://aws.amazon.com/blogs/opensource/deployment-pipeline-spinnaker-kubernetes/
+https://www.metricfire.com/blog/continuous-delivery-pipeline-for-kubernetes-using-spinnaker/
+https://www.linux.com/audience/enterprise/set-cicd-pipeline-kubernetes-part-1-overview/
+https://www.linux.com/audience/devops/set-cicd-pipeline-jenkins-pod-kubernetes-part-2/
+https://www.linux.com/training-tutorials/run-and-scale-distributed-crossword-puzzle-app-cicd-kubernetes-part-3/
+https://www.linux.com/training-tutorials/set-cicd-distributed-crossword-puzzle-app-kubernetes-part-4/
+https://www.weave.works/technologies/cicd-tools/
+https://blog.lwolf.org/post/continuous-deployment-to-kubernetes-from-gitlab-ci/
+https://blog.lwolf.org/post/how-to-build-tiny-golang-docker-images-with-gitlab-ci/
+https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autodeploy-to-kubernetes-using-gitlab-and-helm/
+
+#https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###reate Kubernetes secret for the TLS certificate
+$>  kubectl create secret tls aks-ingress-tls \
+    --namespace ingress-basic \
+    --key aks-ingress-tls.key \
+    --cert aks-ingress-tls.crt
+
+
 ###Access To Your Cluster With A Client CertificateAccess To Your Cluster With A Client Certificate
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
 https://medium.com/better-programming/k8s-tips-give-access-to-your-clusterwith-a-client-certificate-dfb3b71a76fe

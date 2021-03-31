@@ -1,4 +1,84 @@
 ######Startmemoof mysql.memo #######
+
+###mysql trigger
+https://www.mysqltutorial.org/create-the-first-trigger-in-mysql.aspx
+
+mysql root@127.0.0.1:poc> desc srv;
++---------+----------------------+------+-----+---------+-------+
+| Field   | Type                 | Null | Key | Default | Extra |
++---------+----------------------+------+-----+---------+-------+
+| id      | smallint(5) unsigned | NO   | PRI | <null>  |       |
+| name    | char(20)             | YES  |     | <null>  |       |
+| cpu     | tinyint(3) unsigned  | YES  |     | <null>  |       |
+| memory  | tinyint(3) unsigned  | YES  |     | <null>  |       |
+| storage | tinyint(3) unsigned  | YES  |     | <null>  |       |
++---------+----------------------+------+-----+---------+-------+
+5 rows in set
+Time: 0.023s
+mysql root@127.0.0.1:poc> desc srv_log;
++-------+-----------+------+-----+---------+----------------+
+| Field | Type      | Null | Key | Default | Extra          |
++-------+-----------+------+-----+---------+----------------+
+| id    | int(11)   | NO   | PRI | <null>  | auto_increment |
+| msg   | char(255) | YES  |     | <null>  |                |
++-------+-----------+------+-----+---------+----------------+
+2 rows in set
+Time: 0.006s
+
+
+mysql root@127.0.0.1:poc> DELIMITER //                  ####trigger
+                       -> CREATE TRIGGER auditlog BEFORE UPDATE ON srv
+                       -> FOR EACH ROW BEGIN
+                       ->     INSERT INTO  srv_log(msg) select concat("old value[","id:",id,",","name:",name,"cpu:",cpu,",","memory:",memory,",",now(),"]") from srv where id=OLD.id;
+                       -> END;//
+                       -> DELIMITER ;
+
+mysql root@127.0.0.1:poc> select * from srv;
++----+-------+-----+--------+---------+
+| id | name  | cpu | memory | storage |
++----+-------+-----+--------+---------+
+| 1  | web01 | 2   | 8      | 128     |
+| 2  | web02 | 4   | 8      | 128     |
+| 3  | web03 | 2   | 8      | 128     |
+| 4  | db01  | 2   | 64     | 200     |
+| 5  | db02  | 4   | 32     | 200     |
++----+-------+-----+--------+---------+
+5 rows in set
+Time: 0.021s
+mysql root@127.0.0.1:poc> select * from srv_log;
++----+-----+
+| id | msg |
++----+-----+
+0 rows in set
+Time: 0.022s
+mysql root@127.0.0.1:poc> update srv set memory=64 where id<4;
+Query OK, 3 rows affected
+Time: 0.007s
+mysql root@127.0.0.1:poc> select * from srv;
++----+-------+-----+--------+---------+
+| id | name  | cpu | memory | storage |
++----+-------+-----+--------+---------+
+| 1  | web01 | 2   | 64     | 128     |
+| 2  | web02 | 4   | 64     | 128     |
+| 3  | web03 | 2   | 64     | 128     |
+| 4  | db01  | 2   | 64     | 200     |
+| 5  | db02  | 4   | 32     | 200     |
++----+-------+-----+--------+---------+
+5 rows in set
+Time: 0.006s
+mysql root@127.0.0.1:poc> select * from srv_log;                            #####result
++----+--------------------------------------------------------------+
+| id | msg                                                          |
++----+--------------------------------------------------------------+
+| 14 | old value[id:1,name:web01cpu:2,memory:8,2021-03-31 07:08:21] |
+| 15 | old value[id:2,name:web02cpu:4,memory:8,2021-03-31 07:08:21] |
+| 16 | old value[id:3,name:web03cpu:2,memory:8,2021-03-31 07:08:21] |
++----+--------------------------------------------------------------+
+3 rows in set
+Time: 0.006s
+
+
+
 https://sqldatabasetutorials.com/
 #https://stackoverflow.com/questions/11003442/how-to-use-select-in-mysql-insert-statement
 root@mysqlSrv:test> show create table stud;
