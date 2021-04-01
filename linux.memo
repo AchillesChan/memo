@@ -1,3 +1,13 @@
+https://stackoverflow.com/questions/36186394/saving-arguments-passed-from-xargs-to-bash-as-a-variable-for-processing
+find . -mindepth 1 -type d | xargs -n 1 -P 20 -i sh -c "v=\"{}\"; echo \"\$v\""
+find . -mindepth 1 -type d | xargs -n 1 -P 20 -i sh -c 'v="{}"; echo "$v"'
+
+BLOB_PREFIX="char:22:54Z&st=2019-09-11T02:22:54Z&spr=https&sig=yma13D"  $BLOB_PREFIX have spec char
+ls|xargs -P 1 -n 1 -I {} sh -c "echo {} \"$BLOB_PREFIX\"" _    #### $BLOB_PREFIX be quoted by doble sign,double sign escape by \
+2021-03-18.Info.txt char:22:54Z&st=2019-09-11T02:22:54Z&spr=https&sig=yma13D
+2021-03-19.Info.txt char:22:54Z&st=2019-09-11T02:22:54Z&spr=https&sig=yma13D
+2021-03-20.Info.txt char:22:54Z&st=2019-09-11T02:22:54Z&spr=https&sig=yma13D
+
 https://www.metricly.com/linux-memory-leak/
 http://blog.thewebsitepeople.org/2011/03/linux-memory-leak-detection/
 https://linoxide.com/tools/valgrind-memcheck/
