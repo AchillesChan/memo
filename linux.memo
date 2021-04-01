@@ -1,3 +1,43 @@
+=========
+xargs replace awk sed
+
+[linux-w0rf ]$ cat nginx-template
+upstream APP-back-srv {
+        server SERVER;
+}
+server {
+        location APP{
+                proxy_pass http://APP-back-srv$request;
+        }
+}
+
+
+
+[linux-w0rf ]$ echo "
+web 1:80
+db 2:3306"|xargs -P 1 -n 2  sh -c 'cat nginx-template|sed -e 's:APP:\$1:g' -e 's%SERVER%\$2%'' _
+
+upstream web-back-srv {
+        server 1:80;
+}
+server {
+        location web{
+                proxy_pass http://web-back-srv$request;
+        }
+}
+
+
+upstream db-back-srv {
+        server 2:3306;
+}
+server {
+        location db{
+                proxy_pass http://db-back-srv$request;
+        }
+}
+
+===========
+
 https://stackoverflow.com/questions/36186394/saving-arguments-passed-from-xargs-to-bash-as-a-variable-for-processing
 find . -mindepth 1 -type d | xargs -n 1 -P 20 -i sh -c "v=\"{}\"; echo \"\$v\""
 find . -mindepth 1 -type d | xargs -n 1 -P 20 -i sh -c 'v="{}"; echo "$v"'
