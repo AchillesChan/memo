@@ -1,5 +1,7 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
+https://www.zabbix.com/documentation/current/manual/installation/containers
+
 https://blog.zabbix.com/security-related-monitoring-with-zabbix/8659/ ##login,checksums,vulnerablitity scan,service,sensor,logs,ports etc
 1> master key
 secure log-->zabbix agent(active)-->log["/var/log/secure"]-->log-->30s-->90d-->security-->enable

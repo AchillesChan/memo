@@ -450,6 +450,7 @@ IMPORTANT NOTES:
 server {
     ssl on;
     listen 443;
+    ###listen 443 ssl http2  ###new style with http2 support
     server_name  www.abc.com;
         ssl_certificate  /etc/letsencrypt/archive/www.abc.com/fullchain1.pem;
         ssl_certificate_key /etc/letsencrypt/archive/www.abc.com/privkey1.pem;

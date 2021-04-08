@@ -8,6 +8,8 @@ https://techexpert.tips/zabbix/zabbix-monitor-vmware-esxi/
 https://www.golinuxcloud.com/configure-iscsi-target-initiator-targetcli-rhel-centos-7/ 
 https://www.running-system.com/kill-power-virtual-machine-using-esxcli-command/
 https://code.vmware.com/docs/11743/esxi-7-0-esxcli-command-reference/namespace/esxcli_vm.html
+https://bestmonitoringtools.com/vmware-monitoring-with-zabbix-esxi-vcenter-vm-vsphere/
+
 esxcli vm process list
 esxcli vm process kill -t force -w 2100705
 
