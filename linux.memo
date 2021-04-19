@@ -1,4 +1,23 @@
 =========
+https://howto.lintel.in/protect-files-overwriting-noclobber-bash/
+$ tar cf - orig | (cd dest && tar xf -)  ###faster copy small file and preserve permision
+
+$ mktemp --dry-run /tmp/poc.XXX   ###create temp file,XXX denote length
+/tmp/poc.GrW
+
+$ basename /usr/local/zabbix/conf/zabbix.conf                                                                                                                                
+zabbix.conf
+
+$ basename index.html .html                                                                                                                                                  
+index
+
+
+
+$ set -o noclobber  ###set +o noclobber ###revert
+$ echo 1 >a.log
+$ash: file2: cannot overwrite existing file
+
+
 xargs replace awk sed
 
 [linux-w0rf ]$ cat nginx-template
