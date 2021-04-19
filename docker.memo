@@ -1,6 +1,8 @@
 https://sysdig.com/blog/7-docker-security-vulnerabilities/
 ######Startmemoof docker.memo #######
 
+https://azizunsal.github.io/blog/post/delete-images-from-private-docker-registry
+
 docker pull hub.docker.com/it/ingress-nginx/controller:v0.43.0@sha256:hexxxx....
 
 No network connectivity to/from Docker CE container on CentOS 8

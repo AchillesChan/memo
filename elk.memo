@@ -14,6 +14,8 @@ filebeat.config.modules:
   path: ${path.config}/modules.d/*.yml
 output.elasticsearch:
   hosts: ["your_elk_srv_ip:9200"]
+  indices:
+    - index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"   ###create a index everyday
   protocol: "http"
   username: "elastic"
   password: "elastic_pwd"
