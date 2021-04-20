@@ -4,6 +4,15 @@ https://stackoverflow.com/questions/40460830/filebeat-parse-fields-from-message-
 https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html
 https://performanceengineeringsite.wordpress.com/2019/01/05/parsing-data-with-ingest-node-of-elastic-search/
 
+https://www.elastic.co/guide/en/kibana/7.6/managing-indices.html
+Close index. Blocks the index from read/write operations. A closed index exists in the cluster, but doesn’t consume resources other than disk space. If you reopen a closed index, it goes through the normal recovery process.
+Force merge index. Reduces the number of segments in your shard by merging smaller files and clearing deleted ones. Only force merge a read-only index.
+Refresh index. Writes the operations in the indexing buffer to the filesystem cache. This action is automatically performed once per second. Forcing a manual refresh is useful during testing, but should not be routinely done in production because it has a performance impact.
+Clear index cache. Clears all caches associated with the index.
+Flush index. Frees memory by syncing the filesystem cache to disk and clearing the cache. Once the sync is complete, the internal transaction log is reset.
+Freeze index. Makes the index read-only and reduces its memory footprint by moving shards to disk. Frozen indices remain searchable, but queries take 
+
+
 [mysql]
 --10
 # cat /etc/filebeat/filebeat.yml
