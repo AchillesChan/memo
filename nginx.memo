@@ -159,6 +159,7 @@ upstream keepalive-long-connection {
         server 172.16.1.5:80;
         server 172.16.1.6:80;
         keepalive 200;           ###key config
+        least_conn;
 }
 
     location   /pdaapi/ {
