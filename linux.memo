@@ -77,6 +77,8 @@ https://perf.wiki.kernel.org/index.php/Tutorial
 http://www.brendangregg.com/blog/index.html
 http://www.brendangregg.com/perf.html
 http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
+https://docs.microsoft.com/en-us/samples/dotnet/samples/diagnostic-scenarios/
+https://docs.microsoft.com/en-us/dotnet/core/diagnostics/debug-highcpu?tabs=linue
 # git clone https://github.com/brendangregg/FlameGraph  # or download it from github
 # cd FlameGraph
 # perf record -F 99 -a -g -- sleep 60
