@@ -159,8 +159,12 @@ upstream keepalive-long-connection {
         server 172.16.1.5:80;
         server 172.16.1.6:80;
         keepalive 200;           ###key config
+        least_conn;
 }
 
+server {
+    server_name exp.com;
+    listen 80;
     location   /pdaapi/ {
         proxy_set_header         X-Real_IP        $remote_addr;
         proxy_set_header         X-Forwarded-For  $proxy_add_x_forwarded_for;
@@ -176,6 +180,7 @@ upstream keepalive-long-connection {
         proxy_http_version 1.1;                ###key config
         proxy_set_header Connection "";        ###key config
    }
+}
 
 
 ###regex for multiple path
@@ -333,7 +338,7 @@ fs.file-max = 100000
 
 #vim /usr/local/nginx/conf/nginx.conf
 ..............
-worker_rlimit_nofile 65536;  ###add this
+worker_rlimit_nofile 65536;  ###add this on main context
 
 ...........
 

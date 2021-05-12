@@ -71,6 +71,8 @@ https://www.weave.works/technologies/cicd-tools/
 https://blog.lwolf.org/post/continuous-deployment-to-kubernetes-from-gitlab-ci/
 https://blog.lwolf.org/post/how-to-build-tiny-golang-docker-images-with-gitlab-ci/
 https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autodeploy-to-kubernetes-using-gitlab-and-helm/
+https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
+https://koudingspawn.de/kubernetes-autoscaling/
 
 #https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###reate Kubernetes secret for the TLS certificate
 $>  kubectl create secret tls aks-ingress-tls \
