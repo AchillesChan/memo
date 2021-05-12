@@ -1,6 +1,10 @@
 =========
 
 
+https://www.golinuxcloud.com/kubernetes-autoscaling/
+stress memory ,why?
+cat <(yes | tr \\n x | head -c $((1024*1024*600))) <(sleep 120) | grep n
+
 
 https://howto.lintel.in/protect-files-overwriting-noclobber-bash/
 $ tar cf - orig | (cd dest && tar xf -)  ###faster copy small file and preserve permision
@@ -78,6 +82,10 @@ http://www.brendangregg.com/blog/index.html
 http://www.brendangregg.com/perf.html
 http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
 https://docs.microsoft.com/en-us/samples/dotnet/samples/diagnostic-scenarios/
+https://www.gokhan-gokalp.com/en/overview-of-debugging-and-profiling-net-core-applications-on-linux-1-perf-lttng/
+https://www.tessferrandez.com/blog/2021/03/18/debugging-a-netcore-memory-issue-with-dotnet-dump.html
+https://www.cnblogs.com/wu_u/p/14263349.html
+https://www.cnblogs.com/wu_u/p/14109333.html
 https://docs.microsoft.com/en-us/dotnet/core/diagnostics/debug-highcpu?tabs=linue
 # git clone https://github.com/brendangregg/FlameGraph  # or download it from github
 # cd FlameGraph

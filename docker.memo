@@ -164,7 +164,7 @@ services:
             - /usr/local/php:/code
         networks:
             - code-network
-
+    ##network_mode: host  ###set to bridge to host
 networks:
     code-network:
         driver: bridge

@@ -4,6 +4,33 @@ https://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges?ocid=
 https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
 https://docs.azure.cn/zh-cn/aks/azure-ad-integration-cli
 
+https://docs.microsoft.com/en-us/azure/aks/update-credentials#update-aks-cluster-with-new-service-principal-credentials
+update aks cluster credential
+
+$ az aks disable-addons -a monitoring -n my-cluster-name -g my-rg01
+
+$ az ad sp create-for-rbac --skip-assignment
+{
+      "appId": "7d837946-51f3-442d-174c-fd83c7c731c5",
+        "name": "7d837646-b1f3-443d-874c-fd83c7c739c",
+          "password": "a5ce33c9-9286-423d-9c83-612597c7f2f5",
+            "tenant": "a1342dc8-cd1e-4742-c467-31295469d3e5"
+}
+
+
+$ SP_ID=7d837946-51f3-442d-174c-fd83c7c731c5
+$ SP_SECRET=a5ce33c9-9286-423d-9c83-612597c7f2f5
+
+$ az aks update-credentials \
+    --resource-group myResourceGroup \
+        --name myAKSCluster \
+            --reset-service-principal \
+                --service-principal $SP_ID \
+                    --client-secret $SP_SECRET
+
+
+
+
 Allow only the outbound public IP
 $ az aks create \
     --resource-group myResourceGroup \
