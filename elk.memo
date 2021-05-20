@@ -1,3 +1,6 @@
+https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshot-restore.html#snapshot-restore
+https://qbox.io/blog/elasticsearch-data-snapshots-restore-tutorial
+
 #####docker with custom password
 https://www.elastic.co/guide/en/beats/heartbeat/current/configuring-ingest-node.html
 https://stackoverflow.com/questions/40460830/filebeat-parse-fields-from-message-line

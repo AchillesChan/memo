@@ -1,5 +1,17 @@
 ######Startmemoof zabbix.memo #######
 ######Start zabbix.memo #######
+
+##find out ip and hostname in db
+mysql> use zabbix;
+mysql> select interface.hostid,interface.ip,hosts.name from interface inner join hosts on interface.hostid=hosts.hostid;
++--------+--------------+----------------------+
+| hostid | ip           | name                 |
++--------+--------------+----------------------+
+|  70353 | 10.1.10.8    | vm-01                |
+|  90384 | 10.1.10.3    | host-jia             |
++--------+--------------+----------------------+
+
+
 https://www.zabbix.com/documentation/current/manual/installation/containers
 
 https://blog.zabbix.com/security-related-monitoring-with-zabbix/8659/ ##login,checksums,vulnerablitity scan,service,sensor,logs,ports etc
