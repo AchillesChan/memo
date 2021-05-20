@@ -100,7 +100,7 @@ Relevant Help Topics
 
 
 <<<<<<< HEAD
-Remove first N letter:
+Remove first start N letter:
 %s/^.\{0,3\}//g
 =======
 https://stackoverflow.com/questions/28421864/how-do-i-remove-first-5-characters-in-each-line-in-a-text-file-using-vi?rq=1
