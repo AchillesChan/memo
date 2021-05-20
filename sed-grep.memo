@@ -1,3 +1,13 @@
+  
+ $> sed -e 's%^[[:print:]]\{0,5\}%%g' file       ## [[:print:]] is char type,see man regex                                                                                                                     
+ 
+ $ man regex type
+ alnum   digit   punct
+ alpha   graph   space
+ blank   lower   upper
+ cntrl   print   xdigit
+
+
 
 ############replace (sed?) a single line/string in file with multiple lines (string) from another file??
 https://www.unix.com/shell-programming-and-scripting/148888-replace-sed-single-line-string-file-multiple-lines-string-another-file.html

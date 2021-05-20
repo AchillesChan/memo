@@ -101,7 +101,18 @@ Relevant Help Topics
 
 <<<<<<< HEAD
 Remove first start N letter:
-%s/^.\{0,3\}//g
+:%s/^.\{0,3\}//g
+
+:%s%^[[:print:]]\{0,5\}%%g    ## [[:print:]] is char type,see man regex
+ 
+$> sed -e 's%^[[:print:]]\{0,5\}%%g' file
+
+$ man regex type
+alnum   digit   punct
+alpha   graph   space
+blank   lower   upper
+cntrl   print   xdigit
+
 =======
 https://stackoverflow.com/questions/28421864/how-do-i-remove-first-5-characters-in-each-line-in-a-text-file-using-vi?rq=1
 How do I remove first 5 characters in each line in a text file using vi?
