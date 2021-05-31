@@ -1,5 +1,50 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+https://management.chinacloudapi.cn/subscriptions/YOURSUBID/resourceGroups/YOURRG/providers/Microsoft.ContainerService/managedClusters/YOURCLUSTERNAME?api-version=2020-09-01
+
+$> curl -X GET 'https://management.chinacloudapi.cn/subscriptions/YOUR_SUBID/resourceGroups/YOUR_RG/providers/Microsoft.ContainerService/managedClusters/YOUR_CLS_NAME?api-version=2020-09-01' \
+-H 'x-ms-client-session-id: 9cd846e92ca948eead25df1ef1792bf4'   \
+-H 'x-ms-command-name: { HubsExtension.BatchNextTick:0,ResourceMenu.resource:1}'  \
+-H 'Accept-Language: en'   \
+-H 'Authorization: Bearer YOUR_bearer_token' \       ####cp from  debug mode network batch 2nd file curl generated
+-H 'x-ms-effective-locale: en.en-us'  \
+-H 'Content-Type: application/json' \
+-H 'Accept: */*'  \
+-H 'Referer: '  \
+-H 'x-ms-client-request-id: b1016357-3a37-4504-8462-18bf32130001' \
+-H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/...'   ###from debug mode network batch 2nd file curl generated
+
+---output here---
+{                                                                                                                                                                           
+  "id": "/subscriptions/.../resourcegroups/oviders/Microsoft.ContainerService/managedClusters/          
+  "location": "chinaeast2",                                                                                                                                                 
+  "name": "..."                                                                                                                                           
+  "type": "Microsoft.ContainerService/ManagedClusters",                                                                                                                     
+  "properties": {                                                                                                                                              
+......
+   "serviceCidr": "10.0.0.0/16",
+    "dnsServiceIP": "10.0.0.10",
+    "dockerBridgeCidr": "172.17.0.1/16",
+    "outboundType": "loadBalancer"
+   },
+   "maxAgentPools": 100,
+   "apiServerAccessProfile": {
+    "enablePrivateCluster": false
+   }
+  },
+  "sku": {
+   "name": "Basic",
+   "tier": "Free"
+  }
+ }
+
+
+bash-5.0#  az aks show -g myPrjrg01 -n myPrjk8s-prd-web01  -o table    ###check status
+Name                 Location    ResourceGroup    KubernetesVersion    ProvisioningState    Fqdn
+-------------------  ----------  ---------------  -------------------  -------------------  ------------------------------------------------------------------------
+myPrjk8s-prd-web01  chinaeast2       myPrjrg01       1.18.14              Succeeded            myPrjk8s-prd-web01-dns-23da.hcp.chinaeast2.cx.prod.service.azk8s.cn
+
+
 https://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges?ocid=AID754288&wt.mc_id=azfr-c9-scottha&wt.mc_id=CFID0533
 https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
 https://docs.azure.cn/zh-cn/aks/azure-ad-integration-cli
@@ -61,6 +106,7 @@ az aks nodepool add --cluster-name  pressaks-01 \
                       --max-pods 28 \
                       --os-type Linux \
                       --node-vm-size Standard_E2s_v3 \
+                      --node-count 3 \
                       --vnet-subnet-id /subscriptions/subid/resourceGroups/press-rg01/providers/Microsoft.Network/virtualNetworks/press-vnet01/subnets/aks03
 
 ###azure cli

@@ -105,6 +105,13 @@ awk -f replace.cmd replace.value |sed  's/,/\n/g'     #####generate ssh config f
 
 #####
 
+
+###Using awk to sum the values of a column, based on the values of another column
+awk -F '|' '$1 ~ /smiths/ {sum += $3} END {print sum}' inputfilename
+awk '{sum += $2} END {print sum}' inputfilename
+https://unix.stackexchange.com/questions/242946/using-awk-to-sum-the-values-of-a-column-based-on-the-values-of-another-column
+####
+
 ###nginx findo out most access ip 
 https://www.thegeekstuff.com/2010/03/awk-arrays-explained-with-5-practical-examples/
 

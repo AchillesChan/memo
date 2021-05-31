@@ -1,4 +1,58 @@
-######Startmemoof mysql.memo #######
+######Startmemoof mysql.memo ####### 
+https://www.percona.com/blog/2020/04/23/a-simple-approach-to-troubleshooting-high-cpu-in-mysql/
+mysql> select * from performance_schema.threads where PROCESSLIST_INFO is not null\G;
+*************************** 3. row ***************************
+          THREAD_ID: 655911
+               NAME: thread/sql/one_connection
+               TYPE: FOREGROUND
+     PROCESSLIST_ID: 655886
+   PROCESSLIST_USER: zabbix
+   PROCESSLIST_HOST: 192.168.4.4
+     PROCESSLIST_DB: zabbix
+PROCESSLIST_COMMAND: Query
+   PROCESSLIST_TIME: 1
+  PROCESSLIST_STATE: Sending data
+   PROCESSLIST_INFO: SELECT DISTINCT p.eventid,p.objectid,p.clock,p.ns,p.name,p.acknowledged,p.severity FROM problem p,functions f,items i,hosts_groups hg WHERE p.source='0' AND p.object='0' AND p.objectid=f.triggerid AND f.itemid=i.itemid AND i.hostid=hg.hostid AND hg.groupid IN ('2','5') AND NOT EXISTS (SELECT NULL FROM event_suppress es WHERE es.eventid=p.eventid) AND p.r_eventid IS NULL ORDER BY p.eventid DESC
+   PARENT_THREAD_ID: NULL
+               ROLE: NULL
+       INSTRUMENTED: YES
+            HISTORY: YES
+    CONNECTION_TYPE: TCP/IP
+       THREAD_OS_ID: 87                 ###os thread id
+
+
+shell> pidstat -t -p 87 1              ####os layer view
+Average:      UID      TGID       TID    %usr %system  %guest    %CPU   CPU  Command
+Average:      999      1378         -   49.30    1.00    0.00   50.30     -  mysqld
+......
+Average:      999         -       87    49.50    0.40    0.00   49.90     -  |__mysqld
+......
+
+https://stackoverflow.com/questions/4473252/why-we-give-in-query-sql-1-0?noredirect=1
+
+https://stackoverflow.com/questions/9140606/why-would-you-use-where-1-0-statement-in-sql
+SELECT ID FROM CUST_ATTR49 WHERE 1=0
+WHERE 1=0
+Ensures that non data is sent back, so no CPU charge, no Network traffic or other resource consumption.
+
+A query like that can test for:
+
+server availability
+CUST_ATTR49 table existence
+ID column existence
+Keeping a connection alive
+Cause a trigger to fire without changing any rows (with the where clause, but not in a select query)
+manage many OR conditions in dynamic queries (e.g WHERE 1=0 OR <condition>)
+
+Another possible use: if you have a trigger on your table for e.g. DELETE you can do DELETE FROM [Table] WHERE 1 = 0 and that will cause the trigger to fire without changing any rows. Useful if for example your trigger updates other tables and you want to ensure everything's up-to-date, etc. – Boris Mar 4 '15 at 16:19 
+3
+@AndreaColleoni you should add the use where we can add 1=0 with a lot of or conditions while making a dynamic query – MozenRath Mar 12 '15 at 17:17
+
+
+
+
+
+
 https://www.percona.com/community-blog/2020/02/05/finding-mysql-scaling-problems-using-perf/
 https://severalnines.com/database-blog/what-check-if-mysql-memory-utilisation-high
 https://severalnines.com/database-blog/mysql-performance-cheat-sheet
