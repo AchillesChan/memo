@@ -1,5 +1,13 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+https://management.chinacloudapi.cn/subscriptions/YOURSUBID/resourceGroups/YOURRG/providers/Microsoft.ContainerService/managedClusters/YOURCLUSTERNAME?api-version=2020-09-01
+
+bash-5.0#  az aks show -g myPrjrg01 -n myPrjk8s-prd-web01  -o table    ###check status
+Name                 Location    ResourceGroup    KubernetesVersion    ProvisioningState    Fqdn
+-------------------  ----------  ---------------  -------------------  -------------------  ------------------------------------------------------------------------
+myPrjk8s-prd-web01  chinaeast2       myPrjrg01       1.18.14              Succeeded            myPrjk8s-prd-web01-dns-23da.hcp.chinaeast2.cx.prod.service.azk8s.cn
+
+
 https://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges?ocid=AID754288&wt.mc_id=azfr-c9-scottha&wt.mc_id=CFID0533
 https://docs.azure.cn/zh-cn/aks/azure-ad-rbac
 https://docs.azure.cn/zh-cn/aks/azure-ad-integration-cli
@@ -61,6 +69,7 @@ az aks nodepool add --cluster-name  pressaks-01 \
                       --max-pods 28 \
                       --os-type Linux \
                       --node-vm-size Standard_E2s_v3 \
+                      --node-count 3 \
                       --vnet-subnet-id /subscriptions/subid/resourceGroups/press-rg01/providers/Microsoft.Network/virtualNetworks/press-vnet01/subnets/aks03
 
 ###azure cli
