@@ -1,5 +1,23 @@
 ######Startmemoof rabbitmq-server.memo #######
 ######Start rabbitmq-server.memo #######
+
+---rabbitmq queue(s)  unresponsive timeout
+https://kb.juniper.net/InfoCenter/index?page=content&id=KB36066&showDraft=false
+
+$> rabbitmqctl list_queues -p your-queue
+
+Error: timeout, 60.0, "Some queue(s) are unresponsive, use list_unresponsive_queues command."
+
+Fix: A workaround is to ensure ports 35672 - 35682 are open in all three controllers. Enforce this with the 'iptables' command:
+
+    iptables -I INPUT 1 -p tcp --match multiport --dports 35672:35682 -j ACCEPT
+    or 
+    firewall-cmd --add-port 35672-35682/tcp --perm && firewall-cmd --reload
+
+
+---rabbitmq queue(s)  unresponsive timeout
+
+
 install rabbitmq on centos centOs6.7/7.3
 ##set 05
 disable selinux ########fuck
