@@ -73,19 +73,6 @@ sizes: |-
 
 15 template
 {{/* Generate basic labels */}}      ###define,globally shared.
-  name: silly-snake-configmap
-data:
-  salad: caesar
-
----
-# Source: mychart/charts/mysubchart/templates/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: silly-snake-cfgmap2
-data:
-  dessert: ice cream
-  salad: caesar
 {{- define "mychart.labels" }}
   labels:
     generator: helm
@@ -94,8 +81,18 @@ data:
     version: {{ .Chart.Version }}
 {{- end }}
 
-{{- template "mychart.labels" . }}   ###call from name
-##Note that we pass . at the end of the template call. We could just as easily pass .Values or .Values.favorite or whatever scope we want. But what we want is the top-level scope.
+---
+# Source: mychart/charts/mysubchart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: silly-snake-cfgmap2
+  {{- template "mychart.labels" . }}   ###call from name
+  ##Note that we pass . at the end of the template call. We could just as easily pass .Values or .Values.favorite or whatever scope we want. But what we want is the top-level scope.
+data:
+  dessert: ice cream
+  salad: caesar
+
 
 {{ include "mychart.app" . | indent 2 }}   ###use include instead of template (last)
 #It is considered preferable to use include over template in Helm templates simply so that the output formatting can be handled better for YAML documents.
