@@ -1,3 +1,4 @@
+https://www.squadcast.com/blog/infrastructure-monitoring-using-kube-prometheus-operator
 https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
 https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 https://blog.pvincent.io/2017/12/prometheus-blog-series-part-5-alerting-rules/
@@ -73,6 +74,30 @@ https://blog.lwolf.org/post/how-to-build-tiny-golang-docker-images-with-gitlab-c
 https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autodeploy-to-kubernetes-using-gitlab-and-helm/
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
+
+
+##use azure-file on kubernetes
+https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
+--checked on bitnami mariadb,mongodb;mongodb passed on recreate ,maridb not passed 
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: my-azurefile
+provisioner: kubernetes.io/azure-file
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1001                 ###your pod uid
+  - gid=1001                 ###your pod gid
+  - mfsymlinks
+  - cache=strict
+  - actimeo=30
+parameters:
+  skuName: Standard_LRS
+
+--set at least 100GB for pod ##??
+
 
 #https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###reate Kubernetes secret for the TLS certificate
 $>  kubectl create secret tls aks-ingress-tls \

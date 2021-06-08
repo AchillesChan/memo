@@ -7,7 +7,7 @@ cat <(yes | tr \\n x | head -c $((1024*1024*600))) <(sleep 120) | grep n
 
 
 https://howto.lintel.in/protect-files-overwriting-noclobber-bash/
-$ tar cf - orig | (cd dest && tar xf -)  ###faster copy small file and preserve permision
+$ tar cf - orig | (cd dest && tar xf -)  ###faster copy small file and preserve permision than common cp command
 
 $ mktemp --dry-run /tmp/poc.XXX   ###create temp file,XXX denote length
 /tmp/poc.GrW
