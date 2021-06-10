@@ -1,3 +1,7 @@
+PostgreSQL
+https://www.tutorialspoint.com/postgresql/postgresql_quick_guide.htm
+
+
 ######Startmemoof mysql.memo ####### 
 https://www.percona.com/blog/2020/04/23/a-simple-approach-to-troubleshooting-high-cpu-in-mysql/
 mysql> select * from performance_schema.threads where PROCESSLIST_INFO is not null\G;
@@ -3285,6 +3289,14 @@ delimiter ;
 $>测试不需要了
 $>call insert_salgrade(10000,1000000);
 
+--list storage procedure
+SELECT 
+    routine_name
+FROM
+    information_schema.routines
+WHERE
+    routine_type = 'PROCEDURE'
+        AND routine_schema = '<database_name>';
 
 游标设计
 
