@@ -4,13 +4,13 @@
 ####c embedding python###
 https://dev.to/erikwhiting88/how-to-use-c-functions-in-python-7do
 
-$ cat cfactorial.c 
+$ cat cfactorial.c
 long factorial(int user_input) {
   long return_val = 1;
   long int i;
   if (user_input <= 0) {
     return -1;
-        }  
+        }
   else {
     for (i = 1; i <= user_input; i++) {
       return_val *= i;
@@ -41,19 +41,19 @@ $ gcc -fPIC -shared -o cfactorial.so cfactorial.c
 
 
 $ ls cfa* pyfactorial.py
-cfactorial.c  cfactorial.so  pyfactorial.py                               
+cfactorial.c  cfactorial.so  pyfactorial.py
 
-$ python 
-Python 2.7.5 (default, Nov  6 2016, 00:28:07) 
+$ python
+Python 2.7.5 (default, Nov  6 2016, 00:28:07)
 [GCC 4.8.5 20150623 (Red Hat 4.8.5-11)] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import pyfactorial as pf
 >>> pf.factorial(3)
 6
->>> pf.factorial(9) 
+>>> pf.factorial(9)
 362880
->>> pf.factorial(-2)                                                                                                                                                                                                                       
-'C Function failed, check inputs' 
+>>> pf.factorial(-2)
+'C Function failed, check inputs'
 
 ####c embedding python###
 
@@ -351,6 +351,13 @@ else:
 
 ##############mysql operation
 ############http://www.runoob.com/python/python-mysql.html
+--install modle
+$> pip install MySQL-python
+or
+$> yum install MySQL-python
+
+
+
 import MySQLdb
 # 打开数据库连接
 db = MySQLdb.connect("server_ip_or_host","user","pwd","DB_name" )
@@ -441,6 +448,24 @@ except:
 
 # 关闭数据库连接
 db.close()
+
+
+
+
+###call procedure
+cat callmysqlproc.py |grep -v '#'
+###https://pythonmana.com/2021/06/20210603215645724b.html
+import MySQLdb
+db = MySQLdb.connect("192.168.8.15","root","pwd","database")
+cursor = db.cursor()
+cursor.callproc('select_vm_info',args=('172.30.3.10',))
+res1=cursor.fetchall()
+print(res1)
+data = cursor.fetchone()
+print "Database version : %s " % data
+cursor.close()
+db.close()
+
 
 #####get full path and name ###########
 https://stackabuse.com/python-list-files-in-a-directory/
