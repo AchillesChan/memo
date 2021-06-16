@@ -139,7 +139,7 @@ spec:
   - port: 80
   selector:
     run: php-apache
-
+---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
