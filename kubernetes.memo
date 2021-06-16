@@ -79,6 +79,8 @@ https://koudingspawn.de/kubernetes-autoscaling/
 
 ###hpa autosacling
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+https://granulate.io/kubernetes-autoscaling-the-hpa/
+http://www.iceyao.com.cn/2020/05/20/K8s-hpa-implement_principle/
 
 $> cat Dockerfile.yaml
 FROM php:5-apache
@@ -120,8 +122,10 @@ spec:
         resources:
           limits:
             cpu: 500m
+			memory: 200Mi
           requests:
             cpu: 200m
+			memory: 100Mi
 ---
 apiVersion: v1
 kind: Service
@@ -135,7 +139,7 @@ spec:
   - port: 80
   selector:
     run: php-apache
----
+
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -150,6 +154,32 @@ spec:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 50
 
+
+#---
+#apiVersion: autoscaling/v2beta2     ###support cpu/mem 
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: php-apache
+#  namespace: poc
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: php-apache
+#  minReplicas: 1
+#  maxReplicas: 10
+#  - type: Resource
+#    resource:
+#      name: cpu
+#      target:
+#        type: Utilization
+#        averageUtilization: 50
+#  - type: Resource
+#    resource:
+#      name: memory
+#      target:
+#        type: AverageValue
+#        averageValue: 100Mi
 
 
 $> kubectl apply -f php-apache.yaml
