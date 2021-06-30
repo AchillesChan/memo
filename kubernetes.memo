@@ -230,7 +230,7 @@ parameters:
 --set at least 100GB for pod ##??
 
 
-#https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###reate Kubernetes secret for the TLS certificate
+#https://docs.microsoft.com/en-us/azure/aks/ingress-own-tls     ###create Kubernetes secret for the TLS certificate
 $>  kubectl create secret tls aks-ingress-tls \
     --namespace ingress-basic \
     --key aks-ingress-tls.key \

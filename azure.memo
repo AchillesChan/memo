@@ -1,5 +1,41 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+---resize disk size
+https://docs.microsoft.com/en-us/azure/virtual-machines/linux/expand-disks
+1. update size on portal disk item-->size+performance-->change size(need stop vm or release disk from vm)
+2. start vm 
+$ sudo umount /dev/sdc1
+
+$ sudo parted /dev/sdc
+
+GNU Parted 3.2
+Using /dev/sdc1
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) print
+Model: Unknown Msft Virtual Disk (scsi)
+Disk /dev/sdc1: 215GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: loop
+Disk Flags:
+
+Number  Start  End    Size   File system  Flags
+    1      0.00B  107GB  107GB  ext4
+
+    (parted) resizepart
+    Partition number? 1
+    End?  [107GB]? 215GB
+
+$ sudo e2fsck -f /dev/sdc1
+
+$ sudo resize2fs /dev/sdc1
+or sudo xfs_growfs /dev/sdc1 (xfs need mount to datadir first)
+
+$ sudo mount /dev/sdc1 /datadrive
+
+
+---resize disk size
+
+
 https://management.chinacloudapi.cn/subscriptions/YOURSUBID/resourceGroups/YOURRG/providers/Microsoft.ContainerService/managedClusters/YOURCLUSTERNAME?api-version=2020-09-01
 
 $> curl -X GET 'https://management.chinacloudapi.cn/subscriptions/YOUR_SUBID/resourceGroups/YOUR_RG/providers/Microsoft.ContainerService/managedClusters/YOUR_CLS_NAME?api-version=2020-09-01' \
