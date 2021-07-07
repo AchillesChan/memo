@@ -40,6 +40,9 @@ https://www.sudo.ws/alerts/unescape_overflow.html
 sudoedit -s '\' `perl -e 'print "A" x 65536'`
 If you receive a usage or error message, sudo is not vulnerable. If the result is a Segmentation fault, sudo is vulnerable.
 
+fix:
+$ sudo yum update -y sudo.x86_64
+
 ###disable su cmd
 https://www.cyberciti.biz/tips/restrict-the-use-of-su-command.html
 $ vi /etc/pam.d/su

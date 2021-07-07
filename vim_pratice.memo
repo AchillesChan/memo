@@ -1,6 +1,18 @@
 ######Startmemoof vim.memo #######
 ######Start vim.memo #######
 ###fold
+---add suffix to a txt
+$ cat a
+  a1.txt
+  a2.b2.txt
+
+%s:\( [[:alnum:]]\+\):\1-2021:g   ###edit cmd 1
+:%s:\( [a-z0-9]\+\):\1-2021:g  ###or edit cmd  2
+  a1-2021.txt                 ###result
+  a2-2021.b2.txt
+
+
+
 https://vim.fandom.com/wiki/Folding
 The command zc will close a fold (if the cursor is in an open fold), and zo will open a fold (if the cursor is in a closed fold). It's easier to just use za which will toggle the current fold (close it if it was open, or open it if it was closed).
 
