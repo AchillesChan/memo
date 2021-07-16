@@ -1,3 +1,5 @@
+https://codersociety.com/blog/articles/helm-best-practices
+
 ###glob nginx config
 $ cat nginx.conf     ###key                                                                                                                                 
 user nginx;                                                                                                                                                                                  

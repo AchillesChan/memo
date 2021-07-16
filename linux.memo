@@ -1559,6 +1559,15 @@ $> sudo systemctl restart zabbix-agent
 $> sudo ufw allow 10050/tcp
 
 
+70 download package 
+$> apt-get install --download-only pppoe
+$> ls /var/cache/apt/archives/        ###saved path
+$> cp to offline path /var/cache/apt/archives/
+$> cd /var/cache/apt/archives/ && sudo  dpkg -i *
+
+or--
+dpkg -l | grep "^ii"|grep vim| xargs sudo apt-get -y --force-yes install --reinstall --download-only
+
 ###ubuntu basic
 
 

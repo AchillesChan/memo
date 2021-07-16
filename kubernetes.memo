@@ -44,6 +44,8 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://theojulienne.io/2019/07/06/debugging-network-latency-kubernetes.html
 https://severalnines.com/database-blog/running-proxysql-kubernetes-service
 https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline
+https://gist.github.com/onuryilmaz/89a29261652299d7cf768223fd61da02#download-kubernetes-rpms
+https://www.techrepublic.com/article/how-to-quickly-install-kubernetes-on-ubuntu/
 https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#optional-cluster-services
 https://kubernetes.io/docs/concepts/cluster-administration/logging/
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
