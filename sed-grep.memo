@@ -1,4 +1,19 @@
+--copy /move file to new destination with new prefix/suffix
+$ find ./ -type f|tail -n 3
+./web/templates/serviceaccount.yaml
+./web/templates/tests/test-connection.yaml
+
+$ find ./ -type f|sed -e 's:\.\/::g'|sed -e 's:\(^.*/\)\(.*\):\1 \2:g'|tail -n 3
+web/templates/ serviceaccount.yaml
+web/templates/tests/ test-connection.yaml
+
+$ find ./ -type f|sed -e 's:\.\/::g'|sed -e 's:\(^.*/\)\(.*\):\1 \2:g'|tail -n 3|xargs -P 1 -n 2 sh -c 'echo mv $1$2 /home/NEW-FOLDER/$1NEW-PREFIX-$2' _
+mv web/templates/serviceaccount.yaml /home/NEW-FOLDER/web/templates/NEW-PREFIX-serviceaccount.yaml
+mv web/templates/tests/test-connection.yaml /home/NEW-FOLDER/web/templates/tests/NEW-PREFIX-test-connection.yaml
+
  
+--copy /move file to new destination with new prefix/suffix
+
 --rename a file with specfic suffix
 $ echo '                       
 b1.b2
