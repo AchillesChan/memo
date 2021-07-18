@@ -1,3 +1,13 @@
+https://stackoverflow.com/questions/1103149/non-greedy-reluctant-regex-matching-in-sed
+Neither basic nor extended Posix/GNU regex recognizes the non-greedy quantifier; you need a later regex. Fortunately, Perl regex for this context is pretty easy to get:
+$> echo "
+http://www.suepearson.co.uk/product/174/71/3816/"|perl -pe 's|(http://.*?/).*|\1|'
+
+http://www.suepearson.co.uk/
+
+find ./ -type f|sed -e 's:\.\/::g'|perl -pe 's%(^.*?/)(.*)$%\1 \2%'
+
+
 --copy /move file to new destination with new prefix/suffix
 $ find ./ -type f|tail -n 3
 ./web/templates/serviceaccount.yaml
