@@ -40,24 +40,27 @@ spec:
                 value: zabbix
               - name: MYSQL_USER
                 value: zabbix
+              - name: MYSQL_PASSWORD
+                value: zabbix
               - name: MYSQL_ROOT_PASSWORD 
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Release.Name }} 
+                    name: {{ .Release.Name }}-db 
                     key: ROOT_PASSWORD 
- 
           ports:
-            - name: http
-              containerPort: 80
+            - name: db 
+              containerPort: 3306
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+            periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

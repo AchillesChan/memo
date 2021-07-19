@@ -8,8 +8,8 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: 3306
       protocol: TCP
-      name: http
+      name: mysql 
   selector:
     {{- include "db.selectorLabels" . | nindent 4 }}

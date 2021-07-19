@@ -36,16 +36,16 @@ spec:
           env:
               - name: DB_SERVER_HOST
                 value: {{ .Release.Name }}-db
-              - name: ZBX_SERVER_HOST
-                value: {{ .Release.Name }}-server 
-              - name: PHP_TZ
-                value: Asia/Shanghai
+              - name: MYSQL_USER
+                value: zabbix
               - name: MYSQL_DATABAS
                 value: zabbix 
               - name: MYSQL_PASSWORD
                 value: zabbix
-              - name: MYSQL_USER
-                value: zabbix
+              - name: ZBX_SERVER_HOST
+                value: {{ .Release.Name }}-server 
+              - name: PHP_TZ
+                value: Asia/Shanghai
               - name: MYSQL_ROOT_PASSWORD 
                 valueFrom:
                   secretKeyRef:
