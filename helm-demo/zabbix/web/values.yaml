@@ -100,7 +100,7 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
-        - key: app 
+        - key: app          ##KEY-V,FROM app.kubernetes.io/name=web  
           operator: In 
           values:
           - web 
