@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: yourhub.com/it/mysql 
+  repository: hub.com/mysql 
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "5.7"
