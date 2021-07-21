@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 4 
+replicaCount: 6 
 
 image:
   repository: hub.com/zabbix-web-apache-mysql 
@@ -13,6 +13,8 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+custom_label:
+    roleGroup: webGrp01        ###custom define label for affinity using
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -58,17 +60,18 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:         ###Guaranteed if limits eq requests
+    cpu: 200m     ###Burstable if set limits and requests
+    memory: 512Mi
+  requests:       ###BestEffort if not set any limits and request
+    cpu: 100m
+    memory: 128Mi
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  enabled: true 
+  minReplicas: 4
+  maxReplicas: 9
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
@@ -76,32 +79,34 @@ nodeSelector: {}
 
 #tolerations: []
 tolerations:
-  - key: projA 
+  - key: projA              ###will schedule to node with kv:ProjA NoSchedule 
     effect: NoSchedule
     operator: Exists
   - key: env
     effect: NoSchedule
     operator: Exists
  
-#affinity: {}
-#affinity:
-#  podAffinity:
-#    requiredDuringSchedulingIgnoredDuringExecution:
-#    - labelSelector:
-#        matchExpressions:
-#        - key: app 
-#          operator: In 
-#          values:
-#          - web 
-#      topologyKey: kubernetes.io/hostname
-
+affinity: {}           ####take effect only if reschedule even delete/create?
 affinity:
-  podAntiAffinity:
+  podAffinity:                         ###will schedule to node with app.kubernetes.io/role=webGrp01 
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
-        - key: app          ##KEY-V,FROM app.kubernetes.io/name=web  
+        - key: app.kubernetes.io/role  #####custom define on pod 
           operator: In 
           values:
-          - web 
-      topologyKey: app.kubernetes.io/hostname
+          - webGrp01                   #####custom define on pod
+      topologyKey: kubernetes.io/hostname    ####define on node
+  podAntiAffinity:                ###will NOT schedule to node with app.kubernetes.io/name=server AND app.kubernetes.io/name=db
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name  ####pre-defined by cluster on pod 
+          operator: In 
+          values:
+          - server                     ####pre-defined by cluster on pod
+        - key: app.kubernetes.io/name  ####the 2nd podAntiAffinity 
+          operator: In 
+          values:
+          - db 
+      topologyKey: kubernetes.io/hostname

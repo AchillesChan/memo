@@ -4,6 +4,7 @@ metadata:
   name: {{ include "web.fullname" . }}
   labels:
     {{- include "web.labels" . | nindent 4 }}
+    app.kubernetes.io/role:  {{ .Values.custom_label.roleGroup }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -19,6 +20,7 @@ spec:
     {{- end }}
       labels:
         {{- include "web.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/role:  {{ .Values.custom_label.roleGroup }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

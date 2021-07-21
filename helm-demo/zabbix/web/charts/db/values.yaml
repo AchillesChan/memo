@@ -64,6 +64,13 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+#resources:
+#  limits:
+#    cpu: 200m
+#    memory: 512Mi
+#  requests:
+#    cpu: 200m
+#    memory: 512Mi
 
 autoscaling:
   enabled: false
