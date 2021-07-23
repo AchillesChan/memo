@@ -1,13 +1,14 @@
 $ helm -n poc install zbx ./ -f values.yaml
 
-$ kubectl -n poc get pod -o wide 
-NAME                        READY   STATUS    RESTARTS   AGE     IP             NODE               NOMINATED NODE   READINESS GATES    QoS(from LENS)
-zbx-db-5c569b5d86-jhcjn       1/1     Running   0          3m7s    10.244.1.222   srv-cd-k8snode01   <none>           <none>           BestEffort
-zbx-server-74d4945fd5-6jkf9   1/1     Running   0          3m7s    10.244.4.201   srv-cd-k8snode02   <none>           <none>           Guaranteed
-zbx-web-7fcd98d9f6-66mw2      1/1     Running   0          2m51s   10.244.8.126   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-cw5h4      1/1     Running   0          3m7s    10.244.8.123   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-ln6sh      1/1     Running   0          2m51s   10.244.8.125   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-tvvsg      1/1     Running   0          2m51s   10.244.8.124   srv-cd-k8snode8    <none>           <none>           Burstable
+
+$ kubectl get po -n poc -o wide    ###web antiaffinity db,and web affinity server,node blk-pool-node000000 no pod being scheduled  
+NAME                                      READY   STATUS    RESTARTS   AGE   IP           NODE
+ekrzbxo5dd-k5ks-db-64f9867899-6nvxw       0/1     Running   0          19s   10.0.1.71    blk-pool-node000001             ###DB POD
+ekrzbxo5dd-k5ks-server-579b95578c-bpvh9   0/1     Running   0          19s   10.0.1.110   blk-pool-node000002             ###SERVER POD
+ekrzbxo5dd-k5ks-server-579b95578c-rrhjg   0/1     Running   0          19s   10.0.1.88    blk-pool-node000001             ###SERVER POD 
+ekrzbxo5dd-k5ks-web-777dcdc759-4m6cs      0/1     Running   0          3s    10.0.1.109   blk-pool-node000002             ###AFFINITY SERVER NODE BUT DB NOD 
+ekrzbxo5dd-k5ks-web-777dcdc759-7rxj7      0/1     Running   0          19s   10.0.1.133   blk-pool-node000002             ###AFFINITY SERVER NODE BUT DB NOD
+ekrzbxo5dd-k5ks-web-777dcdc759-ch84g      0/1     Running   0          3s    10.0.1.113   blk-pool-node000002             ###AFFINITY SERVER NODE BUT DB NOD
 
 $ helm -n poc upgrade zbx ./ -f values.yaml    ####sometime reschedule not take effect on podAffinity/PodAntiaffinity ???
 

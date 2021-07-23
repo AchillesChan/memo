@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{},"name":"wordpress-ingress","namespace":"default"},"spec":{"rules":[{"host":"adan.bar.com","http":{"paths":[{"backend":{"service":{"name":"akrwp-1153-0723-wordpress","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+  creationTimestamp: "2021-07-23T04:18:10Z"
+  generation: 1
+  managedFields:
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:spec:
+        f:rules: {}
+    manager: kubectl
+    operation: Update
+    time: "2021-07-23T04:18:10Z"
+  - apiVersion: networking.k8s.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: nginx-ingress-controller
+    operation: Update
+    time: "2021-07-23T06:02:36Z"
+  name: prometheus-ingress
+  namespace: default
+  resourceVersion: "454918"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/ingresses/wordpress-ingress
+  uid: bc4036cd-4a01-4c49-b472-6803282440b3
+spec:
+  rules:
+  - host: sl.bar.com
+    http:
+      paths:
+      - backend:
+          serviceName: akr-promethus-stack-1746-0723-grafana 
+          servicePort: 80
+        path: /
+        pathType: Prefix

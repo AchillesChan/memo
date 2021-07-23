@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 6 
+replicaCount: 3 
 
 image:
   repository: hub.com/zabbix-web-apache-mysql 
@@ -70,8 +70,8 @@ resources:
 
 autoscaling:
   enabled: true 
-  minReplicas: 4
-  maxReplicas: 9
+  minReplicas: 3
+  maxReplicas: 23
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
@@ -88,23 +88,19 @@ tolerations:
  
 affinity: {}           ####take effect only if reschedule even delete/create?
 affinity:
-  podAffinity:                         ###will schedule to node with app.kubernetes.io/role=webGrp01 
+  podAffinity:                         ###will schedule to node with app.kubernetes.io/role=server
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
-        - key: app.kubernetes.io/role  #####custom define on pod 
+        - key: app.kubernetes.io/name  #####custom define on pod 
           operator: In 
           values:
-          - webGrp01                   #####custom define on pod
+          - server                   #####custom define on pod
       topologyKey: kubernetes.io/hostname    ####define on node
   podAntiAffinity:                ###will NOT schedule to node with app.kubernetes.io/name=server AND app.kubernetes.io/name=db
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
-        - key: app.kubernetes.io/name  ####pre-defined by cluster on pod 
-          operator: In 
-          values:
-          - server                     ####pre-defined by cluster on pod
         - key: app.kubernetes.io/name  ####the 2nd podAntiAffinity 
           operator: In 
           values:
