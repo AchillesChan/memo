@@ -1,0 +1,9 @@
+install zabbix 
+include:
+readiness and liveness
+init-container
+affinity/antiaffinity(web)
+storageclass (db)
+
+helm -n poc install gn1101 ./ -f values.yaml
+helm -n poc upgrade gn1101 ./ -f values.yaml

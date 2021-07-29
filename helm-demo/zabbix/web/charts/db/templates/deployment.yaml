@@ -52,15 +52,24 @@ spec:
               containerPort: 3306
               protocol: TCP
           readinessProbe:
-            tcpSocket:
-              port: 3306
+            exec:
+              command:
+              - sh
+              - -c
+              - "mysqladmin ping -u root -pmy-super-secret-password"
             initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
           livenessProbe:
             tcpSocket:
               port: 3306
             initialDelaySeconds: 30
             periodSeconds: 10
+          volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/mysql
+          - name: db-cnf
+            mountPath: /etc/mysql/conf.d 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -75,3 +84,26 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: db-cnf
+          configMap:
+            name: mysql-config  ###not helm control
+        {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
+        - name: custom-htaccess
+          configMap:
+            name: {{ template "db.customHTAccessCM" . }}
+            items:
+              - key: db-htaccess.conf
+                path: db-htaccess.conf
+        {{- end }}
+        - name: db-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "db.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "db.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+

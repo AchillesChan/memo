@@ -84,3 +84,19 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+persistence:    ###storage segment
+  enabled: true 
+   ## wordpress data Persistent Volume Storage Class
+   ## If defined, storageClassName: <storageClass>
+   ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  storageClassName: "nfs-storageclasssc01retain" 
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using
+   ## the existingClaim variable
+   # existingClaim: your-claim
+   ## 
+   ## To use the /admin portal and to ensure you can scale wordpress you need to provide a
+   ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
+   ## We recommend that you install the nfs provisioner and map it to a RWO volume
+  accessMode: ReadWriteOnce
+  size: 15Gi
+
