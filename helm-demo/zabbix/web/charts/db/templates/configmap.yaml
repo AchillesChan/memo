@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  my.cnf: |-
+{{ .Files.Get "my.cnf" | indent 4}}

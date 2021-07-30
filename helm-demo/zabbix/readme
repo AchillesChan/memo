@@ -5,5 +5,11 @@ init-container
 affinity/antiaffinity(web)
 storageclass (db)
 
+###conditionally install subchart
+https://stackoverflow.com/questions/54032974/helm-conditionally-install-subchart
+Chart.yaml and values.yaml
+
+setup global imageCredentials(web)
+
 helm -n poc install gn1101 ./ -f values.yaml
 helm -n poc upgrade gn1101 ./ -f values.yaml

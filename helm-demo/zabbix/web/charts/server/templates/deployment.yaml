@@ -20,16 +20,18 @@ spec:
       labels:
         {{- include "server.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Release.Name }}-imagepullsecrets
+#      {{- with .Values.imagePullSecrets }}
+#      imagePullSecrets:
+#        {{- toYaml . | nindent 8 }}
+#      {{- end }}
       serviceAccountName: {{ include "server.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init-server
-          image: hub.com/busybox:1.33
+          image: myhub.com/busybox:1.33
           command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-db 3306; do echo waiting for {{ .Release.Name }}-db 3306 port; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}

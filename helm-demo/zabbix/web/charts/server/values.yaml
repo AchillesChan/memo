@@ -5,8 +5,8 @@
 replicaCount: 3
 
 image:
-  repository: hub.com/zabbix-server-mysql 
-  pullPolicy: IfNotPresent
+  repository: myhub.com/zabbix-server-mysql 
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "4.4.3"
 

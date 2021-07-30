@@ -77,7 +77,9 @@ https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autod
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
 
-
+###https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'   ###set non-default
+kubectl patch storageclass gold -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'        ###set default
 
 ###hpa autosacling
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/

@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: hub.com/mysql 
-  pullPolicy: IfNotPresent
+  repository: myhub.com/mysql 
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "5.7"
 
@@ -85,7 +85,7 @@ tolerations: []
 
 affinity: {}
 persistence:    ###storage segment
-  enabled: true 
+  enabled: false 
    ## wordpress data Persistent Volume Storage Class
    ## If defined, storageClassName: <storageClass>
    ## If set to "-", storageClassName: "", which disables dynamic provisioning

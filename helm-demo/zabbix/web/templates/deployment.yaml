@@ -22,19 +22,21 @@ spec:
         {{- include "web.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/role:  {{ .Values.custom_label.roleGroup }}
     spec:
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Release.Name }}-imagepullsecrets
+#      {{- with .Values.imagePullSecrets }}
+#      imagePullSecrets:
+#        {{- toYaml . | nindent 8 }}
+#      {{- end }}
       serviceAccountName: {{ include "web.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init-server-web
-          image: hub.com/busybox:1.33
+          image: myhub.com/busybox:1.33
           command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-server 10051; do echo waiting for {{ .Release.Name }}-server 10051 port; sleep 2; done;']
         - name: init-server-db
-          image: hub.com/busybox:1.33
+          image: myhub.com/busybox:1.33
           command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-db 3306; do echo waiting for {{ .Release.Name }}-server 3306 port; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}

@@ -151,6 +151,9 @@ Another solution is to join consecutive lines found between non-blank lines.
 
 :v/\S/,/\S/-j
 
+%s:H \(.*\):H \L\1:g  ###replace back reference to lowercase            (H ABC-d=>H abc-d)
+%s:H \(.*\):H \u\1:g  ###replace back reference to first character      (H ABC-d=>H Abc-d)
+
 %s#Hostname\(\s\+\)\(\w\+.*$\)#Hostname\ \U\2#g   ###replace back reference to upper
 :%s:\n: :g                    ###replace newline with space,\n is null char,hex is 0x00
 :%s:\(^.*$\):\1\1:c                              ###repeat whole line  

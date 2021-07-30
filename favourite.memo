@@ -1,4 +1,9 @@
 ######Start favourite.memo #######
+performance and debug(netcore c# memory cpu fireflame)
+https://docs.microsoft.com/en-us/samples/dotnet/samples/diagnostic-scenarios/
+https://devblogs.microsoft.com/dotnet/collecting-net-core-linux-container-cpu-traces-from-a-sidecar-container/
+https://docs.microsoft.com/en-us/dotnet/core/diagnostics/debug-highcpu
+
 https://4sysops.com/archives/three-ways-to-update-vmware-vcenter-server-appliance-vcsa/
 https://kb.vmware.com/s/article/2069041
 https://kb.vmware.com/s/article/2147144

@@ -20,10 +20,12 @@ spec:
       labels:
         {{- include "db.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+#      {{- with .Values.imagePullSecrets }}
+#      imagePullSecrets:
+#        {{- toYaml . | nindent 8 }}
+#      {{- end }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Release.Name }}-imagepullsecrets
       serviceAccountName: {{ include "db.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -68,7 +70,7 @@ spec:
           volumeMounts:
           - name: db-data
             mountPath: /var/lib/mysql
-          - name: db-cnf
+          - name: {{ .Release.Name }}-db-cnf
             mountPath: /etc/mysql/conf.d 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -85,9 +87,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: db-cnf
+        - name: {{ .Release.Name }}-db-cnf
           configMap:
-            name: mysql-config  ###not helm control
+            name: {{ .Release.Name }}-configmap 
         {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
         - name: custom-htaccess
           configMap:
