@@ -4,6 +4,8 @@ readiness and liveness
 init-container
 affinity/antiaffinity(web)
 storageclass (db)
+configmap(db)
+ingress(web)
 
 ###conditionally install subchart
 https://stackoverflow.com/questions/54032974/helm-conditionally-install-subchart
