@@ -1,3 +1,11 @@
+https://istio.io/latest/docs/setup/install/helm/
+https://www.padok.fr/en/blog/traefik-kubernetes-certmanager
+https://kompose.io/    ###convert docker-compose.yaml to kubernete.yaml
+https://doc.traefik.io/traefik/v1.7/user-guide/kubernetes/
+https://www.padok.fr/en/blog/traefik-kubernetes-certmanager
+https://doc.traefik.io/traefik/providers/kubernetes-ingress/
+https://medium.com/@geraldcroes/kubernetes-traefik-101-when-simplicity-matters-957eeede2cf8
+https://github.com/traefik/traefik
 https://www.squadcast.com/blog/infrastructure-monitoring-using-kube-prometheus-operator
 https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
 https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/

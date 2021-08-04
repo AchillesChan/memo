@@ -1,3 +1,10 @@
+kubectl apply -f dashboard-ingress.yaml
+helm install -n traefik traefik ./  -f values.yaml
+kubectl apply -f dashboard-ingress.yaml
+access 2048.padok.fr with change yours DNS 
+kubectl apply -f ingress.yaml  ###add other ingress used by traefik 
+
+
 https://medium.com/@deepeshtripathi/service-autodiscovery-using-traefik-for-docker-containers-6f3f2ef4f1e1
 https://www.padok.fr/en/blog/traefik-kubernetes-certmanager
 https://gist.github.com/bozdoz/f737867cafaa45193ed0a1f218997a38

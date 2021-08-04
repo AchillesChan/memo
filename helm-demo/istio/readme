@@ -1,0 +1,10 @@
+  https://istio.io/latest/docs/setup/install/helm/#migrating-from-non-helm-installations
+
+  curl -L https://istio.io/downloadIstio | sh -
+  kubectl create ns istio-system
+  kubectl get ns
+  cd istio-1.10.3/
+  helm install istio-base manifests/charts/base -n istio-system --set global.jwtPolicy=first-party-jwt
+  helm install istiod manifests/charts/istio-control/istio-discovery     -n istio-system --set global.jwtPolicy=first-party-jwt
+  helm install istio-ingress manifests/charts/gateways/istio-ingress -n istio-system  --set global.jwtPolicy=first-party-jwt
+  helm install istio-egress manifests/charts/gateways/istio-egress -n istio-system  --set global.jwtPolicy=first-party-jwt
