@@ -1,5 +1,5 @@
 apiVersion: v2
-name: web
+name: my-web
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -22,7 +22,7 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 1.16.0
 dependencies:
-- name: server
-  condition: server.enabled
-- name: db
-  condition: db.enabled
+- name: my-server
+  condition: my-server.enabled
+- name: my-db
+  condition: my-db.enabled

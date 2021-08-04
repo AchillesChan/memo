@@ -2,12 +2,12 @@ $ helm -n poc install zbx ./ -f values.yaml
 
 $ kubectl -n poc get pod -o wide 
 NAME                        READY   STATUS    RESTARTS   AGE     IP             NODE               NOMINATED NODE   READINESS GATES    QoS(from LENS)
-zbx-db-5c569b5d86-jhcjn       1/1     Running   0          3m7s    10.244.1.222   srv-cd-k8snode01   <none>           <none>           BestEffort
-zbx-server-74d4945fd5-6jkf9   1/1     Running   0          3m7s    10.244.4.201   srv-cd-k8snode02   <none>           <none>           Guaranteed
-zbx-web-7fcd98d9f6-66mw2      1/1     Running   0          2m51s   10.244.8.126   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-cw5h4      1/1     Running   0          3m7s    10.244.8.123   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-ln6sh      1/1     Running   0          2m51s   10.244.8.125   srv-cd-k8snode8    <none>           <none>           Burstable
-zbx-web-7fcd98d9f6-tvvsg      1/1     Running   0          2m51s   10.244.8.124   srv-cd-k8snode8    <none>           <none>           Burstable
+zbx-my-db-5c569b5d86-jhcjn       1/1     Running   0          3m7s    10.244.1.222   srv-cd-k8snode01   <none>           <none>           BestEffort
+zbx-my-server-74d4945fd5-6jkf9   1/1     Running   0          3m7s    10.244.4.201   srv-cd-k8snode02   <none>           <none>           Guaranteed
+zbx-my-web-7fcd98d9f6-66mw2      1/1     Running   0          2m51s   10.244.8.126   srv-cd-k8snode8    <none>           <none>           Burstable
+zbx-my-web-7fcd98d9f6-cw5h4      1/1     Running   0          3m7s    10.244.8.123   srv-cd-k8snode8    <none>           <none>           Burstable
+zbx-my-web-7fcd98d9f6-ln6sh      1/1     Running   0          2m51s   10.244.8.125   srv-cd-k8snode8    <none>           <none>           Burstable
+zbx-my-web-7fcd98d9f6-tvvsg      1/1     Running   0          2m51s   10.244.8.124   srv-cd-k8snode8    <none>           <none>           Burstable
 
 $ helm -n poc upgrade zbx ./ -f values.yaml    ####sometime reschedule not take effect on podAffinity/PodAntiaffinity ???
 

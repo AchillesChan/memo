@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "web.fullname" . }}
+  name: {{ include "my-web.fullname" . }}
   labels:
-    {{- include "web.labels" . | nindent 4 }}
+    {{- include "my-web.labels" . | nindent 4 }}
     app.kubernetes.io/role:  {{ .Values.custom_label.roleGroup }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
@@ -11,7 +11,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{- include "web.selectorLabels" . | nindent 6 }}
+      {{- include "my-web.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "web.selectorLabels" . | nindent 8 }}
+        {{- include "my-web.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/role:  {{ .Values.custom_label.roleGroup }}
     spec:
       imagePullSecrets:
@@ -28,16 +28,16 @@ spec:
 #      imagePullSecrets:
 #        {{- toYaml . | nindent 8 }}
 #      {{- end }}
-      serviceAccountName: {{ include "web.serviceAccountName" . }}
+      serviceAccountName: {{ include "my-web.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init-server-web
+        - name: init-my-server-my-web
           image: myhub.com/busybox:1.33
-          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-server 10051; do echo waiting for {{ .Release.Name }}-server 10051 port; sleep 2; done;']
-        - name: init-server-db
+          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-my-server 10051; do echo waiting for {{ .Release.Name }}-my-server 10051 port; sleep 2; done;']
+        - name: init-my-server-my-db
           image: myhub.com/busybox:1.33
-          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-db 3306; do echo waiting for {{ .Release.Name }}-server 3306 port; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-my-db 3306; do echo waiting for {{ .Release.Name }}-my-server 3306 port; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -46,7 +46,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
               - name: DB_SERVER_HOST
-                value: {{ .Release.Name }}-db
+                value: {{ .Release.Name }}-my-db
               - name: MYSQL_USER
                 value: zabbix
               - name: MYSQL_DATABAS
@@ -54,13 +54,13 @@ spec:
               - name: MYSQL_PASSWORD
                 value: zabbix
               - name: ZBX_SERVER_HOST
-                value: {{ .Release.Name }}-server 
+                value: {{ .Release.Name }}-my-server 
               - name: PHP_TZ
                 value: Asia/Shanghai
               - name: MYSQL_ROOT_PASSWORD 
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Release.Name }}-db 
+                    name: {{ .Release.Name }}-my-db 
                     key: ROOT_PASSWORD 
  
           ports:

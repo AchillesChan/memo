@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "db.fullname" . }}
+  name: {{ include "my-db.fullname" . }}
   labels:
-    {{- include "db.labels" . | nindent 4 }}
+    {{- include "my-db.labels" . | nindent 4 }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
 {{- end }}
   selector:
     matchLabels:
-      {{- include "db.selectorLabels" . | nindent 6 }}
+      {{- include "my-db.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "db.selectorLabels" . | nindent 8 }}
+        {{- include "my-db.selectorLabels" . | nindent 8 }}
     spec:
 #      {{- with .Values.imagePullSecrets }}
 #      imagePullSecrets:
@@ -26,7 +26,7 @@ spec:
 #      {{- end }}
       imagePullSecrets:
         - name: {{ .Release.Name }}-imagepullsecrets
-      serviceAccountName: {{ include "db.serviceAccountName" . }}
+      serviceAccountName: {{ include "my-db.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
               - name: DB_SERVER_HOST
-                value: {{ .Release.Name }}-db
+                value: {{ .Release.Name }}-my-db
               - name: MYSQL_DATABAS
                 value: zabbix
               - name: MYSQL_USER
@@ -47,10 +47,10 @@ spec:
               - name: MYSQL_ROOT_PASSWORD 
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Release.Name }}-db 
+                    name: {{ .Release.Name }}-my-db 
                     key: ROOT_PASSWORD 
           ports:
-            - name: db 
+            - name: my-db 
               containerPort: 3306
               protocol: TCP
           readinessProbe:
@@ -68,9 +68,9 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
           volumeMounts:
-          - name: db-data
+          - name: my-db-data
             mountPath: /var/lib/mysql
-          - name: {{ .Release.Name }}-db-cnf
+          - name: {{ .Release.Name }}-my-db-cnf
             mountPath: /etc/mysql/conf.d 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -87,25 +87,25 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: {{ .Release.Name }}-db-cnf
+        - name: {{ .Release.Name }}-my-db-cnf
           configMap:
             name: {{ .Release.Name }}-configmap 
         {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
         - name: custom-htaccess
           configMap:
-            name: {{ template "db.customHTAccessCM" . }}
+            name: {{ template "my-db.customHTAccessCM" . }}
             items:
-              - key: db-htaccess.conf
-                path: db-htaccess.conf
+              - key: my-db-htaccess.conf
+                path: my-db-htaccess.conf
         {{- end }}
-        - name: db-data
+        - name: my-db-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "db.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "my-db.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{ end }}
         {{- if .Values.extraVolumes }}
-        {{- include "db.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- include "my-db.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 

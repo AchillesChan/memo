@@ -1,18 +1,18 @@
-# Default values for web.
+# Default values for my-web.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
  
-imageCredentials:          ###key point ,MUST exist 
-  registry: myhub.com      ###template/secret.yaml
-  username: user           ###template/deployment.yaml
-  password: pwd            ###template/_helpers.tpl
-  email: someone@host.com  ###see helm.memo,used by subcharts
+imageCredentials:          ###key point ,MUST 
+  registry: myhub.com 
+  username: foo
+  password: barpasswd 
+  email: someone@host.com
 
 replicaCount: 6 
 
-server:
+my-server:
   enabled: true    
-db:
+my-db:
   enabled: true
 
 image:
@@ -25,7 +25,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 custom_label:
-    roleGroup: webGrp01        ###custom define label for affinity using
+    roleGroup: my-webGrp01        ###custom define label for affinity using
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -68,7 +68,7 @@ ingress:
       #- path: "/"
         #pathType: Prefix
         #backend:
-        # service: {{ .Release.Name }}-web
+        # service: {{ .Release.Name }}-my-web
         #  port:
         #    number: 80
   tls: []
@@ -109,25 +109,25 @@ tolerations:
  
 affinity: {}           ####take effect only if reschedule even delete/create?
 affinity:
-  podAffinity:                         ###will schedule to node with app.kubernetes.io/role=webGrp01 
+  podAffinity:                         ###will schedule to node with app.kubernetes.io/role=my-webGrp01 
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
         - key: app.kubernetes.io/name  #####custom define on pod 
           operator: In 
           values:
-          - server                   #####custom define on pod
+          - my-server                   #####custom define on pod
       topologyKey: kubernetes.io/hostname    ####define on node
-  podAntiAffinity:                ###will NOT schedule to node with app.kubernetes.io/name=server AND app.kubernetes.io/name=db
+  podAntiAffinity:                ###will NOT schedule to node with app.kubernetes.io/name=my-server AND app.kubernetes.io/name=my-db
     requiredDuringSchedulingIgnoredDuringExecution:
     - labelSelector:
         matchExpressions:
 #        - key: app.kubernetes.io/name  ####pre-defined by cluster on pod 
 #          operator: In 
 #          values:
-#          - server                     ####pre-defined by cluster on pod
+#          - my-server                     ####pre-defined by cluster on pod
         - key: app.kubernetes.io/name  ####the 2nd podAntiAffinity 
           operator: In 
           values:
-          - db 
+          - my-db 
       topologyKey: kubernetes.io/hostname

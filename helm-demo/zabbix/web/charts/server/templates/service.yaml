@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "server.fullname" . }}
+  name: {{ include "my-server.fullname" . }}
   labels:
-    {{- include "server.labels" . | nindent 4 }}
+    {{- include "my-server.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: zabbix
   selector:
-    {{- include "server.selectorLabels" . | nindent 4 }}
+    {{- include "my-server.selectorLabels" . | nindent 4 }}

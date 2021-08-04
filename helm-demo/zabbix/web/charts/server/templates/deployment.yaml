@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "server.fullname" . }}
+  name: {{ include "my-server.fullname" . }}
   labels:
-    {{- include "server.labels" . | nindent 4 }}
+    {{- include "my-server.labels" . | nindent 4 }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
 {{- end }}
   selector:
     matchLabels:
-      {{- include "server.selectorLabels" . | nindent 6 }}
+      {{- include "my-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "server.selectorLabels" . | nindent 8 }}
+        {{- include "my-server.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
         - name: {{ .Release.Name }}-imagepullsecrets
@@ -26,13 +26,13 @@ spec:
 #      imagePullSecrets:
 #        {{- toYaml . | nindent 8 }}
 #      {{- end }}
-      serviceAccountName: {{ include "server.serviceAccountName" . }}
+      serviceAccountName: {{ include "my-server.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init-server
+        - name: init-my-server
           image: myhub.com/busybox:1.33
-          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-db 3306; do echo waiting for {{ .Release.Name }}-db 3306 port; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -vz {{ .Release.Name }}-my-db 3306; do echo waiting for {{ .Release.Name }}-my-db 3306 port; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -45,7 +45,7 @@ spec:
               protocol: TCP
           env:
             - name: DB_SERVER_HOST
-              value: {{ .Release.Name }}-db
+              value: {{ .Release.Name }}-my-db
             - name: MYSQL_USER
               value: zabbix
             - name: MYSQL_DATABAS
@@ -55,7 +55,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-db 
+                  name: {{ .Release.Name }}-my-db 
                   key: ROOT_PASSWORD
           readinessProbe:
             tcpSocket:

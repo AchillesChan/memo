@@ -2,13 +2,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "db.fullname" . }}
-  labels: {{- include "db.labels" . | nindent 4 }}
+  name: {{ template "my-db.fullname" . }}
+  labels: {{- include "my-db.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "db.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "my-db.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "db.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "my-db.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
@@ -16,5 +16,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-  {{ include "db.storageClass" . }}
+  {{ include "my-db.storageClass" . }}
 {{- end }}
