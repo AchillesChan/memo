@@ -85,6 +85,99 @@ https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autod
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
 
+
+###yaml basic
+https://developer.ibm.com/tutorials/yaml-basics-and-usage-in-kubernetes/
+https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/
+
+
+--template from kubectl expalin ingress --recursive=true
+spec <Object>
+   backend   <Object>
+      serviceName    <string>
+      servicePort    <string>
+   rules     <[]Object>                   ###60 Plural item is list,it's first child item add prefix -
+      host   <string>                     ###10 the first object's <[]Object> (rules)  propert need add prefix -   
+      http   <Object>                     ###20 the other object's <[]Object>  (rules) propert not need add prefix -
+         paths       <[]Object>           ###30 the non-arry object's <Object>(http)  propert not need add prefix -
+            backend  <Object>
+               serviceName   <string>
+               servicePort   <string>
+            path     <string>
+   tls       <[]Object>
+      hosts  <[]string>                   ####40 As a tls array,add prefix -,append new line,add prefix - and host string 
+      secretName     <string>             ####50 KEY-VALUE PAIR
+status       <Object>
+   loadBalancer      <Object>
+      ingress        <[]Object>
+         hostname    <string>
+         ip  <string>
+
+
+--render result
+spec:
+  tls:
+    - hosts:                                  ####40 As a tls array,add prefix -,append new line,
+      - c2.yourdomain.cn                      ####40 add prefix - and host string 
+      secretName: poc-tls-yourdomain-cn       ####50 KEY-VALUE PAIR 
+  rules:                                      ###60 Plural item's is list,it's  FIRST child item add prefix -
+    - host: c2.yourdomain.cn                  ###10 the first array object's <[]Object> (rules) propert need add prefix -
+      http:                                   ###20 the other array object's <[]Object>  (rules) propert not need add prefix -
+        paths:                                ###30 the non-arry object's <Object> (http) propert not need add prefix -
+          - path: /
+            backend:
+              serviceName: my-web
+              servicePort: 80
+
+
+
+--other example
+
+containers  <[]Object>
+   ......
+  image    <string>
+  imagePullPolicy  <string>
+  lifecycle        <Object>
+     postStart     <Object>
+     ......
+  name     <string>
+  ports  <[]Object>
+    containerPort       <integer>
+    hostIP      <string>
+    hostPort    <integer>
+    name        <string>
+    protocol    <string>
+  readinessProbe <Object>
+    exec        <Object>
+       command  <[]string>
+
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rss-site
+  labels:
+    app: web
+spec:
+  containers:                         ###70 list
+    - name: front-end                 ###containers child 1
+      image: nginx                    ###DO NOT PREFIX -
+      ports:
+        - containerPort: 80
+    - name: rss-reader                ###containers child 2
+      image: nickchase/rss-php-nginx:v1   ###DO NOT PREFIX -
+      ports:
+        - containerPort: 88   ###port list,prefix -
+###yaml basic
+
+###get namespace and secret name of ingress
+kubectl get ing -n pc web-ing -o yaml|grep -E 'namespace|secretName'|grep -v ","|grep -v extensions|sed -e 's:\r::g'|sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' -e 's%namespace:%%g' -e 's%secretName:%%'
+
+##namespace   secretName
+   poc      poc-tls-yourdomain-cn
+
 ###https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/
 kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'   ###set non-default
 kubectl patch storageclass gold -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'        ###set default
