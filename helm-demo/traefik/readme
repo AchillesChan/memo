@@ -1,4 +1,3 @@
-kubectl apply -f dashboard-ingress.yaml
 helm install -n traefik traefik ./  -f values.yaml
 kubectl apply -f dashboard-ingress.yaml
 access 2048.padok.fr with change yours DNS 

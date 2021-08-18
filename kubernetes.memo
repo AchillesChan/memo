@@ -2567,7 +2567,20 @@ curl: (6) Could not resolve host: example.example.com; Unknown error
 
 
 
-
+###create pvc with storageclass not need pv on azure
+---
+ kind: PersistentVolumeClaim
+ apiVersion: v1
+ metadata:
+   name: pvc-stress-logs
+   namespace: poc-azure
+ spec:
+   accessModes:
+   - ReadWriteMany
+   storageClassName: azurefile-retain
+   resources:
+     requests:
+       storage: 10Gi
 
 ####persistentVolumn pvp/fortune-config edited
 
@@ -2632,7 +2645,6 @@ spec:
   volumeName: my-local-pv                 ###reference pv name
   volumeMode: Filesystem
 
-PWD:~/study/persistentVolumn  EXIT:0 TIME:2020-0422-16:53:43CST USER:root
 [k8s-m1 ]# kubectl get pvc
 NAME       STATUS   VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS       AGE
 my-claim   Bound    my-local-pv   5Gi        RWO            my-local-storage   17m

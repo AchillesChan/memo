@@ -1,5 +1,7 @@
 =========
 
+redirect output time to tee
+(time echo >/dev/tcp/foo.com/22) 2>&1 |tee -a output
 
 https://www.golinuxcloud.com/kubernetes-autoscaling/
 stress memory ,why?

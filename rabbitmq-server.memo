@@ -1,5 +1,15 @@
 ######Startmemoof rabbitmq-server.memo #######
 ######Start rabbitmq-server.memo #######
+cluster
+https://www.rabbitmq.com/quorum-queues.html
+https://blog.rabbitmq.com/posts/2020/04/quorum-queues-and-why-disks-matter
+https://www.cloudamqp.com/blog/rabbitmq-quorum-queues.html
+https://blog.rabbitmq.com/posts/2020/06/quorum-queues-local-delivery
+https://blog.rabbitmq.com/posts/2020/04/rabbitmq-gets-an-ha-upgrade/
+https://seroter.com/2020/01/28/lets-try-out-the-new-durable-replicated-quorum-queues-in-rabbitmq/
+https://jack-vanlightly.com/blog/2018/8/31/rabbitmq-vs-kafka-part-5-fault-tolerance-and-high-availability-with-rabbitmq
+https://seroter.com/2020/01/28/lets-try-out-the-new-durable-replicated-quorum-queues-in-rabbitmq/
+https://blog.rabbitmq.com/posts/2020/05/quorum-queues-and-flow-control-the-concepts
 
 ---rabbitmq queue(s)  unresponsive timeout
 https://kb.juniper.net/InfoCenter/index?page=content&id=KB36066&showDraft=false

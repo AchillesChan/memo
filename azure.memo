@@ -1,5 +1,12 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+https://docs.microsoft.com/en-us/azure/aks/cluster-autoscaler#using-the-autoscaler-profile
+
+$ az aks show --resource-group RG01 -n aks-01 --query autoScalerProfile
+$ az aks update -g RG01 -n aks-01  --cluster-autoscaler-profile  scale-down-utilization-threshold=0.7
+
+
+
 ---resize disk size
 https://docs.microsoft.com/en-us/azure/virtual-machines/linux/expand-disks
 1. update size on portal disk item-->size+performance-->change size(need stop vm or release disk from vm)
