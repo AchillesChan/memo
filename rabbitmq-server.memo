@@ -10,6 +10,12 @@ https://seroter.com/2020/01/28/lets-try-out-the-new-durable-replicated-quorum-qu
 https://jack-vanlightly.com/blog/2018/8/31/rabbitmq-vs-kafka-part-5-fault-tolerance-and-high-availability-with-rabbitmq
 https://seroter.com/2020/01/28/lets-try-out-the-new-durable-replicated-quorum-queues-in-rabbitmq/
 https://blog.rabbitmq.com/posts/2020/05/quorum-queues-and-flow-control-the-concepts
+https://jack-vanlightly.com/blog/2018/9/10/how-to-lose-messages-on-a-rabbitmq-cluster
+https://jack-vanlightly.com/blog/2017/12/5/rabbitmq-vs-kafka-part-2-rabbitmq-messaging-patterns-and-topologies
+https://jack-vanlightly.com/blog/2017/12/4/rabbitmq-vs-kafka-part-1-messaging-topologies
+https://sleeplessbeastie.eu/2020/04/08/how-to-mirror-rabbitmq-queues/
+https://jack-vanlightly.com/blog/2018/11/20/quorum-queues-making-rabbitmq-more-competitive
+https://www.cloudamqp.com/blog/quorum-queues-internals-a-deep-dive.html
 
 ---rabbitmq queue(s)  unresponsive timeout
 https://kb.juniper.net/InfoCenter/index?page=content&id=KB36066&showDraft=false

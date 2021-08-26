@@ -24,3 +24,60 @@ ss -tlnp
 firewall-cmd --add-port 2181/tcp --perm
 
 ###basic install
+
+
+
+###docker instal
+https://jack-vanlightly.com/blog/2018/9/2/rabbitmq-vs-kafka-part-6-fault-tolerance-and-high-availability-with-kafka
+https://jack-vanlightly.com/blog/2018/9/18/how-to-lose-messages-on-a-kafka-cluster-part-2
+https://jack-vanlightly.com/blog/2018/9/14/how-to-lose-messages-on-a-kafka-cluster-part1
+https://www.baeldung.com/ops/kafka-docker-setup
+https://github.com/wurstmeister/kafka-docker
+
+
+[root@kafka-server kafka]# cat docker-compos.yaml 
+version: '3'
+services:
+  zookeeper:
+    image: gconfluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    network_mode: host        ####bind to host only,not NAT mode
+    #ports:
+    #  - 22181:2181
+  
+  kafka:
+    image: gconfluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    network_mode: host
+    #ports:
+      #- 9092:9092
+      #- 9092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 10.1.5.3:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.1.5.3:9092,PLAINTEXT_HOST://10.1.5.3:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+[root@kafka-server kafka]# cat /etc/hosts   ###REQUIRED BY map 9092 to WAN ???
+10.1.5.3 kafka-server                       ###and set kafka client host resolve to WANIP map to kafka-server
+
+[root@kafka-server kafka]# docker-compose up -d 
+Creating kafka_zookeeper_1 ... done
+Creating kafka_kafka_1     ... done
+
+[root@kafka-server kafka]# docker ps
+CONTAINER ID        IMAGE                                                    COMMAND                  CREATED             STATUS              PORTS                               NAMES
+fac1c81ec8d9        gconfluentinc/cp-kafka:latest       "/etc/confluent/dock…"   5 seconds ago       Up 4 seconds                                            kafka_kafka_1
+e55951e29127        gconfluentinc/cp-zookeeper:latest   "/etc/confluent/dock…"   5 seconds ago       Up 4 seconds                                            kafka_zookeeper_1
+
+[root@kafka-server kafka]# ss -tlnp|grep java
+LISTEN     0      50           *:29092                    *:*                   users:(("java",pid=6179,fd=129))
+LISTEN     0      50           *:9092                     *:*                   users:(("java",pid=6179,fd=116))
+LISTEN     0      50           *:2181                     *:*                   users:(("java",pid=6133,fd=128))
+
+
