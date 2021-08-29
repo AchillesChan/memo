@@ -1,4 +1,10 @@
-  https://istio.io/latest/docs/setup/install/helm/#migrating-from-non-helm-installations
+https://istio.io/latest/docs/concepts/traffic-management/
+https://istio.io/latest/blog/
+https://istio.io/latest/docs/ops/deployment/architecture/
+https://istio.io/latest/docs/examples/bookinfo/
+https://istio.io/latest/docs/examples/microservices-istio/setup-kubernetes-cluster/
+https://istio.io/latest/docs/setup/install/helm/#migrating-from-non-helm-installations
+https://istio.io/latest/blog/2021/external-locality-failover/
 
   curl -L https://istio.io/downloadIstio | sh -
   kubectl create ns istio-system
