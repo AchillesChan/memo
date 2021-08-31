@@ -1,3 +1,4 @@
+###https://www.digitalocean.com/community/tutorials/how-to-do-canary-deployments-with-istio-and-kubernetes
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:

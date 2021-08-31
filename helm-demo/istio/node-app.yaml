@@ -1,3 +1,4 @@
+##https://www.digitalocean.com/community/tutorials/how-to-do-canary-deployments-with-istio-and-kubernetes
 apiVersion: v1
 kind: Service
 metadata:
