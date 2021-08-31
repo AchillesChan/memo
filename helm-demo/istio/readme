@@ -1,3 +1,4 @@
+https://istio.io/latest/docs/reference/  
 https://istio.io/latest/docs/concepts/traffic-management/
 https://istio.io/latest/blog/
 https://istio.io/latest/docs/ops/deployment/architecture/
@@ -5,7 +6,7 @@ https://istio.io/latest/docs/examples/bookinfo/
 https://istio.io/latest/docs/examples/microservices-istio/setup-kubernetes-cluster/
 https://istio.io/latest/docs/setup/install/helm/#migrating-from-non-helm-installations
 https://istio.io/latest/blog/2021/external-locality-failover/
-
+https://www.digitalocean.com/community/tutorials/how-to-do-canary-deployments-with-istio-and-kubernetes
   curl -L https://istio.io/downloadIstio | sh -
   kubectl create ns istio-system
   kubectl get ns
@@ -14,3 +15,42 @@ https://istio.io/latest/blog/2021/external-locality-failover/
   helm install istiod manifests/charts/istio-control/istio-discovery     -n istio-system --set global.jwtPolicy=first-party-jwt
   helm install istio-ingress manifests/charts/gateways/istio-ingress -n istio-system  --set global.jwtPolicy=first-party-jwt
   helm install istio-egress manifests/charts/gateways/istio-egress -n istio-system  --set global.jwtPolicy=first-party-jwt
+
+https://istio.io/latest/docs/setup/getting-started/
+
+#deploy sample
+$ kubectl label namespace default istio-injection=enabled
+$ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+$ kubectl get services
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+details       ClusterIP   10.0.0.212      <none>        9080/TCP   29s
+kubernetes    ClusterIP   10.0.0.1        <none>        443/TCP    25m
+productpage   ClusterIP   10.0.0.57       <none>        9080/TCP   28s
+ratings       ClusterIP   10.0.0.33       <none>        9080/TCP   29s
+reviews       ClusterIP   10.0.0.28       <none>        9080/TCP   29s
+
+
+$ kubectl get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+details-v1-558b8b4b76-2llld       2/2     Running   0          2m41s
+productpage-v1-6987489c74-lpkgl   2/2     Running   0          2m40s
+ratings-v1-7dc98c7588-vzftc       2/2     Running   0          2m41s
+reviews-v1-7f99cc4496-gdxfn       2/2     Running   0          2m41s
+reviews-v2-7d79d5bd5d-8zzqd       2/2     Running   0          2m41s
+reviews-v3-7dbcdcbc56-m8dph       2/2     Running   0          2m41s
+
+
+$ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
+<title>Simple Bookstore App</title>
+
+
+$ kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+gateway.networking.istio.io/bookinfo-gateway created
+virtualservice.networking.istio.io/bookinfo created
+
+$ istioctl analyze
+✔ No validation issues found when analyzing namespace: default.
+
+
+$ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
+

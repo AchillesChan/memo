@@ -1,0 +1,14 @@
+https://hazelcast.com/glossary/cap-theorem/
+
+In practical terms, a distributed system cannot be made immune to network failures, thus designers of such systems must accept the possibility of such failures as a given, and then decide how to respond. If the system chooses to favor Availability (such systems are designated AP systems), then it will continue to service requests, even though the data could be in an inconsistent state (for example, a failing member may have received and acknowledged an update to the data, but then failed before that update was synchronized with other members of the system). If the system chooses to favor Consistency (known as a CP system), then it will choose to stop serving requests (become unavailable) if the consistency of data cannot be guaranteed. For a CP system, this is achieved by requiring a certain number of nodes to confirm that a data update has been made before acknowledging the update; this certain number will be greater than half of the nodes that comprise the distributed system. 
+
+
+The CAP theorem implies that in the presence of a network partition, one has to choose between consistency and availability.
+
+
+No distributed system is safe from network failures, thus network partitioning generally has to be tolerated.[7][8] In the presence of a partition, one is then left with two options: consistency or availability. When choosing consistency over availability, the system will return an error or a time out if particular information cannot be guaranteed to be up to date due to network partitioning. When choosing availability over consistency, the system will always process the query and try to return the most recent available version of the information, even if it cannot guarantee it is up to date due to network partitioning.
+
+In the absence of network failure – that is, when the distributed system is running normally – both availability and consistency can be satisfied.
+
+CAP is frequently misunderstood as if one has to choose to abandon one of the three guarantees at all times. In fact, the choice is really between consistency and availability only when a network partition or failure happens; at all other times, no trade-off has to be made.
+
