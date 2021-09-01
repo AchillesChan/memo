@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: gnode-demo-v2
+        image: dockerhub.50yc.com/it/gnode-demo-v2
         ports:
         - containerPort: 8080
 ---
@@ -54,6 +54,6 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: gnode-demo
+        image: dockerhub.50yc.com/it/gnode-demo
         ports:
         - containerPort: 8080
