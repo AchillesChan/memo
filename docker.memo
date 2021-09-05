@@ -1,3 +1,24 @@
+https://hasura.io/blog/how-to-write-dockerfiles-for-python-web-apps-6d173842ae1d/  ###ok
+https://docs.docker.com/language/python/build-images/    ###failed 
+####Could not find a version that satisfies the requirement cloud-init==
+$ apt install python3-pip
+$ pip3 install Flask
+$ pip3 freeze > requirements.txt
+$ from flask import Flask
+$ vim app.py
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, Docker!'
+
+$ python3 -m flask run
+$ 
+
+
+
+
 https://keepinguptodate.com/pages/2020/12/net5-aspnet-docker-mac/
 
 
