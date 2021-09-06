@@ -1,0 +1,10 @@
+https://codefresh.io/docs/docs/learn-by-example/python/django/
+https://docs.djangoproject.com/en/3.1/intro/tutorial01/
+
+
+$ docker build --tag dj01 .
+
+$ docker run --rm -p 8000:8000 dj1
+
+$ curl http://localhost:8000/pools/
+Hello, world. You're at the polls index.
