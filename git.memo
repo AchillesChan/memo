@@ -62,7 +62,7 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
       last_name:  'sn'
 EOS
 
-$> gitlab-ctl reconfigure
+$> gitlab-ctl reconfigure   ###Must run after edit gitlab.rb,even restart or reboot system not take effect,only RUN THIS?
 
 set backup path
  $> vim /var/opt/gitlab/gitlab-rails/etc/gitlab.yml

@@ -1,6 +1,46 @@
+<<<<<<< HEAD
 https://blogs.sap.com/2019/06/24/introduction-to-hadoop-in-simple-words/
 https://data-flair.training/blogs/hadoop-ecosystem-components/
 https://data-flair.training/blogs/hadoop-mapreduce-tutorial/
+=======
+###hash join
+https://mysqlserverteam.com/hash-join-in-mysql-8/
+introduced from MySQL 8.0.18
+hard upper limit of 128 chunk files per input
+The probe phase and The build phase
+
+hash join will allocate memory incrementally, meaning that it will never use more memory than it need
+MySQL only supports inner hash join, meaning that that anti, semi and outer joins are still executed using block-nested loop
+
+Hash join is enabled by default, so no action is needed to make use of hash join. 
+mysql> SET optimizer_switch="hash_join=off";
+
+
+analyze
+   mysql> EXPLAIN FORMAT=tree
+    -> SELECT
+    ->   given_name, country_name
+    -> FROM
+    ->   persons JOIN countries ON persons.country_id = countries.country_id;
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| EXPLAIN                                                                                                                                                                                                 |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| -> Inner hash join (countries.country_id = persons.country_id)  (cost=0.70 rows=1)
+    -> Table scan on countries  (cost=0.35 rows=1)
+    -> Hash
+        -> Table scan on persons  (cost=0.35 rows=1)
+ |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+
+
+
+
+
+
+
+
 http://work.shivjijha.com/2014/04/change-master-without-stopping-slave.html
 
 PostgreSQL
