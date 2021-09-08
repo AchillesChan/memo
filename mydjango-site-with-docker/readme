@@ -8,3 +8,8 @@ $ docker run --rm -p 8000:8000 dj1
 
 $ curl http://localhost:8000/pools/
 Hello, world. You're at the polls index.
+
+
+
+#####hot deploy without build new docker,whre /path/2/mysite is code directory
+$ docker run --rm -p 8000:8000 --name dj01 -v /path/2/mysite:/code dj1:latest 

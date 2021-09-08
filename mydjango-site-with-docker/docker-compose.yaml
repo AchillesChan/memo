@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+ mongo:
+   image: dj1:latest
+   ports:
+     - 8000:8000
+   volumes:
+     - /path/2/mysite:/code
