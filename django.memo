@@ -2,7 +2,7 @@ https://www.geeksforgeeks.org/how-to-create-a-basic-project-using-mvt-in-django/
 https://www.geeksforgeeks.org/django-project-mvt-structure/
 https://www.javatpoint.com/django-url-mapping
 
-https://docs.djangoproject.com/en/3.1/intro/tutorial01/
+https://docs.djangoproject.com/en/3.1/intro/tutorial01/ ###worked
 
 $> yum -y install python3.x86_64
 $> python3 -m pip install Django==2.1.2
@@ -49,6 +49,8 @@ $> python3 manage.py check
 $> python3 manage.py test
 $> python3 manage.py runserver 0:8000
 
+$> curl http://localhost:8000/polls/
+Hello, world. You're at the polls index.
 
 
 ###connect to mysql
