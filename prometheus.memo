@@ -1,0 +1,71 @@
+https://github.com/prometheus/prometheus/releases/
+https://github.com/prometheus/alertmanager/releases/
+https://github.com/prometheus/node_exporter/releases/
+https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/promql/prometheus-promql-operators-v2
+https://www.squadcast.com/blog/infrastructure-monitoring-using-kube-prometheus-operator
+
+====set monitor node and send alert mail====
+[srv]# cat prometheus-2.30.3.linux-amd64/prometheus.yml |grep -v '#'
+global:
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['localhost:9093']
+
+rule_files:
+  - /etc/prometheus/rules/*.rules
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+
+
+[srv]# cat alertmanager-0.23.0.linux-amd64/alertmanager.yml |grep -v '#'                                                                                                                
+global:
+  smtp_smarthost: 'mail.exampl.com:25'           ####REQUIRED SSL MAIL SERVER 
+  smtp_from: 'mail_user@exampl.com'
+  smtp_auth_username: 'mail_user@exampl.com'
+  smtp_auth_password: 'sender-pwd'
+  smtp_require_tls: true 
+route:
+  group_by: ['alertname']
+  receiver: 'default-receiver'
+receivers:
+  - name: default-receiver
+    email_configs:
+      - to: tomail@dn.com 
+        send_resolved: true
+
+
+[srv]# cat /etc/prometheus/rules/oststats-alert.rules |grep -v '#'                                                                                                                      
+groups:
+- name: hostStatsAlert
+  rules:
+  - alert: hostCpuUsageAlert
+    expr: sum(avg without (cpu)(irate(node_cpu_seconds_total{cpu="0",mode!="idle"}[1m]))) by (instance) > 0.1
+    for: 1m
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{ $labels.instance }} CPU usgae high"
+      description: "{{ $labels.instance }} CPU usage above 10% (current value: {{ $value }})"
+  - alert: hostMemUsageAlert
+    expr: (node_memory_MemTotal - node_memory_MemAvailable)/node_memory_MemTotal > 0.15
+    for: 1m
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{ $labels.instance }} MEM usgae high"
+      description: "{{ $labels.instance }} MEM usage above 85% (current value: {{ $value }})"
+
+[srv]# ss -tlnp|grep -E '9100|909'
+LISTEN     0      8192      [::]:9100                  [::]:*                   users:(("node_exporter",pid=3194,fd=3))
+LISTEN     0      8192      [::]:9090                  [::]:*                   users:(("prometheus",pid=2992,fd=8))
+LISTEN     0      8192      [::]:9093                  [::]:*                   users:(("alertmanager",pid=14743,fd=8))
+LISTEN     0      8192      [::]:9094                  [::]:*                   users:(("alertmanager",pid=14743,fd=3))
+
