@@ -41,6 +41,7 @@ receivers:
     email_configs:
       - to: tomail@dn.com 
         send_resolved: true
+###PATT kubernetes prometheus-operator change KEYS alertmanager.yaml with SECRET name alertmanager to above.
 
 
 [srv]# cat /etc/prometheus/rules/oststats-alert.rules |grep -v '#'                                                                                                                      
