@@ -150,8 +150,21 @@ az aks nodepool add --cluster-name  pressaks-01 \
                       --os-type Linux \
                       --node-vm-size Standard_E2s_v3 \
                       --node-count 3 \
-                      --vnet-subnet-id /subscriptions/subid/resourceGroups/press-rg01/providers/Microsoft.Network/virtualNetworks/press-vnet01/subnets/aks03
+                      --vnet-subnet-id 
+       /subscriptions/subid/resourceGroups/press-rg01/providers/Microsoft.Network/virtualNetworks/press-vnet01/subnets/aks03
 
+###using autoscaler
+ az aks nodepool add --cluster-name  aks-poc-01 \
+                     --name  e2v3p4 \
+                     --resource-group   yourRG \
+                     --max-pods 40 \
+                     --os-type Linux \
+                     --node-vm-size Standard_e2s_v3 \
+                     --enable-cluster-autoscaler \
+                     --min-count 3 \
+                     --max-count 10 \
+                     --vnet-subnet-id \
+                     /subscriptions/f93yh/resourceGroups/yourRG/providers/Microsoft.Network/virtualNetworks/myNET/subnets/mysub 
 ###azure cli
                 docker pull mcr.microsoft.com/azure-cli
                 docker run -v ~:/tmp -it mcr.microsoft.com/azure-cli   ###map /tmp in container to my home path
