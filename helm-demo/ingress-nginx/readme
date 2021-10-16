@@ -13,3 +13,27 @@ ckringress-1433g-ingress-nginx-controller-c7bb4b5f8-7zk74     1/1     Running   
 ckringress-1433g-ingress-nginx-controller-c7bb4b5f8-hxvgs     1/1     Running   0          6m16s   10.0.1.139   kubernetes-pool-28a59-vmss000002   <none>           <none>
 ckringress-1433g-ingress-nginx-controller-c7bb4b5f8-k4x6g     1/1     Running   0          6m16s   10.0.1.66    kubernetes-pool-28a59-vmss000001   <none>           <none>
 ckringress-1433g-ingress-nginx-defaultbackend-7455bc45928vr   1/1     Running   0          6m16s   10.0.1.112   kubernetes-pool-28a59-vmss000002   <none>           <none>
+
+
++++++++tuning ,need benchmark
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: aazngx-ingress-nginx-controller
+  namespace: default
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: aazngx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/version: 0.48.1
+    helm.sh/chart: ingress-nginx-3.34.0
+data:
+  keep-alive: '200'
+  keep-alive-requests: '600'
+  max-worker-open-files: '81920'
+  reuse-port: 'true'
+  upstream-keepalive-connections: '10000'
+  upstream-keepalive-requests: '200'
+  upstream-keepalive-timeout: '60'
+
