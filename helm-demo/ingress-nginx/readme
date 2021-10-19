@@ -18,7 +18,29 @@ ckringress-1433g-ingress-nginx-defaultbackend-7455bc45928vr   1/1     Running   
 +++++++tuning ,need benchmark
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
 https://jeremyxu2010.github.io/2019/11/%E4%BC%98%E5%8C%96nginx-ingress-controller%E5%B9%B6%E5%8F%91%E6%80%A7%E8%83%BD/
+https://intl.cloud.tencent.com/document/product/457/38300
 
+
+###set up nginx ingress controller
+https://intl.cloud.tencent.com/document/product/457/38300#reusing-time_wait
+      initContainers:
+        - name: setsysctl
+          image: busybox
+          command:
+            - sh
+            - '-c'
+            - |
+              sysctl -w net.core.somaxconn=65535
+              sysctl -w net.ipv4.ip_local_port_range="1024 65535"
+              sysctl -w net.ipv4.tcp_tw_reuse=1
+              sysctl -w fs.file-max=1048576
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+      containers:
 
 kind: ConfigMap
 apiVersion: v1
