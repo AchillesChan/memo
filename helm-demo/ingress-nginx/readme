@@ -22,7 +22,6 @@ https://intl.cloud.tencent.com/document/product/457/38300
 
 
 ###set up nginx ingress controller
-https://intl.cloud.tencent.com/document/product/457/38300#reusing-time_wait
       initContainers:
         - name: setsysctl
           image: busybox
