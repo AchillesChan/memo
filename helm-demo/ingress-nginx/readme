@@ -16,6 +16,9 @@ ckringress-1433g-ingress-nginx-defaultbackend-7455bc45928vr   1/1     Running   
 
 
 +++++++tuning ,need benchmark
+http://www.weixueyuan.net/a/877.html
+http://www.weixueyuan.net/a/884.html
+
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
 https://jeremyxu2010.github.io/2019/11/%E4%BC%98%E5%8C%96nginx-ingress-controller%E5%B9%B6%E5%8F%91%E6%80%A7%E8%83%BD/
 https://intl.cloud.tencent.com/document/product/457/38300
