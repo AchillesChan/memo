@@ -4,6 +4,31 @@ https://betterdev.blog/minimal-safe-bash-script-template/
 https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel/246128#246128
 
+
+
+# cat block-attack-ip-from-firewall-cmd.sh    ####auto deny attack ssh login 
+#!/bin/bash
+ORGIN_HASH=$(cat /var/log/secur*|grep -i 'invalid user.*from'|awk '{print $10}'|sort|uniq|grep '^[1-9]'|md5sum)
+while(true)
+        do
+        sleep 45s
+        CURRENT_HASH=$(cat /var/log/secur*|grep -i 'invalid user.*from'|awk '{print $10}'|sort|uniq|grep '^[1-9]'|md5sum)
+        if
+                [[ "$ORGIN_HASH" == "$CURRENT_HASH" ]]
+        then
+                echo "equal"
+        else 
+                #echo "not equal"
+                #echo  "hash changed from $ORGIN_HASH TO $CURRENT_HASH"
+                cat /var/log/secur*|grep -i 'invalid user.*from'|awk '{print $10}'|sort|uniq|grep '^[1-9]'|xargs -P 1 -n 1 sh -c 'firewall-cmd --add-rich-rule="rule family=ipv4 source address=$1/32 service name=ssh drop" --permanent'  _                
+                firewall-cmd --reload
+                ORGIN_HASH="$CURRENT_HASH"
+        fi
+        done
+
+
+
+
 ###date convert
 $ s=$(($(date --date='2020-10-31 12:31:51.35' +%s%N)/100000000))
 
