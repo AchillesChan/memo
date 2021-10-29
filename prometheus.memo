@@ -5,6 +5,11 @@ https://github.com/prometheus/node_exporter/releases/
 https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/promql/prometheus-promql-operators-v2
 https://www.squadcast.com/blog/infrastructure-monitoring-using-kube-prometheus-operator
 
+
+figure out query info:
+https://community.grafana.com/t/using-grafanas-query-inspector-to-troubleshoot-issues/2630
+edit panel-->edit item-->right click "Query inspector"-->Query-->Refresh
+
 ====set monitor node and send alert mail====
 [srv]# cat prometheus-2.30.3.linux-amd64/prometheus.yml |grep -v '#'
 global:
