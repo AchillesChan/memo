@@ -4,7 +4,7 @@ https://github.com/prometheus/alertmanager/releases/
 https://github.com/prometheus/node_exporter/releases/
 https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/promql/prometheus-promql-operators-v2
 https://www.squadcast.com/blog/infrastructure-monitoring-using-kube-prometheus-operator
-
+https://coralogix.com/blog/promql-tutorial-5-tricks-to-become-a-prometheus-god/
 
 figure out query info:
 https://community.grafana.com/t/using-grafanas-query-inspector-to-troubleshoot-issues/2630
