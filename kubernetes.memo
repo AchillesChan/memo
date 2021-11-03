@@ -100,6 +100,7 @@ https://koudingspawn.de/kubernetes-autoscaling/
 ###renew cert
 https://www.ibm.com/docs/en/fci/1.1.0?topic=kubernetes-renewing-cluster-certificates  ###this work
 https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/_print/
+https://cloud.tencent.com/developer/article/1744610
 
 $ kubeadm alpha certs check-expiration
 
