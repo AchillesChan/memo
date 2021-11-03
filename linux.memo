@@ -1,3 +1,9 @@
+$ echo 'Oct 27 20:34:08'|awk '{print $1,$2,$3}'|xargs -P 1 -n 3 sh -c 'date --date="$1 $2 $3" +%s' _
+1635338048
+
+$ DATE="06/10/2021 00:00:59 EST" && date -d "$DATE" +%s
+1623301259
+
 ###xargs sh single quote 
 $ echo '10.1.1.3'| xargs -P 1 -n 1 -t sh -c 'echo firewall-cmd --add-rich-rule=+rule family=ipv4 source address=$1/32 service name=ssh drop+ --permanent ' _|sed -e s:+:\':g|sh
 sh -c echo firewall-cmd --add-rich-rule=+rule family=ipv4 source address=$1/32 service name=ssh drop+ --permanent  _ 10.1.1.3 
