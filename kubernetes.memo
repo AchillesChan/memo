@@ -1,3 +1,4 @@
+https://github.com/sighupio/permission-manager   ####create rbac user on kubernetes cluster
 https://github.com/kubernetes-sigs/prometheus-adapter/issues/164  ###unable to fetch metrics from custom metrics API
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
 https://github.com/dgkanatsios/CKAD-exercises#contents
@@ -93,6 +94,22 @@ https://blog.lwolf.org/post/how-to-build-tiny-golang-docker-images-with-gitlab-c
 https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autodeploy-to-kubernetes-using-gitlab-and-helm/
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
+
+
+
+###renew cert
+https://www.ibm.com/docs/en/fci/1.1.0?topic=kubernetes-renewing-cluster-certificates  ###this work
+https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/_print/
+
+$ kubeadm alpha certs check-expiration
+
+$ kubeadm alpha certs renew all
+$ stat /etc/kubernetes/admin.conf  ###check update date
+$ cp /etc/kubernetes/admin.conf config     ###working on 1.16
+
+$ export KUBECONFIG=/root/.kube/config
+
+
 
 ###hpa v2beta2
 kubectl explain hpa --recursive=true --api-version=autoscaling/v2beta2
