@@ -2,6 +2,8 @@ https://github.com/sighupio/permission-manager   ####create rbac user on kuberne
 https://github.com/kubernetes-sigs/prometheus-adapter/issues/164  ###unable to fetch metrics from custom metrics API
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
 https://github.com/dgkanatsios/CKAD-exercises#contents
+https://rudimartinsen.com/2020/12/30/backup-restore-etcd/
+https://github.com/larkintuckerllc/k8s-cka-tutorial
 https://dev.to/subodev/how-to-prepare-for-the-ckad-exam-4oa3
 https://github.com/bmuschko/ckad-prep#demos
 https://github.com/bbachi/CKAD-Practice-Questions#table-of-contents
