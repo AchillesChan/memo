@@ -1,3 +1,4 @@
+https://updates.jenkins-ci.org/download/plugins/gitlab-hook/       ###offline plugins
 https://hands-on-tech.github.io/2020/03/15/k8s-jenkins-example.html
 https://devopscube.com/jenkins-multibranch-pipeline-tutorial/
 https://medium.com/geekculture/jenkins-gitlab-integration-processes-668937236e5d
@@ -10,3 +11,230 @@ https://www.chenshaowen.com/blog/how-to-use-jenkins-docker-gitlab-to-build-djang
 https://www.geeksforgeeks.org/jenkins-and-git-integration-using-ssh-key/
 https://digitalavenue.dev/GitLab-Integration-with-Jenkins/
 https://geoweb.princeton.edu/research/jenkins-doc/tutorial_gitlab.html
+
+
+
+###install gitlab
+# cat docker-compose.yml 
+version: '3.1'
+services:
+  gitlab-ce:
+    image: hub.docker.com/gitlab/gitlab-ce:13.6.1 
+    container_name: gitlab-ce
+    ports:
+      - 80:80
+      - 22:22
+    volumes:
+      - /data/gitlab-ce/data:/var/opt/gitlab
+      - /data/gitlab-ce/logs:/var/log/gitlab
+      - /data/gitlab-ce/config:/etc/gitlab
+    restart: always
+    cap_add:
+      - ALL 
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |                                                                                                                  
+        external_url 'http://ip-address:port/'
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+
+# docker-compose up -d 
+
+
+###install jenkins
+yum install -y java-1.8.0-openjdk-devel.x86_64  
+yum install jenkins -y  ####Jenkins 2.320 only work on jdk 8.0
+
+
+###install harbor
+https://github.com/goharbor/harbor/releases
+https://goharbor.io/docs/2.0.0/install-config/configure-yml-file/
+
+
+tar vzxf harbor-offline-installer-v2.3.4.tgz 
+
+# cat harbor.yml|grep -v '#'  ###harbor.yml copy from harbor.yml.tmpl,here is key point
+
+hostname: h.abc.com
+
+http:
+  port: 1080   ###NOT NEED ?
+https:
+  port: 443
+  certificate: /data/harbor/data/your.crt
+  private_key: /data/harbor/data/your.key
+
+external_url: https://h.abc.com  
+harbor_admin_password: Harbor223456  ###key point,change it on portal working too
+
+trivy:
+  ignore_unfixed: false
+  skip_update: false
+  insecure: true 
+data_volume: /data/harbor/data    ###data directory
+ 
+# ./prepare                                                                                                                                                                           
+ prepare base dir is set to /data/harbor                                                                                                                                                                           
+ WARNING:root:WARNING: HTTP protocol is insecure. Harbor will deprecate http protocol in the future. Please make sure to upgrade to https                                                                          
+ Generated configuration file: /config/portal/nginx.conf                                                                                                                                                           
+ Generated configuration file: /config/log/logrotate.conf                                                                                                                                                          
+ Generated configuration file: /config/log/rsyslog_docker.conf                                                                                                                                                     
+ Generated configuration file: /config/nginx/nginx.conf                                                                                                                                                            
+ Generated configuration file: /config/core/env                                                                                                                                                                    
+ Generated configuration file: /config/core/app.conf                                                                                                                                                               
+ Generated configuration file: /config/registry/config.yml                                                                                                                                                         
+ Generated configuration file: /config/registryctl/env                                                                                                                                                             
+ Generated configuration file: /config/registryctl/config.yml                                                                                                                                                      
+ Generated configuration file: /config/db/env                                                                                                                                                                      
+ Generated configuration file: /config/jobservice/env                                                                                                                                                              
+ Generated configuration file: /config/jobservice/config.yml                                                                                                                                                       
+ loaded secret from file: /data/secret/keys/secretkey                                                                                                                                                              
+ Generated configuration file: /compose_location/docker-compose.yml                                                                                                                                                
+ Clean up the input dir  
+
+# ./install.sh                                                                                                                                                                        
+                                                                                                                                                                                                                  
+[Step 0]: checking if docker is installed ...                                                                                                                                                                     
+                                                                                                                                                                                                                  
+Note: docker version: 18.09.9                                                                                                                                                                                     
+                                                                                                                                                                                                                  
+[Step 1]: checking docker-compose is installed ...                                                                                                                                                                
+                                                                                                                                                                                                                  
+Note: docker-compose version: 1.27.4                                                                                                                                                                              
+                                                                                                                                                                                                                  
+[Step 2]: loading Harbor images ...                                                                                                                                                                               
+Loaded image: goharbor/harbor-portal:v2.3.4                                                                                                                                                                       
+Loaded image: goharbor/nginx-photon:v2.3.4                                                                                                                                                                        
+Loaded image: goharbor/notary-server-photon:v2.3.4                                                                                                                                                                
+Loaded image: goharbor/trivy-adapter-photon:v2.3.4                                                                                                                                                                
+Loaded image: goharbor/harbor-core:v2.3.4                                                                                                                                                                         
+Loaded image: goharbor/harbor-db:v2.3.4                                                                                                                                                                           
+Loaded image: goharbor/harbor-jobservice:v2.3.4                                                                                                                                                                   
+Loaded image: goharbor/registry-photon:v2.3.4                                                                                                                                                                     
+Loaded image: goharbor/prepare:v2.3.4                                                                                                                                                                             
+Loaded image: goharbor/harbor-registryctl:v2.3.4                                                                                                                                                                  
+Loaded image: goharbor/harbor-exporter:v2.3.4                                                                                                                                                                     
+Loaded image: goharbor/notary-signer-photon:v2.3.4                                                                                                                                                                
+Loaded image: goharbor/harbor-log:v2.3.4                                                                                                                                                                          
+Loaded image: goharbor/redis-photon:v2.3.4                                                                                                                                                                        
+Loaded image: goharbor/chartmuseum-photon:v2.3.4                                                                                                                                                                  
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                  
+[Step 3]: preparing environment ...                                                                                                                                                                               
+                                                                                                                                                                                                                  
+[Step 4]: preparing harbor configs ...                                                                                                                                                                            
+prepare base dir is set to /data/harbor 
+
+WARNING:root:WARNING: HTTP protocol is insecure. Harbor will deprecate http protocol in the future. Please make sure to upgrade to https                                                     
+Clearing the configuration file: /config/portal/nginx.conf                                                                                                                                   
+Clearing the configuration file: /config/log/logrotate.conf                                                                                                                                  
+Clearing the configuration file: /config/log/rsyslog_docker.conf                                                                                                                             
+Clearing the configuration file: /config/nginx/nginx.conf                                                                                                                                    
+Clearing the configuration file: /config/core/env                                             
+Clearing the configuration file: /config/core/app.conf                                                                                                                                       
+Clearing the configuration file: /config/registry/passwd                                                                                                                                     
+Clearing the configuration file: /config/registry/config.yml                                                                                                                                 
+Clearing the configuration file: /config/registryctl/env                                                                                                                                     
+Clearing the configuration file: /config/registryctl/config.yml                                                                                                                              
+Clearing the configuration file: /config/db/env                                                                                                                                              
+Clearing the configuration file: /config/jobservice/env                                                                                                                                      
+Clearing the configuration file: /config/jobservice/config.yml                                                                                                                               
+Generated configuration file: /config/portal/nginx.conf                                                                                                                                      
+Generated configuration file: /config/log/logrotate.conf                                                                                                                                     
+Generated configuration file: /config/log/rsyslog_docker.conf                                                                                                                                
+Generated configuration file: /config/nginx/nginx.conf                                                                                                                                       
+Generated configuration file: /config/core/env                                                                                                                                               
+Generated configuration file: /config/core/app.conf                                           
+Generated configuration file: /config/registry/config.yml                                                                                                                                    
+Generated configuration file: /config/registryctl/env                                                                                                                                        
+Generated configuration file: /config/registryctl/config.yml                                                                                                                                 
+Generated configuration file: /config/db/env                                                  
+Generated configuration file: /config/jobservice/env                                                                                                                                         
+Generated configuration file: /config/jobservice/config.yml                                                                                                                                  
+loaded secret from file: /data/secret/keys/secretkey                                                                                                                                         
+Generated configuration file: /compose_location/docker-compose.yml                                                                                                                           
+Clean up the input dir                                                                        
+                                                                                              
+                                                                                              
+                                                                                              
+[Step 5]: starting Harbor ...                                                                                                                                                                
+Creating network "harbor_harbor" with the default driver                                                                                                                                     
+Creating harbor-log ... done                                                                                                                                                                 
+Creating harbor-portal ... done                                                                                                                                                              
+Creating registry      ... done                                                               
+Creating redis         ... done                                                               
+Creating registryctl   ... done                                                               
+Creating harbor-db     ... done                                                               
+Creating harbor-core   ... done                                                               
+Creating harbor-jobservice ... done                                                                                                                                                          
+Creating nginx             ... done                                                           
+✔ ----Harbor has been installed and started successfully.----                                                                                                                                
+
+
+# ls data/ -l   ###data directory
+total 0
+drwxr-xr-x 2   10000 10000  6 Nov 17 02:33 ca_download
+drwx------ 3 polkitd input 18 Nov 17 02:33 database
+drwxr-xr-x 2   10000 10000  6 Nov 17 02:33 job_logs
+drwxr-xr-x 2 polkitd input  6 Nov 17 02:33 redis
+drwxr-xr-x 2   10000 10000  6 Nov 17 02:33 registry
+drwxr-xr-x 5 root    root  46 Nov 17 02:33 secret
+-rw-r--r-- 1 root    root  5575 Nov 17 06:55 your.crt
+-rw------- 1 root    root  1704 Nov 17 06:55 your.key
+
+
+
+
+#ss -tlnp                                                        
+State      Recv-Q Send-Q                                                            Local Address:Port                                                                           Peer Address:Port                                                                                                                                                                                         
+LISTEN     0      128                                                                   127.0.0.1:1514                                                                                      *:*                   users:(("docker-proxy",pid=19770,fd=4))                                                                                                                                  
+LISTEN     0      128                                                                          :::32768                                                                                    :::*                   users:(("docker-proxy",pid=1528,fd=4))                                                                                                                                   
+LISTEN     0      128                                                                          :::80                                                                                       :::*                   users:(("docker-proxy",pid=1540,fd=4))                                                                                                                                   
+LISTEN     0      50                                                                           :::8080                                                                                     :::*                   users:(("java",pid=933,fd=127))                                                                                                                                          
+LISTEN     0      128                                                                          :::1080                                                                                     :::*                   users:(("docker-proxy",pid=20399,fd=4))                                                                                                                                  
+
+# docker ps                                                       
+CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS                             PORTS                                                          NAMES                                                                                                                                                                          
+507e785e726e        goharbor/harbor-jobservice:v2.3.4        "/harbor/entrypoint.…"   11 seconds ago      Up 9 seconds (health: starting)                                                                   harbor-jobservice                                                                                                                                                              
+f76274e51524        goharbor/nginx-photon:v2.3.4             "nginx -g 'daemon of…"   11 seconds ago      Up 8 seconds (health: starting)    0.0.0.0:1080->8080/tcp                                         nginx                                                                                                                                                                          
+da1e6d72fd55        goharbor/harbor-core:v2.3.4              "/harbor/entrypoint.…"   12 seconds ago      Up 10 seconds (health: starting)                                                                  harbor-core                                                                                                                                                                    
+a1586d295f01        goharbor/harbor-registryctl:v2.3.4       "/home/harbor/start.…"   16 seconds ago      Up 11 seconds (health: starting)                                                                  registryctl                                                                                                                                                                    
+37e755bf2669        goharbor/harbor-db:v2.3.4                "/docker-entrypoint.…"   16 seconds ago      Up 11 seconds (health: starting)                                                                  harbor-db                                                                                                                                                                      
+8b5930cbae43        goharbor/redis-photon:v2.3.4             "redis-server /etc/r…"   16 seconds ago      Up 12 seconds (health: starting)                                                                  redis                                                                                                                                                                          
+5d42813f88c0        goharbor/registry-photon:v2.3.4          "/home/harbor/entryp…"   16 seconds ago      Up 12 seconds (health: starting)                                                                  registry                                                                                                                                                                       
+740e363a3781        goharbor/harbor-portal:v2.3.4            "nginx -g 'daemon of…"   16 seconds ago      Up 12 seconds (health: starting)                                                                  harbor-portal                                                                                                                                                                  
+3e2383c2046a        goharbor/harbor-log:v2.3.4               "/bin/sh -c /usr/loc…"   17 seconds ago      Up 15 seconds (health: starting)   127.0.0.1:1514->10514/tcp                                      harbor-log                                                                                                                                                                     
+
+
+# external nginx config
+server {
+    listen 443 ssl http2; 
+    server_name   h.abc.com;
+        ssl_certificate /etc/ssl/nginx/fullchain2.pem;
+        ssl_certificate_key /etc/ssl/nginx/privkey2.pem;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout  10m; 
+        ssl_ciphers ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:AES256-GCM-SHA384:DES-CBC3-SHA;
+        ssl_prefer_server_ciphers on; 
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+        #add_header X-Frame-Options ALLOW;
+    server_tokens off;
+    # disable any limits to avoid HTTP 413 for large image uploads
+    client_max_body_size 0;
+
+    # Add extra headers
+    add_header X-Frame-Options DENY;
+    add_header Content-Security-Policy "frame-ancestors 'none'";
+
+    # customized location config file can place to /etc/nginx/etc with prefix harbor.http. and suffix .conf
+    include /etc/nginx/conf.d/harbor.http.*.conf;
+
+    location / { 
+      proxy_pass https://dest-https-public-ip/;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      #proxy_set_header X-Forwarded-Proto $x_forwarded_proto;
+
+      proxy_buffering off;
+      proxy_request_buffering off;
+    } 
