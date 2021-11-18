@@ -63,7 +63,7 @@ https:
   private_key: /data/harbor/data/your.key
 
 external_url: https://h.abc.com  
-harbor_admin_password: Harbor223456  ###key point,change it on portal working too
+harbor_admin_password: repoPWD  ###key point,change it on portal working too
 
 trivy:
   ignore_unfixed: false
@@ -237,4 +237,53 @@ server {
 
       proxy_buffering off;
       proxy_request_buffering off;
-    } 
+    }
+
+
+#clear docker private repo image
+https://azizunsal.github.io/blog/post/delete-images-from-private-docker-registry/
+https://docs.docker.com/registry/spec/api/#deleting-an-image
+https://newbedev.com/how-to-delete-images-from-a-private-docker-registry
+
+$ curl -s -u admin:repoPWD https://h.abc.com/v2/_catalog|json_reformat    ###output json format and silent
+{
+    "repositories": [
+        "it/mongodb",
+        "it/odoo",
+        "it/prydonius/todo"
+    ]
+}
+
+
+$ curl -u admin:repoPWD https://h.abc.com/v2/it/mongodb/tags/list  -H 'Accept: application/vnd.docker.distribution.manifest.v2+json'
+{"name":"it/mongodb","tags":["4.2.4-debian-10-r0"]}
+
+$ curl -I -u  admin:repoPWD https://h.abc.com/v2/it/mongodb/manifests/4.2.4-debian-10-r0 -H 'Accept: application/vnd.docker.distribution.manifest.v2+json'
+HTTP/1.1 200 OK
+Server: nginx
+Date: Thu, 18 Nov 2021 05:40:46 GMT
+Content-Type: application/vnd.docker.distribution.manifest.v2+json
+Content-Length: 2832
+Connection: keep-alive
+Docker-Content-Digest: sha256:85f9......e648    ####key point
+
+$ curl -X DELETE -u admin:repoPWD https://h.abc.com/v2/it/mongodb/manifests/sha256:85f9......e648 -v
+* About to connect() to h.abc.com port 443 (#0)
+... ...
+* Server auth using Basic with user 'admin'
+> DELETE /v2/it/mongodb/manifests/sha256:85f9......e648 HTTP/1.1
+> Authorization: Basic YWRtaW46SGFyYm9yMjIzNDU2
+> User-Agent: curl/7.29.0
+> Host: h.abc.com
+> Accept: */*
+> 
+< HTTP/1.1 202 Accepted
+< Server: nginx
+< Date: Thu, 18 Nov 2021 05:41:33 GMT
+< Content-Length: 0
+< Connection: keep-alive
+< Set-Cookie: sid=eb84a6a546c076cc7aa1c82348ab6b40; Path=/; HttpOnly
+< X-Request-Id: 98d01179-f21c-4469-8532-857e5490ac03
+< 
+* Connection #0 to host h.abc.com left intact
+
