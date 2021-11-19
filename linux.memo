@@ -2269,6 +2269,8 @@ Option 2, include the below in /etc/sysconfig/network-scripts/route-eth0 file: â
 
 
 ###########OpenSSH Change a Passphrase With ssh-keygen command
+https://www.unixtutorial.org/changing-passphrase-to-your-ssh-private-key
+#No Way To Recover Forgotten Passphrase
 
 ssh-keygen -f id_dsa -p
 
