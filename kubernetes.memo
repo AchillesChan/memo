@@ -433,7 +433,10 @@ $>  kubectl create secret tls aks-ingress-tls \
 https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
 https://medium.com/better-programming/k8s-tips-give-access-to-your-clusterwith-a-client-certificate-dfb3b71a76fe
 https://dev.to/ajitvedpathak/user-authentication-and-authorization-in-kubernets-access-control-in-kubernetes-3ef1
- 
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/ 
+https://docs.microsoft.com/en-us/azure/aks/azure-ad-rbac
+https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-identity
+
 simple check:
 $ kubectl get csr Bob -o jsonpath='{.status.certificate}' | base64 --decode > Bob.crt
 $ kubectl config set-credentials Bob --client-certificate=Bob.crt --client-key=Bob.key
@@ -507,34 +510,34 @@ Certificate:
 $ kubectl create ns development
 
 $ echo <<eof |kubectl apply -f -
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
-namespace: development
-name: dev
+  namespace: development
+  name: dev
 rules:
 - apiGroups: [""]
- resources: ["pods", "services"]
- verbs: ["create", "get", "update", "list", "delete"]
+  resources: ["pods", "services"]
+  verbs: ["create", "get", "update", "list", "delete"]
 - apiGroups: ["apps"]
- resources: ["deployments"]
- verbs: ["create", "get", "update", "list", "delete"]
+  resources: ["deployments"]
+  verbs: ["create", "get", "update", "list", "delete"]
 eof
 
 $ echo <<eof |kubectl apply -f -
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-name: dev
-namespace: development
+  name: dev
+  namespace: development
 subjects:
 - kind: User
- name: dave
- apiGroup: rbac.authorization.k8s.io
+  name: dave
+  apiGroup: rbac.authorization.k8s.io
 roleRef:
-kind: Role
-name: dev
-apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dev
+  apiGroup: rbac.authorization.k8s.io
 eof
 
 ###or binding to group(last one not applied)
@@ -542,16 +545,16 @@ $ echo <<eof |kubectl apply -f -
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-name: dev
-namespace: development
+  name: dev
+  namespace: development
 subjects:
 - kind: Group
  name: dev
  apiGroup: rbac.authorization.k8s.io
 roleRef:
-kind: Role
-name: dev
-apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dev
+  apiGroup: rbac.authorization.k8s.io
 eof
 
 #create a kubeconfig.tpl file
@@ -560,19 +563,19 @@ apiVersion: v1
 kind: Config
 clusters:
 - cluster:
-   certificate-authority-data: ${CLUSTER_CA}
-   server: ${CLUSTER_ENDPOINT}
- name: ${CLUSTER_NAME}
+    certificate-authority-data: ${CLUSTER_CA}
+    server: ${CLUSTER_ENDPOINT}
+  name: ${CLUSTER_NAME}
 users:
 - name: ${USER}
- user:
-   client-certificate-data: ${CLIENT_CERTIFICATE_DATA}
+  user:
+    client-certificate-data: ${CLIENT_CERTIFICATE_DATA}
 contexts:
 - context:
-   cluster: ${CLUSTER_NAME}
-   user: dave
- name: ${USER}-${CLUSTER_NAME}
-current-context: ${USER}-${CLUSTER_NAME} 
+    cluster: ${CLUSTER_NAME}
+    user: dave
+  name: ${USER}-${CLUSTER_NAME}
+current-context: ${USER}-${CLUSTER_NAME}
 eof
 
 # User identifier
@@ -643,11 +646,11 @@ $ echo <<eof|kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
- name: mysecret
- namespace: development
+  name: mysecret
+  namespace: development
 data:
- username: YWRtaW4=
- password: MWYyZDFlMmU2N2Rm
+  username: YWRtaW4=
+  password: MWYyZDFlMmU2N2Rm
 
 
 
