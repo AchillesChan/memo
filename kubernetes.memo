@@ -441,11 +441,9 @@ https://medium.com/microsoftazure/azure-kubernetes-service-aks-authentication-an
 simple check:
 $ kubectl get csr Bob -o jsonpath='{.status.certificate}' | base64 --decode > Bob.crt
 $ kubectl config set-credentials Bob --client-certificate=Bob.crt --client-key=Bob.key
-$ kubectl auth can-i list pods -n engineering --as Bob  ###result is yes or no                                                                                             
-$ kubectl auth can-i list pods -n engineering
 
 
-$ openssl genrsa -out dave.key 4096
+$ openssl genrsa -out dave.key 4096         ###generate private key
 
 $ cat <<eof >csr.cnf
 [ req ]
@@ -460,8 +458,8 @@ O = dev
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
-extendedKeyUsage=serverAuth,clientAuth ####Note: the clientAuth entry in the extendedKeyUsage field is important 
-###as the certificate will be used to identify the client.
+extendedKeyUsage=serverAuth,clientAuth          ####Note: the clientAuth entry in the extendedKeyUsage field is important 
+                                                ###as the certificate will be used to identify the client.
 eof
 
 $ openssl req -config ./csr.cnf -new -key dave.key -nodes -out dave.csr
@@ -603,10 +601,12 @@ $ kubectl version
 Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.2", GitCommit:"66049e3b21efe110454d67df4fa62b08ea79a19b", GitTreeState:"clean", BuildDate:"2019-05-16T16:23:09Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"darwin/amd64"}
 Server Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.2", GitCommit:"66049e3b21efe110454d67df4fa62b08ea79a19b", GitTreeState:"clean", BuildDate:"2019-05-16T16:14:56Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 
-$ kubectl get nodes   
+$ kubectl auth can-i list pods -n development --as Bob  ###!!!!Important check,result is Yes/No,need Administrator privileges
+
+$ kubectl get nodes  ### no privileges ,can not get result
 Error from server (Forbidden): nodes is forbidden: User "dave" cannot list resource "nodes" in API group "" at the cluster scope
 
-$ echo <<eof|kubectl apply -f -
+$ echo <<eof|kubectl apply -f -  ###It's working as has privilges
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -642,7 +642,7 @@ spec:
    targetPort: 80
 eof
 
-$ echo <<eof|kubectl apply -f -
+$ echo <<eof|kubectl apply -f -  ###no privileges,cannot create
 # credentials.yaml
 apiVersion: v1
 kind: Secret
