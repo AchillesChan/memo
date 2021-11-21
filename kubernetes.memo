@@ -548,7 +548,7 @@ metadata:
   namespace: development
 subjects:
 - kind: Group
- name: dev
+  name: dev   ###the group information is provided in the Organisation (O) field within the certificate that is sent with each request.
  apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
