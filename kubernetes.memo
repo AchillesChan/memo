@@ -437,6 +437,7 @@ https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 https://docs.microsoft.com/en-us/azure/aks/azure-ad-rbac
 https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-identity
 https://medium.com/microsoftazure/azure-kubernetes-service-aks-authentication-and-authorization-between-azure-rbac-and-k8s-rbac-eab57ab8345d
+https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/
 
 simple check:
 $ kubectl get csr Bob -o jsonpath='{.status.certificate}' | base64 --decode > Bob.crt
