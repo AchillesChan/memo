@@ -503,7 +503,7 @@ $ openssl x509 -in ./dave.crt -noout -text
 Certificate:
            ...
 			Not After : Jun  2 07:56:00 2020 GMT
-       Subject: O=dev, CN=dave         #####key point
+       Subject: O=dev, CN=dave         #####key point,CN is userName,O is Group id.
 ...
 
 $ kubectl create ns development
