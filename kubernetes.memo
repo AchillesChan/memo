@@ -63,7 +63,8 @@ https://github.com/kubernetes/community/blob/master/contributors/design-proposal
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 https://theojulienne.io/2019/07/06/debugging-network-latency-kubernetes.html
 https://severalnines.com/database-blog/running-proxysql-kubernetes-service
-https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline
+https://docs.genesys.com/Documentation/GCXI/9.0.0/Dep/DockerOffline         ####Installing Kubernetes and Docker in offline scenarios
+https://www.centlinux.com/2019/04/install-kubernetes-k8s-offline-on-centos-7.html
 https://gist.github.com/onuryilmaz/89a29261652299d7cf768223fd61da02#download-kubernetes-rpms
 https://www.techrepublic.com/article/how-to-quickly-install-kubernetes-on-ubuntu/
 https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#optional-cluster-services
@@ -98,6 +99,49 @@ https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
 
 
+
+###install kubernetes cluster offline ,WORKING
+ 
+$>  vim /etc/hosts
+$>  hostnamectl set-hostname lan-k8s-m01  ###host need add to /etc/hosts
+$>  setenforce 0   #disable selinux
+$>  vi /etc/selinux/config 
+$>  yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+$>  yum install -y yum-utils   device-mapper-persistent-data   lvm2
+$>  yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+$>  yum makecache fast
+$>  yum install docker-ce-18.09.9 docker-ce-cli-18.09.9 
+$>  
+$>  yum install -y --cacheonly --disablerepo=* ./*.rpm      ###offline install 
+$>  
+$>  systemctl start docker
+$>  swapoff -a && sed -i "s/\/dev\/mapper\/centos-swap/\#\/dev\/mapper\/centos-swap/g" /etc/fstab
+$>  
+$>  ls |grep -v rpm|xargs -P 1 -n 1 sh -c 'docker load <$1' _  ###offline load image
+$>  
+$>  docker tag 8454cbe08dc9 hub.abc.com/it/kube-proxy:v1.16.2       ###tag images
+$>  docker tag 6e4bffa46d70 hub.abc.com/it/kube-scheduler:v1.16.2
+$>  docker tag 8454cbe08dc9 hub.abc.com/it/kube-proxy:v1.16.2
+$>  docker tag c2c9a0406787 hub.abc.com/it/kube-apiserver:v1.16.2
+$>  docker tag ebac1ae204a2 hub.abc.com/it/kube-scheduler:v1.16.2
+$>  docker tag 6e4bffa46d70 hub.abc.com/it/kube-controller-manager:v1.16.2
+$>  docker tag b2756210eeab hub.abc.com/it/kube-controller-manager:3.3.15-0
+$>  docker tag b2756210eeab hub.abc.com/it/etcd:3.3.15-0
+$>  docker tag bf261d157914 hub.abc.com/it/coredns:1.6.2
+$>  docker tag da86e6ba6ca1 hub.abc.com/it/pause:3.1
+$>  
+$>  systemctl stop firewalld  ###initial
+$>  kubeadm init --image-repository=hub.abc.com/it --pod-network-cidr=10.1.0.0/16 --upload-certs --kubernetes-version=1.16.2 
+$>  
+$>  mkdir -p $HOME/.kube
+$>  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$>  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+$>  
+$>  kubectl apply -f kube-flannel.yml ###master is read after install network plugin 
+$>  kubectl get nodes  
+$>     
+$>  kubeadm token generate    ###create new token for join on master
+$>  kubeadm token create 62f6a8.85flm1yzgr0f6r2n --print-join-command 
 
 ###renew cert
 https://www.ibm.com/docs/en/fci/1.1.0?topic=kubernetes-renewing-cluster-certificates  ###this work
@@ -1355,7 +1399,8 @@ kubeadm init --config=kubeadm-config.yaml --upload-certs
 kubectl describe pod coredns-58cc8c89f4-jjrz8 -n kube-system
 
 kubeadm init --image-repository=azk.cn/containers --pod-network-cidr=10.1.0.0/16 --upload-certs \
---apiserver-cert-extra-sans your-public-dns-or-ip.domain.com ###for public use
+--apiserver-cert-extra-sans your-public-dns-or-ip.domain.com \ ###for public use
+--kubernetes-version=1.16.2         ##specify version
 
 kubectl apply -f kube-flannel.yaml  ######only run on first master
 
