@@ -896,6 +896,14 @@ sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/txt/TXT/g") ; ./a.
 $  ls a.TXT
 a.TXT
 
+
+
+find ./ -type f|sed -e 's:./::g' |xargs -P 1 -n 1 -t  sh -c 'sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g")' \;
+sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g") ; bar-01 
+'bar-01' -> 'foo-01'
+sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g") ; bar-02 
+'bar-02' -> 'foo-02
+
 #############tested############
 
 #generate multiple var command
