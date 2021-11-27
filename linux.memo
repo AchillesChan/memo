@@ -898,11 +898,24 @@ a.TXT
 
 
 
-find ./ -type f|sed -e 's:./::g' |xargs -P 1 -n 1 -t  sh -c 'sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g")' \;
+$ find ./ -type f|sed -e 's:./::g' |xargs -P 1 -n 1 -t  sh -c 'sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g")' \;
 sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g") ; bar-01 
 'bar-01' -> 'foo-01'
 sh -c sleep 2s;mv -v "$1" $(printf "%s %s %s\n" "$1" | sed "s/bar/foo/g") ; bar-02 
 'bar-02' -> 'foo-02
+
+
+$ find . -maxdepth 1 -type f|xargs  -P 1 -n 1 sh -c 'sleep 2s;mv -v "$1" $(printf "%s\n" "$1" | sed "s/.txt/.bak-TXT/g")' _;
+'./a1.txt' -> './a1.bak-TXT'
+'./a1.a2.txt' -> './a1.a2.bak-TXT'
+
+
+$ echo "a11 a12 a13
+a21 a22 a23"|xargs -P 1 -n 3 -t sh -c 'echo  $(printf "%s %s %s \n" "$1" "$2" "$3"|sed "s:a:c:g")' _
+sh -c echo  $(printf "%s %s %s \n" "$1" "$2" "$3"|sed "s:a:c:g") _ a11 a12 a13 
+c11 c12 c13
+sh -c echo  $(printf "%s %s %s \n" "$1" "$2" "$3"|sed "s:a:c:g") _ a21 a22 a23 
+c21 c22 c23
 
 #############tested############
 
