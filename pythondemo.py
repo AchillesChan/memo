@@ -1,6 +1,13 @@
 ######Startmemoof pythondemo.py #######
 ######Start pythondemo.py #######
 
+https://www.analyticsvidhya.com/blog/2021/06/15-pandas-functions-to-replicate-basic-sql-queries-in-python/
+https://www.analyticsvidhya.com/blog/2021/06/join-the-dataframes-like-sql-tables-in-python-using-pandas/
+https://stackoverflow.com/questions/42429023/how-can-i-perform-an-inner-join-with-two-object-arrays-in-javascript
+https://stackoverflow.com/questions/54287262/joining-lists-in-python-3-like-sql-join
+
+
+
 ####c embedding python###
 https://dev.to/erikwhiting88/how-to-use-c-functions-in-python-7do
 

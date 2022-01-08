@@ -1,3 +1,13 @@
+##
+https://stackoverflow.com/questions/16758525/make-xargs-handle-filenames-that-contain-spaces
+
+$ find ./ -type f |xargs -d '\n' -I {} mv -v {} ../foo/ 
+'./1.txt' -> '../foo/1.txt'
+'./2' -> '../foo/2'
+'./3 kd.txt' -> '../foo/3 kd.txt'
+
+$ find . -name "*.mp3" -print0 | xargs -0 mplayer
+
 <<<<<<< HEAD
 $ echo 'Oct 27 20:34:08'|awk '{print $1,$2,$3}'|xargs -P 1 -n 3 sh -c 'date --date="$1 $2 $3" +%s' _
 1635338048
