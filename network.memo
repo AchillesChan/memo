@@ -1,5 +1,14 @@
 ######Startmemoof network.memo #######
 ######Start network.memo #######
+https://dustinspecker.com/posts/how-do-kubernetes-and-docker-create-ip-addresses/
+https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#
+https://dustinspecker.com/posts/iptables-how-docker-publishes-ports/
+https://dustinspecker.com/posts/iptables-how-kubernetes-services-direct-traffic-to-pods/
+https://dustinspecker.com/posts/ipvs-how-kubernetes-services-direct-traffic-to-pods/ 
+https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#team_device
+https://www.thegeekstuff.com/2011/01/iptables-fundamentals/
+https://www.thegeekstuff.com/2011/06/iptables-rules-examples/
+https://www.thegeekstuff.com/2012/08/iptables-log-packets/
 https://cizixs.com/2018/01/13/linux-udp-packet-drop-debug/ ###linux 系统 UDP 丢包问题分析思路
 https://netbeez.net/blog/how-to-use-the-linux-traffic-control/
 https://wiki.linuxfoundation.org/networking/netem   ###emulates delay,loss,duplication and re-ordering

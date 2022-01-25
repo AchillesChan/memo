@@ -1,5 +1,10 @@
 ######Startmemoof QA.memo #######
 ######Start QA.memo #######
+Intercept & view all your HTTP(S)
+Mock endpoints or entire servers
+Rewrite, redirect, or inject errors
+https://httptoolkit.tech/   ##similar to postman?
+
 ###update testlink version:database update
 
 Okay, finally I understand how to update the db schame. Here is the way:
