@@ -1,0 +1,4 @@
+https://itectec.com/superuser/how-to-merge-audio-and-video-file-in-ffmpeg/
+ffmpeg -i video.mp4 -i audio.wav -c:v copy -c:a aac output.mp4
+ffmpeg -i video.mp4 -i audio.wav -c copy output.mkv
+ffmpeg -i video.mp4 -i audio.wav -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 output.mp4
