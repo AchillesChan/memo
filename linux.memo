@@ -927,7 +927,7 @@ c11 c12 c13
 sh -c echo  $(printf "%s %s %s \n" "$1" "$2" "$3"|sed "s:a:c:g") _ a21 a22 a23 
 c21 c22 c23
 
-
+###include CJKV and space using find xargs 
 $ find ./ -type f  -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1\"" $(printf "%s" "\"$1\"" | sed "s/
 入门系列: 925 English //g")' _                                                                                   
 mv -v "./入门系列: 925 English Lesson 1 –1.mp4" "./Lesson 1 –1.mp4"
