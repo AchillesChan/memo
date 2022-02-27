@@ -929,13 +929,31 @@ c21 c22 c23
 
 ###include CJKV and space using find xargs 
 $ find ./ -type f  -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1\"" $(printf "%s" "\"$1\"" | sed "s/
-入门系列: 925 English //g")' _                                                                                   
-mv -v "./入门系列: 925 English Lesson 1 –1.mp4" "./Lesson 1 –1.mp4"
-mv -v "./入门系列: 925 English Lesson 1 –2.mp4" "./Lesson 1 –2.mp4"
+入门: English//g")' _                                                                                   
+mv -v "./入门: EnglishLesson 1 –1.mp4" "./Lesson 1 –1.mp4"
+mv -v "./入门: EnglishLesson 1 –2.mp4" "./Lesson 1 –2.mp4"
 
-$ find ./ -type f  -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1\"" $(printf "%s" "\"$1\"" | sed "s/入门系列: 925 English //g")' _|bash
-'./入门系列: 925 English Lesson 1 –1.mp4' -> './Lesson 1 –1.mp4'
-'./入门系列: 925 English Lesson 1 –2.mp4' -> './Lesson 1 –2.mp4'
+$ find ./ -type f  -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1\"" $(printf "%s" "\"$1\"" | sed "s/入门: English//g")' _|bash
+'./入门: EnglishLesson 1 –1.mp4' -> './Lesson 1 –1.mp4'
+'./入门: EnglishLesson 1 –2.mp4' -> './Lesson 1 –2.mp4'
+
+
+$ find ./ -type f -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv \"$1\" $(printf "%s" "\"$1"\"|sed -e "s/飘 2/飘/g")' _
+mv "./飘 256=集-飘 -1.mp4" "./飘56=集-飘 -1.mp4"
+mv "./飘 259=集-飘 -1.mp4" "./飘59=集-飘 -1.mp4"
+
+$ find ./ -type f -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v \"$1\" $(printf "%s" "\"$1"\"|sed -e "s/飘 2/飘/g")' _|bash
+'./飘 256=集-飘 -1.mp4' -> './飘56=集-飘 -1.mp4'
+'./飘 259=集-飘 -1.mp4' -> './飘59=集-飘 -1.mp4'
+
+!!!BEST with variables $1 find xargs sed print0 !!!
+$ find ./ -type f -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1"\" $(printf "%s" "\"$1"\"|sed -e "s/飘 第五季5/飘/g")' _
+mv -v "./飘 第五季59=集- 1.mp4" "./飘9=集- 1.mp4"
+mv -v "./飘 第五季53=集- 1.mp4" "./飘3=集- 1.mp4"
+
+$ find ./ -type f -name '*.mp4' -print0|xargs -P 1 -n 1 -0 sh -c 'echo mv -v "\"$1"\" $(printf "%s" "\"$1"\"|sed -e "s/飘 第五季5/飘/g")' _|bash
+'./飘 第五季59=集- 1.mp4' -> './飘9=集- 1.mp4'
+'./飘 第五季53=集- 1.mp4' -> './飘3=集- 1.mp4'
 
 
 #############tested############
