@@ -1,6 +1,7 @@
 ###ssh client config
 $ man 5 ssh_config
 $ cat ~/.ssh/config -v
+ControlPath /tmp/a-%h%p%r
 Host test
      Hostname 192.168.56.101
      User root
