@@ -1,4 +1,7 @@
 ###ssh client config
+https://goteleport.com/blog/ssh-jump-server/
+https://goteleport.com/blog/how-to-ssh-properly/
+
 $ man 5 ssh_config
 $ cat ~/.ssh/config -v
 ControlPath /tmp/a-%h%p%r
