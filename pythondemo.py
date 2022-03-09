@@ -6,6 +6,174 @@ https://www.analyticsvidhya.com/blog/2021/06/join-the-dataframes-like-sql-tables
 https://stackoverflow.com/questions/42429023/how-can-i-perform-an-inner-join-with-two-object-arrays-in-javascript
 https://stackoverflow.com/questions/54287262/joining-lists-in-python-3-like-sql-join
 
+https://www.liaoxuefeng.com/wiki/1016959663602400/1017261630425888 ####parameters detail
+
+
+$ python3  ##tuple ,content can not be modified,no apped insert method
+Python 3.4.6 (default, Mar 22 2017, 12:26:13) [GCC] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> name=('Adan','Bob','Cindy')
+>>> name
+('Adan', 'Bob', 'Cindy')
+>>> len(name)
+3
+>>> name(0)
+'Adan'
+>>> name(1)
+'Bob'
+>>> name(2)
+'Cindy'
+>>> name(3)
+Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      IndexError: list index out of range
+
+>>> t
+(1, 2, 3)
+>>> t(0)=3   ##tuple ,content can not be modified,no apped insert method
+  File "<stdin>", line 1
+  SyntaxError: can't assign to function call
+  >>> t
+  (1, 2, 3)
+
+
+
+
+>>> t=(1,)    ###for only one elements,MUST use this
+>>> t
+(1,)
+
+
+>>> t   =   ('a',   'b',    ['A',   'B'])
+>>> t[2][0] =   'X'
+>>> t[2][1] =   'Y'
+>>> t
+('a',   'b',    ['X',   'Y'])
+
+
+
+$ python3  ##list
+Python 3.4.6 (default, Mar 22 2017, 12:26:13) [GCC] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> name=['Adan','Bob','Cindy']
+>>> name
+['Adan', 'Bob', 'Cindy']
+>>> len(name)
+3
+>>> name[0]
+'Adan'
+>>> name[1]
+'Bob'
+>>> name[2]
+'Cindy'
+>>> name[3]
+Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      IndexError: list index out of range
+
+>>> name.append('Ele')
+>>> name
+['Adan', 'Bob', 'Cindy', 'Ele']
+>>> name.insert(1,'Jia')
+>>> name
+['Adan', 'Jia', 'Bob', 'Cindy', 'Ele']
+>>> name.pop()
+'Ele'
+>>> name
+['Adan', 'Jia', 'Bob', 'Cindy']
+>>> name.pop(1)
+'Jia'
+>>> name
+['Adan', 'Bob', 'Cindy']
+>>> name[1]='Yi'
+>>> name
+['Adan', 'Yi', 'Cindy']
+
+>>> s=['python','java',['asp','php'],'scheme']    ###multiple demision
+>>> s
+['python', 'java', ['asp', 'php'], 'scheme']
+
+>>> s[2][1]
+'php'
+
+
+###set
+>>> s = set([1, 2, 3])
+>>> s
+{1, 2, 3}
+
+>>> s = set([1, 1, 2, 2, 3, 3])
+>>> s
+{1, 2, 3}
+
+>>> s.add(4)
+>>> s
+{1, 2, 3, 4}
+>>> s.add(4)
+>>> s
+{1, 2, 3, 4}
+
+>>> s.remove(4)
+>>> s
+{1, 2, 3}
+
+>>> s1 = set([1, 2, 3])
+>>> s2 = set([2, 3, 4])
+>>> s1 & s2
+{2, 3}
+>>> s1 | s2
+{1, 2, 3, 4}
+
+
+
+所以，对于不变对象来说，调用对象自身的任意方法，也不会改变该对象自身的内容。相反，这些方法会创建新的对象并返回，这样，就保证了不可变对象本身永远是不可变的。
+>>> a = 'abc'
+>>> b = a.replace('a', 'A')
+>>> b
+'Abc'
+>>> a
+'abc'
+
+
+当我们调用a.replace('a', 'A')时，实际上调用方法replace是作用在字符串对象'abc'上的，而这个方法虽然名字叫replace，但却没有改变字符串'abc'的内容。相反，replace方法创建了一个新字符串'Abc'并返回，如果我们用变量b指向该新字符串，就容易理解了，变量a仍指向原有的字符串'abc'，但变量b却指向新字符串'Abc'了：
+
+####dict ->map
+>>> d=  {'Michael':     95,     'Bob':  75,     'Tracy':        85}
+>>> d['Michael']
+95
+>>> d['Adam']   =       67
+>>> d['Adam']
+67
+>>> d['Jack']   =       90
+>>> d['Jack']
+90
+>>> d['Jack']   =       88
+>>> d['Jack']
+88
+>>> d['Thomas']
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'Thomas'
+>>> 'Thomas'    in d
+False
+>>> d.get('Thomas')
+>>> d.get('Thomas',     -1)
+-1
+>>> d.pop('Bob')
+75
+>>> d
+{'Adam': 67, 'Michael': 95, 'Jack': 88, 'Tracy': 85}
+
+
+$> python3  ###variables
+Python 3.4.6 (default, Mar 22 2017, 12:26:13) [GCC] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> a='abc'
+>>> b=a
+>>> a='xyz'
+>>> print(b)
+abc         ####because b point to abc(the content,not pointer of a)
+
 
 
 ####c embedding python###
