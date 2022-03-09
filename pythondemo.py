@@ -7,6 +7,76 @@ https://stackoverflow.com/questions/42429023/how-can-i-perform-an-inner-join-wit
 https://stackoverflow.com/questions/54287262/joining-lists-in-python-3-like-sql-join
 
 https://www.liaoxuefeng.com/wiki/1016959663602400/1017261630425888 ####parameters detail
+##1 default parameters MUST point to none-variable object
+def power(x, n=2):
+    s = 1
+    while n > 0:
+        n = n - 1
+        s = s * x
+    return s
+
+>>> power(5)
+25
+>>> power(5, 3)
+125
+
+#special for list
+def add_end(L=None):
+    if L is None:
+        L = []
+    L.append('END')
+    return L
+
+
+###variable parameter
+def calc(*numbers):   #with * then name
+    sum = 0
+    for n in numbers:
+        sum = sum + n * n
+    return sum
+
+>>> calc(1, 2)
+5
+>>> calc()
+0
+>>> nums = [1, 2, 3]
+>>> calc(*nums)
+14
+
+###keyword parameter
+>>> def person(name, age, **kw):
+...     print('name:', name, 'age:', age, 'other:', kw)
+...
+>>>
+>>> person('Bob', 35, city='Beijing')
+name: Bob age: 35 other: {'city': 'Beijing'}
+>>> person('Adam', 45, gender='M', job='Engineer')
+name: Adam age: 45 other: {'job': 'Engineer', 'gender': 'M'}
+>>> extra = {'city': 'Beijing', 'job': 'Engineer'}
+>>> person('Jack', 24, city=extra['city'], job=extra['job'])
+name: Jack age: 24 other: {'job': 'Engineer', 'city': 'Beijing'}
+>>> extra = {'city': 'Beijing', 'job': 'Engineer'}
+>>> person('Jack', 24, **extra)
+name: Jack age: 24 other: {'city': 'Beijing', 'job': 'Engineer'}
+
+###named keyword parameter
+>>> def person(name, age, *, city, job):   ####with * independly
+...     print(name, age, city, job)
+...
+>>>
+>>> person('Jack', 24, city='Beijing', job='Engineer')   ###MUST with paramter name
+Jack 24 Beijing Engineer
+>>>
+>>>
+>>> def person(name, age, *, city='Beijing', job):
+...     print(name, age, city, job)
+...
+>>> person('Jack', 24, job='Engineer')
+Jack 24 Beijing Engineer
+
+
+
+
 
 
 $ python3  ##tuple ,content can not be modified,no apped insert method
