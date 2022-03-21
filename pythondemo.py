@@ -6,6 +6,10 @@ https://www.analyticsvidhya.com/blog/2021/06/join-the-dataframes-like-sql-tables
 https://stackoverflow.com/questions/42429023/how-can-i-perform-an-inner-join-with-two-object-arrays-in-javascript
 https://stackoverflow.com/questions/54287262/joining-lists-in-python-3-like-sql-join
 
+https://www.digitalocean.com/community/tutorials/how-to-use-unittest-to-write-a-test-case-for-a-function-in-python
+https://realpython.com/python-testing/
+
+
 https://www.liaoxuefeng.com/wiki/1016959663602400/1017261630425888 ####parameters detail
 ##1 default parameters MUST point to none-variable object
 def power(x, n=2):
