@@ -109,6 +109,7 @@ if __name__ == '__main__':
 
 
 
+###function-styple-map-reduce01### # https://www.liaoxuefeng.com/wiki/1016959663602400/1017329367486080
 ###function-styple-map-reduce01### # -*- coding: utf-8 -*-
 ###function-styple-map-reduce01### from datetime import datetime
 ###function-styple-map-reduce01### from functools import reduce
@@ -129,6 +130,8 @@ if __name__ == '__main__':
 ###function-styple-map-reduce01###     return x * x
 ###function-styple-map-reduce01###
 ###function-styple-map-reduce01### def main():
+###function-styple-map-reduce01###     print (list(map(str,   [1, 2,  3,  4,  5,  6])))  ###map02,shift int to string
+###function-styple-map-reduce01###
 ###function-styple-map-reduce01###     r = map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9])
 ###function-styple-map-reduce01###     print (list(r))      ###map
 ###function-styple-map-reduce01###
