@@ -1,4 +1,64 @@
 '''
+###logging
+###url https://www.digitalocean.com/community/tutorials/how-to-use-logging-in-python-3
+
+
+###code
+
+import logging
+
+ logger1 = logging.getLogger("module_1")
+ logger2 = logging.getLogger("module_2")
+
+
+ logging.basicConfig(
+    filename="test.log",
+    level=logging.DEBUG,
+    format="%(asctime)s:%(levelname)s:%(message)s"
+    )
+
+
+ class Pizza():
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+        logging.debug("Pizza created: {} (${})".format(self.name, self.price))
+
+    def make(self, quantity=1):
+        logging.debug("Made {} {} pizza(s)".format(quantity, self.name))
+
+    def eat(self, quantity=1):
+        logging.debug("Ate {} pizza(s)".format(quantity, self.name))
+
+ logger1.debug("Module 1 debugger")
+ logger2.debug("Module 2 debugger")
+
+ pizza_01 = Pizza("Sicilian", 18)
+ pizza_01.make(5)
+ pizza_01.eat(4)
+
+ pizza_02 = Pizza("quattro formaggi", 16)
+ pizza_02.make(2)
+ pizza_02.eat(2)
+
+
+###result
+
+$ cat test.log
+2022-03-24 11:27:38,405:DEBUG:Module 1 debugger
+2022-03-24 11:27:38,405:DEBUG:Module 2 debugger
+2022-03-24 11:27:38,405:DEBUG:Pizza created: Sicilian ($18)
+2022-03-24 11:27:38,405:DEBUG:Made 5 Sicilian pizza(s)
+2022-03-24 11:27:38,406:DEBUG:Ate 4 pizza(s)
+2022-03-24 11:27:38,406:DEBUG:Pizza created: quattro formaggi ($16)
+2022-03-24 11:27:38,406:DEBUG:Made 2 quattro formaggi pizza(s)
+2022-03-24 11:27:38,406:DEBUG:Ate 2 pizza(s)
+
+'''
+
+
+
+'''
 ###url
 https://pythongeeks.org/python-unit-testing/
 
