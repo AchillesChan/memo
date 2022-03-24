@@ -1,3 +1,205 @@
+'''
+###url
+https://pythongeeks.org/python-unit-testing/
+
+###code
+ import unittest
+
+ def div(a,b):
+    return a/b
+
+
+ class TestMethods(unittest.TestCase):
+  def setUp(self): #Function that runs before each test to set any pre-requisites
+    pass
+
+  def test_abs(self):
+    self.assertEqual( abs(-5), 5) #tests if the absolute value of -5 is 5
+
+  def test_pow(self):      #tests if 2 to the power of 5 is 32
+    self.assertEqual(pow(2,4),32)   ####error here
+
+  # Tests and returns TRUE if the boolean value is non empty or non 0
+  # or else returns False.
+  def test_bool(self):
+    self.assertTrue(bool(5))
+    self.assertFalse(bool(''))
+
+  # Returns true if the string splits and matches
+  # the given output.
+  def test_div(self):
+    s = 'hello world'
+    self.assertEqual(div(2,5),0.4)
+    with self.assertRaises(ZeroDivisionError):
+      div(2,0)
+
+ if __name__ == '__main__':
+    unittest.main()
+
+###result
+$> python3 unittest01.py
+...F
+======================================================================
+FAIL: test_pow (__main__.TestMethods)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "unittest01.py", line 15, in test_pow
+    self.assertEqual(pow(2,4),32)
+AssertionError: 16 != 32
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+FAILED (failures=1)
+
+'''
+
+'''
+###https://www.digitalocean.com/community/tutorials/how-to-write-doctests-in-python
+import doctest
+
+
+def add(a, b):
+    """
+    Given two integers, return the sum.
+
+    :param a: int
+    :param b: int
+    :return: int
+
+    >>> add(2, 3)
+    5
+    >>> add(0, 0)
+    0
+    """
+    return a * b
+
+doctest.testmod()
+
+
+
+def count_vowels(word):
+    """
+    Given a single word, return the total number of vowels in that single word.
+
+    :param word: str
+    :return: int
+
+    >>> count_vowels('Cusco')
+    2
+
+    >>> count_vowels('Manila')
+    3
+
+    >>> count_vowels('Istanbul')
+    3
+    """
+    total_vowels = 0
+    for letter in word.lower():
+        if letter in 'aeiou':
+            total_vowels += 1
+    return total_vowels
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+
+###result(all correct)
+$ python3 doctest01.py -v
+Trying:
+    add(2, 3)
+Expecting:
+    5
+ok
+Trying:
+    add(0, 0)
+Expecting:
+    0
+ok
+Trying:
+    count_vowels('Cusco')
+Expecting:
+    2
+ok
+Trying:
+    count_vowels('Manila')
+Expecting:
+    3
+ok
+Trying:
+    count_vowels('Istanbul')
+Expecting:
+    3
+ok
+1 items had no tests:
+    __main__
+2 items passed all tests:
+   2 tests in __main__.add
+   3 tests in __main__.count_vowels
+5 tests in 3 items.
+5 passed and 0 failed.
+Test passed.
+
+
+
+
+###result(with error):
+$ python3 doctest01.py  -v
+Trying:
+    add(2, 3)
+Expecting:
+    5
+**********************************************************************
+File "doctest01.py", line 34, in __main__.add
+Failed example:
+    add(2, 3)
+Expected:
+    5
+Got:
+    6
+Trying:
+    add(0, 0)
+Expecting:
+    0
+ok
+Trying:
+    count_vowels('Cusco')
+Expecting:
+    1
+**********************************************************************
+File "doctest01.py", line 8, in __main__.count_vowels
+Failed example:
+    count_vowels('Cusco')
+Expected:
+    1
+Got:
+    2
+Trying:
+    count_vowels('Manila')
+Expecting:
+    3
+ok
+Trying:
+    count_vowels('Istanbul')
+Expecting:
+    3
+ok
+1 items had no tests:
+    __main__
+**********************************************************************
+2 items had failures:
+   1 of   2 in __main__.add
+   1 of   3 in __main__.count_vowels
+5 tests in 3 items.
+3 passed and 2 failed.
+***Test Failed*** 2 failures.
+
+
+
+'''
+
+
 ''' basic
 
 # -*- coding: utf-8 -*-
