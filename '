@@ -1,57 +1,6 @@
 '''
-##url https://www.geeksforgeeks.org/coroutine-in-python/
-
-###code
-#-*- coding: utf-8 -*-
-def print_name(prefix):
-    print("Searching prefix:{}".format(prefix))
-    try :
-        while True:
-                name = (yield)
-                if prefix in name:
-                    print(name)
-    except GeneratorExit:
-            print("Closing coroutine!!")
-
-# calling coroutine, nothing will happen
-corou = print_name("Dear")
-
-# This will start execution of coroutine and
-# Prints first line "Searching prefix..."
-# and advance execution to the first yield expression
-corou.__next__()
-
-# sending inputs
-corou.send("Atul")      ###This will NOT print anything due to  if prefix in name:
-corou.send("Dear Atul") ###This will print Dear Atul
-corou.close()
-print()
-
-###result
-$ python3 coroutins.py
-Searching prefix:Dear
-Dear Atul
-Closing coroutine!!
-
-'''
-
-
-
-'''
-###yield
-###url
-https://www.guru99.com/python-yield-return-generator.html
-https://www.geeksforgeeks.org/python-yield-keyword/
-
-Advantages of yield:
-
-Since it stores the local variable states, hence overhead of memory allocation is controlled.
-Since the old state is retained, the flow doesn’t start from the beginning and hence saves time.
-
-Disadvantages of yield:
-
-Sometimes, the use of yield becomes erroneous if the calling of function is not handled properly.
-Time and memory optimization has a cost of complexity of code and hence sometimes hard to understand the logic behind it.
+###yield 
+###url https://www.guru99.com/python-yield-return-generator.html
 
 ###code
  # -*- coding: utf-8 -*-
@@ -64,24 +13,24 @@ Time and memory optimization has a cost of complexity of code and hence sometime
          c1 = c2
          c2 = c3
          count += 1
-
-
+ 
+ 
  fin = getFibonnaciSeries(7)    ##use list style
  print()
  print("Start from list:")
  print(list(fin))
  print()
-
+ 
  fin = getFibonnaciSeries(7)    ###only return generator memory address,Must recall
  print("only print memory address:")
  print(fin)
-
+ 
  fin = getFibonnaciSeries(7)    ###use for-loop style,Must recall
  print()
  print("from for-loop style:")
  for i in fin:
      print(i)
-
+ 
  fin = getFibonnaciSeries(7)    ###use next() style,Must recall
  print("from next() style:")
  print(next(fin))
@@ -89,22 +38,22 @@ Time and memory optimization has a cost of complexity of code and hence sometime
  print(next(fin))
  print(next(fin))
  print(next(fin))
-
+ 
  ########
  def test(n):
      return n*n
-
+ 
  def getSquare(n):
      for i in range(n):
          yield test(i)    ###calling function
-
- sq = getSquare(6)
+ 
+ sq = getSquare(10)
  print()
  print("Example calling function result:",list(sq))
 
 ###result
 
-$ python3 yieldfun.py
+$ python3 yieldfun.py 
 
 Start from list:
 [0, 1, 1, 2, 3, 5, 8]
@@ -127,7 +76,7 @@ from next() style:
 2
 3
 
-Example calling function result: [0, 1, 4, 9, 16, 25]
+Example calling function result: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 
 '''
 
