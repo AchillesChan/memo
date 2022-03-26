@@ -1,6 +1,103 @@
 '''
-##url https://www.geeksforgeeks.org/coroutine-in-python/
+###asyncio
+###url https://realpython.com/async-io-python/
 
+###version
+[root@c1 python]# python3
+Python 3.9.6 (default, Mar 26 2022, 07:32:44)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-44)] on linux
+
+###code
+[root@c1 python]# cat a1.py
+import asyncio
+
+async def count():
+    print("One")
+    await asyncio.sleep(1)
+    print("Two")
+async def main():
+    await asyncio.gather(count(), count())
+
+if __name__ == "__main__":
+    import time
+    s = time.perf_counter()
+    asyncio.run(main())
+    #loop = asyncio.get_event_loop()    ###old style before v3.5;same as asyncio.run(main())
+    #loop.run_until_complete(main())
+    elapsed = time.perf_counter() - s
+    print(f"{__file__} executed in {elapsed:0.2f} seconds.")
+
+
+###result,only cost 1 second,not 2second.
+[root@c1 python]# python3 a1.py
+One
+One
+Two
+Two
+/root/work/python/a1.py executed in 1.00 seconds.
+
+
+
+
+###another example
+##https://tutorialedge.net/python/concurrency/getting-started-with-asyncio-python/
+
+[root@c1 python]# cat a3.py
+import asyncio
+import random
+
+async def myCoroutine(id):
+    process_time = random.randint(1,5)
+    await asyncio.sleep(process_time)
+    print("Coroutine: {}, has successfully completed after {} seconds".format(id, process_time))
+
+async def main():
+    tasks = []
+    for i in range(10):
+        tasks.append(asyncio.ensure_future(myCoroutine(i)))
+
+    await asyncio.gather(*tasks)
+
+
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(main())
+finally:
+    loop.close()
+
+[root@c1 python]# python3 -V
+Python 3.9.6
+
+
+[root@c1 python]# python3 a3.py
+Coroutine: 1, has successfully completed after 1 seconds
+Coroutine: 6, has successfully completed after 1 seconds
+Coroutine: 9, has successfully completed after 1 seconds
+Coroutine: 0, has successfully completed after 2 seconds
+Coroutine: 8, has successfully completed after 2 seconds
+Coroutine: 3, has successfully completed after 3 seconds
+Coroutine: 5, has successfully completed after 3 seconds
+Coroutine: 4, has successfully completed after 4 seconds
+Coroutine: 2, has successfully completed after 5 seconds
+Coroutine: 7, has successfully completed after 5 seconds
+
+'''
+
+
+
+'''
+###install python3 on centos
+###https://tecadmin.net/install-python-3-7-on-centos/
+$> yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel xz-devel
+$> cd /usr/src   && wget https://www.python.org/ftp/python/3.7.11/Python-3.7.11.tgz
+$> tar vzxf Python-3.7.11.tgz
+$> cd Python-3.7.11 && ./configure --enable-optimizations  && make altinstall
+
+'''
+
+'''
+##url https://www.geeksforgeeks.org/coroutine-in-python/
+##https://stackabuse.com/coroutines-in-python/
 ###code
 #-*- coding: utf-8 -*-
 def print_name(prefix):
@@ -32,6 +129,46 @@ $ python3 coroutins.py
 Searching prefix:Dear
 Dear Atul
 Closing coroutine!!
+
+###example 2
+#-*- coding: utf-8 -*-
+from datetime import datetime
+def producer(cor):
+    n = 1
+    cor.send(None)
+    while n < 100:
+        cor.send(n)
+        n = n * 2
+
+#@coroutine
+def my_filter(num, cor):
+    cor.send(None)
+    while True:
+        n = (yield)
+        if n < num:
+            cor.send(n)
+
+#@coroutine
+def printer():
+    while True:
+        n = (yield)
+        print(n)
+now=datetime.now()
+print('%s: ' %now)
+prnt = printer()
+filt = my_filter(50, prnt)
+producer(filt)
+
+
+##result
+$ python3 c1.py
+2022-01-21 17:31:01.378527:
+1
+2
+4
+8
+16
+32
 
 '''
 
