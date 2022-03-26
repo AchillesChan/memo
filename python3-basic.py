@@ -38,8 +38,65 @@ Two
 
 
 
+###another example1
+###https://stackoverflow.com/questions/50757497/simplest-async-await-example-possible-in-python
 
-###another example
+###code:
+[root@c1 python]# cat a4.py
+import asyncio
+import time
+
+async def sleep():
+    print(f'Time: {time.time() - start:.2f}')
+    await asyncio.sleep(1)
+
+async def sum(name, numbers):
+    total = 0
+    for number in numbers:
+        print(f'Task {name}: Computing {total}+{number}')
+        await sleep()
+        total += number
+    print(f'Task {name}: Sum = {total}\n')
+
+start = time.time()
+
+loop = asyncio.get_event_loop()
+tasks = [
+    loop.create_task(sum("A", [1, 2])),
+    loop.create_task(sum("B", [1, 2, 3])),
+]
+loop.run_until_complete(asyncio.wait(tasks))
+loop.close()
+
+end = time.time()
+print(f'Time: {end-start:.2f} sec')
+
+
+
+##result
+[root@c1 python]# python3.9 a4.py
+Task A: Computing 0+1
+Time: 0.00
+Task B: Computing 0+1
+Time: 0.00
+Task A: Computing 1+2
+Time: 1.00
+Task B: Computing 1+2
+Time: 1.00
+Task A: Sum = 3
+
+Task B: Computing 3+3
+Time: 2.01
+Task B: Sum = 6
+
+Time: 3.01 sec
+
+
+
+
+###another example2
+
+
 ##https://tutorialedge.net/python/concurrency/getting-started-with-asyncio-python/
 
 [root@c1 python]# cat a3.py
