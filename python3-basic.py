@@ -1,4 +1,36 @@
 '''
+###re module
+###code
+[root@c1 python]# cat re1.py
+import re
+print(re.split(r'[\s\,\;]+', 'a,b;; c  d'))
+print(re.match(r'^\d{3}\-\d{3,8}$', '010-12345'))
+m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
+print('m0 is: %s' % m.group(0))  ###group
+print('m1 is: %s' % m.group(1))   ####group
+
+print(re.match(r'^(\d+)(0*)$', '102300').groups())   ##greedy match
+print(re.match(r'^(\d+?)(0*)$', '102300').groups())  ##none-greedy match
+
+re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')  ###compile for latter use,more effient
+print(re_telephone.match('010-12345').groups(1))
+print(re_telephone.match('010-8086').groups(2))
+
+[root@c1 python]# python3 re1.py
+['a', 'b', 'c', 'd']
+<re.Match object; span=(0, 9), match='010-12345'>
+m0 is: 010-12345
+m1 is: 010
+('102300', '')
+('1023', '00')
+('010', '12345')
+('010', '8086')
+
+
+'''
+
+
+'''
 ###asyncio
 ###url https://realpython.com/async-io-python/
 
