@@ -1,33 +1,29 @@
 '''
 ###re module
-###code
 [root@c1 python]# cat re1.py
 import re
-print(re.split(r'[\s\,\;]+', 'a,b;; c  d'))
+print(re.split(r'[\s\,\;]+', 'a,b;; c  d'),'###use multiple delimeter')
 print(re.match(r'^\d{3}\-\d{3,8}$', '010-12345'))
 m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
-print('m0 is: %s' % m.group(0))  ###group
-print('m1 is: %s' % m.group(1))   ####group
+print('m0 is: %s' % m.group(0),'###return all groups')
+print('m1 is: %s' % m.group(1),'###return one group')
 
-print(re.match(r'^(\d+)(0*)$', '102300').groups())   ##greedy match,PATT bettween group and groups
-print(re.match(r'^(\d+?)(0*)$', '102300').groups())  ##none-greedy match
+print(re.match(r'^(\d+)(0*)$', '102300').groups(),'###greedy match,return all groups')   ##greedy match
+print(re.match(r'^(\d+?)(0*)$', '102300').groups(),'###non-greedy match,return all groups')
 
-re_telephone = re.compile(r'^(\d{3})-(\d{3,8})-(\d{1,3})$')  ###compile for latter use,more effient
-print(re_telephone.match('010-12345-12').group(1))   ##PATT bettween group and groups ,here group
-print(re_telephone.match('010-2265-26').group(2))
-print(re_telephone.match('010-8086-39').group(3))
+re_telephone = re.compile(r'^(\d{1,3})-(\d{3,8})-(\d{1,3})$')  ###compile for latter use,more effient
+print(re_telephone.match('10-12345-12').group(1),'###return only one group')
+print(re_telephone.match('10-22345-12').group(2),'###return only one group')
 
 [root@c1 python]# python3 re1.py
-['a', 'b', 'c', 'd']
+['a', 'b', 'c', 'd'] ###use multiple delimeter
 <re.Match object; span=(0, 9), match='010-12345'>
-m0 is: 010-12345
-m1 is: 010
-('102300', '')   ##PATT bettween group and groups ,here groups
-('1023', '00')   ##PATT bettween group and groups ,here groups
-010               ##PATT bettween group and groups ,here group
-2265             ##PATT bettween group and groups ,here group
-39              ##PATT bettween group and groups ,here group
-
+m0 is: 010-12345 ###return all groups
+m1 is: 010 ###return one group
+('102300', '') ###greedy match,return all groups
+('1023', '00') ###non-greedy match,return all groups
+10 ###return only one group
+22345 ###return only one group
 
 '''
 
