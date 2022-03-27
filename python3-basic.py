@@ -9,22 +9,24 @@ m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
 print('m0 is: %s' % m.group(0))  ###group
 print('m1 is: %s' % m.group(1))   ####group
 
-print(re.match(r'^(\d+)(0*)$', '102300').groups())   ##greedy match
+print(re.match(r'^(\d+)(0*)$', '102300').groups())   ##greedy match,PATT bettween group and groups
 print(re.match(r'^(\d+?)(0*)$', '102300').groups())  ##none-greedy match
 
-re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')  ###compile for latter use,more effient
-print(re_telephone.match('010-12345').groups(1))
-print(re_telephone.match('010-8086').groups(2))
+re_telephone = re.compile(r'^(\d{3})-(\d{3,8})-(\d{1,3})$')  ###compile for latter use,more effient
+print(re_telephone.match('010-12345-12').group(1))   ##PATT bettween group and groups ,here group
+print(re_telephone.match('010-2265-26').group(2))
+print(re_telephone.match('010-8086-39').group(3))
 
 [root@c1 python]# python3 re1.py
 ['a', 'b', 'c', 'd']
 <re.Match object; span=(0, 9), match='010-12345'>
 m0 is: 010-12345
 m1 is: 010
-('102300', '')
-('1023', '00')
-('010', '12345')
-('010', '8086')
+('102300', '')   ##PATT bettween group and groups ,here groups
+('1023', '00')   ##PATT bettween group and groups ,here groups
+010               ##PATT bettween group and groups ,here group
+2265             ##PATT bettween group and groups ,here group
+39              ##PATT bettween group and groups ,here group
 
 
 '''
