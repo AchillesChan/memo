@@ -1,4 +1,71 @@
 '''
+###padas
+###url
+##install
+$> pip3 install matplotlib -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+$> pip3  install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+$> pip3 install pandas -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+$> pip3  install seaborn scipy  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+
+[root@c1 python]# cat padas02.py
+# importing pandas
+import pandas as pd
+
+# Creating dataframe a
+a = pd.DataFrame()
+
+# Creating Dictionary
+d = {'id': [1, 2, 10, 12],
+        'name': ['zhao', 'qian', 'sun', 'li']}
+
+a = pd.DataFrame(d)
+print('dataframe a is:')
+print(a)
+# Creating dataframe b
+b = pd.DataFrame()
+
+# Creating dictionary
+d = {'id': [1, 2, 9, 8],
+        'city': ['luoyang', 'changan', 'youzhou', 'jinling']}
+b = pd.DataFrame(d)
+print('dataframe b is:')
+print(b)
+# inner join
+df = pd.merge(a, b, on='id', how='inner')
+
+# display dataframe
+print('dataframe join a and b is:')
+print (df)
+
+[root@c1 python]# python3 padas02.py
+dataframe a is:
+   id  name
+0   1  zhao
+1   2  qian
+2  10   sun
+3  12    li
+dataframe b is:
+   id      city
+0   1   luoyang
+1   2  changan
+2   9   youzhou
+3   8   jinling
+dataframe join a and b is:
+   id  name      city
+0   1  zhao   luoyang
+1   2  qian  changan
+
+
+'''
+
+
+'''
+###data merge and join
+###https://www.shanelynn.ie/merge-join-dataframes-python-pandas-index-1/
+
+
+
+'''
 ###re module
 [root@c1 python]# cat re1.py
 import re
