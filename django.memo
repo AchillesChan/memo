@@ -1,3 +1,118 @@
+https://www.geeksforgeeks.org/how-to-create-an-app-in-django/
+
+
+$> django-admin startapp projectApp
+or 
+$> python manage.py startapp projectApp
+
+[root@c1 projectName]# tree 
+.
+├── db.sqlite3
+├── manage.py
+├── projectApp
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-39.pyc
+│   ├── models.py
+│   ├── __pycache__
+│   │   ├── admin.cpython-39.pyc
+│   │   ├── apps.cpython-39.pyc
+│   │   ├── __init__.cpython-39.pyc
+│   │   ├── models.cpython-39.pyc
+│   │   ├── urls.cpython-39.pyc
+│   │   └── views.cpython-39.pyc
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+└── projectName
+    ├── asgi.py
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-39.pyc
+    │   ├── settings.cpython-39.pyc
+    │   ├── urls.cpython-39.pyc
+    │   ├── views.cpython-39.pyc
+    │   └── wsgi.cpython-39.pyc
+    ├── settings.py
+    ├── urls.py
+    ├── views.py
+    └── wsgi.py
+
+6 directories, 28 files
+
+[root@c1 projectName]# cat projectApp/urls.py 
+from django.urls import path
+#now import the views.py file into this code
+from . import views
+urlpatterns=[
+  path('',views.index),
+]
+[root@c1 projectName]# cat projectApp/views.py 
+#from django.shortcuts import render
+from django.http import HttpResponse
+ 
+ 
+def index(request):
+  return HttpResponse("App index")
+# Create your views here.
+[root@c1 projectName]# cat projectName/settings.py 
+... ...
+DEBUG = FALSE
+
+ALLOWED_HOSTS = [ '127.0.0.1',
+    '192.168.6.1',
+]
+
+
+# Application definition
+
+INSTALLED_APPS = [
+     ... ...
+     'django.contrib.staticfiles',
+    'projectApp'   ####add app here
+]
+... ...
+
+ROOT_URLCONF = 'projectApp.urls'   ###add App name here
+#ROOT_URLCONF = 'projectName.urls'
+... ...
+
+
+[root@c1 projectName]# cat projectName/urls.py 
+... ...
+from django.urls import include         ###add include
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include("projectApp.urls")),   ###add include
+]
+
+
+# python3  manage.py runserver 0:8000
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+April 18, 2022 - 13:19:38
+Django version 4.0.3, using settings 'projectName.settings'
+Starting development server at http://0:8000/
+Quit the server with CONTROL-C.
+
+
+# curl 127.0.0.1:8000
+App index
+
+##########
+
+
+
+
+
+
+
 https://www.tutorialspoint.com/django/index.htm
 https://www.geeksforgeeks.org/how-to-create-a-basic-project-using-mvt-in-django/
 https://www.geeksforgeeks.org/django-project-mvt-structure/
