@@ -1,4 +1,93 @@
 '''
+[root@c1 python]# cat db02.py
+###https://pypi.org/project/PyMySQL/
+###https://zetcode.com/python/pymysql/ ***
+import pymysql
+import pymysql.cursors
+
+###0x1 with cursor
+
+con = pymysql.connect(host='127.0.0.1',
+        user='root',
+        password='my-secret',
+        db='testdb',
+        cursorclass=pymysql.cursors.DictCursor)
+
+try:
+
+    with con.cursor() as cur:
+
+        cur.execute('SELECT * FROM cities')
+
+        rows = cur.fetchall()
+
+        for row in rows:
+            print(row['id'], row['name'])
+
+finally:
+
+    con.close()
+
+
+###0x2 fetchall
+con = pymysql.connect(host='127.0.0.1', user='root',password='my-secret', db='testdb')
+try:
+
+    with con.cursor() as cur:
+
+        cur.execute('SELECT * FROM cities')
+
+        rows = cur.fetchall()
+
+        for row in rows:
+            print(f'{row[0]} {row[1]} {row[2]}')
+
+finally:
+
+    con.close()
+
+###0x3 get version
+con = pymysql.connect(host='127.0.0.1', user='root',password='my-secret', db='testdb')
+try:
+    with con.cursor() as cur:
+
+        cur.execute('SELECT VERSION()')
+
+        version = cur.fetchone()
+
+        print(f'Database version: {version[0]}')
+
+finally:
+
+    con.close()
+
+[root@c1 python]# python3 db02.py
+1 Bratislava
+2 Budapest
+3 Prague
+4 Warsaw
+5 Los Angeles
+6 New York
+7 Edinburgh
+8 Berlin
+1 Bratislava 432000
+2 Budapest 1759000
+3 Prague 1280000
+4 Warsaw 1748000
+5 Los Angeles 3971000
+6 New York 8550000
+7 Edinburgh 464000
+8 Berlin 3671000
+Database version: 5.7.24
+'''
+
+
+'''
+https://zetcode.com/python/pymysql/
+'''
+
+
+'''
 ###padas
 ###url
 ##install

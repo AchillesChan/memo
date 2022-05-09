@@ -101,6 +101,63 @@ https://about.gitlab.com/blog/2017/09/21/how-to-create-ci-cd-pipeline-with-autod
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscalerg
 https://koudingspawn.de/kubernetes-autoscaling/
 
+###https://linuxhandbook.com/kubectl-drain-node/
+###https://www.percona.com/blog/2021/01/20/drain-kubernetes-nodes-wisely/
+#Step 1: Mark the node as unschedulable (cordon)
+root@kmaster-rj:~# kubectl get nodes
+NAME          STATUS   ROLES    AGE   VERSION
+kmaster-rj    Ready    master   44d   v1.18.8
+kworker-rj1   Ready    <none>   44d   v1.18.8
+kworker-rj2   Ready    <none>   44d   v1.18.8
+root@kmaster-rj:~#
+
+root@kmaster-rj:~# kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP              NODE          NOMINATED NODE   READINESS GATES
+my-dep-557548758d-gprnr   1/1     Running   1          4d23h   172.16.213.48   kworker-rj1   <none>           <none>
+my-dep-557548758d-d2pmd   1/1     Running   1          4d15h     172.16.213.57   kworker-rj2   <none>           <none>
+pod-delete-demo           1/1     Running   1          2d      172.16.213.56   kworker-rj1   <none>           <none>
+root@kmaster-rj:~#
+
+root@kmaster-rj:~# kubectl cordon kworker-rj2
+node/kworker-rj2 cordoned
+root@kmaster-rj:~# 
+
+root@kmaster-rj:~# kubectl get nodes
+NAME          STATUS                     ROLES    AGE   VERSION
+kmaster-rj    Ready                      master   44d   v1.18.8
+kworker-rj1   Ready                      <none>   44d   v1.18.8
+kworker-rj2   Ready,SchedulingDisabled   <none>   44d   v1.18.8
+root@kmaster-rj:~#
+
+#Step 2: Drain the node to prepare for maintenance
+root@kmaster-rj:~# kubectl drain kworker-rj2 --grace-period=300 --ignore-daemonsets=true
+node/kworker-rj2 already cordoned
+WARNING: ignoring DaemonSet-managed Pods: kube-system/calico-node-fl8dl, kube-system/kube-proxy-95vdf
+evicting pod default/my-dep-557548758d-d2pmd
+pod/my-dep-557548758d-d2pmd evicted
+node/kworker-rj2 evicted
+root@kmaster-rj:~#
+
+NOTE: kubectl drain cannot delete Pods not managed by ReplicationController, ReplicaSet, Job, DaemonSet or StatefulSet. You need to use --force to override that and by doing that the individual pods will be deleted permanently.
+
+
+root@kmaster-rj:~# kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP              NODE          NOMINATED NODE   READINESS GATES
+my-dep-557548758d-gprnr   1/1     Running   1          4d23h   172.16.213.48   kworker-rj1   <none>           <none>
+my-dep-557548758d-dsanh   1/1     Running   0          27s     172.16.213.38   kworker-rj1   <none>           <none>
+pod-delete-demo           1/1     Running   1          2d      172.16.213.56   kworker-rj1   <none>           <none>
+root@kmaster-rj:~#
+
+#Step 3: Uncordon the node after maintenance completes
+
+root@kmaster-rj:~# kubectl uncordon kworker-rj2
+node/kworker-rj2 uncordoned
+
+root@kmaster-rj:~# kubectl get nodes
+NAME          STATUS   ROLES    AGE   VERSION
+kmaster-rj    Ready    master   44d   v1.18.8
+kworker-rj1   Ready    <none>   44d   v1.18.8
+kworker-rj2   Ready    <none>   44d   v1.18.8
 
 
 ###install kubernetes cluster offline ,WORKING
