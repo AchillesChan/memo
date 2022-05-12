@@ -431,6 +431,28 @@ online$> yumdownloader --assumeyes --destdir=<your_rpm_dir> --resolve yum-utils 
 online$> scp <your_rpm_dir> offlien:/path/2/rpm 
 offline$> yum install -y --cacheonly --disablerepo=* ./*.rpm
 
+
+https://linuxize.com/post/how-to-install-deb-packages-on-ubuntu/
+##check ubuntu  version
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.4 LTS
+Release:        20.04
+Codename:       focal
+
+online@ubuntu01:~$ apt-get download vsftpd
+Get:1 http://cn.archive.ubuntu.com/ubuntu focal/main amd64 vsftpd amd64 3.0.3-12 [115 kB]
+Fetched 115 kB in 2s (52.5 kB/s) 
+
+offline@ubuntu01:~$ sudo apt install ./vsftpd_3.0.3-12_amd64.deb
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Note, selecting 'vsftpd' instead of './vsftpd_3.0.3-12_amd64.deb'
+
+
+
 curl -d "@data.json" -X POST http://localhost:3000/data
 cat data.json
 {
