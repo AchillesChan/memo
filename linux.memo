@@ -1807,15 +1807,28 @@ https://ostechnix.com/download-packages-dependencies-locally-ubuntu/
 https://fabianlee.org/2016/07/27/ubuntu-installing-packages-without-public-internet-access/
 http://manpages.ubuntu.com/manpages/bionic/man8/apt-offline.8.html
  
-$> apt-get install --download-only pppoe ##online vm
+$> apt-get install --download-only installing-pkg-name##online vm
 $> ls /var/cache/apt/archives/        ###saved path
-$> cp to offline vm path /var/cache/apt/archives/
-$> cd /var/cache/apt/archives/ && sudo  dpkg -i *
+$> scp -3 online:~/var/cache/apt/archives/  offline@/var/cache/apt/archives/
+$offline> cd /var/cache/apt/archives/ && sudo  dpkg -i *.deb
 
 or--
 dpkg -l | grep "^ii"|grep vim| xargs sudo apt-get -y --force-yes install --reinstall --download-only
 
+#example on offline
+ubuntu01:/var/cache/apt/archives$ ping www.baidu.com
+ping: www.baidu.com: Temporary failure in name resolution
 
+ubuntu01:/var/cache/apt/archives$ ping 114.114.114.114
+ping: connect: Network is unreachable
+
+ubuntu01:/var/cache/apt/archives$ sudo dpkg -i *.deb
+Selecting previously unselected package bridge-utils.
+(Reading database ... 71807 files and directories currently installed.)
+Preparing to unpack bridge-utils_1.6-2ubuntu1_amd64.deb ...
+Unpacking bridge-utils (1.6-2ubuntu1) ...
+Selecting previously unselected package conntrack.
+... ...
 ###ubuntu basic
 
 
