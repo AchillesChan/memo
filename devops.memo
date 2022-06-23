@@ -4,7 +4,14 @@ https://medium.com/geekculture/jenkins-gitlab-integration-processes-668937236e5d
 https://docs.gitlab.com/ee/integration/jenkins.html
 https://github.com/jenkinsci/helm-charts
 https://www.bogotobogo.com/DevOps/Docker/Docker-Jenkins-Multibranch-Pipeline-with-Jenkinsfile-and-Github.php
-https://hands-on-tech.github.io/2020/03/15/k8s-jenkins-example.html            ####*** some typo cd/ci ci/cd
+
+https://hands-on-tech.github.io/2020/03/15/k8s-jenkins-example.html            ####**** some typo cd/ci ci/cd
+https://github.com/davidcampos/k8s-jenkins-example
+https://about.gitlab.com/blog/2016/12/14/continuous-delivery-of-a-spring-boot-application-with-gitlab-ci-and-kubernetes/
+https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
+https://blog.nestybox.com/2019/09/14/dind.html
+https://blog.nestybox.com/2019/11/11/docker-sandbox.html
+
 https://plugins.jenkins.io/docker-workflow/
 https://www.chenshaowen.com/blog/how-to-use-jenkins-docker-gitlab-to-build-django-automated-deployment-process.html
 https://www.geeksforgeeks.org/jenkins-and-git-integration-using-ssh-key/
