@@ -1,5 +1,6 @@
 ######Startmemoof network.memo #######
 ######Start network.memo #######
+https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux  ###tcp time wait
 https://dustinspecker.com/posts/how-do-kubernetes-and-docker-create-ip-addresses/
 https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#
 https://dustinspecker.com/posts/iptables-how-docker-publishes-ports/
