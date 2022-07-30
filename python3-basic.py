@@ -31,7 +31,8 @@ print ("joined:")
 ### df = df[df.columns[cols]]
 ### the same below
 
-print(df2[["User","Sub","score"]].to_string(index=False))
+print ((df2[["User","Sub","score"]].sort_values(by=['User']).to_string(index=False)))
+
 dbConnection.close()
 
 adan@ha1:~$ python3 pa02.py
@@ -55,11 +56,11 @@ before join:
 
 joined:
  User  Sub  score
-zhang  CHN     66
  wang  CHN     99
-zhang  ENG     77
  wang  ENG     88
   xia Math     98
+zhang  CHN     66
+zhang  ENG     77
 
 '''
 
