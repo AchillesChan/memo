@@ -1,4 +1,51 @@
 '''
+https://pythontic.com/pandas/serialization/mysql
+Importing data from a MySQL database into Pandas dataframe
+
+$ cat pa02.py
+
+from sqlalchemy import create_engine
+import pymysql
+import pandas as pd
+
+sqlEngine       = create_engine('mysql+pymysql://root:my-secret@127.0.0.1:5306', pool_recycle=3600)
+dbConnection    = sqlEngine.connect()
+basic           = pd.read_sql("select * from Student.basic", dbConnection);
+zone            = pd.read_sql("select * from Student.zone", dbConnection);
+
+
+print(basic)
+print('')
+print(zone)
+print('')
+dataframe = pd.merge(basic, zone, on='id', how='inner')
+print (dataframe)
+dbConnection.close()
+
+$ python3 pa02.py
+   id   name
+0   1  zhang
+1   2   wang
+2   3    xia
+3   4   Yang
+4   5   Tang
+
+   id     zone
+0   3    Toyko
+1   2    Paris
+2   1   London
+3   4  NewYork
+
+   id   name     zone
+0   1  zhang   London
+1   2   wang    Paris
+2   3    xia    Toyko
+3   4   Yang  NewYork
+
+'''
+
+
+'''
 [root@c1 python]# cat db02.py
 ###https://pypi.org/project/PyMySQL/
 ###https://zetcode.com/python/pymysql/ ***
