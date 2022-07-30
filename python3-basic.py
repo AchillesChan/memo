@@ -1,13 +1,16 @@
 '''
-https://pythontic.com/pandas/serialization/mysql
 Importing data from a MySQL database into Pandas dataframe
+https://pythontic.com/pandas/serialization/mysql
+https://www.geeksforgeeks.org/how-to-print-dataframe-in-python-without-index/
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html
+https://stackoverflow.com/questions/48641632/extracting-specific-columns-from-pandas-dataframe
 
-$ cat pa02.py
+adan@ha1:~$ cat pa02.py
 from sqlalchemy import create_engine
 import pymysql
 import pandas as pd
 
-sqlEngine       = create_engine('mysql+pymysql://user:password@127.0.0.1:5306', pool_recycle=3600)
+sqlEngine       = create_engine('mysql+pymysql://root:my-secret@127.0.0.1:5306', pool_recycle=3600)
 dbConnection    = sqlEngine.connect()
 basic           = pd.read_sql("select id as uid,name as User from Student.basic", dbConnection);
 subjective      = pd.read_sql("select id as sid,name as Sub from Student.subjective", dbConnection);
@@ -15,14 +18,19 @@ score           = pd.read_sql("select * from Student.score", dbConnection);
 
 pd.set_option('display.expand_frame_repr', False)
 df1 = pd.merge(score, basic, on='uid', how='inner')
-df2 = pd.merge(df1,subjective, on = 'sid' ,how = 'inner')
+df2 = pd.merge(subjective,df1, on = 'sid' ,how = 'inner')
+print ("before join:")
 print (basic)
 print (subjective)
 print (score)
-print (df2)
+
+print ("")
+print ("joined:")
+print(df2[["User","Sub","score"]].to_string(index=False))
 dbConnection.close()
 
-$ python3 pa02.py
+adan@ha1:~$ python3 pa02.py
+before join:
    uid   User
 0    1  zhang
 1    2   wang
@@ -39,12 +47,14 @@ $ python3 pa02.py
 2    2   22     88
 3    2   11     99
 4    3   33     98
-   uid  sid  score   User   Sub
-0    1   11     66  zhang   CHN
-1    2   11     99   wang   CHN
-2    1   22     77  zhang   ENG
-3    2   22     88   wang   ENG
-4    3   33     98    xia  Math
+
+joined:
+ User  Sub  score
+zhang  CHN     66
+ wang  CHN     99
+zhang  ENG     77
+ wang  ENG     88
+  xia Math     98
 
 '''
 
