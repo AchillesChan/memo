@@ -3,44 +3,48 @@ https://pythontic.com/pandas/serialization/mysql
 Importing data from a MySQL database into Pandas dataframe
 
 $ cat pa02.py
-
 from sqlalchemy import create_engine
 import pymysql
 import pandas as pd
 
-sqlEngine       = create_engine('mysql+pymysql://root:my-secret@127.0.0.1:5306', pool_recycle=3600)
+sqlEngine       = create_engine('mysql+pymysql://user:password@127.0.0.1:5306', pool_recycle=3600)
 dbConnection    = sqlEngine.connect()
-basic           = pd.read_sql("select * from Student.basic", dbConnection);
-zone            = pd.read_sql("select * from Student.zone", dbConnection);
+basic           = pd.read_sql("select id as uid,name as User from Student.basic", dbConnection);
+subjective      = pd.read_sql("select id as sid,name as Sub from Student.subjective", dbConnection);
+score           = pd.read_sql("select * from Student.score", dbConnection);
 
-
-print(basic)
-print('')
-print(zone)
-print('')
-dataframe = pd.merge(basic, zone, on='id', how='inner')
-print (dataframe)
+pd.set_option('display.expand_frame_repr', False)
+df1 = pd.merge(score, basic, on='uid', how='inner')
+df2 = pd.merge(df1,subjective, on = 'sid' ,how = 'inner')
+print (basic)
+print (subjective)
+print (score)
+print (df2)
 dbConnection.close()
 
 $ python3 pa02.py
-   id   name
-0   1  zhang
-1   2   wang
-2   3    xia
-3   4   Yang
-4   5   Tang
-
-   id     zone
-0   3    Toyko
-1   2    Paris
-2   1   London
-3   4  NewYork
-
-   id   name     zone
-0   1  zhang   London
-1   2   wang    Paris
-2   3    xia    Toyko
-3   4   Yang  NewYork
+   uid   User
+0    1  zhang
+1    2   wang
+2    3    xia
+3    4   Yang
+4    5   Tang
+   sid   Sub
+0   11   CHN
+1   22   ENG
+2   33  Math
+   uid  sid  score
+0    1   11     66
+1    1   22     77
+2    2   22     88
+3    2   11     99
+4    3   33     98
+   uid  sid  score   User   Sub
+0    1   11     66  zhang   CHN
+1    2   11     99   wang   CHN
+2    1   22     77  zhang   ENG
+3    2   22     88   wang   ENG
+4    3   33     98    xia  Math
 
 '''
 
