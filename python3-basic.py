@@ -26,6 +26,11 @@ print (score)
 
 print ("")
 print ("joined:")
+
+### cols = [1,2,3,4]
+### df = df[df.columns[cols]]
+### the same below
+
 print(df2[["User","Sub","score"]].to_string(index=False))
 dbConnection.close()
 
