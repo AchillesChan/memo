@@ -5,62 +5,37 @@ https://www.geeksforgeeks.org/how-to-print-dataframe-in-python-without-index/
 https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html
 https://stackoverflow.com/questions/48641632/extracting-specific-columns-from-pandas-dataframe
 
-adan@ha1:~$ cat pa02.py
+adan@ha1:~$ grep -v '#' pa02.py
 from sqlalchemy import create_engine
 import pymysql
 import pandas as pd
 
-sqlEngine       = create_engine('mysql+pymysql://root:my-secret@127.0.0.1:5306', pool_recycle=3600)
+sqlEngine       = create_engine('mysql+pymysql://root:my-secret@127.0.0.1:3306', pool_recycle=3600)
 dbConnection    = sqlEngine.connect()
 basic           = pd.read_sql("select id as uid,name as User from Student.basic", dbConnection);
-subjective      = pd.read_sql("select id as sid,name as Sub from Student.subjective", dbConnection);
+sub             = pd.read_sql("select id as sid,name as Sub from Student.sub", dbConnection);
 score           = pd.read_sql("select * from Student.score", dbConnection);
 
 pd.set_option('display.expand_frame_repr', False)
 df1 = pd.merge(score, basic, on='uid', how='inner')
-df2 = pd.merge(subjective,df1, on = 'sid' ,how = 'inner')
-print ("before join:")
-print (basic)
-print (subjective)
-print (score)
-
-print ("")
+df2 = pd.merge(sub,df1, on = 'sid' ,how = 'inner')
 print ("joined:")
-
-### cols = [1,2,3,4]
-### df = df[df.columns[cols]]
-### the same below
-
-print ((df2[["User","Sub","score"]].sort_values(by=['User']).to_string(index=False)))
-
+print ((df2[["User","Sub","score"]].sort_values(by=['User','Sub']).to_string(index=False)))
 dbConnection.close()
 
 adan@ha1:~$ python3 pa02.py
-before join:
-   uid   User
-0    1  zhang
-1    2   wang
-2    3    xia
-3    4   Yang
-4    5   Tang
-   sid   Sub
-0   11   CHN
-1   22   ENG
-2   33  Math
-   uid  sid  score
-0    1   11     66
-1    1   22     77
-2    2   22     88
-3    2   11     99
-4    3   33     98
-
 joined:
- User  Sub  score
- wang  CHN     99
- wang  ENG     88
-  xia Math     98
-zhang  CHN     66
-zhang  ENG     77
+ User Sub  score
+ Adan Chn     77
+ Adan Eng     66
+ Adan Phy     88
+  Bob Chn     79
+  Bob Eng     67
+  Bob Phy     90
+Cindy Chn     83
+Cindy Eng     75
+Cindy Phy     96
+
 
 '''
 
