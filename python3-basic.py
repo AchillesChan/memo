@@ -1,3 +1,27 @@
+https://www.geeksforgeeks.org/python-bitwise-operators/
+https://www.geeksforgeeks.org/modify-bit-given-position/
+'''
+# Python3 program to modify a bit at position
+# p in n to b.
+
+# Returns modified n.
+def modifyBit( n, p, b):
+	mask = 1 << p
+	return (n & ~mask) | ((b << p) & mask)
+
+# Driver code
+def main():
+	print(modifyBit(6, 2, 0))
+	print(modifyBit(6, 5, 1))
+
+if __name__ == '__main__':
+	main()
+# This code is contributed by PrinciRaj1992
+
+
+'''
+
+
 '''
 Importing data from a MySQL database into Pandas dataframe
 https://pythontic.com/pandas/serialization/mysql
@@ -20,7 +44,7 @@ pd.set_option('display.expand_frame_repr', False)
 df1 = pd.merge(score, basic, on='uid', how='inner')
 df2 = pd.merge(sub,df1, on = 'sid' ,how = 'inner')
 print ("joined:")
-print ((df2[["User","Sub","score"]].sort_values(by=['User','Sub']).to_string(index=False)))
+print ((df2[["User","Sub","score"]].sort_values(by=['User','Sub'],ascending=True).to_string(index=False)))
 dbConnection.close()
 
 adan@ha1:~$ python3 pa02.py

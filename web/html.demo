@@ -1,0 +1,37 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>t2</title>
+<meta name="generator" content="HTML::TextToHTML v2.53"/>
+</head>
+<body>
+<p>
+<h1>P1</h1>
+http://www.example.com
+</p>
+<pre>            ###pre define format
+{
+    "log-opts": {
+        "max-size": "10m",
+        "max-file": "3"
+    },
+    "insecure-registries":["<a href="https://192.168.1.109/8080">https://192.168.1.109/8080</a>"],
+    "graph": "/data/docker",
+    "runtimes": {
+        "sysbox-runc": {
+            "path": "/usr/bin/sysbox-runc"
+        }
+    },
+    "bip": "172.20.0.1/16",
+    "default-address-pools": [
+        {
+            "base": "172.25.0.0/16",
+            "size": 24
+        }
+    ]
+}
+</pre>
+</body>
+</html>

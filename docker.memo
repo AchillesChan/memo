@@ -1,3 +1,8 @@
+https://contains.dev/blog/optimizing-docker-image-size
+https://devopscube.com/reduce-docker-image-size
+https://www.ctl.io/developers/blog/post/dockerfile-entrypoint-vs-cmd
+https://www.ctl.io/developers/blog/post/dockerfile-add-vs-copy/
+
 https://www.cnblogs.com/sparkdev/p/9573248.html   ###*** docker COPY/ADD copy/add Copy/Add
 https://hasura.io/blog/how-to-write-dockerfiles-for-python-web-apps-6d173842ae1d/  ###ok
 https://docs.docker.com/language/python/build-images/    ###failed 
