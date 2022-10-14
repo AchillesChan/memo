@@ -1,3 +1,6 @@
+$ curl -o /dev/null -s -w %{http_code} www.example.com   ####curl get head only 
+302
+
 https://devopedia.org/linux-signals
 ###ssh client config
 https://goteleport.com/blog/ssh-jump-server/
