@@ -1,6 +1,13 @@
 ######Startmemoof nginx.memo #######
 ######Start nginx.memo #######
 
+
+prevent Chinese 乱码/Mojibake
+
+Append/modify the following directive in http, server, or location:
+charset UTF-8;
+
+
 https://www.howtoforge.com/nginx-how-to-block-exploits-sql-injections-file-injections-spam-user-agents-etc
 if ( $query_string ~* ".*[;'<>].*" ){
      return 404;
@@ -539,7 +546,7 @@ $>sudo vim /usr/local/nginx/conf/nginx.conf
         location /download/ {
             auth_basic "Auth";
             auth_basic_user_file /usr/local/nginx/conf/auth_file;
-            autoindex on; 
+            autoindex on;              ####permit browse file list 
             autoindex_exact_size on; 
             autoindex_localtime on; 
             root /data/source; 

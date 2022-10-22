@@ -16,3 +16,9 @@ file 'first.mp4'$
 file 'last.mp4'$
 
 $> ffmpeg -safe 0 -f concat -i list.txt -c copy all.mp4
+
+--
+for ts file
+cat 1.ts >>all.ts
+cat 2.ts >>all.ts
+... ...

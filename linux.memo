@@ -1,3 +1,71 @@
+https://zhuanlan.zhihu.com/p/27253604 Mojibake/乱码
+
+
+https://www.golinuxcloud.com/run-while-loop-until-specific-time-shell-bash/
+https://serverfault.com/questions/895962/what-is-the-difference-between-and-when-using-bin-bash-c
+$$ is the PID of the current shell. When you use $$ in the bash -c script body, you get the pid of that spawned shell
+$ echo $$; bash -c 'echo $$'; echo $$
+6872
+6987
+6872
+
+$! is the PID of the last backgrounded process
+$ sleep 5 & echo $!; sleep 5 & echo $!; echo ===; pgrep -l sleep
+[1] 7118
+7118
+[2] 7119
+7119
+===
+7118 sleep
+7119 sleep
+
+https://linuxize.com/post/bash-wait/ ###parallel prefer 
+
+$ cat c.sh
+#!/bin/bash
+
+echo "$(date +%H:%M:%S): start"
+pids=()
+timeout 10 bash -c 'sleep 20; echo "$(date +%H:%M:%S): job 1 terminated successfully"' &
+pids+=($!)
+timeout 2 bash -c 'sleep 5; echo "$(date +%H:%M:%S): job 2 terminated successfully"' &
+pids+=($!)
+for pid in ${pids[@]}; do
+   wait $pid
+   exit_status=$?
+   if [[ $exit_status -eq 124 ]]; then
+      echo "$(date +%H:%M:%S): $pid terminated by timeout"
+   else
+      echo "$(date +%H:%M:%S): $pid exited successfully"
+   fi
+done
+
+$ sh  c.sh 
+22:05:39: start
+22:05:49: 19383 terminated by timeout
+22:05:49: 19384 terminated by timeout
+
+
+
+### http://ascii-table.com/ansi-escape-sequences.php
+### https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_sequences
+### https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
+
+[192 ]$ cat -A a |head -n 3
+^[[0m^[[00ma^[[0m$
+^[[00m137.ts^[[0m$
+^[[00m136.ts^[[0m$
+
+[192 ]$ sed -i 's/\x1b\[[0-9;]*m//g' a
+
+[192 ]$ cat -A a |head -n 3
+a$
+137.ts$
+136.ts$
+
+---------------
+
+
 $ curl -o /dev/null -s -w %{http_code} www.example.com   ####curl get head only 
 302
 
