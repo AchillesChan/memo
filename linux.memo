@@ -1,3 +1,19 @@
+###find out some missing file of seq files,sed single quote 
+$ ls
+1.txt  2.txt  4.txt  5.txt  6.txt  9.txt
+
+$ ls 3.txt
+ls: cannot access '3.txt': No such file or directory
+
+$ seq 1 9 |xargs -P 1 -n 1 bash -c 'ls $1.txt >/dev/null 2>  >(tee -a tmp)' _;clear;awk '{print $4}' tmp|sed -e 's%:%%g' -e 's:':':g' -e "s:'::g"|sort|uniq   
+
+3.txt
+7.txt
+8.txt
+
+-----------------
+
+
 https://zhuanlan.zhihu.com/p/27253604 Mojibake/乱码
 
 
