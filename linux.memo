@@ -1,9 +1,30 @@
-###find out some missing file of seq files,sed single quote 
+$ time seq 1 10 |xargs -P 5 -n 1 bash -c 'ping 10.1.1.0.$1 -c 1 &> /dev/null && echo 10.1.1.0.$1 is live || echo 10.1.1.0.$1 not exist' _   ###parallel ping 
+10.1.1.0.3 is live
+10.1.1.0.1 is live
+10.1.1.0.4 is live
+10.1.1.0.8 is live
+10.1.1.0.6 is live
+10.1.1.0.2 not exist
+10.1.1.0.9 not exist
+10.1.1.0.10 not exist
+10.1.1.0.5 not exist
+10.1.1.0.7 not exist
+
+real 10.012     user 0.037      sys 0.020       pcpu 0.56
+
+
+
+###find out some missing file of seq files,sed single quote,tee,redirect 
 $ ls
 1.txt  2.txt  4.txt  5.txt  6.txt  9.txt
 
 $ ls 3.txt
 ls: cannot access '3.txt': No such file or directory
+
+$ rm -f tmp;seq 1 9 |xargs -P 1 -n 1 bash -c 'ls $1.txt 1>/dev/null 2>> tmp ' _;awk '{print $4}' tmp|sed -e 's%:%%g' -e "s:'::g" 
+3.txt
+5.txt
+8.txt
 
 $ seq 1 9 |xargs -P 1 -n 1 bash -c 'ls $1.txt >/dev/null 2>  >(tee -a tmp)' _;clear;awk '{print $4}' tmp|sed -e 's%:%%g' -e 's:':':g' -e "s:'::g"|sort|uniq   
 

@@ -1,5 +1,38 @@
 ######Startmemoof bash-script.memo #######
 ######Start bash-script.memo #######
+
+Parallel pings
+When it comes to 255 addresses, the delay gets accumulated and becomes large. We can
+run all the ping commands in parallel to make this faster. To make the ping commands run
+in parallel, we enclose the loop body in ( )&. ( ) encloses a block of commands to run as a
+subshell and & sends it to the background.
+
+#!/bin/bash
+#Filename: fast_ping.sh
+# Change base address 192.168.0 according to your network.
+for ip in 192.168.0.{1..255} ;
+do
+ (
+ ping $ip -c2 &> /dev/null ;
+
+ if [ $? -eq 0 ];
+ then
+ echo $ip is alive
+ fi
+ )&
+ done
+wait
+
+
+In the for loop, we execute many background processes and come out of the loop,
+terminating the script. In order to prevent the script to terminate until all its entire child
+processes end, we have a command called wait. Place wait at the end of the script,
+so that it waits for the time until all the child ( ) subshell processes complete.
+
+
+
+
+
 https://betterdev.blog/minimal-safe-bash-script-template/
 https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel/246128#246128
