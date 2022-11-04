@@ -1,5 +1,9 @@
 ######Startmemoof sniffer.memo #######
 ######Start sniffer.memo #######
+ https://downey.io/blog/kubernetes-ephemeral-debug-container-tcpdump/
+  $ kubectl exec  nginx -c nginx -- tcpdump -i eth0 -w - | wireshark -k -i -   ###TIPS  ** 
+
+
 Tcpdump usage examples from https://www.rationallyparanoid.com/articles/tcpdump.html
 
 #############get sniffer packages and use string read it
