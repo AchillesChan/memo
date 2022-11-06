@@ -1,5 +1,67 @@
 ######Startmemoof ansible.memo #######
 ######Start ansible.memo #######
+adan@ha1:~/ansible$ ansible -i vms all --user=adan --become-user root -e 'ansible_become_password=@p.yml' --vault-password-file=vault.txt  -m raw -a 'ls /etc/cni/net.d' 
+n1 | FAILED | rc=2 >>
+ls: cannot access '/etc/cni/net.d': Permission denied           ####why ?????
+Shared connection to 192.168.56.112 closed.
+non-zero return code
+
+adan@ha1:~/ansible$ ansible -i vms all --user=adan --become-user root -e 'ansible_become_password=@p.yml' --vault-password-file=vault.txt  -m raw -a 'id adan' 
+m1 | CHANGED | rc=0 >>
+uid=1000(adan) gid=1000(adan) groups=1000(adan),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd),117(docker)
+Shared connection to 192.168.56.111 closed.
+
+https://www.shellhacks.com/ansible-sudo-a-password-is-required/
+https://stackoverflow.com/questions/21870083/specify-sudo-password-for-ansible
+
+$ ansible-playbook playbook.yml -i inventory.ini --user=username \
+                              --extra-vars "ansible_sudo_pass=yourPassword"
+
+$ ansible -i vms all -e "ansible_become_password=your-sudo-pwd" -m raw -a 'ip r' --user=user1  --become 
+n1 | CHANGED | rc=0 >>
+
+default via 192.168.56.1 dev enp0s3 proto static 
+10.244.0.0/24 via 10.244.0.0 dev flannel.1 onlink 
+10.244.1.0/24 dev cni0 proto kernel scope link src 10.244.1.1 
+10.244.2.0/24 via 10.244.2.0 dev flannel.1 onlink 
+10.244.3.0/24 via 10.244.3.0 dev flannel.1 onlink 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.56.0/24 dev enp0s3 proto kernel scope link src 192.168.56.112 
+Shared connection to 192.168.56.112 closed.
+
+n2 | CHANGED | rc=0 >>
+
+default via 192.168.56.1 dev enp0s3 proto static 
+10.244.0.0/24 via 10.244.0.0 dev flannel.1 onlink 
+10.244.1.0/24 via 10.244.1.0 dev flannel.1 onlink 
+10.244.2.0/24 via 10.244.2.0 dev flannel.1 onlink 
+10.244.3.0/24 dev cni0 proto kernel scope link src 10.244.3.1 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.56.0/24 dev enp0s3 proto kernel scope link src 192.168.56.113 
+Shared connection to 192.168.56.113 closed.
+
+n3 | CHANGED | rc=0 >>
+
+
+default via 192.168.56.1 dev enp0s3 proto static 
+10.244.0.0/24 via 10.244.0.0 dev flannel.1 onlink 
+10.244.1.0/24 via 10.244.1.0 dev flannel.1 onlink 
+10.244.2.0/24 dev cni0 proto kernel scope link src 10.244.2.1 
+10.244.3.0/24 via 10.244.3.0 dev flannel.1 onlink 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.56.0/24 dev enp0s3 proto kernel scope link src 192.168.56.114 
+Shared connection to 192.168.56.114 closed.
+
+m1 | CHANGED | rc=0 >>
+
+default via 192.168.56.1 dev enp0s3 proto static 
+10.244.1.0/24 via 10.244.1.0 dev flannel.1 onlink 
+10.244.2.0/24 via 10.244.2.0 dev flannel.1 onlink 
+10.244.3.0/24 via 10.244.3.0 dev flannel.1 onlink 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.56.0/24 dev enp0s3 proto kernel scope link src 192.168.56.111 
+Shared connection to 192.168.56.111 closed.
+
 
 ##pssh 
 https://www.cyberciti.biz/cloud-computing/how-to-use-pssh-parallel-ssh-program-on-linux-unix/
