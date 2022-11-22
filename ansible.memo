@@ -6,6 +6,18 @@ ls: cannot access '/etc/cni/net.d': Permission denied           ####why ?????
 Shared connection to 192.168.56.112 closed.
 non-zero return code
 
+adan@ha1:~/ansible$ export ASB_BECOME_PWD=your-sudo-pwd    ####!!!!! **
+adan@ha1:~/ansible$ ansible -i vms master --user=adan --become  -m raw -a 'ls /etc/cni/net.d'  -e "ansible_become_password=$ASB_BECOME_PWD"
+m1 | CHANGED | rc=0 >>
+
+10-calico.conflist  calico-kubeconfig
+Shared connection to 192.168.56.111 closed.
+
+adan@ha1:~/ansible$ export ASB_BECOME_PWD=''   ###clear ASB_BECOME_PWD
+adan@ha1:~/ansible$ ansible -i vms master --user=adan --become  -m raw -a 'ls /etc/cni/net.d'  -e "ansible_become_password=$ASB_BECOME_PWD"
+m1 | FAILED | rc=-1 >>
+Missing sudo password
+
 adan@ha1:~/ansible$ ansible -i vms all --user=adan --become-user root -e 'ansible_become_password=@p.yml' --vault-password-file=vault.txt  -m raw -a 'id adan' 
 m1 | CHANGED | rc=0 >>
 uid=1000(adan) gid=1000(adan) groups=1000(adan),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd),117(docker)
