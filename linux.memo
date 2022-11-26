@@ -1937,6 +1937,37 @@ Preparing to unpack bridge-utils_1.6-2ubuntu1_amd64.deb ...
 Unpacking bridge-utils (1.6-2ubuntu1) ...
 Selecting previously unselected package conntrack.
 ... ...
+
+--80 Change the Default Editor From Nano on Ubuntu Linux
+-- https://www.howtogeek.com/howto/ubuntu/change-the-default-editor-from-nano-on-ubuntu-linux/
+
+$ sudo update-alternatives --config editor
+There are 4 choices for the alternative editor (providing /usr/bin/editor).
+
+  Selection    Path                Priority   Status
+------------------------------------------------------------
+* 0            /bin/nano            40        auto mode
+  1            /bin/ed             -100       manual mode
+  2            /bin/nano            40        manual mode
+  3            /usr/bin/vim.basic   30        manual mode
+  4            /usr/bin/vim.tiny    15        manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 3
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/editor (editor) in manual mode
+
+$ sudo update-alternatives --config editor
+There are 4 choices for the alternative editor (providing /usr/bin/editor).
+
+  Selection    Path                Priority   Status
+------------------------------------------------------------
+  0            /bin/nano            40        auto mode
+  1            /bin/ed             -100       manual mode
+  2            /bin/nano            40        manual mode
+* 3            /usr/bin/vim.basic   30        manual mode
+  4            /usr/bin/vim.tiny    15        manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 
+
 ###ubuntu basic
 
 

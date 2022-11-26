@@ -1,3 +1,120 @@
+ backup and restore saved object(Visualize,Dashboard)
+ using user elastic login-->management-->saved objects-->using import and export function
+ 
+ 
+ 
+ https://kifarunix.com/backup-and-restore-elasticsearch-index-data/
+ https://serverfault.com/questions/897183/how-to-take-elasticsearch-single-index-backup
+ https://www.cyberithub.com/tutorial-elasticsearch-backup-and-restore/ 
+ 
+ --0x1 prepare repo
+$ cat elasticsearch/config/elasticsearch.yml 
+---
+## Default Elasticsearch configuration from Elasticsearch base image.
+## https://github.com/elastic/elasticsearch/blob/6.8/distribution/docker/src/docker/config/elasticsearch.yml
+#
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+path.repo: ["/elk-backup"]   ###key
+
+$ docker-compose up -d
+ 
+$ curl -u elastic:changeme -XPUT "http://192.168.56.109:9200/_snapshot/backup_repo" -H 'Content-Type: application/json' -d'
+  {
+        "type": "fs",
+        "settings": {
+           "location": "/elk_backup/",
+           "compress": true
+           }
+  }'
+   
+$ alias curlx='curl -u elastic:changeme'
+$ export ES=192.168.56.109:9200
+$ curlx -XGET "$ES/_snapshot/backup_repo?pretty" 
+ 
+$ curlx -XGET "$ES/_snapshot/_all?pretty"
+ {
+   "backup_repo" : {
+     "type" : "fs",
+     "settings" : {
+       "compress" : "true",
+       "location" : "/elk-backup/"
+     }
+   }
+ }
+ 
+ 
+ --0x2 backup
+ $ curlx -XPUT "$ES/_snapshot/backup_repo/backup01?wait_for_completion=false" -H 'Content-Type: application/json' -d'  
+ {
+    "indices": "filebeat-6.8.23-2022.11.15,filebeat-6.8.23-2022.11.14", 
+    "ignore_unavailable": true, 
+    "include_global_state": true    
+ }'                                                                                                                           
+                                      
+ {"accepted":true} ###respone,not input
+
+
+ ##server repone 
+ [2022-11-25T13:14:01,839][INFO ][o.e.s.SnapshotsService   ] [RkL6Od8] snapshot [backup_repo:backup01/MdOu2NFDTzuK5jgv9EU8NA] started
+ [2022-11-25T13:14:03,057][INFO ][o.e.s.SnapshotsService   ] [RkL6Od8] snapshot [backup_repo:backup01/MdOu2NFDTzuK5jgv9EU8NA] completed with state [SUCCESS]
+ 
+ --0x3 check backup
+ [192 ]$  curlx -XGET "$ES"/_snapshot/backup_repo/backup01/?pretty                 
+ {
+   "snapshots" : [
+     {
+       "snapshot" : "backup01",
+       "uuid" : "MdOu2NFDTzuK5jgv9EU8NA", 
+       "version_id" : 6082399,
+       "version" : "6.8.23",
+       "indices" : [
+         "filebeat-6.8.23-2022.11.15",
+         "filebeat-6.8.23-2022.11.14"
+       ],
+       "include_global_state" : true,
+       "state" : "SUCCESS",
+       "start_time" : "2022-11-25T13:14:01.570Z",
+       "start_time_in_millis" : 1669382041570,
+       "end_time" : "2022-11-25T13:14:02.789Z",
+       "end_time_in_millis" : 1669382042789,
+       "duration_in_millis" : 1219,
+       "failures" : [ ],
+       "shards" : {
+         "total" : 6,
+         "failed" : 0,
+         "successful" : 6
+       }
+     }
+   ]
+ }
+ 
+ 
+ --0x4 delete index
+ [192 ]$ curlx -X DELETE "$ES"/filebeat-6.8.23-2022.11.15
+ {"acknowledged":true}
+ 
+ [192 ]$ curlx -X DELETE "$ES"/filebeat-6.8.23-2022.11.14
+ {"acknowledged":true}
+ 
+ [2022-11-25T13:15:02,919][INFO ][o.e.c.m.MetaDataDeleteIndexService] [RkL6Od8] [filebeat-6.8.23-2022.11.15/Jy_o1c_EQJ-0QmmbEVdIpg] deleting index
+ [2022-11-25T13:15:05,448][INFO ][o.e.c.m.MetaDataDeleteIndexService] [RkL6Od8] [filebeat-6.8.23-2022.11.14/478QGMB0Q6yxoQ1SlDCWOw] deleting index
+ 
+ --0x5 restore index                                                                                                                                                                                                               
+ [192 $ curlx -XPOST "$ES/_snapshot/backup_repo/snapshot_1/_restore?wait_for_completion=false" -H 'Content-Type: application/json' -d'
+{
+"indices": "filebeat-6.8.23-2022.11.15,filebeat-6.8.23-2022.11.14",
+"ignore_unavailable": false
+}'
+
+###repone
+ {
+   "accepted" : true
+ }
+ 
+
+
+
 https://mindmajix.com/elasticsearch/curl-syntax-with-examples
 https://kifarunix.com/backup-and-restore-elasticsearch-index-data/
 https://linuxhint.com/restore-elasticsearch-clusters-snapshots/
