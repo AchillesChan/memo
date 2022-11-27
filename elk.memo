@@ -1,3 +1,6 @@
+ clean cache(danger!!!!)
+ sudo rm -rf /data02/docker/volumes/docker-elk-release-6x_elasticsearch/_data
+ 
  backup and restore saved object(Visualize,Dashboard)
  using user elastic login-->management-->saved objects-->using import and export function
  
@@ -112,7 +115,35 @@ $ curlx -XGET "$ES/_snapshot/_all?pretty"
    "accepted" : true
  }
  
+--0x5 from elk web portal 'Dev tool-->Console' operate
+GET _cat/indices/_all?pretty
 
+GET _cat/nodes
+
+GET _cat/repositories?pretty
+
+GET _snapshot/_all?pretty     
+
+GET _snapshot/backup_repo/_all?pretty
+
+DELETE _snapshot/backup_repo/filebeat_snopshot1?pretty
+
+PUT _snapshot/backup_repo 
+   {
+         "type": "fs",
+         "settings": {
+            "location": "/elk-backup/",
+            "compress": true
+            }   
+   }
+   
+
+POST _snapshot/backup_repo/backup01/_restore
+{
+"indices": "filebeat-6.8.23-2022.11.15,filebeat-6.8.23-2022.11.14",
+"ignore_unavailable": false
+}
+===============================
 
 
 https://mindmajix.com/elasticsearch/curl-syntax-with-examples
