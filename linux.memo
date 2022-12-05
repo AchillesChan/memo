@@ -220,7 +220,7 @@ $ DATE="06/10/2021 00:00:59 EST" && date -d "$DATE" +%s
 url code/decode  $https://stackoverflow.com/questions/6182356/what-is-2c-in-a-url
 https://meyerweb.com/eric/tools/dencoder/ ###online decode/encode
 
-$ echo "http%3A%2F%2Fwww.foo.com%2Findex.php%3Fid%3Dqwerty" | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e
+url code/decode $ echo "http%3A%2F%2Fwww.foo.com%2Findex.php%3Fid%3Dqwerty" | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e
 http://www.foo.com/index.php?id=qwerty
 
 +----+-----+----+-----+----+-----+----+-----+
