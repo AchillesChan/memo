@@ -360,6 +360,7 @@ https://perf.wiki.kernel.org/index.php/Tutorial
 http://www.brendangregg.com/blog/index.html
 http://www.brendangregg.com/perf.html
 http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
+https://www.brendangregg.com/FlameGraphs/memoryflamegraphs.html
 https://docs.microsoft.com/en-us/samples/dotnet/samples/diagnostic-scenarios/
 https://www.gokhan-gokalp.com/en/overview-of-debugging-and-profiling-net-core-applications-on-linux-1-perf-lttng/
 https://www.tessferrandez.com/blog/2021/03/18/debugging-a-netcore-memory-issue-with-dotnet-dump.html

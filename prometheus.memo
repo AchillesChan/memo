@@ -1,3 +1,6 @@
+https://github.com/prometheus/prometheus/blob/release-2.40/config/testdata/conf.good.yml
+https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+https://prometheus.io/docs/prometheus/latest/querying/functions/
 https://github.com/prometheus/prometheus/releases/
 https://github.com/prometheus/alertmanager/blob/main/doc/examples/simple.yml
 https://github.com/prometheus/alertmanager/releases/
@@ -29,7 +32,10 @@ scrape_configs:
   - job_name: 'node'
     static_configs:
       - targets: ['localhost:9100']
-
+  - job_name: 'media_search'
+      scrape_interval: 10s
+      static_configs:
+        - targets: ['localhost:9888', 'localhost:9988', 'localhost:9989']
 
 [srv]# cat alertmanager-0.23.0.linux-amd64/alertmanager.yml |grep -v '#'                                                                                                                
 global:

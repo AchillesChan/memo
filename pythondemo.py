@@ -9,6 +9,31 @@ https://stackoverflow.com/questions/54287262/joining-lists-in-python-3-like-sql-
 https://www.digitalocean.com/community/tutorials/how-to-use-unittest-to-write-a-test-case-for-a-function-in-python
 https://realpython.com/python-testing/
 
+https://www.programiz.com/python-programming/break-continue
+# program to print odd numbers from 1 to 10
+
+num = 0
+
+while num < 10:
+    num += 1
+
+    if (num % 2) == 0:
+        continue           ###skip current ,enter next
+
+    print(num)
+
+# program to find first 5 multiples of 6
+
+i = 1
+
+while (i<=10):
+    print('6 * ',(i), '=',6 * i)
+    if i >= 5:
+        break            ###terminal loop
+    i = i + 1
+
+
+
 
 https://www.liaoxuefeng.com/wiki/1016959663602400/1017261630425888 ####parameters detail
 ##1 default parameters MUST point to none-variable object
