@@ -1,8 +1,119 @@
 <<<<<<< HEAD
+https://dev.mysql.com/doc/refman/8.0/en/innodb-deadlock-example.html   *****
+
+https://www.w3schools.com/mysql/mysql_in.asp
+
+mysql> select c0.id,c0.city,c0.name from c1 as c0 inner join c1 as c2 on c0.city=c2.city and c0.name<>c2.name;
++------+--------+------+
+| id   | city   | name |
++------+--------+------+
+|    1 | Toyko  | yi   |                   same city different company // c0.city=c2.city and c0.name<>c2.name;
+|    3 | Toyko  | jia  |                      //self join
+|    5 | London | zi   |
+|    4 | London | ding |
++------+--------+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from c1;
++------+------+--------+
+| id   | name | city   |
++------+------+--------+
+|    3 | jia  | Toyko  |
+|    1 | yi   | Toyko  |
+|    2 | bin  | Synde  |
+|    4 | ding | London |
+|    5 | zi   | London |
++------+------+--------+
+5 rows in set (0.01 sec)
+
+
+
+
+
+
+
+
+
+
+mysql> select * from c where exists (select * from t where count=6);
+Empty set (0.00 sec)
+
+mysql> select * from c where exists (select * from t where count=5);
++------+-------+-------+
+| cid  | cname | ctype |
++------+-------+-------+
+| 1001 | zhang | c     |
+| 1002 | wang  | b     |
+| 1003 | zhao  | c     |
+| 1004 | liu   | b     |
+| 1005 | li    | c     |
+| 1006 | chen  | b     |
++------+-------+-------+
+6 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from c where c.cid=any (select t.cid from t where t.count>5);
++------+-------+-------+
+| cid  | cname | ctype |
++------+-------+-------+
+| 1003 | zhao  | c     |
+| 1004 | liu   | b     |
+| 1006 | chen  | b     |
++------+-------+-------+
+3 rows in set (0.00 sec)
+
+
+SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
+FROM ((Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID)
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID);
+
+mysql> select c.cname,g.gname,t.count from( c join t on c.cid=t.cid and c.cid=1001) join g on g.gid=t.gid;
++-------+--------+-------+
+| cname | gname  | count |
++-------+--------+-------+
+| zhang | iphone |     3 |
+| zhang | tesla  |     3 |
+| zhang | iphone |     2 |
++-------+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from t where cid in (select cid from c where cid<1005);
++------+------+------+-------+
+| tid  | cid  | gid  | count |
++------+------+------+-------+
+| 3001 | 1001 | 2001 |     3 |
+| 3002 | 1001 | 2002 |     3 |
+| 3007 | 1001 | 2001 |     2 |
+| 3004 | 1002 | 2002 |     5 |
+| 3005 | 1003 | 2002 |    10 |
+| 3006 | 1004 | 2001 |    12 |
++------+------+------+-------+
+6 rows in set (0.00 sec)
+
+
+
+https://virtual-dba.com/blog/understanding-mysql-deadlocks-with-innodb-engine/
+https://hub.nuaa.cf/planetscale/vitess-operator/blob/main/docs/gcp-quickstart.md
+https://vitess.io/docs/15.0/overview/architecture/ 
+https://vitess.io/docs/15.0/user-guides/configuration-basic/   ###mysql ha/ft/kubernetes/failover 
 https://blogs.sap.com/2019/06/24/introduction-to-hadoop-in-simple-words/
 https://data-flair.training/blogs/hadoop-ecosystem-components/
 https://data-flair.training/blogs/hadoop-mapreduce-tutorial/
 =======
+ set character_set_client
+  set character_set_connection
+   set characet_set_results
+    
+     set names gbk
+      
+       innodb_flush_log_at_trx_commit=1 
+        
+         innodb_flush_method=o_dsync
+
+
 ###hash join
 https://mysqlserverteam.com/hash-join-in-mysql-8/
 introduced from MySQL 8.0.18

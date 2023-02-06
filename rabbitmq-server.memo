@@ -16,6 +16,8 @@ https://jack-vanlightly.com/blog/2017/12/4/rabbitmq-vs-kafka-part-1-messaging-to
 https://sleeplessbeastie.eu/2020/04/08/how-to-mirror-rabbitmq-queues/
 https://jack-vanlightly.com/blog/2018/11/20/quorum-queues-making-rabbitmq-more-competitive
 https://www.cloudamqp.com/blog/quorum-queues-internals-a-deep-dive.html
+https://www.rabbitmq.com/backup.html
+https://www.rabbitmq.com/definitions.html
 
 ---rabbitmq queue(s)  unresponsive timeout
 https://kb.juniper.net/InfoCenter/index?page=content&id=KB36066&showDraft=false
