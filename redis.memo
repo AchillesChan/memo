@@ -1,5 +1,7 @@
 ######Startmemoof redis.memo #######
 ######Start redis.memo #######
+https://www.w3schools.io/nosql/redis-backup-restore/#:~:text=How%20to%20take%20backup%20and%20restore%20Redis%20database.,the%20save%20or%20bgsave%20command%20to%20take%20backup
+
 Redis下载安装
 
 0:insatll dependent

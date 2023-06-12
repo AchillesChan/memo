@@ -2,6 +2,12 @@ https://contains.dev/blog/optimizing-docker-image-size
 https://devopscube.com/reduce-docker-image-size
 https://www.ctl.io/developers/blog/post/dockerfile-entrypoint-vs-cmd
 https://www.ctl.io/developers/blog/post/dockerfile-add-vs-copy/
+https://phoenixnap.com/kb/docker-cmd-vs-entrypoint#:~:text=CMD%20is%20an%20instruction%20that%20is%20best%20to,to%20define%20a%20container%20with%20a%20specific%20executable.
+https://emmer.dev/blog/docker-shell-vs.-exec-form/
+
+In short, CMD defines default commands and/or parameters for a container. CMD is an instruction that is best to use if you need a default command which users can easily override. If a Dockerfile has multiple CMDs, it only applies the instructions from the last one.
+On the other hand, ENTRYPOINT is preferred when you want to define a container with a specific executable. You cannot override an ENTRYPOINT when starting a container unless you add the --entrypoint flag.
+
 
 
 A multi-arch multitool for container network troubleshooting. Based on Alpine Linux. 
