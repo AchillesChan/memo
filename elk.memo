@@ -1,4 +1,68 @@
- clean cache(danger!!!!)
+# logstash with grok
+# https://www.elastic.co/guide/en/logstash/current/config-examples.html
+
+$ cat /usr/share/logstash/d.conf                                                                                                                              
+input { stdin { } }                                                                                                                                                                            
+                                                                                                                                                                                               
+filter {                                                                                                                                                                                       
+  grok {                                                                                                                                                                                       
+    match => { "message" => "%{COMBINEDAPACHELOG}" }                                                                                                                                           
+  }                                                                                                                                                                                            
+  date {                                                                                                                                                                                       
+    match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]                                                                                                                                        
+  }                                                                                                                                                                                            
+}                                                                                                                                                                                              
+                                                                                                                                                                                               
+output {                                                                                                                                                                                       
+  #elasticsearch { hosts => ["localhost:9200"] }                                                                                                                                               
+  stdout { codec => rubydebug }                                                                                                                                                                
+}                                                                                                                                                                                              
+$ sudo /usr/share/logstash/bin/logstash -f /usr/share/logstash/d.conf                                                                                         
+Using bundled JDK: /usr/share/logstash/jdk
+......
+
+127.0.0.1 - - [11/Dec/2013:00:01:45 -0800] "GET /xampp/status.php HTTP/1.1" 200 3891 "http://cadenza/xampp/navi.php" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:25.0) Gecko/20100101 Firefox/25.0"    ####Input from stdin
+
+###parse results
+{
+          "http" => {
+         "version" => "1.1",
+         "request" => {
+              "method" => "GET",
+            "referrer" => "http://cadenza/xampp/navi.php"
+        },
+        "response" => {
+            "status_code" => 200,
+                   "body" => {
+                "bytes" => 3891
+            }
+        }
+    },
+       "message" => "127.0.0.1 - - [11/Dec/2013:00:01:45 -0800] \"GET /xampp/status.php HTTP/1.1\" 200 3891 \"http://cadenza/xampp/navi.php\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv
+:25.0) Gecko/20100101 Firefox/25.0\"",
+     "timestamp" => "11/Dec/2013:00:01:45 -0800",
+           "url" => {
+        "original" => "/xampp/status.php"
+    },
+    "@timestamp" => 2013-12-11T08:01:45.000Z,
+        "source" => {
+        "address" => "127.0.0.1"
+    },
+          "host" => {
+        "hostname" => "ha1"
+    },
+    "user_agent" => {
+        "original" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:25.0) Gecko/20100101 Firefox/25.0"
+    },
+      "@version" => "1",
+         "event" => {
+        "original" => "127.0.0.1 - - [11/Dec/2013:00:01:45 -0800] \"GET /xampp/status.php HTTP/1.1\" 200 3891 \"http://cadenza/xampp/navi.php\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; 
+rv:25.0) Gecko/20100101 Firefox/25.0\""
+    }
+}
+
+###https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose
+clean cache(danger!!!!)
  sudo rm -rf /data02/docker/volumes/docker-elk-release-6x_elasticsearch/_data
  
  backup and restore saved object(Visualize,Dashboard)
@@ -19,6 +83,7 @@ $ cat elasticsearch/config/elasticsearch.yml
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
 path.repo: ["/elk-backup"]   ###key
+
 
 $ docker-compose up -d
  
