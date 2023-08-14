@@ -2,6 +2,16 @@ https://docs.bitnami.com/tutorials/deploy-redis-sentinel-production-cluster/
 https://www.willandskill.se/en/setup-a-highly-available-redis-cluster-with-sentinel-and-haproxy/
 https://redis.io/topics/sentinel
 
+####
+https://redis.io/docs/management/sentinel/
+
+min-replicas-to-write 1
+min-replicas-max-lag 10
+
+With the above configuration (please see the self-commented redis.conf example in the Redis distribution for more information) a Redis instance, when acting as a master, will stop accepting writes if it can't write to at least 1 replica. Since replication is asynchronous not being able to write actually means that the replica is either disconnected, or is not sending us asynchronous acknowledges for more than the specified max-lag number of seconds.
+####
+
+
 [master]
 10.0.2.11
 # cat c6.conf        ###master redis.conf
