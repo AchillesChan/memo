@@ -145,6 +145,15 @@ location    proxy_pass                         Request        Received by upstre
 /webapp     http://localhost:5000/api   /webappfoo?bar=baz    /apifoo?bar=baz
 
 
+###Access example.com/request_dir/ get info from location /path/2/real_directory/
+location /request_dir/ {
+	proxy_pass http://127.0.0.1/Real_local_dir/;
+}   
+
+location /Real_local_dir/ {
+	root  /path/2/real_directory/; 
+	index  index.html index.htm;
+} 
 
 https://github.com/nginx-modules/nginx_upstream_check_module
 https://www.nginx.com/blog/help-the-world-by-healing-your-nginx-configuration/
