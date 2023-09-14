@@ -1,3 +1,7 @@
+https://andrewlock.net/creating-a-generalised-docker-image-for-building-asp-net-core-apps-using-onbuild/
+https://www.hanselman.com/blog/optimizing-aspnet-core-docker-image-sizes
+https://dev.to/jiayanguo/build-a-template-dockerfile-with-onbuild-il
+
 https://contains.dev/blog/optimizing-docker-image-size
 https://devopscube.com/reduce-docker-image-size
 https://www.ctl.io/developers/blog/post/dockerfile-entrypoint-vs-cmd
