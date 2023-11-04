@@ -1,5 +1,11 @@
 ######Startmemoof azure.memo #######
 ######Start azure.memo #######
+https://github.com/alfonsof/terraform-azure-examples/tree/master/code  ###IaC
+https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build  ##Iac
+https://insight-services-apac.github.io/2021/04/25/landing-zones.html
+https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/understand-ea-roles
+https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/ea-portal-administration
+https://jakewalsh.co.uk/why-you-need-a-landing-zone/
 https://docs.microsoft.com/en-us/azure/aks/cluster-autoscaler#using-the-autoscaler-profile
 
 $ az aks show --resource-group RG01 -n aks-01 --query autoScalerProfile
