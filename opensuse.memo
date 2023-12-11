@@ -1,3 +1,7 @@
+solve chrome/edge cannot start
+rm ~/.config/google-chrome/Default/google-chrome/Singlet*
+rm ~/.config/microsoft-edge/Default/google-chrome/Singlet*
+
 chrome 
 /home/Michael/.config/google-chrome/Default/BookMarks  ###favourite path
 

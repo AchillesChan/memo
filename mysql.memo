@@ -2452,6 +2452,8 @@ mysql> show variables like "%schedule%"; ####Here must be ON
 
 
 ############xtrabackup mysql##################################
+https://docs.percona.com/percona-xtrabackup/8.0/take-streaming-backup.html
+
 ####install
 环境：CENTOS 7+Xtrabackup2.4+mysql 5.7（社区版本）
 mysql5.7需要xtrabackup2.4
