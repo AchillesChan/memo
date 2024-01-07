@@ -1,3 +1,13 @@
+
+ls --color=never|xargs -P 1 -n 1 -d '\n' sh -c 'echo du -sh \"$1\"' _|bash   ####delimiter and text only in ls
+0       bin
+11M     Documents
+69M     Pictures
+0       Public
+0       Templates
+4G     VirtualBox VMs
+
+
 $ time seq 1 10 |xargs -P 5 -n 1 bash -c 'ping 10.1.1.0.$1 -c 1 &> /dev/null && echo 10.1.1.0.$1 is live || echo 10.1.1.0.$1 not exist' _   ###parallel ping 
 10.1.1.0.3 is live
 10.1.1.0.1 is live

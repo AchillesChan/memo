@@ -1,5 +1,6 @@
 ######Startmemoof git.memo #######
 ######Start git.memo #######
+https://www.atlassian.com/git/tutorials/using-branches/git-merge 
 https://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html
 https://www.ruanyifeng.com/blog/2018/10/git-internals.html
 http://www.ttlsa.com/linux/gitlab-backup-restore/
@@ -371,6 +372,23 @@ Could not open a connection to your authentication agent
 
 eval `ssh-agent`
 ssh-add ~/.ssh/rsa
-ssh-add -l 
+ssh-add -l
+
+
+#### add repo with git command ???
+echo "# David" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:UserName/David.git
+git push -u origin main
+
+
+git remote add origin git@github.com:UserName/David.git
+git branch -M main
+git push -u origin main
+
+
 ######End git.memo #######
 ######Endmemoof git.memo #######
