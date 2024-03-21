@@ -1,3 +1,28 @@
+###convert heic picture to jpg in ubuntu 20.04
+
+$ for i in 39*.HEIC;do stat "${i%}";done
+  
+  File: 390.HEIC
+    Size: 988169          Blocks: 1936       IO Block: 4096   regular file
+    Device: 835h/2101d      Inode: 9455315     Links: 1
+    Access: (0775/-rwxrwxr-x)  Uid: ( 1000/    adan)   Gid: ( 1000/    adan)
+    Access: 2024-01-17 06:57:52.309626660 +0000
+    Modify: 2024-01-17 06:55:01.161675017 +0000
+    Change: 2024-01-17 06:55:01.161675017 +0000
+     Birth: -
+
+       File: 391.HEIC
+         Size: 1335130         Blocks: 2608       IO Block: 4096   regular file
+         Device: 835h/2101d      Inode: 9455316     Links: 1
+         Access: (0775/-rwxrwxr-x)  Uid: ( 1000/    adan)   Gid: ( 1000/    adan)
+         Access: 2024-01-17 06:57:52.641817057 +0000
+         Modify: 2024-01-17 06:55:02.225662465 +0000
+         Change: 2024-01-17 06:55:02.225662465 +0000
+          Birth: -
+
+
+sudo apt install libheif-examples
+for i in *.HEIC; do heif-convert "$i" "${i%.HEIC}.jpg"; done
 
 ls --color=never|xargs -P 1 -n 1 -d '\n' sh -c 'echo du -sh \"$1\"' _|bash   ####delimiter and text only in ls
 0       bin
