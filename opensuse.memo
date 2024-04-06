@@ -1,3 +1,5 @@
+spell hint/English auto-completion shortcut key:Ctrl + Alt +h
+
 solve chrome/edge cannot start
 rm ~/.config/google-chrome/Default/google-chrome/Singlet*
 rm ~/.config/microsoft-edge/Default/google-chrome/Singlet*
