@@ -1,6 +1,7 @@
 ######Startmemoof rabbitmq-server.memo #######
 ######Start rabbitmq-server.memo #######
 cluster
+https://adamtheautomator.com/rabbitmq-cluster/          ###****
 https://www.rabbitmq.com/quorum-queues.html
 https://blog.rabbitmq.com/posts/2020/04/quorum-queues-and-why-disks-matter
 https://www.cloudamqp.com/blog/rabbitmq-quorum-queues.html
