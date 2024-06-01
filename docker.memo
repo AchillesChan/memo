@@ -37,6 +37,24 @@ $ python3 -m flask run
 $ 
 
 
+daemon.json example:
+# cat daemon.json 
+{
+  "storage-driver": "overlay2",
+  "graph": "/data/docker",
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "2"
+  },
+  "debug": false,
+  "insecure-registries":[
+    "172.16.1.1:8082",
+    "172.16.1.1:8083"
+  ],
+  "userns-remap": "1000:1000"
+} 
+
 
 
 https://keepinguptodate.com/pages/2020/12/net5-aspnet-docker-mac/
