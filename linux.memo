@@ -1,3 +1,6 @@
+find /etc/kubernetes -type f -exec grep -Iq . {} \; -print   ###find general files in folder /etc/kubernetes
+
+
 ###convert heic picture to jpg in ubuntu 20.04
 
 $ for i in 39*.HEIC;do stat "${i%}";done

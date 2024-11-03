@@ -1,5 +1,6 @@
 # logstash with grok
 # https://www.elastic.co/guide/en/logstash/current/config-examples.html
+https://logz.io/blog/elasticsearch-cluster-tutorial/
 https://www.golinuxcloud.com/setup-configure-elasticsearch-cluster-7-linux/   ### ***
 $ cat /usr/share/logstash/d.conf                                                                                                                              
 input { stdin { } }                                                                                                                                                                            
