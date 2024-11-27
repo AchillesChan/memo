@@ -1005,6 +1005,31 @@ https://www.maketecheasier.com/netcat-transfer-files-between-linux-computers/
 https://stackoverflow.com/questions/17797758/using-nc-to-transfer-large-file
 https://www.tecmint.com/transfer-files-between-two-linux-machines/
 
+
+
+ nc transfer files  ####*** working from      chatgpt                                                                                                                                                                                                                                                                                                 
+ 1. Send a File Using Netcat (nc) 
+ On Receiver (Machine A):
+ nc -l -p 12345 > received_file.txt
+ 
+ On Sender (Machine B):
+ nc 192.168.1.100 12345 < file_to_send.txt
+ 
+ 
+ 
+ 2. Send a Directory Using Netcat (nc) 
+ On the Receiver (Server) Side:
+ nc -l -p 12345 | tar xvf -
+ 
+ 
+ On the Sender (Client) Side:
+ tar cf - /path/to/directory | nc 192.168.1.100 12345
+
+ nc transfer files  ####*** working from      chatgpt                                                                                                                                                                                                                                                                                                 
+
+
+
+
 [receiver]# nc -vl sender-port |tar zxv 
 Ncat: Version 7.50 ( https://nmap.org/ncat )
 Ncat: Listening on :::sender-port
